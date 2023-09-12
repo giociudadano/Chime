@@ -12,6 +12,7 @@ import 'models/material_colors_model.dart';
 
 // Pages
 part 'pages/onboarding.dart';
+part 'pages/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,16 +88,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var isOnboardingVisited = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadIsOnboardingVisited();
+  }
+
   void saveTheme(String currentTheme) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('theme', currentTheme);
+  }
+
+  void loadIsOnboardingVisited() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    setState(() {
+      isOnboardingVisited =
+          sharedPreferences.getBool('isOnboardingVisited') ?? false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: OnBoardingPage(),
+      body: isOnboardingVisited ? const LoginPage() : const OnBoardingPage(),
     );
   }
 }

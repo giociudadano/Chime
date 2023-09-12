@@ -11,6 +11,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
+  void saveIsOnboardingVisited(bool state) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isOnboardingVisited', state);
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -50,6 +55,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    if (currentIndex == onBoardingModels.length - 1) {
+                      saveIsOnboardingVisited(true);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                          (Route<dynamic> route) => false);
+                    }
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.ease,
@@ -68,7 +80,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     style: const TextStyle(
                       fontFamily: 'Bahnschrift',
                       fontVariations: [
-                        FontVariation('wght', 300),
+                        FontVariation('wght', 350),
                         FontVariation('wdth', 100),
                       ],
                       fontSize: 14,
