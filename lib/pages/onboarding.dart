@@ -69,9 +69,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
-                        Theme.of(context).colorScheme.primaryContainer),
-                    foregroundColor: MaterialStatePropertyAll(
                         Theme.of(context).colorScheme.primary),
+                    foregroundColor: MaterialStatePropertyAll(
+                        Theme.of(context).colorScheme.onPrimary),
                   ),
                   child: Text(
                     currentIndex == onBoardingModels.length - 1

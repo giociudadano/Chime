@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/palettes/core_palette.dart';
 
 class MaterialColors {
-  static Color seedColor = Colors.red;
+  static Color seedColor = Colors.blue;
 
   static Color getSurface(bool darkMode) {
     CorePalette p = CorePalette.of(seedColor.value);
