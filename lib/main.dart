@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Models
 import 'models/onboarding_model.dart';
+import 'models/material_colors_model.dart';
 
 // Pages
 part 'pages/onboarding.dart';

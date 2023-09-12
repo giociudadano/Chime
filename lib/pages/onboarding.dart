@@ -13,8 +13,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: MaterialColors.getSurface(darkMode),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
