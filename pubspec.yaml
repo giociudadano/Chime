@@ -38,6 +38,8 @@ dependencies:
   shared_preferences: ^2.2.1
   onboarding: ^3.1.0
   material_color_utilities: ^0.2.0
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,11 @@ library main;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+// Database
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 // External Libraries
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,8 +18,12 @@ import 'models/material_colors_model.dart';
 // Pages
 part 'pages/onboarding.dart';
 part 'pages/login.dart';
+part 'pages/home.dart';
 
 Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -63,14 +72,14 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
+          seedColor: Colors.deepPurple,
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
+          seedColor: Colors.deepPurple,
           brightness: Brightness.dark,
         ),
       ),

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "134846671691",
+    "firebase_url": "https://cmsc198-c2845-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "cmsc198-c2845",
+    "storage_bucket": "cmsc198-c2845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134846671691:android:f0f3be1e1acc00fc4216ce",
+        "android_client_info": {
+          "package_name": "com.giociudadano.cmsc198.cmsc198"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh2wbMonUlknnMBWB8W1XYif5DIUDwbug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
