@@ -1,7 +1,19 @@
+library main;
+
+import 'dart:ui';
 import 'package:flutter/material.dart';
+
+// External Libraries
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+// Models
+import 'models/onboarding_model.dart';
+
+// Pages
+part 'pages/onboarding.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -17,13 +29,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
   @override
   void initState() {
     super.initState();
-    getSharedPreferences();
+    loadTheme();
   }
 
-  void getSharedPreferences() async {
+  void loadTheme() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     String? theme = sharedPreferences.getString('theme');
@@ -34,40 +48,45 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  ThemeMode _themeMode = ThemeMode.system;
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Special Problem',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      themeMode: _themeMode,
-      home: const MyHomePage(title: 'Special Problem'),
-    );
-  }
-
   void changeTheme(ThemeMode themeMode) {
     setState(() {
       _themeMode = themeMode;
     });
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Special Problem',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+      ),
+      themeMode: _themeMode,
+      debugShowCheckedModeBanner: false,
+      home: const MyHomePage(),
+    );
+  }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+  const MyHomePage({super.key});
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void saveCurrentTheme(String currentTheme) async {
+  void saveTheme(String currentTheme) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('theme', currentTheme);
   }
@@ -75,34 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Choose your theme:'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      MyApp.of(context).changeTheme(ThemeMode.light);
-                      saveCurrentTheme('light');
-                    },
-                    child: const Text('Light')),
-                ElevatedButton(
-                    onPressed: () {
-                      MyApp.of(context).changeTheme(ThemeMode.dark);
-                      saveCurrentTheme('dark');
-                    },
-                    child: const Text('Dark')),
-              ],
-            ),
-          ],
-        ),
-      ),
+      extendBody: true,
+      body: OnBoardingPage(),
     );
   }
 }
