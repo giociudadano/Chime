@@ -28,24 +28,37 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             children: [
               Expanded(
                 child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: onBoardingModels.length,
-                  onPageChanged: (int index) {
-                    setState(() {
-                      currentIndex = index;
-                    });
-                  },
-                  itemBuilder: (context, index) => OnBoardingContent(
-                    image: onBoardingModels[index].image,
-                    title: onBoardingModels[index].title,
-                    description: onBoardingModels[index].description,
-                  ),
-                ),
+                    controller: _pageController,
+                    itemCount: AppLocalizations.of(context)!
+                        .onBoardingImages
+                        .split(':')
+                        .length,
+                    onPageChanged: (int index) {
+                      setState(() {
+                        currentIndex = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return OnBoardingPageContent(
+                        image: AppLocalizations.of(context)!
+                            .onBoardingImages
+                            .split(':')[index],
+                        title: AppLocalizations.of(context)!
+                            .onBoardingTitles
+                            .split(':')[index],
+                        description: AppLocalizations.of(context)!
+                            .onBoardingDescriptions
+                            .split(':')[index],
+                      );
+                    }),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  onBoardingModels.length,
+                  AppLocalizations.of(context)!
+                      .onBoardingImages
+                      .split(':')
+                      .length,
                   (index) => buildDot(index, context),
                 ),
               ),
@@ -55,7 +68,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (currentIndex == onBoardingModels.length - 1) {
+                    if (currentIndex ==
+                        AppLocalizations.of(context)!
+                                .onBoardingImages
+                                .split(':')
+                                .length -
+                            1) {
                       saveIsOnboardingVisited(true);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -74,7 +92,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         Theme.of(context).colorScheme.onPrimary),
                   ),
                   child: Text(
-                    currentIndex == onBoardingModels.length - 1
+                    currentIndex ==
+                            AppLocalizations.of(context)!
+                                    .onBoardingImages
+                                    .split(':')
+                                    .length -
+                                1
                         ? "Continue"
                         : "Next",
                     style: const TextStyle(
@@ -108,8 +131,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 }
 
-class OnBoardingContent extends StatelessWidget {
-  const OnBoardingContent(
+class OnBoardingPageContent extends StatelessWidget {
+  const OnBoardingPageContent(
       {Key? key,
       required this.image,
       required this.title,

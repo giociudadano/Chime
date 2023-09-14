@@ -10,9 +10,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 // External Libraries
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Models
-import 'models/onboarding_model.dart';
 import 'models/material_colors_model.dart';
 
 // Pages
@@ -85,6 +86,16 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('tl', 'PH'),
+      ],
       home: const MyHomePage(),
     );
   }

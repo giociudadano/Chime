@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: MaterialColors.getSurface(darkMode),
-      body: Text("Hello!"),
+      body: const Text("Hello!"),
     );
   }
 }

@@ -14,16 +14,16 @@ class _LoginPageState extends State<LoginPage> {
 
   String? _verifyEmailField(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter an email';
+      return AppLocalizations.of(context)!.loginEmailEmptyError;
     }
     return null;
   }
 
   String? _verifyPasswordField(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please enter a password';
+      return AppLocalizations.of(context)!.loginPasswordEmptyError;
     } else if (value.length < 8) {
-      return 'Password must be 8 characters or more';
+      return AppLocalizations.of(context)!.loginPasswordLengthError;
     }
     return null;
   }
@@ -37,13 +37,15 @@ class _LoginPageState extends State<LoginPage> {
       switch (e.code) {
         case 'user-not-found':
         case 'wrong-password':
-          errorMessage = "Sorry, that email or password is incorrect.";
+          errorMessage =
+              AppLocalizations.of(context)!.loginSnackbarIncorrectPassword;
           break;
         case 'invalid-email':
-          errorMessage = "Please enter a valid email address.";
+          errorMessage =
+              AppLocalizations.of(context)!.loginSnackbarInvalidEmail;
           break;
         default:
-          errorMessage = "Authentication failed. Please try again later.";
+          errorMessage = AppLocalizations.of(context)!.loginSnackbarGeneric;
       }
       bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
                 fontFamily: 'Bahnschrift',
-                fontVariations: [
+                fontVariations: const [
                   FontVariation('wght', 350),
                   FontVariation('wdth', 100),
                 ],
@@ -63,9 +65,11 @@ class _LoginPageState extends State<LoginPage> {
       );
       return;
     }
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const HomePage()),
-        (Route<dynamic> route) => false);
+    if (context.mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomePage()),
+          (Route<dynamic> route) => false);
+    }
   }
 
   @override
@@ -79,9 +83,9 @@ class _LoginPageState extends State<LoginPage> {
           child: ListView(
             children: [
               const SizedBox(height: 70),
-              const Text(
-                'Welcome\nback',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.loginTitle,
+                style: const TextStyle(
                   fontFamily: 'Bahnschrift',
                   fontVariations: [
                     FontVariation('wght', 700),
@@ -101,11 +105,11 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Email",
+                        AppLocalizations.of(context)!.loginEmail,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Bahnschrift',
-                            fontVariations: [
+                            fontVariations: const [
                               FontVariation('wght', 350),
                               FontVariation('wdth', 100),
                             ],
@@ -121,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: 'Enter your email',
+                        hintText: AppLocalizations.of(context)!.loginEmailHint,
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
@@ -144,11 +148,11 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Password",
+                        AppLocalizations.of(context)!.loginPassword,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Bahnschrift',
-                            fontVariations: [
+                            fontVariations: const [
                               FontVariation('wght', 350),
                               FontVariation('wdth', 100),
                             ],
@@ -164,7 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: 'Enter your password',
+                        hintText:
+                            AppLocalizations.of(context)!.loginPasswordHint,
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
@@ -172,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                             MaterialColors.getSurfaceContainerLowest(darkMode),
                         isDense: true,
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: 'Bahnschrift',
                           fontVariations: [
                             FontVariation('wght', 300),
@@ -184,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                         return _verifyPasswordField(value);
                       },
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
                         Expanded(
@@ -196,7 +201,6 @@ class _LoginPageState extends State<LoginPage> {
                                       _inputEmail.text, _inputPassword.text);
                                 }
                               }
-                              ;
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
@@ -205,14 +209,14 @@ class _LoginPageState extends State<LoginPage> {
                                   Theme.of(context).colorScheme.onPrimary),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                'Log In',
+                                AppLocalizations.of(context)!.loginLogin,
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
                                   fontFamily: 'Bahnschrift',
-                                  fontVariations: [
+                                  fontVariations: const [
                                     FontVariation('wght', 500),
                                     FontVariation('wdth', 100),
                                   ],
@@ -233,9 +237,9 @@ class _LoginPageState extends State<LoginPage> {
                               color: Theme.of(context).colorScheme.outline),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            "Or continue with",
+                            AppLocalizations.of(context)!.loginOrContinueWith,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.outline),
                           ),
@@ -251,14 +255,15 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                           color: MaterialColors.getSurfaceContainerLowest(
                               darkMode),
                         ),
                         height: 50,
                         width: 50,
                         child: Padding(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           child: IconButton(
                               icon: Image.asset(
                                   'lib/assets/images/service_google.png'),
@@ -268,7 +273,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        'Sign up instead',
+                        AppLocalizations.of(context)!.loginSignUpInstead,
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
@@ -276,14 +281,14 @@ class _LoginPageState extends State<LoginPage> {
                             decorationColor:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                             fontFamily: 'Bahnschrift',
-                            fontVariations: [
+                            fontVariations: const [
                               FontVariation('wght', 350),
                               FontVariation('wdth', 100),
                             ],
                             fontSize: 14),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                   ],
                 ),
               )
