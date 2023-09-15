@@ -3,22 +3,24 @@ library main;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-// Database
+// Imports Firebase libraries. Responsible for authentication and reading and writing to database.
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-// External Libraries
+// Imports cosmetic and accessibility libraries. Responsible for dynamic theme modes and languages.
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// Models
+// Imports helper functions. Responsible for generating neutral colors.
 import 'models/material_colors_model.dart';
 
-// Pages
+// Defines all page components.
 part 'pages/onboarding.dart';
 part 'pages/login.dart';
+part 'pages/signup.dart';
 part 'pages/home.dart';
 
 Future<void> main() async {
@@ -49,6 +51,7 @@ class _MyAppState extends State<MyApp> {
     loadTheme();
   }
 
+  // Loads the currently selected theme. If no theme is selected, defaults to the system theme.
   void loadTheme() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -60,6 +63,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  // Changes the current theme based on the passed ThemeMode object.
   void changeTheme(ThemeMode themeMode) {
     setState(() {
       _themeMode = themeMode;
@@ -116,11 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     loadIsOnboardingVisited();
   }
 
-  void saveTheme(String currentTheme) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('theme', currentTheme);
-  }
-
+  // Checks if the user is new. Visits OnBoardingPage if so and LoginPage if not.
   void loadIsOnboardingVisited() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();

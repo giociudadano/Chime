@@ -1,21 +1,30 @@
 part of main;
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _inputEmail = TextEditingController();
+  final _inputUsername = TextEditingController();
   final _inputPassword = TextEditingController();
 
-  // Checks if the email field is empty and returns an error if so.
+  // Checks if the email field is empty and returns an error message if so.
   String? _verifyEmailField(String? value) {
     if (value == null || value.isEmpty) {
       return AppLocalizations.of(context)!.emailEmptyError;
+    }
+    return null;
+  }
+
+  // Checks if the username field is empty and returns an error message if so.
+  String? _verifyUsernameField(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.usernameEmptyError;
     }
     return null;
   }
@@ -30,27 +39,68 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  // Logs in the user using the passed credentials. If an exception occurs, displays that error
-  // using a snackbar. Otherwise, redirects to HomePage.
-  void _loginUser(String email, String password) async {
+  // Writes new user information to the database with the specified credentials. Displays a
+  // snackbar message on success.
+  void _writeUserToDatabase(UserCredential result, String username) {
+    if (result.user != null) {
+      String uid = result.user!.uid;
+      try {
+        DatabaseReference ref = FirebaseDatabase.instance.ref("users/$uid");
+        ref.update({
+          "username": username,
+          "displayName": username,
+        });
+        if (context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (Route<dynamic> route) => false);
+          bool darkMode = Theme.of(context).brightness == Brightness.dark;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.accountCreationSuccessful,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 14,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 350),
+                          FontVariation('wdth', 100),
+                        ],
+                      )),
+              backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+            ),
+          );
+        }
+      } catch (e) {
+        return;
+      }
+    }
+  }
+
+  // Creates a new user with the specified credentials. Displays a snackbar message if an
+  // error occurs.
+  void _signupUser(String email, String username, String password) async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((result) {
+        _writeUserToDatabase(result, username);
+      });
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       switch (e.code) {
-        case 'user-not-found':
-        case 'wrong-password':
+        case 'email-already-in-use':
           errorMessage =
-              AppLocalizations.of(context)!.loginSnackbarIncorrectPasswordError;
+              AppLocalizations.of(context)!.signupSnackbarEmailInUseError;
           break;
         case 'invalid-email':
           errorMessage =
-              AppLocalizations.of(context)!.loginSnackbarInvalidEmailError;
+              AppLocalizations.of(context)!.signupSnackbarEmailInvalidError;
           break;
         default:
           errorMessage =
-              AppLocalizations.of(context)!.loginSnackbarGenericError;
+              AppLocalizations.of(context)!.signupSnackbarGenericError;
       }
       bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -70,11 +120,6 @@ class _LoginPageState extends State<LoginPage> {
       );
       return;
     }
-    if (context.mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
-          (Route<dynamic> route) => false);
-    }
   }
 
   @override
@@ -89,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 70),
               Text(
-                AppLocalizations.of(context)!.loginTitle,
+                AppLocalizations.of(context)!.signupTitle,
                 style: const TextStyle(
                   fontFamily: 'Bahnschrift',
                   fontVariations: [
@@ -139,14 +184,59 @@ class _LoginPageState extends State<LoginPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 14),
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14,
+                      ),
                       validator: (String? value) {
                         return _verifyEmailField(value);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalizations.of(context)!.username,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 350),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 14),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _inputUsername,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: AppLocalizations.of(context)!.usernameHint,
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14,
+                      ),
+                      validator: (String? value) {
+                        return _verifyUsernameField(value);
                       },
                     ),
                     const SizedBox(height: 10),
@@ -201,8 +291,8 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 {
-                                  _loginUser(
-                                      _inputEmail.text, _inputPassword.text);
+                                  _signupUser(_inputEmail.text,
+                                      _inputUsername.text, _inputPassword.text);
                                 }
                               }
                             },
@@ -215,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                AppLocalizations.of(context)!.login,
+                                AppLocalizations.of(context)!.signup,
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
@@ -233,56 +323,14 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                              thickness: 0.5,
-                              color: Theme.of(context).colorScheme.outline),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            AppLocalizations.of(context)!.loginServices,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            thickness: 0.5,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          color: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
-                        ),
-                        height: 50,
-                        width: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: IconButton(
-                              icon: Image.asset(
-                                  'lib/assets/images/service_google.png'),
-                              onPressed: () => {}),
-                        )),
-                    const SizedBox(height: 20),
                     TextButton(
                       onPressed: () {
                         if (context.mounted) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const SignupPage()));
+                          Navigator.of(context).pop();
                         }
                       },
                       child: Text(
-                        AppLocalizations.of(context)!.signupPush,
+                        AppLocalizations.of(context)!.loginPush,
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,

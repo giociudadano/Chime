@@ -98,8 +98,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                     .split(':')
                                     .length -
                                 1
-                        ? "Continue"
-                        : "Next",
+                        ? AppLocalizations.of(context)!.onBoardingContinue
+                        : AppLocalizations.of(context)!.onBoardingNext,
                     style: const TextStyle(
                       fontFamily: 'Bahnschrift',
                       fontVariations: [
@@ -131,6 +131,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 }
 
+// Defines each swipable frame in OnBoardingPage.
 class OnBoardingPageContent extends StatelessWidget {
   const OnBoardingPageContent(
       {Key? key,
