@@ -271,7 +271,20 @@ class _LoginPageState extends State<LoginPage> {
                           child: IconButton(
                               icon: Image.asset(
                                   'lib/assets/images/service_google.png'),
-                              onPressed: () => {}),
+                              onPressed: () async {
+                                await AuthService()
+                                    .signInWithGoogle()
+                                    .then((response) {
+                                  print("RESPONSE: ******** $response");
+                                  if (context.mounted && response == true) {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage()),
+                                        (Route<dynamic> route) => false);
+                                  }
+                                });
+                              }),
                         )),
                     const SizedBox(height: 20),
                     TextButton(

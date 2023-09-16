@@ -73,6 +73,9 @@ class _SignupPageState extends State<SignupPage> {
           );
         }
       } catch (e) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          FirebaseAuth.instance.currentUser!.delete();
+        }
         return;
       }
     }

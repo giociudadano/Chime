@@ -9,6 +9,9 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+// Imports service libraries. Responsible for one-time authentication methods.
+import 'package:google_sign_in/google_sign_in.dart';
+
 // Imports cosmetic and accessibility libraries. Responsible for dynamic theme modes and languages.
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -23,11 +26,13 @@ part 'pages/login.dart';
 part 'pages/signup.dart';
 part 'pages/home.dart';
 
+part 'services/auth_service.dart';
+
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
