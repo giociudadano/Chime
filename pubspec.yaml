@@ -46,6 +46,7 @@ dependencies:
   firebase_database: ^10.2.5
   google_sign_in: ^6.1.5
   google_sign_in_web: ^0.12.0+4
+  foundation: ^0.0.5
 
 dev_dependencies:
   flutter_test:

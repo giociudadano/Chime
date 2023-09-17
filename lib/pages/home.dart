@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Text(FirebaseAuth.instance.currentUser!.uid),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
-            child: Text("Log Out"),
+            child: const Text("Log Out"),
             onPressed: () {
               logoutUser();
             },

@@ -19,6 +19,15 @@
   "login": "Log In",
   "loginServices": "Or continue with",
   "loginPush": "I already have an account",
+  "loginFeedback": "Successfully logged in as {username}",
+  "@loginFeedback": {
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "Gio"
+      }
+    }
+  },
   "signup": "Get Started",
   "signupPush": "Sign up instead",
   "loginSnackbarIncorrectPasswordError": "Sorry, that email or password is incorrect.",

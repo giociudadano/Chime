@@ -2,6 +2,7 @@ library main;
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 // Imports Firebase libraries. Responsible for authentication and reading and writing to database.
 import 'package:firebase_core/firebase_core.dart';
@@ -28,11 +29,16 @@ part 'pages/home.dart';
 
 part 'services/auth_service.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (foundation.kIsWeb) {
+    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+  }
   runApp(const MyApp());
 }
 
@@ -106,6 +112,7 @@ class _MyAppState extends State<MyApp> {
         Locale('tl', 'PH'),
       ],
       home: const MyHomePage(),
+      navigatorKey: navigatorKey,
     );
   }
 }
@@ -123,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     loadIsOnboardingVisited();
+    addLoginStateListener();
   }
 
   // Checks if the user is new. Visits OnBoardingPage if so and LoginPage if not.
@@ -132,6 +140,17 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isOnboardingVisited =
           sharedPreferences.getBool('isOnboardingVisited') ?? false;
+    });
+  }
+
+  void addLoginStateListener() async {
+    Stream<User?> loginStateListener = FirebaseAuth.instance.authStateChanges();
+    loginStateListener.listen((User? user) async {
+      if (user != null) {
+        Navigator.of(navigatorKey.currentContext!).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            (Route<dynamic> route) => false);
+      }
     });
   }
 
