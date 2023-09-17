@@ -275,7 +275,6 @@ class _LoginPageState extends State<LoginPage> {
                                 await AuthService()
                                     .signInWithGoogle()
                                     .then((response) {
-                                  print("RESPONSE: ******** $response");
                                   if (context.mounted && response == true) {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(

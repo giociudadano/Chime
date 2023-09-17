@@ -21,24 +21,27 @@ class AuthService {
   }
 
   Future<bool> signInWithGoogle() async {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
-
     try {
-      print("try print");
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/userinfo.profile',
+        ],
+      );
+
+      GoogleSignInAccount? gUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+      final credential = GoogleAuthProvider.credential(
+          accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+
       var result = await FirebaseAuth.instance.signInWithCredential(credential);
       if (result.user != null && result.additionalUserInfo!.isNewUser) {
-        print("if print");
         String username = result.user!.displayName!;
         return _writeUserToDatabase(result, username);
       } else {
         return true;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }

@@ -1,25 +1,36 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "cmsc198",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "cmsc198 (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "cmsc198 (release mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Chrome",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--web-port",
+        "8000",
+        "--web-browser-flag",
+        "--disable-web-security"
+      ]
+    },
+    {
+      "name": "Android",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "cmsc198 (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "cmsc198 (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    }
+  ]
 }
