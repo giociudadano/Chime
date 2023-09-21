@@ -1,4 +1,5 @@
 {
+  "appName": "chime!",
   "onBoardingImages": "lib/assets/images/logo.png:lib/assets/images/logo.png:lib/assets/images/logo.png",
   "onBoardingTitles": "Title A:Title B:Title C",
   "onBoardingDescriptions": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.:Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.:Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -19,15 +20,6 @@
   "login": "Log In",
   "loginServices": "Or continue with",
   "loginPush": "I already have an account",
-  "loginFeedback": "Successfully logged in as {username}",
-  "@loginFeedback": {
-    "placeholders": {
-      "username": {
-        "type": "String",
-        "example": "Gio"
-      }
-    }
-  },
   "signup": "Get Started",
   "signupPush": "Sign up instead",
   "loginSnackbarIncorrectPasswordError": "Sorry, that email or password is incorrect.",
@@ -36,5 +28,9 @@
   "accountCreationSuccessful": "Account created successfully!",
   "signupSnackbarEmailInUseError": "Email already exists, please try logging in using this email.",
   "signupSnackbarEmailInvalidError": "Please enter a valid email address.",
-  "signupSnackbarGenericError": "There was an unknown error with creating your account. Please try again later."
+  "signupSnackbarGenericError": "There was an unknown error with creating your account. Please try again later.",
+  "navTabShop": "Shop",
+  "navTabPlaces": "Places",
+  "navTabStore": "My Store",
+  "navTabProfile": "Profile"
 }

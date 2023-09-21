@@ -8,12 +8,7 @@
       "name": "Chrome",
       "request": "launch",
       "type": "dart",
-      "args": [
-        "--web-port",
-        "8000",
-        "--web-browser-flag",
-        "--disable-web-security"
-      ]
+      "args": ["--web-port", "8000"]
     },
     {
       "name": "Android",

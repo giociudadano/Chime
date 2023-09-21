@@ -26,6 +26,8 @@ part 'pages/onboarding.dart';
 part 'pages/login.dart';
 part 'pages/signup.dart';
 part 'pages/home.dart';
+part 'pages/shop.dart';
+part 'pages/profile.dart';
 
 part 'services/auth_service.dart';
 
@@ -88,14 +90,14 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFF64FFDA),
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFF64FFDA),
           brightness: Brightness.dark,
         ),
       ),

@@ -8,53 +8,110 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void logoutUser() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      if (context.mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-            (Route<dynamic> route) => false);
-      }
-    } catch (e) {
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              "There was an error logging out your account. Please try again later.",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 14,
-                fontFamily: 'Bahnschrift',
-                fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
-                ],
-              )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
-        ),
-      );
-      return;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      backgroundColor: MaterialColors.getSurface(darkMode),
-      body: Column(
-        children: [
-          Text(FirebaseAuth.instance.currentUser!.uid),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            child: const Text("Log Out"),
-            onPressed: () {
-              logoutUser();
-            },
-          )
-        ],
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        bottomNavigationBar: Container(
+            color: MaterialColors.getSurfaceContainer(darkMode), child: menu()),
+        body: const TabBarView(
+          children: [
+            ShopPage(),
+            Icon(Icons.directions_transit),
+            Icon(Icons.directions_bike),
+            ProfilePage(),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget menu() {
+    return TabBar(
+      tabs: [
+        Tab(
+          height: 60,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Icon(Icons.local_mall_outlined),
+              Text(
+                AppLocalizations.of(context)!.navTabShop,
+                style: const TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3),
+              ),
+            ],
+          ),
+        ),
+        Tab(
+          height: 60,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Icon(Icons.restaurant),
+              Text(
+                AppLocalizations.of(context)!.navTabPlaces,
+                style: const TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3),
+              )
+            ],
+          ),
+        ),
+        Tab(
+          height: 60,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Icon(Icons.storefront),
+              Text(
+                AppLocalizations.of(context)!.navTabStore,
+                style: const TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3),
+              )
+            ],
+          ),
+        ),
+        Tab(
+          height: 60,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Icon(Icons.account_circle_outlined),
+              Text(
+                AppLocalizations.of(context)!.navTabProfile,
+                style: const TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

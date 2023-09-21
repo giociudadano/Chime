@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_color_utilities/palettes/core_palette.dart';
 
 class MaterialColors {
-  static Color seedColor = Colors.deepPurple;
+  static Color seedColor = const Color(0xFF64FFDA);
 
   static Color getSurface(bool darkMode) {
     CorePalette p = CorePalette.of(seedColor.value);
