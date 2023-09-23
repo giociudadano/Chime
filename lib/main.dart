@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // Imports service libraries. Responsible for one-time authentication methods.
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,9 +18,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geolocator/geolocator.dart';
+//Geohash
 
-// Imports helper functions. Responsible for generating neutral colors.
+// Imports helper functions and models.
 import 'models/material_colors_model.dart';
+part 'models/product_model.dart';
 
 // Defines all page components.
 part 'pages/onboarding.dart';

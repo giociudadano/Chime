@@ -4,10 +4,11 @@ part of main;
 class ProductCard extends StatefulWidget {
   ProductCard(
       {super.key,
+      required this.id,
       required this.productName,
       required this.placeName,
       required this.productPrice});
-  String productName, placeName;
+  String productName, productImageURL = '', placeName, id;
   int productPrice;
 
   @override
@@ -15,6 +16,28 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  void getProductImageURL() async {
+    String url = '';
+    String ref = "products/${widget.id}.jpg";
+    try {
+      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    } catch (e) {
+      //
+    } finally {
+      if (mounted) {
+        setState(() {
+          widget.productImageURL = url;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProductImageURL();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -33,11 +56,10 @@ class _ProductCardState extends State<ProductCard> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: 90,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                      "https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141353.jpg"),
+                  image: NetworkImage(widget.productImageURL),
                 ),
               ),
             ),

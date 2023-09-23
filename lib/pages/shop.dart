@@ -1,5 +1,6 @@
 part of main;
 
+// The 'Shop' page displays a list of recommended products for the user to buy.
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
 
@@ -11,10 +12,12 @@ class _ShopPageState extends State<ShopPage> {
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
   final products = [];
-  int productsPerPage = 3;
+  int productsPerPage = 5;
   int productsDisplayed = 0;
   String? lastVisible;
 
+  // Initializes a listener that checks if the user scrolls to the bottom of the ListView. If true,
+  // adds a list of products to the bottom of the list.
   void addScrollListener() {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge &&
@@ -24,6 +27,34 @@ class _ShopPageState extends State<ShopPage> {
     });
   }
 
+  // Fetches the current coordinates of the user.
+  Future<Position> getDevicePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  // Queries a list of products sorted by distance from the device. Called on page initialization
+  // and on reaching the bottom of the ListView.
   void addProducts() async {
     Query getQuery() {
       FirebaseFirestore db = FirebaseFirestore.instance;
@@ -40,13 +71,18 @@ class _ShopPageState extends State<ShopPage> {
       }
     }
 
+    Position position = await getDevicePosition();
     getQuery().get().then((querySnapshot) {
       for (var docSnapshot in querySnapshot.docs) {
-        setState(() {
-          products.add(docSnapshot.data());
-          productsDisplayed += productsPerPage;
-          lastVisible = docSnapshot.id;
-        });
+        if (mounted) {
+          setState(() {
+            products.add(
+                ProductModel(docSnapshot.id, docSnapshot.data(), position));
+            productsDisplayed += productsPerPage;
+            lastVisible = docSnapshot.id;
+            products.sort((a, b) => a.distance.compareTo(b.distance));
+          });
+        }
       }
     });
   }
@@ -152,9 +188,10 @@ class _ShopPageState extends State<ShopPage> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       return ProductCard(
-                          productName: products[index]["productName"],
-                          placeName: products[index]["placeName"],
-                          productPrice: products[index]["productPrice"]);
+                          id: products[index].id,
+                          productName: products[index].productName,
+                          placeName: products[index].placeName,
+                          productPrice: products[index].productPrice);
                     },
                   ),
                 ],
