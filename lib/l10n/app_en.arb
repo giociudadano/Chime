@@ -32,5 +32,7 @@
   "navTabShop": "Shop",
   "navTabPlaces": "Places",
   "navTabStore": "My Store",
-  "navTabProfile": "Profile"
+  "navTabProfile": "Profile",
+  "searchBoxHint": "Search for a product",
+  "sectionRecommended": "Recommended products"
 }

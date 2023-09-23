@@ -9,6 +9,42 @@ class ShopPage extends StatefulWidget {
 
 class _ShopPageState extends State<ShopPage> {
   final _searchBox = TextEditingController();
+  final _scrollController = ScrollController();
+  final products = [];
+  int productsPerPage = 3;
+  int productsDisplayed = 0;
+  String lastKeySeen = "a";
+
+  void addScrollListener() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels != 0) {
+        addProducts();
+      }
+    });
+  }
+
+  void addProducts() async {
+    Query query = FirebaseDatabase.instance
+        .ref('products')
+        .orderByKey()
+        .startAfter(lastKeySeen)
+        .limitToFirst(productsPerPage);
+    query.onChildAdded.listen((event) {
+      setState(() {
+        products.add(event.snapshot.value);
+        productsDisplayed += productsPerPage;
+        lastKeySeen = event.snapshot.key ?? lastKeySeen;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    addScrollListener();
+    addProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +71,7 @@ class _ShopPageState extends State<ShopPage> {
                               FontVariation('wght', 700),
                               FontVariation('wdth', 100),
                             ],
-                            fontSize: 25,
+                            fontSize: 22,
                             letterSpacing: -0.3),
                       ),
                       IconButton(
@@ -53,7 +89,7 @@ class _ShopPageState extends State<ShopPage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       contentPadding: EdgeInsets.zero,
-                      hintText: "Search for an item",
+                      hintText: AppLocalizations.of(context)!.searchBoxHint,
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
@@ -72,13 +108,47 @@ class _ShopPageState extends State<ShopPage> {
                         FontVariation('wght', 300),
                         FontVariation('wdth', 100),
                       ],
-                      fontSize: 14,
+                      fontSize: 13,
                     ),
                   ),
                 ],
               ),
             ),
           ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView(
+                controller: _scrollController,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.sectionRecommended,
+                    style: const TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 700),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 18,
+                        letterSpacing: -0.3),
+                  ),
+                  const SizedBox(height: 10),
+                  ListView.builder(
+                    key: UniqueKey(),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      return ProductCard(
+                          productName: products[index]["productName"],
+                          placeName: products[index]["placeName"],
+                          productPrice: products[index]["productPrice"]);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

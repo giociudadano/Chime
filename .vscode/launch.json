@@ -5,10 +5,16 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Chrome",
+      "name": "Chrome (testing)",
       "request": "launch",
       "type": "dart",
-      "args": ["--web-port", "8000"]
+      // Disable web security for loading network images
+      "args": [
+        "--web-port",
+        "8000",
+        "--web-browser-flag",
+        "--disable-web-security"
+      ]
     },
     {
       "name": "Android",

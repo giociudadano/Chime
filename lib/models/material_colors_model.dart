@@ -6,7 +6,7 @@ class MaterialColors {
 
   static Color getSurface(bool darkMode) {
     CorePalette p = CorePalette.of(seedColor.value);
-    return Color(p.neutral.get(darkMode ? 6 : 96));
+    return Color(p.neutral.get(darkMode ? 6 : 94));
   }
 
   static Color getSurfaceDim(bool darkMode) {
