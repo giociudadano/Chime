@@ -12,6 +12,7 @@ class _ShopPageState extends State<ShopPage> {
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
   final products = [];
+  Timer? _debounce;
   int productsPerPage = 5;
   int productsDisplayed = 0;
   String? lastVisible;
@@ -87,11 +88,32 @@ class _ShopPageState extends State<ShopPage> {
     });
   }
 
+  void addSearchListener() {
+    _searchBox.addListener(() {
+      if (_debounce != null) {
+        _debounce!.cancel();
+      }
+      _debounce = Timer(const Duration(milliseconds: 800), () {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     addScrollListener();
     addProducts();
+    addSearchListener();
+  }
+
+  @override
+  void dispose() {
+    _searchBox.dispose();
+    _debounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -187,11 +209,17 @@ class _ShopPageState extends State<ShopPage> {
                     shrinkWrap: true,
                     itemCount: products.length,
                     itemBuilder: (context, index) {
-                      return ProductCard(
-                          id: products[index].id,
-                          productName: products[index].productName,
-                          placeName: products[index].placeName,
-                          productPrice: products[index].productPrice);
+                      if (products[index].productName.toLowerCase().contains(
+                              _searchBox.value.text.toString().toLowerCase()) &&
+                          _searchBox.value.toString().toLowerCase() != '') {
+                        return ProductCard(
+                            id: products[index].id,
+                            productName: products[index].productName,
+                            placeName: products[index].placeName,
+                            productPrice: products[index].productPrice);
+                      } else {
+                        return const SizedBox.shrink();
+                      }
                     },
                   ),
                 ],
