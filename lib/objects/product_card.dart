@@ -27,7 +27,7 @@ class _ProductCardState extends State<ProductCard> {
       ),
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 25),
       child: SizedBox(
-        height: 150,
+        height: 140,
         child: Column(
           children: [
             Container(

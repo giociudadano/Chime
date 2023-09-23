@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Imports service libraries. Responsible for one-time authentication methods.
 import 'package:google_sign_in/google_sign_in.dart';

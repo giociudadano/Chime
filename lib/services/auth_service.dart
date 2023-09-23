@@ -5,11 +5,11 @@ class AuthService {
     if (result.user != null) {
       String uid = result.user!.uid;
       try {
-        DatabaseReference ref = FirebaseDatabase.instance.ref("users/$uid");
-        ref.update({
-          "username": username,
-          "displayName": username,
-        });
+        FirebaseFirestore db = FirebaseFirestore.instance;
+        db
+            .collection("users")
+            .doc(uid)
+            .set({"username": username, "displayName": username});
         return true;
       } catch (e) {
         if (FirebaseAuth.instance.currentUser != null) {

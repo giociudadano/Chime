@@ -45,11 +45,11 @@ class _SignupPageState extends State<SignupPage> {
     if (result.user != null) {
       String uid = result.user!.uid;
       try {
-        DatabaseReference ref = FirebaseDatabase.instance.ref("users/$uid");
-        ref.update({
-          "username": username,
-          "displayName": username,
-        });
+        FirebaseFirestore db = FirebaseFirestore.instance;
+        db
+            .collection("users")
+            .doc(uid)
+            .set({"username": username, "displayName": username});
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const HomePage()),

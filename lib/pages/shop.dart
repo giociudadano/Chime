@@ -13,7 +13,7 @@ class _ShopPageState extends State<ShopPage> {
   final products = [];
   int productsPerPage = 3;
   int productsDisplayed = 0;
-  String lastKeySeen = "a";
+  String? lastVisible;
 
   void addScrollListener() {
     _scrollController.addListener(() {
@@ -25,17 +25,29 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void addProducts() async {
-    Query query = FirebaseDatabase.instance
-        .ref('products')
-        .orderByKey()
-        .startAfter(lastKeySeen)
-        .limitToFirst(productsPerPage);
-    query.onChildAdded.listen((event) {
-      setState(() {
-        products.add(event.snapshot.value);
-        productsDisplayed += productsPerPage;
-        lastKeySeen = event.snapshot.key ?? lastKeySeen;
-      });
+    Query getQuery() {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      if (lastVisible == null) {
+        return db
+            .collection("products")
+            .orderBy(FieldPath.documentId)
+            .limit(productsPerPage);
+      } else {
+        return db
+            .collection("products")
+            .orderBy(FieldPath.documentId)
+            .startAfter([lastVisible]).limit(productsPerPage);
+      }
+    }
+
+    getQuery().get().then((querySnapshot) {
+      for (var docSnapshot in querySnapshot.docs) {
+        setState(() {
+          products.add(docSnapshot.data());
+          productsDisplayed += productsPerPage;
+          lastVisible = docSnapshot.id;
+        });
+      }
     });
   }
 

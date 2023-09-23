@@ -43,10 +43,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  firebase_database: ^10.2.5
   google_sign_in: ^6.1.5
   google_sign_in_web: ^0.12.0+4
   foundation: ^0.0.5
+  cloud_firestore: ^4.9.2
 
 dev_dependencies:
   flutter_test:
