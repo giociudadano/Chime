@@ -9,15 +9,21 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  // Variables for controllers.
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
+
+  // Variables for pagination.
   final products = [];
-  Timer? _debounce;
   int productsPerPage = 5;
   int productsDisplayed = 0;
   String? lastVisible;
 
-  // Initializes a listener that checks if the user scrolls to the bottom of the ListView. If true,
+  // Variables for search function.
+  FocusNode focus = FocusNode();
+  Timer? _debounce;
+
+  // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
   void addScrollListener() {
     _scrollController.addListener(() {
@@ -90,14 +96,16 @@ class _ShopPageState extends State<ShopPage> {
 
   void addSearchListener() {
     _searchBox.addListener(() {
-      if (_debounce != null) {
-        _debounce!.cancel();
-      }
-      _debounce = Timer(const Duration(milliseconds: 800), () {
-        if (mounted) {
-          setState(() {});
+      if (focus.hasFocus) {
+        if (_debounce != null) {
+          _debounce!.cancel();
         }
-      });
+        _debounce = Timer(const Duration(milliseconds: 800), () {
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
     });
   }
 
@@ -152,6 +160,7 @@ class _ShopPageState extends State<ShopPage> {
                   ),
                   const SizedBox(height: 10),
                   TextField(
+                    focusNode: focus,
                     controller: _searchBox,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -203,25 +212,33 @@ class _ShopPageState extends State<ShopPage> {
                         letterSpacing: -0.3),
                   ),
                   const SizedBox(height: 10),
-                  ListView.builder(
-                    key: UniqueKey(),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      if (products[index].productName.toLowerCase().contains(
-                              _searchBox.value.text.toString().toLowerCase()) &&
-                          _searchBox.value.toString().toLowerCase() != '') {
-                        return ProductCard(
-                            id: products[index].id,
-                            productName: products[index].productName,
-                            placeName: products[index].placeName,
-                            productPrice: products[index].productPrice);
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
+                  GridView.builder(
+                      key: UniqueKey(),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              mainAxisExtent: 220,
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 0.8,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 0),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        if (products[index].productName.toLowerCase().contains(
+                                _searchBox.value.text
+                                    .toString()
+                                    .toLowerCase()) &&
+                            _searchBox.value.toString().toLowerCase() != '') {
+                          return ProductCard(
+                              id: products[index].id,
+                              productName: products[index].productName,
+                              placeName: products[index].placeName,
+                              productPrice: products[index].productPrice);
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }),
                 ],
               ),
             ),

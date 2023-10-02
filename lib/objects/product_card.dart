@@ -45,17 +45,15 @@ class _ProductCardState extends State<ProductCard> {
       color: MaterialColors.getSurfaceContainerLowest(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      margin: const EdgeInsets.fromLTRB(10, 0, 10, 25),
+      margin: const EdgeInsets.fromLTRB(7, 0, 7, 15),
       child: SizedBox(
-        height: 140,
+        height: 220,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: 90,
+              height: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
@@ -64,68 +62,58 @@ class _ProductCardState extends State<ProductCard> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(10, 8, 15, 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Image.network(
-                          "https://img.freepik.com/premium-vector/restaurant-logo-design-template_79169-56.jpg?w=2000",
-                          width: 32,
-                          height: 32,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.placeName,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 13,
-                                  letterSpacing: -0.3),
-                            ),
-                            Text(
-                              widget.productName,
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 16,
-                                letterSpacing: -0.3,
-                                height: 0.8,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    Text(
-                      '₱${widget.productPrice}',
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 25,
+                    child: Text(
+                      widget.productName,
+                      maxLines: 2,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontFamily: 'Bahnschrift',
                           fontVariations: const [
-                            FontVariation('wght', 700),
+                            FontVariation('wght', 500),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 16,
-                          letterSpacing: -0.3),
+                          fontSize: 13,
+                          letterSpacing: -0.3,
+                          height: 0.85,
+                          overflow: TextOverflow.ellipsis),
                     ),
-                  ],
-                ))
+                  ),
+                  Text(
+                    '₱${widget.productPrice}',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 700),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 15,
+                        letterSpacing: -0.3),
+                  ),
+                  Text(
+                    widget.placeName,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 11,
+                        letterSpacing: -0.3,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
