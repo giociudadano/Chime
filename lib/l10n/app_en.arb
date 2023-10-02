@@ -29,7 +29,7 @@
   "signupSnackbarEmailInUseError": "Email already exists, please try logging in using this email.",
   "signupSnackbarEmailInvalidError": "Please enter a valid email address.",
   "signupSnackbarGenericError": "There was an unknown error with creating your account. Please try again later.",
-  "navTabShop": "Shop",
+  "navTabShop": "Products",
   "navTabPlaces": "Places",
   "navTabStore": "My Store",
   "navTabProfile": "Profile",

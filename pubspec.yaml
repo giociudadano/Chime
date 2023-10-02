@@ -50,6 +50,7 @@ dependencies:
   geolocator: ^10.1.0
   dart_geohash: ^2.0.2
   firebase_storage: ^11.2.7
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
