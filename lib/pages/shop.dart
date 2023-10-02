@@ -14,7 +14,8 @@ class _ShopPageState extends State<ShopPage> {
   final _scrollController = ScrollController();
 
   // Variables for pagination.
-  final products = [];
+  List<ProductModel> products = [];
+  List<ProductModel> productsSearched = [];
   int productsPerPage = 5;
   int productsDisplayed = 0;
   String? lastVisible;
@@ -102,7 +103,16 @@ class _ShopPageState extends State<ShopPage> {
         }
         _debounce = Timer(const Duration(milliseconds: 800), () {
           if (mounted) {
-            setState(() {});
+            setState(() {
+              productsSearched = [];
+              for (ProductModel product in products) {
+                if (product.productName
+                    .toLowerCase()
+                    .contains(_searchBox.value.text.toString().toLowerCase())) {
+                  productsSearched.add(product);
+                }
+              }
+            });
           }
         });
       }
@@ -201,7 +211,10 @@ class _ShopPageState extends State<ShopPage> {
                 controller: _scrollController,
                 children: [
                   Text(
-                    AppLocalizations.of(context)!.sectionRecommended,
+                    _searchBox.text.isEmpty
+                        ? AppLocalizations.of(context)!.sectionNear
+                        : AppLocalizations.of(context)!
+                            .sectionSearch(_searchBox.text.toLowerCase()),
                     style: const TextStyle(
                         fontFamily: 'Bahnschrift',
                         fontVariations: [
@@ -223,20 +236,23 @@ class _ShopPageState extends State<ShopPage> {
                               childAspectRatio: 0.8,
                               crossAxisSpacing: 0,
                               mainAxisSpacing: 0),
-                      itemCount: products.length,
+                      itemCount: (_searchBox.text.isEmpty)
+                          ? products.length
+                          : productsSearched.length,
                       itemBuilder: (context, index) {
-                        if (products[index].productName.toLowerCase().contains(
-                                _searchBox.value.text
-                                    .toString()
-                                    .toLowerCase()) &&
-                            _searchBox.value.toString().toLowerCase() != '') {
+                        if (_searchBox.text.isEmpty) {
                           return ProductCard(
                               id: products[index].id,
                               productName: products[index].productName,
                               placeName: products[index].placeName,
                               productPrice: products[index].productPrice);
                         } else {
-                          return const SizedBox.shrink();
+                          return ProductCard(
+                              id: productsSearched[index].id,
+                              productName: productsSearched[index].productName,
+                              placeName: productsSearched[index].placeName,
+                              productPrice:
+                                  productsSearched[index].productPrice);
                         }
                       }),
                 ],
