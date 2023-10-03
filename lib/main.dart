@@ -26,18 +26,21 @@ import 'package:geolocator/geolocator.dart';
 // Imports helper functions and models.
 import 'models/material_colors_model.dart';
 part 'models/product_model.dart';
+part 'models/place_model.dart';
 
 // Defines all page components.
 part 'pages/onboarding.dart';
 part 'pages/login.dart';
 part 'pages/signup.dart';
 part 'pages/home.dart';
-part 'pages/shop.dart';
+part 'pages/products.dart';
+part 'pages/places.dart';
 part 'pages/profile.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
 part 'objects/product_card.dart';
+part 'objects/place_card.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

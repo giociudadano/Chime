@@ -26,7 +26,7 @@ class MaterialColors {
 
   static Color getSurfaceContainerLow(bool darkMode) {
     CorePalette p = CorePalette.of(seedColor.value);
-    return Color(p.neutral.get(darkMode ? 10 : 95));
+    return Color(p.neutral.get(darkMode ? 10 : 96));
   }
 
   static Color getSurfaceContainer(bool darkMode) {

@@ -1,26 +1,25 @@
 part of main;
 
-/* Defines the model of a product in ProductsPage.
+/* Defines the model of a place in PlacesPage.
    Populates the 'distance' field using the passed device position coordinates by calculating the distance of
    the device from the place of the product.
 */
-class ProductModel {
+class PlaceModel {
   String id;
-  String productName = "", placeName = "";
-  int productPrice = 0;
+  String placeName = "";
+  String placeTagline = "";
   GeoPoint placePosition = const GeoPoint(0, 0);
   Position devicePosition;
   double distance = 0;
 
-  ProductModel(this.id, data, this.devicePosition) {
-    productName = data["productName"];
+  PlaceModel(this.id, data, this.devicePosition) {
     placeName = data["placeName"];
-    productPrice = data["productPrice"];
+    placeTagline = data["placeTagline"];
     placePosition = data["placePosition"];
     getDistance();
   }
 
-  // Calculates and sets the distance of the device from the product. Used to populate the 'distance' field.
+  // Calculates and sets the distance of the device from the place. Used to populate the 'distance' field.
   void getDistance() {
     distance = Geolocator.distanceBetween(
         devicePosition.latitude,

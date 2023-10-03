@@ -1,23 +1,23 @@
 part of main;
 
-// The 'Shop' page displays a list of recommended products for the user to buy.
-class ShopPage extends StatefulWidget {
-  const ShopPage({super.key});
+// The 'Places' page displays a list of places for the user to buy from.
+class PlacesPage extends StatefulWidget {
+  const PlacesPage({super.key});
 
   @override
-  State<ShopPage> createState() => _ShopPageState();
+  State<PlacesPage> createState() => _PlacesPageState();
 }
 
-class _ShopPageState extends State<ShopPage> {
+class _PlacesPageState extends State<PlacesPage> {
   // Variables for controllers.
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
 
   // Variables for pagination.
-  List<ProductModel> products = [];
-  List<ProductModel> productsSearched = [];
-  int productsPerPage = 5;
-  int productsDisplayed = 0;
+  List<PlaceModel> places = [];
+  List<PlaceModel> placesSearched = [];
+  int placesPerPage = 5;
+  int placesDisplayed = 0;
   String? lastVisible;
 
   // Variables for search function.
@@ -30,7 +30,7 @@ class _ShopPageState extends State<ShopPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge &&
           _scrollController.position.pixels != 0) {
-        addProducts();
+        addPlaces();
       }
     });
   }
@@ -61,21 +61,21 @@ class _ShopPageState extends State<ShopPage> {
     return await Geolocator.getCurrentPosition();
   }
 
-  // Queries a list of products sorted by distance from the device. Called on page initialization
+  // Queries a list of places sorted by distance from the device. Called on page initialization
   // and on reaching the bottom of the ListView.
-  void addProducts() async {
+  void addPlaces() async {
     Query getQuery() {
       FirebaseFirestore db = FirebaseFirestore.instance;
       if (lastVisible == null) {
         return db
-            .collection("products")
+            .collection("places")
             .orderBy(FieldPath.documentId)
-            .limit(productsPerPage);
+            .limit(placesPerPage);
       } else {
         return db
-            .collection("products")
+            .collection("places")
             .orderBy(FieldPath.documentId)
-            .startAfter([lastVisible]).limit(productsPerPage);
+            .startAfter([lastVisible]).limit(placesPerPage);
       }
     }
 
@@ -84,11 +84,11 @@ class _ShopPageState extends State<ShopPage> {
       for (var docSnapshot in querySnapshot.docs) {
         if (mounted) {
           setState(() {
-            products.add(
-                ProductModel(docSnapshot.id, docSnapshot.data(), position));
-            productsDisplayed += productsPerPage;
+            places
+                .add(PlaceModel(docSnapshot.id, docSnapshot.data(), position));
+            placesDisplayed += placesPerPage;
             lastVisible = docSnapshot.id;
-            products.sort((a, b) => a.distance.compareTo(b.distance));
+            places.sort((a, b) => a.distance.compareTo(b.distance));
           });
         }
       }
@@ -104,12 +104,12 @@ class _ShopPageState extends State<ShopPage> {
         _debounce = Timer(const Duration(milliseconds: 800), () {
           if (mounted) {
             setState(() {
-              productsSearched = [];
-              for (ProductModel product in products) {
-                if (product.productName
+              placesSearched = [];
+              for (PlaceModel place in places) {
+                if (place.placeName
                     .toLowerCase()
                     .contains(_searchBox.value.text.toString().toLowerCase())) {
-                  productsSearched.add(product);
+                  placesSearched.add(place);
                 }
               }
             });
@@ -123,7 +123,7 @@ class _ShopPageState extends State<ShopPage> {
   void initState() {
     super.initState();
     addScrollListener();
-    addProducts();
+    addPlaces();
     addSearchListener();
   }
 
@@ -138,12 +138,12 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurface(darkMode),
+      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            color: MaterialColors.getSurfaceContainer(darkMode),
+            color: MaterialColors.getSurfaceContainerLow(darkMode),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -212,9 +212,9 @@ class _ShopPageState extends State<ShopPage> {
                 children: [
                   Text(
                     _searchBox.text.isEmpty
-                        ? AppLocalizations.of(context)!.sectionNear
+                        ? AppLocalizations.of(context)!.placesNear
                         : AppLocalizations.of(context)!
-                            .sectionSearch(_searchBox.text.toLowerCase()),
+                            .placesSearch(_searchBox.text.toLowerCase()),
                     style: const TextStyle(
                         fontFamily: 'Bahnschrift',
                         fontVariations: [
@@ -231,28 +231,27 @@ class _ShopPageState extends State<ShopPage> {
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                              mainAxisExtent: 220,
-                              maxCrossAxisExtent: 200,
-                              childAspectRatio: 0.8,
+                              mainAxisExtent: 100,
+                              maxCrossAxisExtent: 450,
+                              childAspectRatio: 2,
                               crossAxisSpacing: 0,
                               mainAxisSpacing: 0),
                       itemCount: (_searchBox.text.isEmpty)
-                          ? products.length
-                          : productsSearched.length,
+                          ? places.length
+                          : placesSearched.length,
                       itemBuilder: (context, index) {
                         if (_searchBox.text.isEmpty) {
-                          return ProductCard(
-                              id: products[index].id,
-                              productName: products[index].productName,
-                              placeName: products[index].placeName,
-                              productPrice: products[index].productPrice);
+                          return PlaceCard(
+                            id: places[index].id,
+                            placeName: places[index].placeName,
+                            placeTagline: places[index].placeTagline,
+                          );
                         } else {
-                          return ProductCard(
-                              id: productsSearched[index].id,
-                              productName: productsSearched[index].productName,
-                              placeName: productsSearched[index].placeName,
-                              productPrice:
-                                  productsSearched[index].productPrice);
+                          return PlaceCard(
+                            id: placesSearched[index].id,
+                            placeName: placesSearched[index].placeName,
+                            placeTagline: placesSearched[index].placeTagline,
+                          );
                         }
                       }),
                 ],

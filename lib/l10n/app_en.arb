@@ -34,9 +34,18 @@
   "navTabStore": "My Store",
   "navTabProfile": "Profile",
   "searchBoxHint": "Search for a product",
-  "sectionNear": "Recommended products near you",
-  "sectionSearch": "Recommended products named '{search}'",
-  "@sectionSearch": {
+  "productsNear": "Recommended products near you",
+  "productsSearch": "Recommended products named '{search}'",
+  "@productsSearch": {
+    "placeholders": {
+      "search": {
+        "type": "String"
+      }
+    }
+  },
+  "placesNear": "Recommended places near you",
+  "placesSearch": "Recommended places named '{search}'",
+  "@placesSearch": {
     "placeholders": {
       "search": {
         "type": "String"

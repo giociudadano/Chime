@@ -15,11 +15,12 @@ class _HomePageState extends State<HomePage> {
       length: 4,
       child: Scaffold(
         bottomNavigationBar: Container(
-            color: MaterialColors.getSurfaceContainer(darkMode), child: menu()),
+            color: MaterialColors.getSurfaceContainerLow(darkMode),
+            child: menu()),
         body: const TabBarView(
           children: [
-            ShopPage(),
-            Icon(Icons.directions_transit),
+            ProductsPage(),
+            PlacesPage(),
             Icon(Icons.directions_bike),
             ProfilePage(),
           ],
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              const Icon(Icons.restaurant),
+              const Icon(Icons.storefront_outlined),
               Text(
                 AppLocalizations.of(context)!.navTabPlaces,
                 style: const TextStyle(
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              const Icon(Icons.storefront),
+              const Icon(Icons.payments_outlined),
               Text(
                 AppLocalizations.of(context)!.navTabStore,
                 style: const TextStyle(

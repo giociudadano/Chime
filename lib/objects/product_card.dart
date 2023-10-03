@@ -42,7 +42,7 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+      color: MaterialColors.getSurfaceContainerLow(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(7, 0, 7, 15),
@@ -73,7 +73,7 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                 )),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(10, 12, 10, 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
