@@ -44,7 +44,7 @@ class _PlaceCardState extends State<PlaceCard> {
       color: MaterialColors.getSurfaceContainerLow(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
-      margin: const EdgeInsets.fromLTRB(7, 0, 7, 15),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
       child: SizedBox(
         height: 100,
         child: Row(

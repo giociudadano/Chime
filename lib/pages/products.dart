@@ -80,12 +80,14 @@ class _ProductsPageState extends State<ProductsPage> {
     }
 
     Position position = await getDevicePosition();
-    getQuery().get().then((querySnapshot) {
+    getQuery().get().then((querySnapshot) async {
       for (var docSnapshot in querySnapshot.docs) {
+        ProductModel product =
+            ProductModel(docSnapshot.id, docSnapshot.data(), position);
+        await product.getPlaceDetails();
         if (mounted) {
           setState(() {
-            products.add(
-                ProductModel(docSnapshot.id, docSnapshot.data(), position));
+            products.add(product);
             productsDisplayed += productsPerPage;
             lastVisible = docSnapshot.id;
             products.sort((a, b) => a.distance.compareTo(b.distance));
@@ -236,7 +238,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               mainAxisExtent: 220,
                               maxCrossAxisExtent: 200,
                               childAspectRatio: 0.8,
-                              crossAxisSpacing: 0,
+                              crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                       itemCount: (_searchBox.text.isEmpty)
                           ? products.length
@@ -244,13 +246,13 @@ class _ProductsPageState extends State<ProductsPage> {
                       itemBuilder: (context, index) {
                         if (_searchBox.text.isEmpty) {
                           return ProductCard(
-                              id: products[index].id,
+                              productID: products[index].productID,
                               productName: products[index].productName,
                               placeName: products[index].placeName,
                               productPrice: products[index].productPrice);
                         } else {
                           return ProductCard(
-                              id: productsSearched[index].id,
+                              productID: productsSearched[index].productID,
                               productName: productsSearched[index].productName,
                               placeName: productsSearched[index].placeName,
                               productPrice:

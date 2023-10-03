@@ -34,6 +34,7 @@ part 'pages/login.dart';
 part 'pages/signup.dart';
 part 'pages/home.dart';
 part 'pages/products.dart';
+part 'pages/product.dart';
 part 'pages/places.dart';
 part 'pages/profile.dart';
 

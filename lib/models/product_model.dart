@@ -4,28 +4,38 @@ part of main;
    Populates the 'distance' field using the passed device position coordinates by calculating the distance of
    the device from the place of the product.
 */
+// ignore: must_be_immutable
 class ProductModel {
-  String id;
-  String productName = "", placeName = "";
+  // Passed Properties
+  String productID;
+  String placeID = "";
+  String productName = "";
   int productPrice = 0;
-  GeoPoint placePosition = const GeoPoint(0, 0);
   Position devicePosition;
+
+  // Populated Properties
+  String placeName = "";
+  GeoPoint placePosition = const GeoPoint(0, 0);
   double distance = 0;
 
-  ProductModel(this.id, data, this.devicePosition) {
+  ProductModel(this.productID, data, this.devicePosition) {
     productName = data["productName"];
-    placeName = data["placeName"];
+    placeID = data["placeID"];
     productPrice = data["productPrice"];
-    placePosition = data["placePosition"];
-    getDistance();
   }
 
-  // Calculates and sets the distance of the device from the product. Used to populate the 'distance' field.
-  void getDistance() {
-    distance = Geolocator.distanceBetween(
-        devicePosition.latitude,
-        devicePosition.longitude,
-        placePosition.latitude,
-        placePosition.longitude);
+  getPlaceDetails() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("places").doc(placeID).get().then((document) {
+      if (document.exists) {
+        placeName = document.data()!['placeName'];
+        placePosition = document.data()!['placePosition'];
+        distance = Geolocator.distanceBetween(
+            devicePosition.latitude,
+            devicePosition.longitude,
+            placePosition.latitude,
+            placePosition.longitude);
+      }
+    });
   }
 }
