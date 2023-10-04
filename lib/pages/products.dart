@@ -168,7 +168,9 @@ class _ProductsPageState extends State<ProductsPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.shopping_cart_outlined),
-                        onPressed: () {},
+                        onPressed: () {
+                          //TODO - Cart Functionality
+                        },
                       ),
                     ],
                   ),
@@ -192,7 +194,9 @@ class _ProductsPageState extends State<ProductsPage> {
                       prefixIcon: const Icon(Icons.search_outlined),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.mic_outlined),
-                        onPressed: () {},
+                        onPressed: () {
+                          //TODO - Speech-to-Text Search Functionality
+                        },
                       ),
                     ),
                     style: const TextStyle(

@@ -49,8 +49,8 @@ class _ProductCardState extends State<ProductCard> {
       child: InkWell(
         onTap: () {
           if (context.mounted) {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ProductPage()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProductPage(widget.productID)));
           }
         },
         child: SizedBox(

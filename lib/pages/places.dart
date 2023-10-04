@@ -164,7 +164,9 @@ class _PlacesPageState extends State<PlacesPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.shopping_cart_outlined),
-                        onPressed: () {},
+                        onPressed: () {
+                          //TODO - Cart Functionality
+                        },
                       ),
                     ],
                   ),
@@ -188,7 +190,9 @@ class _PlacesPageState extends State<PlacesPage> {
                       prefixIcon: const Icon(Icons.search_outlined),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.mic_outlined),
-                        onPressed: () {},
+                        onPressed: () {
+                          //TODO - Speech-to-Text Search Functionality
+                        },
                       ),
                     ),
                     style: const TextStyle(
