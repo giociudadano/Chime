@@ -59,7 +59,7 @@ class _ProductCardState extends State<ProductCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  width: 180,
+                  width: 200,
                   height: 120,
                   child: FittedBox(
                     clipBehavior: Clip.hardEdge,

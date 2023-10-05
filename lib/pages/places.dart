@@ -24,6 +24,9 @@ class _PlacesPageState extends State<PlacesPage> {
   FocusNode focus = FocusNode();
   Timer? _debounce;
 
+  // Variables for favorites.
+  List<PlaceModel> placesFavorited = [];
+
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
   void addScrollListener() {
@@ -61,6 +64,31 @@ class _PlacesPageState extends State<PlacesPage> {
     return await Geolocator.getCurrentPosition();
   }
 
+  // Initializes a listener that tracks if the current pkace favorites have changed from other screens.
+  void addFavoritesListener() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    db.collection("users").doc(uid).snapshots().listen((event) async {
+      placesFavorited = [];
+      var favorites = event.data()!['favoritePlaces'];
+      for (String favorite in favorites) {
+        await db
+            .collection("places")
+            .doc(favorite)
+            .get()
+            .then((document2) async {
+          if (document2.exists) {
+            PlaceModel place = PlaceModel(document2.id, document2.data());
+            placesFavorited.add(place);
+          }
+        });
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   // Queries a list of places sorted by distance from the device. Called on page initialization
   // and on reaching the bottom of the ListView.
   void addPlaces() async {
@@ -80,12 +108,14 @@ class _PlacesPageState extends State<PlacesPage> {
     }
 
     Position position = await getDevicePosition();
-    getQuery().get().then((querySnapshot) {
+    getQuery().get().then((querySnapshot) async {
       for (var docSnapshot in querySnapshot.docs) {
         if (mounted) {
+          PlaceModel place = PlaceModel(docSnapshot.id, docSnapshot.data(),
+              devicePosition: position);
+          place.getDistance();
           setState(() {
-            places
-                .add(PlaceModel(docSnapshot.id, docSnapshot.data(), position));
+            places.add(place);
             placesDisplayed += placesPerPage;
             lastVisible = docSnapshot.id;
             places.sort((a, b) => a.distance.compareTo(b.distance));
@@ -123,6 +153,7 @@ class _PlacesPageState extends State<PlacesPage> {
   void initState() {
     super.initState();
     addScrollListener();
+    addFavoritesListener();
     addPlaces();
     addSearchListener();
   }
@@ -165,7 +196,7 @@ class _PlacesPageState extends State<PlacesPage> {
                       IconButton(
                         icon: const Icon(Icons.shopping_cart_outlined),
                         onPressed: () {
-                          //TODO: Add favorite/unfavorite product functionality
+                          //TODO: Add cart functionality
                         },
                       ),
                     ],
@@ -214,6 +245,39 @@ class _PlacesPageState extends State<PlacesPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
+                  if (placesFavorited.isNotEmpty && _searchBox.text == '')
+                    Text(
+                      AppLocalizations.of(context)!.placesFavorited,
+                      style: const TextStyle(
+                          fontFamily: 'Bahnschrift',
+                          fontVariations: [
+                            FontVariation('wght', 700),
+                            FontVariation('wdth', 100),
+                          ],
+                          fontSize: 18,
+                          letterSpacing: -0.3),
+                    ),
+                  if (placesFavorited.isNotEmpty && _searchBox.text == '')
+                    const SizedBox(height: 10),
+                  if (placesFavorited.isNotEmpty && _searchBox.text == '')
+                    GridView.builder(
+                      key: UniqueKey(),
+                      shrinkWrap: true,
+                      itemCount: placesFavorited.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PlaceCard(
+                            placeID: placesFavorited[index].placeID,
+                            placeName: placesFavorited[index].placeName,
+                            placeTagline: placesFavorited[index].placeTagline);
+                      },
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              mainAxisExtent: 100,
+                              maxCrossAxisExtent: 450,
+                              childAspectRatio: 2,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 0),
+                    ),
                   Text(
                     _searchBox.text.isEmpty
                         ? AppLocalizations.of(context)!.placesNear
@@ -246,13 +310,13 @@ class _PlacesPageState extends State<PlacesPage> {
                       itemBuilder: (context, index) {
                         if (_searchBox.text.isEmpty) {
                           return PlaceCard(
-                            id: places[index].id,
+                            placeID: places[index].placeID,
                             placeName: places[index].placeName,
                             placeTagline: places[index].placeTagline,
                           );
                         } else {
                           return PlaceCard(
-                            id: placesSearched[index].id,
+                            placeID: placesSearched[index].placeID,
                             placeName: placesSearched[index].placeName,
                             placeTagline: placesSearched[index].placeTagline,
                           );

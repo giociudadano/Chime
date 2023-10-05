@@ -93,11 +93,13 @@ class _ProductPageState extends State<ProductPage> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        List favorites = document.data()!['favorites'];
+        List favorites = document.data()!['favoriteProducts'];
         if (favorites.contains(widget.productID)) {
-          setState(() {
-            widget.isFavorited = true;
-          });
+          if (mounted) {
+            setState(() {
+              widget.isFavorited = true;
+            });
+          }
         }
       }
     });
@@ -110,16 +112,18 @@ class _ProductPageState extends State<ProductPage> {
       FirebaseFirestore db = FirebaseFirestore.instance;
       if (isFavorited) {
         db.collection("users").doc(uid).update({
-          "favorites": FieldValue.arrayRemove([widget.productID])
+          "favoriteProducts": FieldValue.arrayRemove([widget.productID])
         });
       } else {
         db.collection("users").doc(uid).update({
-          "favorites": FieldValue.arrayUnion([widget.productID])
+          "favoriteProducts": FieldValue.arrayUnion([widget.productID])
         });
       }
-      setState(() {
-        widget.isFavorited = !isFavorited;
-      });
+      if (mounted) {
+        setState(() {
+          widget.isFavorited = !isFavorited;
+        });
+      }
     } catch (e) {
       return;
     }
@@ -146,15 +150,43 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.outline),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Padding(
+            padding: EdgeInsets.fromLTRB(10, 10, 6, 6),
+            child: Ink(
+              decoration: ShapeDecoration(
+                color: Colors.black.withOpacity(0.3),
+                shape: const CircleBorder(),
+              ),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Ink(
+                decoration: ShapeDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  shape: const CircleBorder(),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.shopping_cart_outlined,
+                      color: Colors.white),
+                  onPressed: () {
+                    //TODO: Add cart functionality
+                  },
+                ),
+              ),
+            ),
+          ]),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       floatingActionButton: SizedBox(
         height: 50,
@@ -182,6 +214,7 @@ class _ProductPageState extends State<ProductPage> {
         ),
       ),
       body: ListView(
+        padding: const EdgeInsets.only(top: 0),
         children: [
           SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -208,9 +241,6 @@ class _ProductPageState extends State<ProductPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                  height: 15,
-                  color: MaterialColors.getSurfaceContainerLow(darkMode)),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(
@@ -275,10 +305,10 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ]),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: widget.productDesc != ''
-                    ? Text(
+              widget.productDesc != ''
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Text(
                         widget.productDesc,
                         maxLines: 3,
                         style: TextStyle(
@@ -292,15 +322,10 @@ class _ProductPageState extends State<ProductPage> {
                             letterSpacing: -0.3,
                             height: 1.1,
                             overflow: TextOverflow.ellipsis),
-                      )
-                    : const SizedBox.shrink(),
-              ),
-              if (widget.productDesc != '') const SizedBox(height: 20),
-              Container(
-                  height: 15,
-                  color: MaterialColors.getSurfaceContainerLow(darkMode)),
+                      ))
+                  : const SizedBox.shrink(),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Card(
                   color: MaterialColors.getSurfaceContainerLow(darkMode),
                   clipBehavior: Clip.antiAliasWithSaveLayer,

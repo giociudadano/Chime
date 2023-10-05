@@ -4,11 +4,11 @@ part of main;
 class PlaceCard extends StatefulWidget {
   PlaceCard({
     super.key,
-    required this.id,
+    required this.placeID,
     required this.placeName,
     required this.placeTagline,
   });
-  String placeName, placeTagline, placeImageURL = ' ', id;
+  String placeName, placeTagline, placeImageURL = ' ', placeID;
 
   @override
   State<PlaceCard> createState() => _PlaceCardState();
@@ -17,7 +17,7 @@ class PlaceCard extends StatefulWidget {
 class _PlaceCardState extends State<PlaceCard> {
   void getPlaceImageURL() async {
     String url = '';
-    String ref = "places/${widget.id}.jpg";
+    String ref = "places/${widget.placeID}.jpg";
     try {
       url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
     } catch (e) {
@@ -45,78 +45,86 @@ class _PlaceCardState extends State<PlaceCard> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-      child: SizedBox(
-        height: 100,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 90,
-              child: FittedBox(
-                clipBehavior: Clip.hardEdge,
-                fit: BoxFit.cover,
-                child: CachedNetworkImage(
-                  imageUrl: widget.placeImageURL,
-                  placeholder: (context, url) => const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(),
+      child: InkWell(
+        onTap: () {
+          if (context.mounted) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PlacePage(widget.placeID)));
+          }
+        },
+        child: SizedBox(
+          height: 100,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 90,
+                child: FittedBox(
+                  clipBehavior: Clip.hardEdge,
+                  fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.placeImageURL,
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) => Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Icon(Icons.storefront_outlined,
+                          color: Theme.of(context).colorScheme.outlineVariant),
+                    ),
+                    fadeInCurve: Curves.easeIn,
+                    fadeOutCurve: Curves.easeOut,
                   ),
-                  errorWidget: (context, url, error) => Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Icon(Icons.storefront_outlined,
-                        color: Theme.of(context).colorScheme.outlineVariant),
-                  ),
-                  fadeInCurve: Curves.easeIn,
-                  fadeOutCurve: Curves.easeOut,
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      child: Text(
-                        widget.placeName,
-                        maxLines: 1,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 700),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: Text(
-                        widget.placeTagline,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: const [
-                            FontVariation('wght', 400),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 12,
-                          letterSpacing: -0.3,
-                          overflow: TextOverflow.ellipsis,
-                          height: 0.85,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        child: Text(
+                          widget.placeName,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          widget.placeTagline,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 12,
+                            letterSpacing: -0.3,
+                            overflow: TextOverflow.ellipsis,
+                            height: 0.85,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

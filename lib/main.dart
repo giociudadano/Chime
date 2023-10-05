@@ -36,6 +36,7 @@ part 'pages/home.dart';
 part 'pages/products.dart';
 part 'pages/product.dart';
 part 'pages/places.dart';
+part 'pages/place.dart';
 part 'pages/profile.dart';
 
 // Imports all services and objects.

@@ -44,6 +44,7 @@
       }
     }
   },
+  "placesFavorited": "Favorited places",
   "placesNear": "Recommended places near you",
   "placesSearch": "Recommended places named '{search}'",
   "@placesSearch": {

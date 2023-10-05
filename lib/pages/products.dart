@@ -38,6 +38,32 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
+  // Initializes a listener that tracks if the current product favorites have changed from other screens.
+  void addFavoritesListener() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    db.collection("users").doc(uid).snapshots().listen((event) async {
+      productsFavorited = [];
+      var favorites = event.data()!['favoriteProducts'];
+      for (String favorite in favorites) {
+        await db
+            .collection("products")
+            .doc(favorite)
+            .get()
+            .then((document2) async {
+          if (document2.exists) {
+            ProductModel product = ProductModel(document2.id, document2.data());
+            await product.getPlaceName();
+            productsFavorited.add(product);
+          }
+        });
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   // Fetches the current coordinates of the user.
   Future<Position> getDevicePosition() async {
     bool serviceEnabled;
@@ -101,30 +127,6 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
-  Future addFavorites() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("users").doc(uid).get().then((document) async {
-      if (document.exists) {
-        var favorites = document.data()!['favorites'];
-        for (String favorite in favorites) {
-          await db
-              .collection("products")
-              .doc(favorite)
-              .get()
-              .then((document2) async {
-            if (document2.exists) {
-              ProductModel product =
-                  ProductModel(document2.id, document2.data());
-              await product.getPlaceName();
-              productsFavorited.add(product);
-            }
-          });
-        }
-      }
-    });
-  }
-
   // Adds a text field listener that detects if the user searches for an item. Adds all matching
   // items to a list and displays that list in the GridView.
   void addSearchListener() {
@@ -155,8 +157,8 @@ class _ProductsPageState extends State<ProductsPage> {
   void initState() {
     super.initState();
     addScrollListener();
+    addFavoritesListener();
     addProducts();
-    addFavorites();
     addSearchListener();
   }
 
@@ -247,7 +249,7 @@ class _ProductsPageState extends State<ProductsPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
-                  if (productsFavorited.isNotEmpty)
+                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
                     Text(
                       AppLocalizations.of(context)!.productsFavorited,
                       style: const TextStyle(
@@ -259,8 +261,9 @@ class _ProductsPageState extends State<ProductsPage> {
                           fontSize: 18,
                           letterSpacing: -0.3),
                     ),
-                  if (productsFavorited.isNotEmpty) const SizedBox(height: 10),
-                  if (productsFavorited.isNotEmpty)
+                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
+                    const SizedBox(height: 10),
+                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
                     SizedBox(
                       height: 220,
                       child: GridView.builder(
