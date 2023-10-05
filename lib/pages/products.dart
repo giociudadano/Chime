@@ -169,7 +169,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       IconButton(
                         icon: const Icon(Icons.shopping_cart_outlined),
                         onPressed: () {
-                          //TODO - Cart Functionality
+                          //TODO: Add cart functionality
                         },
                       ),
                     ],
@@ -195,7 +195,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.mic_outlined),
                         onPressed: () {
-                          //TODO - Speech-to-Text Search Functionality
+                          //TODO: Add speech-to-text functionality
                         },
                       ),
                     ),
