@@ -155,14 +155,14 @@ class _ProductPageState extends State<ProductPage> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 6, 6),
+            padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
             child: Ink(
               decoration: ShapeDecoration(
                 color: Colors.black.withOpacity(0.3),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
                   Navigator.pop(context);
                 },

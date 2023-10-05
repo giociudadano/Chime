@@ -6,9 +6,9 @@ class ProductCard extends StatefulWidget {
       {super.key,
       required this.productID,
       required this.productName,
-      required this.placeName,
-      required this.productPrice});
-  String productName, productImageURL = '', placeName, productID;
+      required this.productPrice,
+      required this.placeID});
+  String productName, productImageURL = '', placeName = '', productID, placeID;
   int productPrice;
 
   @override
@@ -32,10 +32,22 @@ class _ProductCardState extends State<ProductCard> {
     }
   }
 
+  void getPlaceName() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("places").doc(widget.placeID).get().then((document) {
+      if (document.exists) {
+        setState(() {
+          widget.placeName = document.data()!['placeName'];
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getProductImageURL();
+    getPlaceName();
   }
 
   @override

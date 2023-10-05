@@ -39,7 +39,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   // Initializes a listener that tracks if the current product favorites have changed from other screens.
-  void addFavoritesListener() {
+  void addFavoritesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
     db.collection("users").doc(uid).snapshots().listen((event) async {
@@ -53,7 +53,6 @@ class _ProductsPageState extends State<ProductsPage> {
             .then((document2) async {
           if (document2.exists) {
             ProductModel product = ProductModel(document2.id, document2.data());
-            await product.getPlaceName();
             productsFavorited.add(product);
           }
         });
@@ -108,22 +107,17 @@ class _ProductsPageState extends State<ProductsPage> {
       }
     }
 
-    Position position = await getDevicePosition();
     getQuery().get().then((querySnapshot) async {
-      for (var docSnapshot in querySnapshot.docs) {
-        ProductModel product = ProductModel(docSnapshot.id, docSnapshot.data(),
-            devicePosition: position);
-        await product.getPlaceName();
-        await product.getPlaceLocation();
+      await Future.forEach(querySnapshot.docs, (docSnapshot) async {
+        ProductModel product = ProductModel(docSnapshot.id, docSnapshot.data());
         if (mounted) {
           setState(() {
             products.add(product);
             productsDisplayed += productsPerPage;
             lastVisible = docSnapshot.id;
-            products.sort((a, b) => a.distance.compareTo(b.distance));
           });
         }
-      }
+      });
     });
   }
 
@@ -156,10 +150,15 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
-    addScrollListener();
-    addFavoritesListener();
-    addProducts();
-    addSearchListener();
+
+    initProducts() async {
+      addScrollListener();
+      addFavoritesListener();
+      addProducts();
+      addSearchListener();
+    }
+
+    initProducts();
   }
 
   @override
@@ -275,9 +274,9 @@ class _ProductsPageState extends State<ProductsPage> {
                           return ProductCard(
                               productID: productsFavorited[index].productID,
                               productName: productsFavorited[index].productName,
-                              placeName: productsFavorited[index].placeName,
                               productPrice:
-                                  productsFavorited[index].productPrice);
+                                  productsFavorited[index].productPrice,
+                              placeID: productsFavorited[index].placeID);
                         },
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -320,15 +319,15 @@ class _ProductsPageState extends State<ProductsPage> {
                           return ProductCard(
                               productID: products[index].productID,
                               productName: products[index].productName,
-                              placeName: products[index].placeName,
-                              productPrice: products[index].productPrice);
+                              productPrice: products[index].productPrice,
+                              placeID: products[index].placeID);
                         } else {
                           return ProductCard(
                               productID: productsSearched[index].productID,
                               productName: productsSearched[index].productName,
-                              placeName: productsSearched[index].placeName,
                               productPrice:
-                                  productsSearched[index].productPrice);
+                                  productsSearched[index].productPrice,
+                              placeID: productsSearched[index].placeID);
                         }
                       }),
                 ],

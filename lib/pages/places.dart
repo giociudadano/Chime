@@ -113,7 +113,7 @@ class _PlacesPageState extends State<PlacesPage> {
         if (mounted) {
           PlaceModel place = PlaceModel(docSnapshot.id, docSnapshot.data(),
               devicePosition: position);
-          place.getDistance();
+          place.setDistance();
           setState(() {
             places.add(place);
             placesDisplayed += placesPerPage;

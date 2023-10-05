@@ -199,7 +199,7 @@ class _PlacePageState extends State<PlacePage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   child: IconButton(
                     icon: Icon(
                       widget.isFavorited

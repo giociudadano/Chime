@@ -19,7 +19,7 @@ class PlaceModel {
   }
 
   // Calculates and sets the distance of the device from the place. Used to populate the 'distance' field.
-  void getDistance() {
+  void setDistance() {
     distance = Geolocator.distanceBetween(
         devicePosition!.latitude,
         devicePosition!.longitude,
