@@ -34,6 +34,7 @@
   "navTabStore": "My Store",
   "navTabProfile": "Profile",
   "searchBoxHint": "Search for a product",
+  "productsFavorited": "Favorited products",
   "productsNear": "Recommended products near you",
   "productsSearch": "Recommended products named '{search}'",
   "@productsSearch": {

@@ -24,6 +24,9 @@ class _ProductsPageState extends State<ProductsPage> {
   FocusNode focus = FocusNode();
   Timer? _debounce;
 
+  // Variables for favorites.
+  List<ProductModel> productsFavorited = [];
+
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
   void addScrollListener() {
@@ -82,15 +85,40 @@ class _ProductsPageState extends State<ProductsPage> {
     Position position = await getDevicePosition();
     getQuery().get().then((querySnapshot) async {
       for (var docSnapshot in querySnapshot.docs) {
-        ProductModel product =
-            ProductModel(docSnapshot.id, docSnapshot.data(), position);
-        await product.getPlaceDetails();
+        ProductModel product = ProductModel(docSnapshot.id, docSnapshot.data(),
+            devicePosition: position);
+        await product.getPlaceName();
+        await product.getPlaceLocation();
         if (mounted) {
           setState(() {
             products.add(product);
             productsDisplayed += productsPerPage;
             lastVisible = docSnapshot.id;
             products.sort((a, b) => a.distance.compareTo(b.distance));
+          });
+        }
+      }
+    });
+  }
+
+  Future addFavorites() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("users").doc(uid).get().then((document) async {
+      if (document.exists) {
+        var favorites = document.data()!['favorites'];
+        for (String favorite in favorites) {
+          await db
+              .collection("products")
+              .doc(favorite)
+              .get()
+              .then((document2) async {
+            if (document2.exists) {
+              ProductModel product =
+                  ProductModel(document2.id, document2.data());
+              await product.getPlaceName();
+              productsFavorited.add(product);
+            }
           });
         }
       }
@@ -128,6 +156,7 @@ class _ProductsPageState extends State<ProductsPage> {
     super.initState();
     addScrollListener();
     addProducts();
+    addFavorites();
     addSearchListener();
   }
 
@@ -218,6 +247,43 @@ class _ProductsPageState extends State<ProductsPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
+                  if (productsFavorited.isNotEmpty)
+                    Text(
+                      AppLocalizations.of(context)!.productsFavorited,
+                      style: const TextStyle(
+                          fontFamily: 'Bahnschrift',
+                          fontVariations: [
+                            FontVariation('wght', 700),
+                            FontVariation('wdth', 100),
+                          ],
+                          fontSize: 18,
+                          letterSpacing: -0.3),
+                    ),
+                  if (productsFavorited.isNotEmpty) const SizedBox(height: 10),
+                  if (productsFavorited.isNotEmpty)
+                    SizedBox(
+                      height: 220,
+                      child: GridView.builder(
+                        key: UniqueKey(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: productsFavorited.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ProductCard(
+                              productID: productsFavorited[index].productID,
+                              productName: productsFavorited[index].productName,
+                              placeName: productsFavorited[index].placeName,
+                              productPrice:
+                                  productsFavorited[index].productPrice);
+                        },
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                                mainAxisExtent: 165,
+                                maxCrossAxisExtent: 220,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 10),
+                      ),
+                    ),
                   Text(
                     _searchBox.text.isEmpty
                         ? AppLocalizations.of(context)!.productsNear
@@ -241,7 +307,6 @@ class _ProductsPageState extends State<ProductsPage> {
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                               mainAxisExtent: 220,
                               maxCrossAxisExtent: 200,
-                              childAspectRatio: 0.8,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                       itemCount: (_searchBox.text.isEmpty)
