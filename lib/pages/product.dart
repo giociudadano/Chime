@@ -4,6 +4,7 @@ part of main;
 // This page is visited when the user clicks on a product from the 'Products' page.
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget {
+  // Variables for product information.
   String productID;
   String productName = '',
       productDesc = '',
@@ -12,8 +13,11 @@ class ProductPage extends StatefulWidget {
       placeName = '',
       placeImageURL = '';
   int productPrice = 0;
-  int cartItems = 0;
+
+  // Variables for user information.
+
   bool isFavorited = false;
+
   ProductPage(this.productID, {super.key});
 
   @override
@@ -22,6 +26,9 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   StreamSubscription? cartListener;
+  int cartItems = 0;
+  int itemQuantity = 1;
+
   // Retrieves and sets product information from FirebaseDB given the product ID of the page.
   Future _getProductInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -142,7 +149,7 @@ class _ProductPageState extends State<ProductPage> {
           .doc(uid)
           .collection("cart")
           .doc(widget.placeID)
-          .set({widget.productID: 1}, SetOptions(merge: true));
+          .set({widget.productID: itemQuantity}, SetOptions(merge: true));
     } catch (e) {
       return;
     }
@@ -164,7 +171,7 @@ class _ProductPageState extends State<ProductPage> {
           cartItems += place.data().length;
         }
         setState(() {
-          widget.cartItems = cartItems;
+          this.cartItems = cartItems;
         });
       });
     });
@@ -233,7 +240,7 @@ class _ProductPageState extends State<ProductPage> {
                       //TODO: Add cart functionality
                     },
                   ),
-                  if (widget.cartItems != 0)
+                  if (cartItems != 0)
                     Positioned(
                       right: 0,
                       top: 0,
@@ -242,11 +249,11 @@ class _ProductPageState extends State<ProductPage> {
                           backgroundColor:
                               Theme.of(context).colorScheme.primary,
                           child: Text(
-                            widget.cartItems.toString(),
+                            cartItems.toString(),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
                                 fontFamily: 'Bahnschrift',
-                                fontVariations: [
+                                fontVariations: const [
                                   FontVariation('wght', 700),
                                   FontVariation('wdth', 100),
                                 ],
@@ -313,7 +320,7 @@ class _ProductPageState extends State<ProductPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -325,9 +332,8 @@ class _ProductPageState extends State<ProductPage> {
                               widget.productName,
                               maxLines: 2,
                               style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontFamily: 'Bahnschrift',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
@@ -378,7 +384,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               widget.productDesc != ''
                   ? Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: Text(
                         widget.productDesc,
                         maxLines: 3,
@@ -395,6 +401,83 @@ class _ProductPageState extends State<ProductPage> {
                             overflow: TextOverflow.ellipsis),
                       ))
                   : const SizedBox.shrink(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                child: Text(
+                  "Quantity",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                    height: 0.85,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+                child: Row(
+                  children: [
+                    Container(
+                      color: MaterialColors.getSurfaceContainerLow(darkMode),
+                      width: 32,
+                      height: 32,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.remove,
+                          color: Theme.of(context).colorScheme.outline,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          if (itemQuantity > 1) {
+                            setState(() {
+                              itemQuantity -= 1;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                      color: MaterialColors.getSurfaceContainerLow(darkMode),
+                      width: 40,
+                      height: 32,
+                      child: Center(
+                        child: Text(itemQuantity.toString(),
+                            style: const TextStyle(
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: [
+                                  FontVariation('wght', 500),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 16,
+                                letterSpacing: -0.3),
+                            textAlign: TextAlign.center),
+                      ),
+                    ),
+                    Container(
+                      color: MaterialColors.getSurfaceContainerLow(darkMode),
+                      width: 32,
+                      height: 32,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          color: Theme.of(context).colorScheme.outline,
+                          size: 18,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            itemQuantity += 1;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Card(

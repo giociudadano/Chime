@@ -15,6 +15,7 @@ class PlacePage extends StatefulWidget {
 
   // Variables used for user-related information.
   bool isFavorited = false;
+  int cartItems = 0;
 
   PlacePage(this.placeID, {super.key});
 
@@ -23,6 +24,7 @@ class PlacePage extends StatefulWidget {
 }
 
 class _PlacePageState extends State<PlacePage> {
+  StreamSubscription? cartListener;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -122,6 +124,28 @@ class _PlacePageState extends State<PlacePage> {
     }
   }
 
+  void addCartListener() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    cartListener = db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .snapshots()
+        .listen((event) async {
+      db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
+        int cartItems = 0;
+        for (var place in snapshot.docs) {
+          cartItems += place.data().length;
+        }
+        setState(() {
+          widget.cartItems = cartItems;
+        });
+      });
+    });
+  }
+
   // Initializes page.
   @override
   void initState() {
@@ -131,8 +155,15 @@ class _PlacePageState extends State<PlacePage> {
       _getUserInfo();
     }
 
-    super.initState();
     initPlace();
+    addCartListener();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cartListener!.cancel();
+    super.dispose();
   }
 
   @override
@@ -151,13 +182,35 @@ class _PlacePageState extends State<PlacePage> {
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconButton(
-                icon: Icon(Icons.shopping_cart_outlined,
-                    color: Theme.of(context).colorScheme.outline),
-                onPressed: () {
-                  //TODO: Add cart functionality
-                },
-              ),
+              child: Stack(children: [
+                IconButton(
+                  icon: Icon(Icons.shopping_cart_outlined,
+                      color: Theme.of(context).colorScheme.outline),
+                  onPressed: () {
+                    //TODO: Add cart functionality
+                  },
+                ),
+                if (widget.cartItems != 0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: CircleAvatar(
+                        radius: 10,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        child: Text(
+                          widget.cartItems.toString(),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3),
+                        )),
+                  )
+              ]),
             ),
           ]),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
