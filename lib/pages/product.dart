@@ -12,6 +12,7 @@ class ProductPage extends StatefulWidget {
       placeName = '',
       placeImageURL = '';
   int productPrice = 0;
+  int cartItems = 0;
   bool isFavorited = false;
   ProductPage(this.productID, {super.key});
 
@@ -20,6 +21,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  StreamSubscription? cartListener;
   // Retrieves and sets product information from FirebaseDB given the product ID of the page.
   Future _getProductInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -129,6 +131,45 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  // Adds the product to the user's cart. Creates a collection for that product's place if it does not already exist
+  // and stores the product as an entry in that collection.
+  void addToCart() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db
+          .collection("users")
+          .doc(uid)
+          .collection("cart")
+          .doc(widget.placeID)
+          .set({widget.productID: 1}, SetOptions(merge: true));
+    } catch (e) {
+      return;
+    }
+  }
+
+  void addCartListener() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    cartListener = db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .snapshots()
+        .listen((event) async {
+      db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
+        int cartItems = 0;
+        for (var place in snapshot.docs) {
+          cartItems += place.data().length;
+        }
+        setState(() {
+          widget.cartItems = cartItems;
+        });
+      });
+    });
+  }
+
   // Initializes page. Retrieves and sets the product information and image first to retrieve the place ID. Place ID is
   // then used to retrieve and set the place information and image.
   @override
@@ -144,6 +185,13 @@ class _ProductPageState extends State<ProductPage> {
     }
 
     initProduct();
+    addCartListener();
+  }
+
+  @override
+  void dispose() {
+    cartListener!.cancel();
+    super.dispose();
   }
 
   @override
@@ -177,13 +225,36 @@ class _ProductPageState extends State<ProductPage> {
                   color: Colors.black.withOpacity(0.3),
                   shape: const CircleBorder(),
                 ),
-                child: IconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined,
-                      color: Colors.white),
-                  onPressed: () {
-                    //TODO: Add cart functionality
-                  },
-                ),
+                child: Stack(children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined,
+                        color: Colors.white),
+                    onPressed: () {
+                      //TODO: Add cart functionality
+                    },
+                  ),
+                  if (widget.cartItems != 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          child: Text(
+                            widget.cartItems.toString(),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3),
+                          )),
+                    )
+                ]),
               ),
             ),
           ]),
@@ -193,7 +264,7 @@ class _ProductPageState extends State<ProductPage> {
         child: FittedBox(
           child: FloatingActionButton.extended(
               onPressed: () {
-                // TODO: Add add-to-cart functionality
+                addToCart();
               },
               icon: Icon(Icons.shopping_cart_outlined,
                   color: Theme.of(context).colorScheme.onPrimary),
