@@ -199,7 +199,7 @@ class _ProductPageState extends State<ProductPage> {
                   color: Theme.of(context).colorScheme.onPrimary),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              label: Text(AppLocalizations.of(context)!.productAddToCart,
+              label: Text(AppLocalizations.of(context)!.addToCart,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontFamily: 'Bahnschrift',
@@ -331,82 +331,91 @@ class _ProductPageState extends State<ProductPage> {
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   elevation: 0,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                  child: SizedBox(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 70,
-                          child: FittedBox(
-                            clipBehavior: Clip.hardEdge,
-                            fit: BoxFit.cover,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.placeImageURL,
-                              placeholder: (context, url) => const Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: CircularProgressIndicator(),
+                  child: InkWell(
+                    onTap: () {
+                      if (context.mounted) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PlacePage(widget.placeID)));
+                      }
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 70,
+                            child: FittedBox(
+                              clipBehavior: Clip.hardEdge,
+                              fit: BoxFit.cover,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.placeImageURL,
+                                placeholder: (context, url) => const Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Icon(Icons.storefront_outlined,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant),
+                                ),
+                                fadeInCurve: Curves.easeIn,
+                                fadeOutCurve: Curves.easeOut,
                               ),
-                              errorWidget: (context, url, error) => Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Icon(Icons.storefront_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant),
-                              ),
-                              fadeInCurve: Curves.easeIn,
-                              fadeOutCurve: Curves.easeOut,
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    child: Text(
-                                  AppLocalizations.of(context)!.productSoldBy,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 500),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      height: 0.9,
-                                      fontSize: 13,
-                                      letterSpacing: -0.3,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                                const SizedBox(height: 5),
-                                SizedBox(
-                                  child: Text(
-                                    widget.placeName,
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                      child: Text(
+                                    AppLocalizations.of(context)!.soldBy,
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .outline,
                                         fontFamily: 'Bahnschrift',
                                         fontVariations: const [
-                                          FontVariation('wght', 700),
+                                          FontVariation('wght', 500),
                                           FontVariation('wdth', 100),
                                         ],
-                                        fontSize: 15,
-                                        letterSpacing: -0.3,
                                         height: 0.9,
+                                        fontSize: 13,
+                                        letterSpacing: -0.3,
                                         overflow: TextOverflow.ellipsis),
+                                  )),
+                                  const SizedBox(height: 5),
+                                  SizedBox(
+                                    child: Text(
+                                      widget.placeName,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 15,
+                                          letterSpacing: -0.3,
+                                          height: 0.9,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

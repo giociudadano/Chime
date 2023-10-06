@@ -36,9 +36,11 @@ class _ProductCardState extends State<ProductCard> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db.collection("places").doc(widget.placeID).get().then((document) {
       if (document.exists) {
-        setState(() {
-          widget.placeName = document.data()!['placeName'];
-        });
+        if (mounted) {
+          setState(() {
+            widget.placeName = document.data()!['placeName'];
+          });
+        }
       }
     });
   }

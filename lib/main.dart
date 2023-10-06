@@ -3,6 +3,7 @@ library main;
 import 'dart:async';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -15,13 +16,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 // Imports service libraries. Responsible for one-time authentication methods.
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Imports cosmetic and accessibility libraries. Responsible for dynamic theme modes and languages.
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:geolocator/geolocator.dart';
-//Geohash
 
 // Imports helper functions and models.
 import 'models/material_colors_model.dart';

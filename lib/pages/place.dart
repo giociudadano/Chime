@@ -8,6 +8,9 @@ class PlacePage extends StatefulWidget {
   // Variables used for place information.
   String placeID;
   String placeName = '', placeTagline = '', placeImageURL = '';
+  LatLng latLng = const LatLng(0, 0);
+  CameraPosition cameraPosition =
+      const CameraPosition(target: LatLng(0, 0), zoom: 16);
   List<ProductModel> products = [];
 
   // Variables used for user-related information.
@@ -20,6 +23,9 @@ class PlacePage extends StatefulWidget {
 }
 
 class _PlacePageState extends State<PlacePage> {
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
   // Retrieves and sets the place information given the place ID of the page.
   // Place ID is retrieved when obtaining product information.
   Future _getPlaceInfo() async {
@@ -30,9 +36,12 @@ class _PlacePageState extends State<PlacePage> {
         .get()
         .then((document) async {
       if (document.exists) {
+        var placePosition = document.data()!['placePosition'];
         setState(() {
           widget.placeName = document.data()!['placeName'] ?? '';
           widget.placeTagline = document.data()!['placeTagline'] ?? '';
+          widget.latLng =
+              LatLng(placePosition.latitude, placePosition.longitude);
         });
 
         var products = document.data()!['products'] ?? [];
@@ -46,6 +55,10 @@ class _PlacePageState extends State<PlacePage> {
             });
           });
         }
+
+        final GoogleMapController controller = await _controller.future;
+        controller.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(target: widget.latLng, zoom: 16)));
       }
     });
   }
@@ -240,6 +253,21 @@ class _PlacePageState extends State<PlacePage> {
             ),
           ),
         ),
+        SizedBox(
+            height: 250,
+            child: GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: widget.cameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              markers: {
+                Marker(
+                  markerId: MarkerId(widget.placeName),
+                  position: widget.latLng,
+                )
+              },
+            )),
         if (widget.products.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(20),
@@ -247,7 +275,7 @@ class _PlacePageState extends State<PlacePage> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 AppLocalizations.of(context)!.recommendedProducts,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Bahnschrift',
                     fontVariations: [
                       FontVariation('wght', 700),
@@ -256,7 +284,7 @@ class _PlacePageState extends State<PlacePage> {
                     fontSize: 18,
                     letterSpacing: -0.3),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 220,
                 child: GridView.builder(

@@ -16,7 +16,7 @@ class _ProductsPageState extends State<ProductsPage> {
   // Variables for pagination.
   List<ProductModel> products = [];
   List<ProductModel> productsSearched = [];
-  int productsPerPage = 5;
+  int productsPerPage = 10;
   int productsDisplayed = 0;
   String? lastVisible;
 
