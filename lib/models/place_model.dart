@@ -5,25 +5,13 @@ part of main;
    the device from the place of the product.
 */
 class PlaceModel {
+  // Passed properties
   String placeID;
   String placeName = "";
   String placeTagline = "";
-  GeoPoint placePosition = const GeoPoint(0, 0);
-  Position? devicePosition;
-  double distance = 0;
 
-  PlaceModel(this.placeID, data, {this.devicePosition}) {
+  PlaceModel(this.placeID, data) {
     placeName = data["placeName"];
     placeTagline = data["placeTagline"];
-    placePosition = data["placePosition"];
-  }
-
-  // Calculates and sets the distance of the device from the place. Used to populate the 'distance' field.
-  void setDistance() {
-    distance = Geolocator.distanceBetween(
-        devicePosition!.latitude,
-        devicePosition!.longitude,
-        placePosition.latitude,
-        placePosition.longitude);
   }
 }

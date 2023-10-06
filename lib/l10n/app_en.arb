@@ -55,5 +55,6 @@
     }
   },
   "productSoldBy": "Sold by",
-  "productAddToCart": "Add to Cart"
+  "productAddToCart": "Add to Cart",
+  "recommendedProducts": "Recommended products"
 }

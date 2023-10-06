@@ -5,9 +5,14 @@ part of main;
 
 // ignore: must_be_immutable
 class PlacePage extends StatefulWidget {
+  // Variables used for place information.
   String placeID;
   String placeName = '', placeTagline = '', placeImageURL = '';
+  List<ProductModel> products = [];
+
+  // Variables used for user-related information.
   bool isFavorited = false;
+
   PlacePage(this.placeID, {super.key});
 
   @override
@@ -19,12 +24,28 @@ class _PlacePageState extends State<PlacePage> {
   // Place ID is retrieved when obtaining product information.
   Future _getPlaceInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("places").doc(widget.placeID).get().then((document) {
+    await db
+        .collection("places")
+        .doc(widget.placeID)
+        .get()
+        .then((document) async {
       if (document.exists) {
         setState(() {
           widget.placeName = document.data()!['placeName'] ?? '';
           widget.placeTagline = document.data()!['placeTagline'] ?? '';
         });
+
+        var products = document.data()!['products'] ?? [];
+        for (var product in products) {
+          await db.collection("products").doc(product).get().then((document) {
+            ProductModel productModel =
+                ProductModel(document.id, document.data());
+            widget.products.add(productModel);
+            setState(() {
+              widget.products;
+            });
+          });
+        }
       }
     });
   }
@@ -219,6 +240,46 @@ class _PlacePageState extends State<PlacePage> {
             ),
           ),
         ),
+        if (widget.products.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                AppLocalizations.of(context)!.recommendedProducts,
+                style: TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 18,
+                    letterSpacing: -0.3),
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                height: 220,
+                child: GridView.builder(
+                  key: UniqueKey(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ProductCard(
+                        productID: widget.products[index].productID,
+                        productName: widget.products[index].productName,
+                        productPrice: widget.products[index].productPrice,
+                        placeID: widget.products[index].placeID);
+                  },
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisExtent: 165,
+                      maxCrossAxisExtent: 220,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 10),
+                ),
+              ),
+            ]),
+          )
       ]),
     );
   }

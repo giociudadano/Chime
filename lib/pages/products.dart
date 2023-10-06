@@ -63,32 +63,6 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
-  // Fetches the current coordinates of the user.
-  Future<Position> getDevicePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
   // Queries a list of products sorted by distance from the device. Called on page initialization
   // and on reaching the bottom of the ListView.
   void addProducts() async {
@@ -150,15 +124,10 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
-
-    initProducts() async {
-      addScrollListener();
-      addFavoritesListener();
-      addProducts();
-      addSearchListener();
-    }
-
-    initProducts();
+    addScrollListener();
+    addFavoritesListener();
+    addProducts();
+    addSearchListener();
   }
 
   @override

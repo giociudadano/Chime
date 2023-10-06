@@ -38,32 +38,6 @@ class _PlacesPageState extends State<PlacesPage> {
     });
   }
 
-  // Fetches the current coordinates of the user.
-  Future<Position> getDevicePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
   // Initializes a listener that tracks if the current pkace favorites have changed from other screens.
   void addFavoritesListener() {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -107,18 +81,14 @@ class _PlacesPageState extends State<PlacesPage> {
       }
     }
 
-    Position position = await getDevicePosition();
     getQuery().get().then((querySnapshot) async {
       for (var docSnapshot in querySnapshot.docs) {
         if (mounted) {
-          PlaceModel place = PlaceModel(docSnapshot.id, docSnapshot.data(),
-              devicePosition: position);
-          place.setDistance();
+          PlaceModel place = PlaceModel(docSnapshot.id, docSnapshot.data());
           setState(() {
             places.add(place);
             placesDisplayed += placesPerPage;
             lastVisible = docSnapshot.id;
-            places.sort((a, b) => a.distance.compareTo(b.distance));
           });
         }
       }

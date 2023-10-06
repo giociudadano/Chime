@@ -12,6 +12,11 @@ class ProductModel {
   String productName = "";
   int productPrice = 0;
 
+  // Populated Properties
+  String placeName = "";
+  GeoPoint placePosition = const GeoPoint(0, 0);
+  double distance = 0;
+
   ProductModel(this.productID, data) {
     productName = data["productName"];
     placeID = data["placeID"];
