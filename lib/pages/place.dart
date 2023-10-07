@@ -146,7 +146,6 @@ class _PlacePageState extends State<PlacePage> {
     });
   }
 
-  // Initializes page.
   @override
   void initState() {
     void initPlace() async {
@@ -187,7 +186,8 @@ class _PlacePageState extends State<PlacePage> {
                   icon: Icon(Icons.shopping_cart_outlined,
                       color: Theme.of(context).colorScheme.outline),
                   onPressed: () {
-                    //TODO: Add cart functionality
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const CartPage()));
                   },
                 ),
                 if (widget.cartItems != 0)

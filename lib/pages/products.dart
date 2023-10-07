@@ -199,7 +199,8 @@ class _ProductsPageState extends State<ProductsPage> {
                         IconButton(
                           icon: const Icon(Icons.shopping_cart_outlined),
                           onPressed: () {
-                            //TODO: Add cart functionality
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const CartPage()));
                           },
                         ),
                         if (cartItems != 0)

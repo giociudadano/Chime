@@ -37,11 +37,14 @@ part 'pages/product.dart';
 part 'pages/places.dart';
 part 'pages/place.dart';
 part 'pages/profile.dart';
+part 'pages/cart.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
 part 'objects/product_card.dart';
 part 'objects/place_card.dart';
+part 'objects/order_card.dart';
+part 'objects/order_item_card.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

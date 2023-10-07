@@ -196,7 +196,8 @@ class _PlacesPageState extends State<PlacesPage> {
                         IconButton(
                           icon: const Icon(Icons.shopping_cart_outlined),
                           onPressed: () {
-                            //TODO: Add cart functionality
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const CartPage()));
                           },
                         ),
                         if (cartItems != 0)
@@ -299,7 +300,7 @@ class _PlacesPageState extends State<PlacesPage> {
                               mainAxisExtent: 100,
                               maxCrossAxisExtent: 450,
                               childAspectRatio: 2,
-                              crossAxisSpacing: 0,
+                              crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                     ),
                   Text(
@@ -326,7 +327,7 @@ class _PlacesPageState extends State<PlacesPage> {
                               mainAxisExtent: 100,
                               maxCrossAxisExtent: 450,
                               childAspectRatio: 2,
-                              crossAxisSpacing: 0,
+                              crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                       itemCount: (_searchBox.text.isEmpty)
                           ? places.length
