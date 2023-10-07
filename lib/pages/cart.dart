@@ -18,6 +18,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  StreamSubscription? cartListener;
   final _scrollController = ScrollController();
   Map orders = {};
 
@@ -29,7 +30,9 @@ class _CartPageState extends State<CartPage> {
       for (var place in snapshot.docs) {
         orders[place.id] = place.data();
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -41,6 +44,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void dispose() {
+    cartListener!.cancel();
     super.dispose();
   }
 
@@ -83,7 +87,7 @@ class _CartPageState extends State<CartPage> {
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
                     String key = orders.keys.elementAt(index);
-                    return OrderCard(placeID: key, order: orders[key]);
+                    return OrderCard(placeID: key, orderItems: orders[key]);
                   }),
             ),
         ],
