@@ -1,3 +1,13 @@
+/*
+  [Title]
+  PlaceCard
+
+  [Description]
+  A PlaceCard is an object that contains the place's id, image URL, name, and description.
+  May be tapped on to direct the user to a PlacePage of that place.
+  Created when visiting PlacesPage. Each place in the database has its own PlaceCard.
+*/
+
 part of main;
 
 // ignore: must_be_immutable
@@ -15,6 +25,7 @@ class PlaceCard extends StatefulWidget {
 }
 
 class _PlaceCardState extends State<PlaceCard> {
+  // Fetches and sets the product's image.
   void getPlaceImageURL() async {
     String url = '';
     String ref = "places/${widget.placeID}.jpg";

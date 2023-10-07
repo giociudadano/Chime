@@ -1,3 +1,13 @@
+/*
+  [Title]
+  LoginPage
+
+  [Description]
+  Contains options to login using credentials or one-tap authentication.
+  Call-to-action text may be tapped to sign up the user.
+  Visited when the user is logged out or when the user exits OnBoardingPage for the first time.
+*/
+
 part of main;
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Variables for controllers.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _inputEmail = TextEditingController();
   final _inputPassword = TextEditingController();

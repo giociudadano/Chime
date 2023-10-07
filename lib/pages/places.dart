@@ -1,3 +1,14 @@
+/*
+  [Title]
+  PlacesPage
+
+  [Description]
+  Displays information about places in the database and currently favorited places.
+  Contains options to search for a place.
+  Creates a list of PlaceCards for each place in the database.
+  Visited as a tab in the HomePage.
+*/
+
 part of main;
 
 // The 'Places' page displays a list of places for the user to buy from.
@@ -99,6 +110,8 @@ class _PlacesPageState extends State<PlacesPage> {
     });
   }
 
+  // Adds a listener that detects if an item is added to cart.
+  // Used in displaying the number of current items in cart.
   void addSearchListener() {
     _searchBox.addListener(() {
       if (focus.hasFocus) {

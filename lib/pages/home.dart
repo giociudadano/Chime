@@ -1,3 +1,11 @@
+/*
+  [Title]
+  HomePage
+
+  [Description]
+  Container for all tab pages. Visited when the user logs in.
+*/
+
 part of main;
 
 class HomePage extends StatefulWidget {

@@ -1,3 +1,13 @@
+/*
+  [Title]
+  OrderCard
+
+  [Description]
+  An OrderCard is an object containing a place name, a list of order items from that place, and a checkout button.
+  
+  Created when visiting the CartPage. Each place in the cart has its own OrderCard.
+*/
+
 part of main;
 
 // ignore: must_be_immutable

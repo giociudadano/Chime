@@ -1,3 +1,13 @@
+/*
+  [Title]
+  SignupPage
+
+  [Description]
+  Contains options to sign up for an account using credentials.
+  Call-to-action text may be tapped to go back to LoginPage.
+  Visited when the user taps on a call-to-action text from LoginPage.
+*/
+
 part of main;
 
 class SignupPage extends StatefulWidget {

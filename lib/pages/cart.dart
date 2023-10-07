@@ -1,3 +1,13 @@
+/*
+  [Title]
+  CartPage
+
+  [Description]
+  Displays information about the cart.
+  Creates a list of OrderCards for each place in the cart the user is ordering from.
+  Each OrderCard contains a list of OrderItemCards for each product the user is ordering from that place.
+*/
+
 part of main;
 
 class CartPage extends StatefulWidget {
@@ -11,6 +21,7 @@ class _CartPageState extends State<CartPage> {
   final _scrollController = ScrollController();
   Map orders = {};
 
+  // Fetches a list of products from the user's cart.
   void addProducts() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;

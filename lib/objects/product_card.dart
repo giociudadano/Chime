@@ -1,3 +1,13 @@
+/*
+  [Title]
+  ProductCard
+
+  [Description]
+  A ProductCard is an object that contains the product's id, name, price, and the place it belongs to.
+  May be tapped to direct the user to a ProductPage of that product. 
+  Created when visiting ProductsPage. Each product in the database has its own ProductsPage.
+*/
+
 part of main;
 
 // ignore: must_be_immutable
@@ -16,6 +26,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  // Fetches and sets the product's image.
   void getProductImageURL() async {
     String url = '';
     String ref = "products/${widget.productID}.jpg";
@@ -32,6 +43,7 @@ class _ProductCardState extends State<ProductCard> {
     }
   }
 
+  // Fetches and gets the product name.
   void getPlaceName() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db.collection("places").doc(widget.placeID).get().then((document) {

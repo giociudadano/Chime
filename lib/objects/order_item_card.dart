@@ -1,3 +1,14 @@
+/*
+  [Title]
+  OrderItemCard
+
+  [Description]
+  An OrderItemCard is an object containing a product's URL, name, price, and quantity to be ordered.
+  Contains additional options to modify quantity and remove from cart.
+  Image may be tapped to view the ProductPage of that product.
+  Created when OrderCard is called. Each product belonging to a place has its own OrderItemCard.
+*/
+
 part of main;
 
 // ignore: must_be_immutable
@@ -15,8 +26,10 @@ class OrderItemCard extends StatefulWidget {
 }
 
 class _OrderItemCardState extends State<OrderItemCard> {
+  // Variable for debouncing. Used when modifying item quantity to prevent numerous database calls.
   Timer? _debounce;
 
+  // Fetches and sets the product's image.
   void getProductImageURL() async {
     String url = '';
     String ref = "products/${widget.productID}.jpg";
@@ -33,6 +46,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
     }
   }
 
+  // Fetches and gets the product name and price.
   void getProductInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db
@@ -51,14 +65,15 @@ class _OrderItemCardState extends State<OrderItemCard> {
     });
   }
 
-  void writeItemQuantity() {
+  // Updates the item's quantity in database when the amount is modified.
+  // Uses a debounce variable to prevent successive calls.
+  void updateItemQuantityDebounce() {
     if (_debounce != null) {
       _debounce!.cancel();
     }
     _debounce = Timer(const Duration(milliseconds: 800), () {
       String uid = FirebaseAuth.instance.currentUser!.uid;
       try {
-        print("Fired!");
         FirebaseFirestore db = FirebaseFirestore.instance;
         db
             .collection("users")
@@ -68,6 +83,38 @@ class _OrderItemCardState extends State<OrderItemCard> {
             .set({widget.productID: widget.quantity}, SetOptions(merge: true));
       } catch (e) {
         return;
+      }
+    });
+  }
+
+  // Removes the product from the database.
+  // If the product is the last product from a place, the place collection from is also removed from the cart.
+  void removeProductFromCart() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .doc(widget.placeID)
+        .update({
+      widget.productID: FieldValue.delete(),
+    });
+
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .doc(widget.placeID)
+        .get()
+        .then((snapshot) {
+      if (snapshot.data()!.isEmpty) {
+        db
+            .collection("users")
+            .doc(uid)
+            .collection("cart")
+            .doc(widget.placeID)
+            .delete();
       }
     });
   }
@@ -127,9 +174,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
             ),
             const SizedBox(width: 10),
             Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   const SizedBox(height: 10),
                   Text(
                     widget.productName,
@@ -173,7 +220,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                           ),
                           onPressed: () {
                             if (widget.quantity > 1) {
-                              writeItemQuantity();
+                              updateItemQuantityDebounce();
                               setState(() {
                                 widget.quantity -= 1;
                               });
@@ -209,7 +256,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                             size: 18,
                           ),
                           onPressed: () {
-                            writeItemQuantity();
+                            updateItemQuantityDebounce();
                             setState(() {
                               widget.quantity += 1;
                             });
@@ -218,7 +265,24 @@ class _OrderItemCardState extends State<OrderItemCard> {
                       ),
                     ],
                   ),
-                ])),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 25,
+              width: 25,
+              child: IconButton(
+                padding: EdgeInsets.all(0),
+                icon: Icon(
+                  Icons.close,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                onPressed: () {
+                  removeProductFromCart();
+                },
+              ),
+            )
           ],
         ),
       ),

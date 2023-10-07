@@ -1,3 +1,11 @@
+/*
+  [Title]
+  OnBoardingPage
+
+  [Description]
+  Displays instructions for the user when launching the program for the first time.
+*/
+
 part of main;
 
 class OnBoardingPage extends StatefulWidget {
@@ -11,6 +19,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   int currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
+  // Sets the state on whether onboarding has already been visited.
   void saveIsOnboardingVisited(bool state) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isOnboardingVisited', state);

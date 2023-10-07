@@ -1,3 +1,13 @@
+/*
+  [Title]
+  ProductPage
+
+  [Description]
+  Displays information about a product, its image, price, and description.
+  Contains options to modify quantity to be ordered and to add the product to cart or favorites.
+  Visited when clicking on a ProductCard from ProductsPage.
+*/
+
 part of main;
 
 // The 'Product' page displays additional information about a product.
@@ -155,6 +165,8 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  // Adds a listener that detects if an item is added to cart.
+  // Used in displaying the number of current items in cart.
   void addCartListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;

@@ -1,3 +1,14 @@
+/*
+  [Title]
+  ProductsPage
+
+  [Description]
+  Displays information about products in the database and currently favorited products.
+  Contains options to search for a product.
+  Creates a list of ProductCards for each product in the database.
+  Visited as a tab in the HomePage.
+*/
+
 part of main;
 
 // The 'Products' page displays a list of recommended products for the user to buy.
@@ -125,6 +136,8 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
+  // Adds a listener that detects if an item is added to cart.
+  // Used in displaying the number of current items in cart.
   void addCartListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;

@@ -1,3 +1,12 @@
+/*
+  [Title]
+  PlacePage
+
+  [Description]
+  Displays the name of a place, its location on the map, and its products.
+  Visited when the user clicks on a place from PlacesPage.
+*/
+
 part of main;
 
 // The 'place' page displays additional information about a place and its products.
