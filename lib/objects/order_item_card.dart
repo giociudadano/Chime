@@ -13,15 +13,20 @@ part of main;
 
 // ignore: must_be_immutable
 class OrderItemCard extends StatefulWidget {
-  OrderItemCard(this._deleteFrame,
+  OrderItemCard(
       {super.key,
       required this.placeID,
       required this.productID,
-      required this.quantity});
+      required this.quantity,
+      this.deleteFrame,
+      this.updateTotal});
   String placeID, productID, productImageURL = '', productName = '';
   int quantity, productPrice = 0;
   bool isVisible = true;
-  final VoidCallback _deleteFrame;
+
+  // Variable callbacks used in updating OrderCard.
+  final VoidCallback? deleteFrame;
+  final Function(int delta)? updateTotal;
 
   @override
   State<OrderItemCard> createState() => _OrderItemCardState();
@@ -69,7 +74,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
 
   // Updates the item's quantity in database when the amount is modified.
   // Uses a debounce variable to prevent successive calls.
-  void updateItemQuantityDebounce() {
+  void setProductQuantityAtDatabase() {
     if (_debounce != null) {
       _debounce!.cancel();
     }
@@ -102,7 +107,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         .update({
       widget.productID: FieldValue.delete(),
     });
-
+    widget.updateTotal!(-(widget.productPrice * widget.quantity));
     setState(() {
       widget.isVisible = false;
     });
@@ -115,7 +120,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         .get()
         .then((snapshot) {
       if (snapshot.data()!.isEmpty) {
-        widget._deleteFrame();
+        widget.deleteFrame!();
         db
             .collection("users")
             .doc(uid)
@@ -211,11 +216,12 @@ class _OrderItemCardState extends State<OrderItemCard> {
                             FontVariation('wght', 700),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 15,
+                          fontSize: 20,
                           letterSpacing: -0.3),
                     ),
                     const SizedBox(height: 5),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
                           color:
@@ -230,7 +236,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                             ),
                             onPressed: () {
                               if (widget.quantity > 1) {
-                                updateItemQuantityDebounce();
+                                setProductQuantityAtDatabase();
+                                widget.updateTotal!(-widget.productPrice);
                                 setState(() {
                                   widget.quantity -= 1;
                                 });
@@ -268,7 +275,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                               size: 18,
                             ),
                             onPressed: () {
-                              updateItemQuantityDebounce();
+                              setProductQuantityAtDatabase();
+                              widget.updateTotal!(widget.productPrice);
                               setState(() {
                                 widget.quantity += 1;
                               });

@@ -38,6 +38,8 @@ part 'pages/places.dart';
 part 'pages/place.dart';
 part 'pages/profile.dart';
 part 'pages/cart.dart';
+part 'pages/checkout.dart';
+part 'pages/addresses.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';

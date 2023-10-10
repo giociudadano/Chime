@@ -40,6 +40,7 @@ class _ProductsPageState extends State<ProductsPage> {
   // Variables for user information.
   List<ProductModel> productsFavorited = [];
   int cartItems = 0;
+  final ValueNotifier<bool> valueNotifierCartItems = ValueNotifier(false);
 
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
@@ -48,32 +49,6 @@ class _ProductsPageState extends State<ProductsPage> {
       if (_scrollController.position.atEdge &&
           _scrollController.position.pixels != 0) {
         addProducts();
-      }
-    });
-  }
-
-  // Initializes a listener that tracks if the current product favorites have changed from other screens.
-  void addFavoritesListener() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    favoritesListener =
-        db.collection("users").doc(uid).snapshots().listen((event) async {
-      productsFavorited = [];
-      var favorites = event.data()!['favoriteProducts'];
-      for (String favorite in favorites) {
-        await db
-            .collection("products")
-            .doc(favorite)
-            .get()
-            .then((document2) async {
-          if (document2.exists) {
-            ProductModel product = ProductModel(document2.id, document2.data());
-            productsFavorited.add(product);
-          }
-        });
-      }
-      if (mounted) {
-        setState(() {});
       }
     });
   }
@@ -107,6 +82,32 @@ class _ProductsPageState extends State<ProductsPage> {
           });
         }
       });
+    });
+  }
+
+  // Initializes a listener that tracks if the current product favorites have changed from other screens.
+  void addFavoritesListener() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    favoritesListener =
+        db.collection("users").doc(uid).snapshots().listen((event) async {
+      productsFavorited = [];
+      var favorites = event.data()!['favoriteProducts'];
+      for (String favorite in favorites) {
+        await db
+            .collection("products")
+            .doc(favorite)
+            .get()
+            .then((document2) async {
+          if (document2.exists) {
+            ProductModel product = ProductModel(document2.id, document2.data());
+            productsFavorited.add(product);
+          }
+        });
+      }
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -151,11 +152,9 @@ class _ProductsPageState extends State<ProductsPage> {
       db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
         int cartItems = 0;
         for (var place in snapshot.docs) {
-          cartItems += place.data().length;
+          this.cartItems += place.data().length;
+          valueNotifierCartItems.value = !valueNotifierCartItems.value;
         }
-        setState(() {
-          this.cartItems = cartItems;
-        });
       });
     });
   }
@@ -195,53 +194,55 @@ class _ProductsPageState extends State<ProductsPage> {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.appName,
-                        style: const TextStyle(
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: [
-                              FontVariation('wght', 700),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 22,
-                            letterSpacing: -0.3),
-                      ),
-                      Stack(children: [
-                        IconButton(
-                          icon: const Icon(Icons.shopping_cart_outlined),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const CartPage()));
-                          },
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.appName,
+                          style: const TextStyle(
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: [
+                                FontVariation('wght', 700),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 22,
+                              letterSpacing: -0.3),
                         ),
-                        if (cartItems != 0)
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: CircleAvatar(
-                                radius: 10,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                child: Text(
-                                  cartItems.toString(),
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 14,
-                                      letterSpacing: -0.3),
-                                )),
-                          )
-                      ])
-                    ],
-                  ),
+                        Stack(children: [
+                          IconButton(
+                            icon: const Icon(Icons.shopping_cart_outlined),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const CartPage()));
+                            },
+                          ),
+                          ValueListenableBuilder<bool>(
+                              valueListenable: valueNotifierCartItems,
+                              builder: (context, val, child) {
+                                return Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: CircleAvatar(
+                                      radius: 10,
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.primary,
+                                      child: Text(
+                                        cartItems.toString(),
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 14,
+                                            letterSpacing: -0.3),
+                                      )),
+                                );
+                              }),
+                        ]),
+                      ]),
                   const SizedBox(height: 10),
                   TextField(
                     focusNode: focus,
@@ -263,7 +264,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.mic_outlined),
                         onPressed: () {
-                          //TODO: Add speech-to-text functionality
+                          //TODO: Add method that converts speech to text.
                         },
                       ),
                     ),

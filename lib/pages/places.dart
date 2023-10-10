@@ -260,7 +260,7 @@ class _PlacesPageState extends State<PlacesPage> {
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.mic_outlined),
                         onPressed: () {
-                          //TODO: Add speech-to-text search functionality
+                          //TODO: Add method that converts speech to text.
                         },
                       ),
                     ),

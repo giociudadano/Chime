@@ -32,14 +32,13 @@ class _ProductCardState extends State<ProductCard> {
     String ref = "products/${widget.productID}.jpg";
     try {
       url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    } catch (e) {
-      //
-    } finally {
       if (mounted) {
         setState(() {
           widget.productImageURL = url;
         });
       }
+    } catch (e) {
+      return;
     }
   }
 
@@ -59,9 +58,9 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   void initState() {
-    super.initState();
     getProductImageURL();
     getPlaceName();
+    super.initState();
   }
 
   @override

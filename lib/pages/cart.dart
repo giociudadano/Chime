@@ -18,7 +18,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  StreamSubscription? cartListener;
   final _scrollController = ScrollController();
   Map orders = {};
 
@@ -44,7 +43,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void dispose() {
-    cartListener!.cancel();
     super.dispose();
   }
 
@@ -61,37 +59,82 @@ class _CartPageState extends State<CartPage> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          "My cart",
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontFamily: 'Bahnschrift',
-              fontVariations: const [
-                FontVariation('wght', 700),
-                FontVariation('wdth', 100),
-              ],
-              fontSize: 20,
-              letterSpacing: -0.3),
+        title: Center(
+          child: Text(
+            AppLocalizations.of(context)!.cartHeader,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
         ),
-      ),
-      body: ListView(
-        controller: _scrollController,
-        children: [
-          if (orders.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  key: UniqueKey(),
-                  shrinkWrap: true,
-                  itemCount: orders.length,
-                  itemBuilder: (context, index) {
-                    String key = orders.keys.elementAt(index);
-                    return OrderCard(placeID: key, orderItems: orders[key]);
-                  }),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: IconButton(
+              icon: Icon(Icons.info_outline,
+                  color: Theme.of(context).colorScheme.outline),
+              onPressed: () {
+                //TODO: Add information about the cart page.
+                throw UnimplementedError(
+                    "TODO: Add information about the cart page.");
+              },
             ),
+          ),
         ],
       ),
+      body: orders.isNotEmpty
+          ? ListView(
+              controller: _scrollController,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      key: UniqueKey(),
+                      shrinkWrap: true,
+                      itemCount: orders.length,
+                      itemBuilder: (context, index) {
+                        String key = orders.keys.elementAt(index);
+                        return OrderCard(placeID: key, orderItems: orders[key]);
+                      }),
+                ),
+              ],
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Theme.of(context).colorScheme.outline,
+                    size: 40,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "You have an empty cart. \n Why not try adding a product?",
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 500),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 15,
+                        letterSpacing: -0.3,
+                        height: 0.85,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -8,6 +8,7 @@
   Created when visiting the CartPage. Each place in the cart has its own OrderCard.
 */
 
+//TODO: Checkout button should display the total price.
 part of main;
 
 // ignore: must_be_immutable
@@ -22,6 +23,9 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
+  int total = 0;
+  final ValueNotifier<bool> valueNotifierTotal = ValueNotifier(false);
+
   // Retrieves and sets the place information given the place ID of the page.
   // Place ID is retrieved when obtaining product information.
   Future getPlaceName() async {
@@ -41,10 +45,34 @@ class _OrderCardState extends State<OrderCard> {
     });
   }
 
+  void getTotal() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    for (var orderItem in widget.orderItems.entries) {
+      await db.collection("products").doc(orderItem.key).get().then((document) {
+        int productPrice = document.data()!['productPrice'] * orderItem.value;
+        setState(() {
+          total += productPrice;
+        });
+      });
+    }
+  }
+
+  void deleteFrame() {
+    setState(() {
+      widget.isVisible = false;
+    });
+  }
+
+  void updateTotal(int delta) {
+    total += delta;
+    valueNotifierTotal.value = !valueNotifierTotal.value;
+  }
+
   @override
   void initState() {
     super.initState();
     getPlaceName();
+    getTotal();
   }
 
   @override
@@ -62,26 +90,29 @@ class _OrderCardState extends State<OrderCard> {
           elevation: 0,
           margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.placeName,
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 700),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 16,
-                      letterSpacing: -0.3,
-                      height: 0.85,
-                      overflow: TextOverflow.ellipsis),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Text(
+                    widget.placeName,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 700),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 16,
+                        letterSpacing: -0.3,
+                        height: 0.85,
+                        overflow: TextOverflow.ellipsis),
+                  ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   key: UniqueKey(),
@@ -89,14 +120,12 @@ class _OrderCardState extends State<OrderCard> {
                   itemCount: widget.orderItems.length,
                   itemBuilder: (BuildContext context, int index) {
                     String key = widget.orderItems.keys.elementAt(index);
-                    return OrderItemCard(() {
-                      setState(() {
-                        widget.isVisible = false;
-                      });
-                    },
+                    return OrderItemCard(
                         placeID: widget.placeID,
                         productID: key,
-                        quantity: widget.orderItems[key]);
+                        quantity: widget.orderItems[key],
+                        deleteFrame: deleteFrame,
+                        updateTotal: updateTotal);
                   },
                 ),
                 Row(
@@ -104,7 +133,11 @@ class _OrderCardState extends State<OrderCard> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          //TODO: Add functionality to checkout items.
+                          if (context.mounted) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    CheckoutPage(subtotal: total)));
+                          }
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
@@ -112,18 +145,23 @@ class _OrderCardState extends State<OrderCard> {
                           foregroundColor: MaterialStatePropertyAll(
                               Theme.of(context).colorScheme.onPrimary),
                         ),
-                        child: Text(
-                          "Checkout",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 500),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14,
-                          ),
-                        ),
+                        child: ValueListenableBuilder<bool>(
+                            valueListenable: valueNotifierTotal,
+                            builder: (context, val, child) {
+                              return Text(
+                                "${AppLocalizations.of(context)!.checkout} (₱$total)",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 500),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 14,
+                                ),
+                              );
+                            }),
                       ),
                     ),
                   ],
