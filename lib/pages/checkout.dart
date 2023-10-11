@@ -27,35 +27,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
   String? deliveryMethod;
 
   // Variables for user information.
-  int? selectedAddressIndex;
-  List addresses = [];
+  String? selectedAddress;
+  Map addresses = {};
 
   // Gets a list of addresses from the database.
   void getAddresses() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    db.collection("users").doc(uid).get().then((snapshot) {
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("addresses")
+        .get()
+        .then((snapshot) {
+      for (var address in snapshot.docs) {
+        addresses[address.id] = {
+          "name": address.data()["name"],
+          "address": address.data()["address"]
+        };
+      }
       if (mounted) {
-        setState(() {
-          addresses = snapshot.data()!['addresses'];
-        });
+        setState(() {});
       }
     });
   }
 
   // Initializes a selected address listener.
   // Periodically checks the user's profile in database for write updates and modifies the
-  // addresses list and selected address index if so.
+  // addresses list and selected address if so.
   void initSelectedAddressListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     selectedAddressListener =
         db.collection("users").doc(uid).snapshots().listen((event) async {
-      getAddresses();
       if (mounted) {
         setState(() {
-          selectedAddressIndex = event.data()!['selectedAddressIndex'];
+          selectedAddress = event.data()!['selectedAddress'];
+          if (selectedAddress == null && deliveryMethod == 'delivery') {
+            deliveryMethod = null;
+          }
         });
       }
     });
@@ -190,9 +201,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ]),
                     )),
                 Opacity(
-                  opacity: selectedAddressIndex == null ? 0.5 : 1,
+                  opacity: selectedAddress == null ? 0.5 : 1,
                   child: AbsorbPointer(
-                    absorbing: selectedAddressIndex == null,
+                    absorbing: selectedAddress == null,
                     child: Card(
                       elevation: 0,
                       color: MaterialColors.getSurfaceContainerLow(darkMode),
@@ -262,30 +273,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Text(
-                                  "My address",
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 18,
-                                      letterSpacing: -0.3,
-                                      overflow: TextOverflow.ellipsis),
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  child: Text(
+                                    "My address",
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 18,
+                                        letterSpacing: -0.3,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () {
+                                SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: IconButton(
+                                    padding: const EdgeInsets.all(0),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      size: 18,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                    onPressed: () {
+                                      if (context.mounted) {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AddressesPage()),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ]),
+                          Row(children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
                                   if (context.mounted) {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -293,88 +329,67 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                 const AddressesPage()));
                                   }
                                 },
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(30, 30),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    alignment: Alignment.centerRight),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    "Add",
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 14,
-                                        letterSpacing: -0.3,
-                                        overflow: TextOverflow.ellipsis),
+                                child: Card(
+                                  elevation: 0,
+                                  color:
+                                      MaterialColors.getSurfaceContainerLowest(
+                                          darkMode),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            selectedAddress == null ||
+                                                    addresses[
+                                                            selectedAddress] ==
+                                                        null
+                                                ? "No address"
+                                                : addresses[selectedAddress]
+                                                    ["name"],
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant,
+                                                fontFamily: 'Bahnschrift',
+                                                fontVariations: const [
+                                                  FontVariation('wght', 700),
+                                                  FontVariation('wdth', 100),
+                                                ],
+                                                fontSize: 14,
+                                                letterSpacing: -0.3,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            selectedAddress == null ||
+                                                    addresses[
+                                                            selectedAddress] ==
+                                                        null
+                                                ? "This user has no address selected. To allow delivery, please add an address."
+                                                : addresses[selectedAddress!]
+                                                    ["address"],
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                                fontFamily: 'Bahnschrift',
+                                                fontVariations: const [
+                                                  FontVariation('wght', 400),
+                                                  FontVariation('wdth', 100),
+                                                ],
+                                                fontSize: 14,
+                                                height: 1,
+                                                letterSpacing: -0.3,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ]),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(children: [
-                            Expanded(
-                              child: Card(
-                                elevation: 0,
-                                color: MaterialColors.getSurfaceContainerLowest(
-                                    darkMode),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          selectedAddressIndex != null
-                                              ? addresses[selectedAddressIndex!]
-                                                  ["name"]
-                                              : "No address",
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
-                                              fontFamily: 'Bahnschrift',
-                                              fontVariations: const [
-                                                FontVariation('wght', 700),
-                                                FontVariation('wdth', 100),
-                                              ],
-                                              fontSize: 14,
-                                              letterSpacing: -0.3,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          selectedAddressIndex != null
-                                              ? addresses[selectedAddressIndex!]
-                                                  ["address"]
-                                              : "This user has no address selected. To allow delivery, please add an address.",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
-                                              fontFamily: 'Bahnschrift',
-                                              fontVariations: const [
-                                                FontVariation('wght', 400),
-                                                FontVariation('wdth', 100),
-                                              ],
-                                              fontSize: 14,
-                                              height: 1,
-                                              letterSpacing: -0.3,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ]),
                                 ),
                               ),
                             )

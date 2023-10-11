@@ -9,27 +9,26 @@ class AddressesPage extends StatefulWidget {
 
 class _AddressesPageState extends State<AddressesPage> {
   // Variables for controllers.
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _inputName = TextEditingController();
-  final _inputAddress = TextEditingController();
+  final GlobalKey<FormState> _formAddAddressKey = GlobalKey<FormState>();
+  final _inputAddAddressName = TextEditingController();
+  final _inputAddAddressAddress = TextEditingController();
 
   // Variables for listeners.
   StreamSubscription? addressesListener;
   StreamSubscription? selectedAddressListener;
 
   // Variables for user information.
-  List addresses = [];
-  int? selectedAddressIndex;
+  Map addresses = {};
+  String? selectedAddress;
 
-  // Writes address to database.
+  // Writes a new address to database.
   void _addAddress(String name, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).update({
-        "addresses": FieldValue.arrayUnion([
-          {"name": name, "address": address}
-        ])
+      db.collection("users").doc(uid).collection("addresses").add({
+        "name": name,
+        "address": address,
       });
       Navigator.pop(context);
     } catch (e) {
@@ -37,11 +36,42 @@ class _AddressesPageState extends State<AddressesPage> {
     }
   }
 
-  void setSelectedAddressIndex(int index) {
+  // Overwrites an address in database.
+  void _editAddress(String id, String name, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).update({"selectedAddressIndex": index});
+      db.collection("users").doc(uid).collection("addresses").doc(id).update({
+        "name": name,
+        "address": address,
+      });
+      Navigator.pop(context);
+    } catch (e) {
+      return;
+    }
+  }
+
+  // Removes an address in database.
+  void _deleteAddress(String id) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("users").doc(uid).collection("addresses").doc(id).delete();
+      addresses.remove(id);
+      if (selectedAddress == id) {
+        setSelectedAddress(null);
+      }
+      Navigator.pop(context);
+    } catch (e) {
+      return;
+    }
+  }
+
+  void setSelectedAddress(String? id) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("users").doc(uid).update({"selectedAddress": id});
     } catch (e) {
       return;
     }
@@ -53,12 +83,43 @@ class _AddressesPageState extends State<AddressesPage> {
   void initAddressesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    addressesListener =
+    addressesListener = db
+        .collection("users")
+        .doc(uid)
+        .collection("addresses")
+        .snapshots()
+        .listen((event) async {
+      db
+          .collection("users")
+          .doc(uid)
+          .collection("addresses")
+          .get()
+          .then((snapshot) {
+        for (var address in snapshot.docs) {
+          addresses[address.id] = {
+            "name": address.data()["name"],
+            "address": address.data()["address"]
+          };
+        }
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    });
+  }
+
+  // Initializes a selected address listener.
+  // Periodically checks the user's profile in database for write updates and modifies the
+  // addresses list and selected address if so.
+  void initSelectedAddressListener() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    selectedAddressListener =
         db.collection("users").doc(uid).snapshots().listen((event) async {
       if (mounted) {
         setState(() {
-          addresses = event.data()!['addresses'];
-          selectedAddressIndex = event.data()!['selectedAddressIndex'];
+          selectedAddress = event.data()!['selectedAddress'];
         });
       }
     });
@@ -66,7 +127,7 @@ class _AddressesPageState extends State<AddressesPage> {
 
   // Shows a form that allows the user to add an address.
   // Visible when clicking on the 'plus' button at the upper right of the page.
-  Future showForm(BuildContext context) async {
+  Future showAddAddressForm(BuildContext context) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return showDialog(
         context: context,
@@ -92,12 +153,12 @@ class _AddressesPageState extends State<AddressesPage> {
                   letterSpacing: -0.3),
             ),
             content: Form(
-              key: _formKey,
+              key: _formAddAddressKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    controller: _inputName,
+                    controller: _inputAddAddressName,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -134,7 +195,7 @@ class _AddressesPageState extends State<AddressesPage> {
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
-                    controller: _inputAddress,
+                    controller: _inputAddAddressAddress,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -177,10 +238,10 @@ class _AddressesPageState extends State<AddressesPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formAddAddressKey.currentState!.validate()) {
                               {
-                                _addAddress(
-                                    _inputName.text, _inputAddress.text);
+                                _addAddress(_inputAddAddressName.text,
+                                    _inputAddAddressAddress.text);
                               }
                             }
                           },
@@ -194,6 +255,188 @@ class _AddressesPageState extends State<AddressesPage> {
                             "Submit",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 500),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // Shows a form that allows the user to edit an address.
+  // Visible when clicking on the 'edit' button at an address card.
+  Future showEditAddressForm(
+      BuildContext context, String id, String name, String address) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    final GlobalKey<FormState> formEditAddressKey = GlobalKey<FormState>();
+    final inputEditAddressName = TextEditingController(text: name);
+    final inputEditAddressAddress = TextEditingController(text: address);
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            title: const Text(
+              "Edit address",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: [
+                    FontVariation('wght', 700),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 20,
+                  letterSpacing: -0.3),
+            ),
+            content: Form(
+              key: formEditAddressKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: inputEditAddressName,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText: "Name",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14),
+                    validator: (String? value) {
+                      return _verifyNameField(value);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    controller: inputEditAddressAddress,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText: "Address",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14),
+                    minLines: 3,
+                    maxLines: 3,
+                    validator: (String? value) {
+                      return _verifyAddressField(value);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formEditAddressKey.currentState!.validate()) {
+                              _editAddress(id, inputEditAddressName.text,
+                                  inputEditAddressAddress.text);
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.primary),
+                            foregroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onPrimary),
+                          ),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 500),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _deleteAddress(id);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Colors.red[darkMode ? 200 : 900]),
+                            foregroundColor: MaterialStatePropertyAll(
+                                Colors.red[darkMode ? 200 : 900]),
+                          ),
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.surface,
                               fontFamily: 'Bahnschrift',
                               fontVariations: const [
                                 FontVariation('wght', 500),
@@ -232,6 +475,7 @@ class _AddressesPageState extends State<AddressesPage> {
   @override
   void initState() {
     initAddressesListener();
+    initSelectedAddressListener();
     super.initState();
   }
 
@@ -276,7 +520,7 @@ class _AddressesPageState extends State<AddressesPage> {
                 icon: Icon(Icons.add,
                     color: Theme.of(context).colorScheme.outline),
                 onPressed: () {
-                  showForm(context);
+                  showAddAddressForm(context);
                 },
               ),
             ),
@@ -287,6 +531,7 @@ class _AddressesPageState extends State<AddressesPage> {
           child: ListView.builder(
             itemCount: addresses.length,
             itemBuilder: (context, index) {
+              String key = addresses.keys.elementAt(index);
               return Card(
                 elevation: 0,
                 color: MaterialColors.getSurfaceContainerLow(darkMode),
@@ -294,48 +539,79 @@ class _AddressesPageState extends State<AddressesPage> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     side: BorderSide(
                       width: 3,
-                      color: selectedAddressIndex == index
+                      color: selectedAddress == key
                           ? Theme.of(context).colorScheme.primary
                           : Colors.transparent,
                     )),
                 child: InkWell(
                   onTap: () {
-                    setSelectedAddressIndex(index);
+                    setSelectedAddress(key);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            addresses[index]["name"],
-                            maxLines: 1,
-                            style: const TextStyle(
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 14,
-                                letterSpacing: -0.3,
-                                overflow: TextOverflow.ellipsis),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      addresses[key]["name"],
+                                      maxLines: 1,
+                                      style: const TextStyle(
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: [
+                                            FontVariation('wght', 700),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      addresses[key]["address"],
+                                      maxLines: 3,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 500),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                          height: 0.9,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  ]),
+                            ),
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            addresses[index]["address"],
-                            maxLines: 3,
-                            style: TextStyle(
+                          const SizedBox(width: 10),
+                          SizedBox(
+                            height: 25,
+                            width: 25,
+                            child: IconButton(
+                              padding: const EdgeInsets.all(0),
+                              icon: Icon(
+                                Icons.edit,
+                                size: 18,
                                 color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 500),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 14,
-                                letterSpacing: -0.3,
-                                height: 0.9,
-                                overflow: TextOverflow.ellipsis),
-                          ),
+                              ),
+                              onPressed: () {
+                                showEditAddressForm(
+                                    context,
+                                    key,
+                                    addresses[key]["name"],
+                                    addresses[key]["address"]);
+                              },
+                            ),
+                          )
                         ]),
                   ),
                 ),
