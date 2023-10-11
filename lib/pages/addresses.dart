@@ -15,11 +15,13 @@ class _AddressesPageState extends State<AddressesPage> {
 
   // Variables for listeners.
   StreamSubscription? addressesListener;
+  StreamSubscription? selectedAddressListener;
 
   // Variables for user information.
   List addresses = [];
+  int? selectedAddressIndex;
 
-  // Adds an address to the database.
+  // Writes address to database.
   void _addAddress(String name, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
@@ -35,8 +37,20 @@ class _AddressesPageState extends State<AddressesPage> {
     }
   }
 
-  // Initializes a listener that tracks the current addresses.
-  void addAddressesListener() {
+  void setSelectedAddressIndex(int index) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("users").doc(uid).update({"selectedAddressIndex": index});
+    } catch (e) {
+      return;
+    }
+  }
+
+  // Initializes an addresses list listener.
+  // Periodically checks the user's profile for updates and modifies
+  // the addresses list and selected address index if so.
+  void initAddressesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
     addressesListener =
@@ -44,6 +58,7 @@ class _AddressesPageState extends State<AddressesPage> {
       if (mounted) {
         setState(() {
           addresses = event.data()!['addresses'];
+          selectedAddressIndex = event.data()!['selectedAddressIndex'];
         });
       }
     });
@@ -114,7 +129,7 @@ class _AddressesPageState extends State<AddressesPage> {
                         ],
                         fontSize: 14),
                     validator: (String? value) {
-                      return null;
+                      return _verifyNameField(value);
                     },
                   ),
                   const SizedBox(height: 15),
@@ -153,7 +168,7 @@ class _AddressesPageState extends State<AddressesPage> {
                     minLines: 3,
                     maxLines: 3,
                     validator: (String? value) {
-                      return null;
+                      return _verifyAddressField(value);
                     },
                   ),
                   const SizedBox(height: 20),
@@ -198,9 +213,25 @@ class _AddressesPageState extends State<AddressesPage> {
         });
   }
 
+  // Checks if the name field is empty and returns an error if so.
+  String? _verifyNameField(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your name";
+    }
+    return null;
+  }
+
+  // Checks if the address field is empty and returns an error message if so.
+  String? _verifyAddressField(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter your address";
+    }
+    return null;
+  }
+
   @override
   void initState() {
-    addAddressesListener();
+    initAddressesListener();
     super.initState();
   }
 
@@ -259,41 +290,54 @@ class _AddressesPageState extends State<AddressesPage> {
               return Card(
                 elevation: 0,
                 color: MaterialColors.getSurfaceContainerLow(darkMode),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          addresses[index]["name"],
-                          maxLines: 1,
-                          style: const TextStyle(
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          addresses[index]["address"],
-                          maxLines: 3,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 500),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                              height: 0.9,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ]),
+                shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    side: BorderSide(
+                      width: 3,
+                      color: selectedAddressIndex == index
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent,
+                    )),
+                child: InkWell(
+                  onTap: () {
+                    setSelectedAddressIndex(index);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            addresses[index]["name"],
+                            maxLines: 1,
+                            style: const TextStyle(
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            addresses[index]["address"],
+                            maxLines: 3,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 500),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3,
+                                height: 0.9,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ]),
+                  ),
                 ),
               );
             },

@@ -41,21 +41,22 @@ class _ProductsPageState extends State<ProductsPage> {
   List<ProductModel> productsFavorited = [];
   int cartItems = 0;
   final ValueNotifier<bool> valueNotifierCartItems = ValueNotifier(false);
+  final ValueNotifier<bool> valueNotifierFavorites = ValueNotifier(false);
 
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
-  void addScrollListener() {
+  void initScrollListener() {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge &&
           _scrollController.position.pixels != 0) {
-        addProducts();
+        initProducts();
       }
     });
   }
 
   // Queries a list of products sorted by distance from the device. Called on page initialization
   // and on reaching the bottom of the ListView.
-  void addProducts() async {
+  void initProducts() async {
     Query getQuery() {
       FirebaseFirestore db = FirebaseFirestore.instance;
       if (lastVisible == null) {
@@ -86,7 +87,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   // Initializes a listener that tracks if the current product favorites have changed from other screens.
-  void addFavoritesListener() async {
+  void initFavoritesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
     favoritesListener =
@@ -105,15 +106,13 @@ class _ProductsPageState extends State<ProductsPage> {
           }
         });
       }
-      if (mounted) {
-        setState(() {});
-      }
+      valueNotifierFavorites.value = !valueNotifierFavorites.value;
     });
   }
 
   // Adds a text field listener that detects if the user searches for an item. Adds all matching
   // items to a list and displays that list in the GridView.
-  void addSearchListener() {
+  void initSearchListener() {
     _searchBox.addListener(() {
       if (focus.hasFocus) {
         if (_debounce != null) {
@@ -139,7 +138,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   // Adds a listener that detects if an item is added to cart.
   // Used in displaying the number of current items in cart.
-  void addCartListener() async {
+  void initCartListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -152,9 +151,10 @@ class _ProductsPageState extends State<ProductsPage> {
       db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
         int cartItems = 0;
         for (var place in snapshot.docs) {
-          this.cartItems += place.data().length;
-          valueNotifierCartItems.value = !valueNotifierCartItems.value;
+          cartItems += place.data().length;
         }
+        this.cartItems = cartItems;
+        valueNotifierCartItems.value = !valueNotifierCartItems.value;
       });
     });
   }
@@ -162,11 +162,11 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     super.initState();
-    addScrollListener();
-    addFavoritesListener();
-    addProducts();
-    addSearchListener();
-    addCartListener();
+    initScrollListener();
+    initFavoritesListener();
+    initProducts();
+    initSearchListener();
+    initCartListener();
   }
 
   @override
@@ -218,28 +218,33 @@ class _ProductsPageState extends State<ProductsPage> {
                           ValueListenableBuilder<bool>(
                               valueListenable: valueNotifierCartItems,
                               builder: (context, val, child) {
-                                return Positioned(
-                                  right: 0,
-                                  top: 0,
-                                  child: CircleAvatar(
-                                      radius: 10,
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      child: Text(
-                                        cartItems.toString(),
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onPrimary,
-                                            fontFamily: 'Bahnschrift',
-                                            fontVariations: const [
-                                              FontVariation('wght', 700),
-                                              FontVariation('wdth', 100),
-                                            ],
-                                            fontSize: 14,
-                                            letterSpacing: -0.3),
-                                      )),
-                                );
+                                if (cartItems != 0) {
+                                  return Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: CircleAvatar(
+                                        radius: 10,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: Text(
+                                          cartItems.toString(),
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                              fontFamily: 'Bahnschrift',
+                                              fontVariations: const [
+                                                FontVariation('wght', 700),
+                                                FontVariation('wdth', 100),
+                                              ],
+                                              fontSize: 14,
+                                              letterSpacing: -0.3),
+                                        )),
+                                  );
+                                } else {
+                                  return const SizedBox.shrink();
+                                }
                               }),
                         ]),
                       ]),
@@ -287,44 +292,55 @@ class _ProductsPageState extends State<ProductsPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
-                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
-                    Text(
-                      AppLocalizations.of(context)!.productsFavorited,
-                      style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 700),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 18,
-                          letterSpacing: -0.3),
-                    ),
-                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
-                    const SizedBox(height: 10),
-                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
-                    SizedBox(
-                      height: 220,
-                      child: GridView.builder(
-                        key: UniqueKey(),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: productsFavorited.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ProductCard(
-                              productID: productsFavorited[index].productID,
-                              productName: productsFavorited[index].productName,
-                              productPrice:
-                                  productsFavorited[index].productPrice,
-                              placeID: productsFavorited[index].placeID);
-                        },
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                mainAxisExtent: 165,
-                                maxCrossAxisExtent: 220,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 10),
-                      ),
-                    ),
+                  ValueListenableBuilder<bool>(
+                      valueListenable: valueNotifierFavorites,
+                      builder: (context, val, child) {
+                        if (productsFavorited.isNotEmpty &&
+                            _searchBox.text == '') {
+                          return Column(children: [
+                            Text(
+                              AppLocalizations.of(context)!.productsFavorited,
+                              style: const TextStyle(
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 18,
+                                  letterSpacing: -0.3),
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              height: 220,
+                              child: GridView.builder(
+                                key: UniqueKey(),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: productsFavorited.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ProductCard(
+                                      productID:
+                                          productsFavorited[index].productID,
+                                      productName:
+                                          productsFavorited[index].productName,
+                                      productPrice:
+                                          productsFavorited[index].productPrice,
+                                      placeID:
+                                          productsFavorited[index].placeID);
+                                },
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                        mainAxisExtent: 165,
+                                        maxCrossAxisExtent: 220,
+                                        crossAxisSpacing: 0,
+                                        mainAxisSpacing: 10),
+                              ),
+                            )
+                          ]);
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      }),
                   Text(
                     _searchBox.text.isEmpty
                         ? AppLocalizations.of(context)!.productsNear

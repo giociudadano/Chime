@@ -8,7 +8,6 @@
   Created when visiting the CartPage. Each place in the cart has its own OrderCard.
 */
 
-//TODO: Checkout button should display the total price.
 part of main;
 
 // ignore: must_be_immutable

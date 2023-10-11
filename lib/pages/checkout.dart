@@ -1,3 +1,13 @@
+/*
+  [Title]
+  CheckoutPage
+
+  [Description]
+  A page that appears when tapping on a checkout button from CartPage.
+  Displays user options to order via pickup or delivery. Displays the current address and allows the option to add an
+    address through the AddressesPage.
+*/
+
 part of main;
 
 // ignore: must_be_immutable
@@ -10,29 +20,58 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  String? deliveryMethod;
-  int? defaultDeliveryAddressIndex;
+  // Variables for listeners.
+  StreamSubscription? selectedAddressListener;
 
-  // Fetches the current delivery address index.
-  void getDefaultDeliveryAddressIndex() async {
+  // Form variables.
+  String? deliveryMethod;
+
+  // Variables for user information.
+  int? selectedAddressIndex;
+  List addresses = [];
+
+  // Gets a list of addresses from the database.
+  void getAddresses() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    await db.collection("users").doc(uid).get().then((document) {
-      if (document.exists) {
-        if (mounted) {
-          setState(() {
-            defaultDeliveryAddressIndex =
-                document.data()!['defaultDeliveryAddressIndex'];
-          });
-        }
+    db.collection("users").doc(uid).get().then((snapshot) {
+      if (mounted) {
+        setState(() {
+          addresses = snapshot.data()!['addresses'];
+        });
+      }
+    });
+  }
+
+  // Initializes a selected address listener.
+  // Periodically checks the user's profile in database for write updates and modifies the
+  // addresses list and selected address index if so.
+  void initSelectedAddressListener() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    selectedAddressListener =
+        db.collection("users").doc(uid).snapshots().listen((event) async {
+      getAddresses();
+      if (mounted) {
+        setState(() {
+          selectedAddressIndex = event.data()!['selectedAddressIndex'];
+        });
       }
     });
   }
 
   @override
   void initState() {
-    getDefaultDeliveryAddressIndex();
+    getAddresses();
+    initSelectedAddressListener();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    selectedAddressListener!.cancel();
+    super.dispose();
   }
 
   @override
@@ -151,9 +190,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ]),
                     )),
                 Opacity(
-                  opacity: defaultDeliveryAddressIndex == null ? 0.5 : 1,
+                  opacity: selectedAddressIndex == null ? 0.5 : 1,
                   child: AbsorbPointer(
-                    absorbing: defaultDeliveryAddressIndex == null,
+                    absorbing: selectedAddressIndex == null,
                     child: Card(
                       elevation: 0,
                       color: MaterialColors.getSurfaceContainerLow(darkMode),
@@ -296,7 +335,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "No address",
+                                          selectedAddressIndex != null
+                                              ? addresses[selectedAddressIndex!]
+                                                  ["name"]
+                                              : "No address",
                                           maxLines: 1,
                                           style: TextStyle(
                                               color: Theme.of(context)
@@ -313,7 +355,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         ),
                                         const SizedBox(height: 5),
                                         Text(
-                                          "This user has no address selected. To allow delivery, please add an address.",
+                                          selectedAddressIndex != null
+                                              ? addresses[selectedAddressIndex!]
+                                                  ["address"]
+                                              : "This user has no address selected. To allow delivery, please add an address.",
                                           maxLines: 2,
                                           style: TextStyle(
                                               color: Theme.of(context)

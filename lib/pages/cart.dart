@@ -22,7 +22,7 @@ class _CartPageState extends State<CartPage> {
   Map orders = {};
 
   // Fetches a list of products from the user's cart.
-  void addProducts() {
+  void getProducts() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
     db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
@@ -37,7 +37,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void initState() {
-    addProducts();
+    getProducts();
     super.initState();
   }
 
