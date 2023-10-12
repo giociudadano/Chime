@@ -134,8 +134,8 @@ class _OrderCardState extends State<OrderCard> {
                         onPressed: () {
                           if (context.mounted) {
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    CheckoutPage(subtotal: total)));
+                                builder: (context) => CheckoutPage(
+                                    placeID: widget.placeID, subtotal: total)));
                           }
                         },
                         style: ButtonStyle(

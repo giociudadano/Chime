@@ -12,7 +12,8 @@ part of main;
 
 // ignore: must_be_immutable
 class CheckoutPage extends StatefulWidget {
-  CheckoutPage({super.key, required this.subtotal});
+  CheckoutPage({super.key, required this.placeID, required this.subtotal});
+  String placeID = '';
   int subtotal = 0;
 
   @override
@@ -25,6 +26,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   // Form variables.
   String? deliveryMethod;
+  String? paymentMethod = 'Cash on delivery';
+
+  // Variables for place information.
+  int? deliveryPrice;
 
   // Variables for user information.
   String? selectedAddress;
@@ -52,6 +57,38 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
+  // Gets the delivery price of the place.
+  void getDeliveryPrice() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("places").doc(widget.placeID).get().then((document) {
+      setState(() {
+        deliveryPrice = document.data()!['deliveryPrice'];
+      });
+    });
+  }
+
+  // Gets the delivery fee of the order.
+  // The delivery fee does not always match the delivery price, especially if (a) the shop did not mention their
+  // delivery prices; and (b) the user did not select the 'delivery' option.
+  int getDeliveryFee() {
+    if (deliveryPrice == null || deliveryMethod != 'Delivery') {
+      return 0;
+    } else {
+      return deliveryPrice!;
+    }
+  }
+
+  // Gets the total price of the order.
+  int getTotal() {
+    return getDeliveryFee() + widget.subtotal;
+  }
+
+  void addOrder(
+      String placeID, Map items, String deliveryMethod, String paymentMethod) {
+    print(
+        "PlaceID: $placeID\nItems: $items\n Delivery Method: $deliveryMethod \n Payment Method: $paymentMethod");
+  }
+
   // Initializes a selected address listener.
   // Periodically checks the user's profile in database for write updates and modifies the
   // addresses list and selected address if so.
@@ -64,7 +101,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       if (mounted) {
         setState(() {
           selectedAddress = event.data()!['selectedAddress'];
-          if (selectedAddress == null && deliveryMethod == 'delivery') {
+          if (selectedAddress == null && deliveryMethod == 'Delivery') {
             deliveryMethod = null;
           }
         });
@@ -72,9 +109,269 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
+  // Shows a reminder when clicking on the 'information' button at the upper right of the screen.
+  Future showReminder(BuildContext context) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          title: Text(
+            "Reminder",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  "By default, delivery address is expected to be within the locality. However, you may contact the seller for special requests.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 400),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 14,
+                      height: 1.1,
+                      letterSpacing: -0.3),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimary),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "I understand",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 600),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Shows a dialog that allows the user to select a payment method.
+  Future showPaymentMethodDialog(BuildContext context) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          title: Text(
+            "Pay ₱${getTotal()}",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  "E-wallet transactions will be verified through the automated text to the seller. Please pay in full to avoid delays in processing.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 400),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 14,
+                      height: 1.1,
+                      letterSpacing: -0.3),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+                child: DropdownButtonFormField(
+                  isExpanded: true,
+                  elevation: 1,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(
+                          width: 3,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary), //<-- SEE HERE
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(
+                          width: 3,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary), //<-- SEE HERE
+                    ),
+                  ),
+                  value: paymentMethod,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'Cash on delivery',
+                      child: Text(
+                        "Cash on delivery",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline,
+                          fontFamily: 'Bahnschrift',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                            FontVariation('wdth', 100),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      onTap: () {
+                        paymentMethod = "Cash on delivery";
+                      },
+                    ),
+                  ],
+                  onChanged: (value) {
+                    value = value;
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        addOrder(widget.placeID, {}, deliveryMethod!,
+                            paymentMethod!);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimary),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "Pay now",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 600),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            MaterialColors.getSurfaceContainerLow(darkMode)),
+                        foregroundColor: MaterialStatePropertyAll(
+                            MaterialColors.getSurfaceContainerLow(darkMode)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 600),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getAddresses();
+    getDeliveryPrice();
     initSelectedAddressListener();
     super.initState();
   }
@@ -102,10 +399,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
         title: Center(
           child: Text(
             AppLocalizations.of(context)!.checkout,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+            style: const TextStyle(
                 fontFamily: 'Bahnschrift',
-                fontVariations: const [
+                fontVariations: [
                   FontVariation('wght', 700),
                   FontVariation('wdth', 100),
                 ],
@@ -120,9 +416,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               icon: Icon(Icons.info_outline,
                   color: Theme.of(context).colorScheme.outline),
               onPressed: () {
-                //TODO: Add information about the checkout page.
-                throw UnimplementedError(
-                    "TODO: Add information about the checkout page.");
+                showReminder(context);
               },
             ),
           ),
@@ -153,7 +447,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
                         Radio(
-                          value: 'pickup',
+                          value: 'Pick Up',
                           groupValue: deliveryMethod,
                           onChanged: (String? value) {
                             setState(() {
@@ -212,7 +506,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         child: Row(
                           children: [
                             Radio(
-                              value: 'delivery',
+                              value: 'Delivery',
                               groupValue: deliveryMethod,
                               onChanged: (String? value) {
                                 setState(() {
@@ -242,7 +536,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       overflow: TextOverflow.ellipsis),
                                 ),
                                 Text(
-                                  "Unknown amount",
+                                  deliveryPrice == null
+                                      ? "Unknown amount"
+                                      : "₱$deliveryPrice",
                                   maxLines: 1,
                                   style: TextStyle(
                                       color:
@@ -421,7 +717,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         overflow: TextOverflow.ellipsis),
                   ),
                   Text(
-                    "0",
+                    getDeliveryFee().toString(),
                     maxLines: 1,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
@@ -513,7 +809,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         overflow: TextOverflow.ellipsis),
                   ),
                   Text(
-                    "0",
+                    getTotal().toString(),
                     maxLines: 1,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
@@ -529,35 +825,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ]),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 30),
           Row(
             children: [
               Expanded(
                 child: Opacity(
                   opacity: deliveryMethod == null ? 0.5 : 1,
-                  child: ElevatedButton(
-                    onPressed: deliveryMethod == null
-                        ? null
-                        : () {
-                            //TODO: Add pop-up.
-                            throw UnimplementedError("Add pop-up.");
-                          },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.primary),
-                      foregroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.checkout,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 500),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: ElevatedButton(
+                      onPressed: deliveryMethod == null
+                          ? null
+                          : () {
+                              showPaymentMethodDialog(context);
+                            },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimary),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "Proceed to payment",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 600),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 15,
+                          ),
+                        ),
                       ),
                     ),
                   ),

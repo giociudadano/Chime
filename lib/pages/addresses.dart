@@ -251,16 +251,54 @@ class _AddressesPageState extends State<AddressesPage> {
                             foregroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.onPrimary),
                           ),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 500),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                MaterialColors.getSurfaceContainerLow(
+                                    darkMode)),
+                            foregroundColor: MaterialStatePropertyAll(
+                                MaterialColors.getSurfaceContainerLow(
+                                    darkMode)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
@@ -403,23 +441,26 @@ class _AddressesPageState extends State<AddressesPage> {
                             foregroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.onPrimary),
                           ),
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 500),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -433,16 +474,19 @@ class _AddressesPageState extends State<AddressesPage> {
                             foregroundColor: MaterialStatePropertyAll(
                                 Colors.red[darkMode ? 200 : 900]),
                           ),
-                          child: Text(
-                            "Delete",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.surface,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 500),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.surface,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),

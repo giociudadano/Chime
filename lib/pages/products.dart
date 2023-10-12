@@ -338,7 +338,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             )
                           ]);
                         } else {
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         }
                       }),
                   Text(
