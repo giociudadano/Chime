@@ -67,8 +67,17 @@ class _PlacesPageState extends State<PlacesPage> {
             .get()
             .then((document2) async {
           if (document2.exists) {
-            PlaceModel place = PlaceModel(document2.id, document2.data());
-            placesFavorited.add(place);
+            PlaceModel placeFavorited =
+                PlaceModel(document2.id, document2.data());
+            placesFavorited.add(placeFavorited);
+
+            /* Removes the item from the recommended list.
+            for (var place in places) {
+              if (place.placeID == placeFavorited.placeID) {
+                places.remove(place);
+              }
+            }
+            */
           }
         });
       }
@@ -249,7 +258,8 @@ class _PlacesPageState extends State<PlacesPage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       contentPadding: EdgeInsets.zero,
-                      hintText: AppLocalizations.of(context)!.searchBoxHint,
+                      hintText:
+                          AppLocalizations.of(context)!.placesSearchBoxHint,
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,

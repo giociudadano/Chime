@@ -20,12 +20,36 @@ class ProductCard extends StatefulWidget {
       required this.placeID});
   String productName, productImageURL = '', placeName = '', productID, placeID;
   int productPrice;
+  bool isFavorited = false;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> {
+  void setFavoriteProduct(bool isFavorited) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      if (isFavorited) {
+        db.collection("users").doc(uid).update({
+          "favoriteProducts": FieldValue.arrayRemove([widget.productID])
+        });
+      } else {
+        db.collection("users").doc(uid).update({
+          "favoriteProducts": FieldValue.arrayUnion([widget.productID])
+        });
+      }
+      if (mounted) {
+        setState(() {
+          widget.isFavorited = !isFavorited;
+        });
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   // Fetches and sets the product's image.
   void getProductImageURL() async {
     String url = '';
@@ -56,10 +80,29 @@ class _ProductCardState extends State<ProductCard> {
     });
   }
 
+  // Retrieves and sets user information (e.g. favorited) on the place.
+  Future _getUserInfo() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("users").doc(uid).get().then((document) {
+      if (document.exists) {
+        List favorites = document.data()!['favoriteProducts'];
+        if (favorites.contains(widget.productID)) {
+          if (mounted) {
+            setState(() {
+              widget.isFavorited = true;
+            });
+          }
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
     getProductImageURL();
     getPlaceName();
+    _getUserInfo();
     super.initState();
   }
 
@@ -83,28 +126,47 @@ class _ProductCardState extends State<ProductCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                  width: 200,
-                  height: 120,
-                  child: FittedBox(
-                    clipBehavior: Clip.hardEdge,
-                    fit: BoxFit.cover,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.productImageURL,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: CircularProgressIndicator(),
+              Stack(children: [
+                SizedBox(
+                    width: 200,
+                    height: 120,
+                    child: FittedBox(
+                      clipBehavior: Clip.hardEdge,
+                      fit: BoxFit.cover,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.productImageURL,
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Icon(Icons.local_mall_outlined,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant),
+                        ),
+                        fadeInCurve: Curves.easeIn,
+                        fadeOutCurve: Curves.easeOut,
                       ),
-                      errorWidget: (context, url, error) => Padding(
-                        padding: const EdgeInsets.all(40.0),
-                        child: Icon(Icons.local_mall_outlined,
-                            color:
-                                Theme.of(context).colorScheme.outlineVariant),
+                    )),
+                Positioned(
+                    right: 5,
+                    top: 5,
+                    child: IconButton(
+                      icon: Icon(
+                        widget.isFavorited
+                            ? Icons.favorite_outlined
+                            : Icons.favorite_outline,
+                        size: 24,
+                        color: widget.isFavorited
+                            ? Colors.redAccent
+                            : Colors.white,
                       ),
-                      fadeInCurve: Curves.easeIn,
-                      fadeOutCurve: Curves.easeOut,
-                    ),
-                  )),
+                      onPressed: () {
+                        setFavoriteProduct(widget.isFavorited);
+                      },
+                    ))
+              ]),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 12, 10, 8),
                 child: Column(

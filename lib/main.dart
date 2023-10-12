@@ -15,7 +15,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 // Imports service libraries. Responsible for one-time authentication methods.
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Imports cosmetic and accessibility libraries. Responsible for dynamic theme modes and languages.
 import 'package:shared_preferences/shared_preferences.dart';

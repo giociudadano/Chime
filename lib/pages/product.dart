@@ -38,6 +38,7 @@ class _ProductPageState extends State<ProductPage> {
   StreamSubscription? cartListener;
   int cartItems = 0;
   int itemQuantity = 1;
+  bool isInCart = false;
 
   // Retrieves and sets product information from FirebaseDB given the product ID of the page.
   Future _getProductInfo() async {
@@ -110,7 +111,7 @@ class _ProductPageState extends State<ProductPage> {
   Future _getUserInfo() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("users").doc(uid).get().then((document) {
+    db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
         List favorites = document.data()!['favoriteProducts'];
         if (favorites.contains(widget.productID)) {
@@ -119,6 +120,20 @@ class _ProductPageState extends State<ProductPage> {
               widget.isFavorited = true;
             });
           }
+        }
+      }
+    });
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .doc(widget.placeID)
+        .get()
+        .then((document) {
+      if (document.data() != null) {
+        if (document.data()![widget.productID] != null) {
+          isInCart = true;
+          itemQuantity = document.data()![widget.productID];
         }
       }
     });
@@ -160,6 +175,25 @@ class _ProductPageState extends State<ProductPage> {
           .collection("cart")
           .doc(widget.placeID)
           .set({widget.productID: itemQuantity}, SetOptions(merge: true));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              isInCart
+                  ? "${widget.productName} updated in cart!"
+                  : "${widget.productName} added to cart!",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 350),
+                  FontVariation('wdth', 100),
+                ],
+              )),
+          backgroundColor: MaterialColors.getSurfaceContainer(
+              Theme.of(context).brightness == Brightness.dark),
+        ),
+      );
     } catch (e) {
       return;
     }
@@ -178,8 +212,12 @@ class _ProductPageState extends State<ProductPage> {
         .snapshots()
         .listen((event) async {
       db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
-        int cartItems = 0;
+        isInCart = false;
+        var cartItems = 0;
         for (var place in snapshot.docs) {
+          if (place.id == widget.placeID) {
+            isInCart = true;
+          }
           cartItems += place.data().length;
         }
         setState(() {
@@ -290,7 +328,10 @@ class _ProductPageState extends State<ProductPage> {
                   color: Theme.of(context).colorScheme.onPrimary),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
-              label: Text(AppLocalizations.of(context)!.addToCart,
+              label: Text(
+                  isInCart
+                      ? "Update cart"
+                      : AppLocalizations.of(context)!.addToCart,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontFamily: 'Bahnschrift',

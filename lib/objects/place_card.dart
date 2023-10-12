@@ -19,12 +19,36 @@ class PlaceCard extends StatefulWidget {
     required this.placeTagline,
   });
   String placeName, placeTagline, placeImageURL = ' ', placeID;
+  bool isFavorited = false;
 
   @override
   State<PlaceCard> createState() => _PlaceCardState();
 }
 
 class _PlaceCardState extends State<PlaceCard> {
+  void setFavoritePlace(bool isFavorited) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      if (isFavorited) {
+        db.collection("users").doc(uid).update({
+          "favoritePlaces": FieldValue.arrayRemove([widget.placeID])
+        });
+      } else {
+        db.collection("users").doc(uid).update({
+          "favoritePlaces": FieldValue.arrayUnion([widget.placeID])
+        });
+      }
+      if (mounted) {
+        setState(() {
+          widget.isFavorited = !isFavorited;
+        });
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   // Fetches and sets the product's image.
   void getPlaceImageURL() async {
     String url = '';
@@ -42,10 +66,29 @@ class _PlaceCardState extends State<PlaceCard> {
     }
   }
 
+  // Retrieves and sets user information (e.g. favorited) on the place.
+  Future _getUserInfo() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("users").doc(uid).get().then((document) {
+      if (document.exists) {
+        List favorites = document.data()!['favoritePlaces'];
+        if (favorites.contains(widget.placeID)) {
+          if (mounted) {
+            setState(() {
+              widget.isFavorited = true;
+            });
+          }
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
     getPlaceImageURL();
+    _getUserInfo();
+    super.initState();
   }
 
   @override
@@ -134,6 +177,23 @@ class _PlaceCardState extends State<PlaceCard> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: IconButton(
+                  icon: Icon(
+                    widget.isFavorited
+                        ? Icons.favorite_outlined
+                        : Icons.favorite_outline,
+                    size: 24,
+                    color: widget.isFavorited
+                        ? Colors.redAccent
+                        : Theme.of(context).colorScheme.outline,
+                  ),
+                  onPressed: () {
+                    setFavoritePlace(widget.isFavorited);
+                  },
+                ),
+              )
             ],
           ),
         ),

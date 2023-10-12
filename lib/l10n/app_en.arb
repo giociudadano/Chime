@@ -33,7 +33,7 @@
   "navTabPlaces": "Places",
   "navTabStore": "My Store",
   "navTabProfile": "Profile",
-  "searchBoxHint": "Search for a product",
+  "productsSearchBoxHint": "Search for a product",
   "productsFavorited": "Favorited products",
   "productsNear": "Recommended products near you",
   "productsSearch": "Recommended products named '{search}'",
@@ -44,6 +44,7 @@
       }
     }
   },
+  "placesSearchBoxHint": "Search for a place",
   "placesFavorited": "Favorited places",
   "placesNear": "Recommended places near you",
   "placesSearch": "Recommended places named '{search}'",

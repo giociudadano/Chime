@@ -258,7 +258,8 @@ class _ProductsPageState extends State<ProductsPage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       contentPadding: EdgeInsets.zero,
-                      hintText: AppLocalizations.of(context)!.searchBoxHint,
+                      hintText:
+                          AppLocalizations.of(context)!.productsSearchBoxHint,
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
@@ -297,46 +298,50 @@ class _ProductsPageState extends State<ProductsPage> {
                       builder: (context, val, child) {
                         if (productsFavorited.isNotEmpty &&
                             _searchBox.text == '') {
-                          return Column(children: [
-                            Text(
-                              AppLocalizations.of(context)!.productsFavorited,
-                              style: const TextStyle(
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 18,
-                                  letterSpacing: -0.3),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 220,
-                              child: GridView.builder(
-                                key: UniqueKey(),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: productsFavorited.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ProductCard(
-                                      productID:
-                                          productsFavorited[index].productID,
-                                      productName:
-                                          productsFavorited[index].productName,
-                                      productPrice:
-                                          productsFavorited[index].productPrice,
-                                      placeID:
-                                          productsFavorited[index].placeID);
-                                },
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                        mainAxisExtent: 165,
-                                        maxCrossAxisExtent: 220,
-                                        crossAxisSpacing: 0,
-                                        mainAxisSpacing: 10),
-                              ),
-                            )
-                          ]);
+                          return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .productsFavorited,
+                                  style: const TextStyle(
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 18,
+                                      letterSpacing: -0.3),
+                                ),
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  height: 220,
+                                  child: GridView.builder(
+                                    key: UniqueKey(),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: productsFavorited.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ProductCard(
+                                          productID: productsFavorited[index]
+                                              .productID,
+                                          productName: productsFavorited[index]
+                                              .productName,
+                                          productPrice: productsFavorited[index]
+                                              .productPrice,
+                                          placeID:
+                                              productsFavorited[index].placeID);
+                                    },
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            mainAxisExtent: 165,
+                                            maxCrossAxisExtent: 220,
+                                            crossAxisSpacing: 0,
+                                            mainAxisSpacing: 10),
+                                  ),
+                                )
+                              ]);
                         } else {
                           return const SizedBox.shrink();
                         }
@@ -356,34 +361,40 @@ class _ProductsPageState extends State<ProductsPage> {
                         letterSpacing: -0.3),
                   ),
                   const SizedBox(height: 10),
-                  GridView.builder(
-                      key: UniqueKey(),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              mainAxisExtent: 220,
-                              maxCrossAxisExtent: 200,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 0),
-                      itemCount: (_searchBox.text.isEmpty)
-                          ? products.length
-                          : productsSearched.length,
-                      itemBuilder: (context, index) {
-                        if (_searchBox.text.isEmpty) {
-                          return ProductCard(
-                              productID: products[index].productID,
-                              productName: products[index].productName,
-                              productPrice: products[index].productPrice,
-                              placeID: products[index].placeID);
-                        } else {
-                          return ProductCard(
-                              productID: productsSearched[index].productID,
-                              productName: productsSearched[index].productName,
-                              productPrice:
-                                  productsSearched[index].productPrice,
-                              placeID: productsSearched[index].placeID);
-                        }
+                  ValueListenableBuilder<bool>(
+                      valueListenable: valueNotifierFavorites,
+                      builder: (context, val, child) {
+                        return GridView.builder(
+                            key: UniqueKey(),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 220,
+                                    maxCrossAxisExtent: 200,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                            itemCount: (_searchBox.text.isEmpty)
+                                ? products.length
+                                : productsSearched.length,
+                            itemBuilder: (context, index) {
+                              if (_searchBox.text.isEmpty) {
+                                return ProductCard(
+                                    productID: products[index].productID,
+                                    productName: products[index].productName,
+                                    productPrice: products[index].productPrice,
+                                    placeID: products[index].placeID);
+                              } else {
+                                return ProductCard(
+                                    productID:
+                                        productsSearched[index].productID,
+                                    productName:
+                                        productsSearched[index].productName,
+                                    productPrice:
+                                        productsSearched[index].productPrice,
+                                    placeID: productsSearched[index].placeID);
+                              }
+                            });
                       }),
                 ],
               ),
