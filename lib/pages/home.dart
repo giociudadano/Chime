@@ -27,8 +27,8 @@ class _HomePageState extends State<HomePage> {
             child: menu()),
         body: const TabBarView(
           children: [
-            ProductsPage(),
             PlacesPage(),
+            ProductsPage(),
             Icon(Icons.directions_bike),
             ProfilePage(),
           ],
@@ -40,26 +40,6 @@ class _HomePageState extends State<HomePage> {
   Widget menu() {
     return TabBar(
       tabs: [
-        Tab(
-          height: 60,
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              const Icon(Icons.local_mall_outlined),
-              Text(
-                AppLocalizations.of(context)!.navTabShop,
-                style: const TextStyle(
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: [
-                      FontVariation('wght', 500),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 13,
-                    letterSpacing: -0.3),
-              ),
-            ],
-          ),
-        ),
         Tab(
           height: 60,
           child: Column(
@@ -77,6 +57,26 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 13,
                     letterSpacing: -0.3),
               )
+            ],
+          ),
+        ),
+        Tab(
+          height: 60,
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              const Icon(Icons.local_mall_outlined),
+              Text(
+                AppLocalizations.of(context)!.navTabShop,
+                style: const TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 500),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3),
+              ),
             ],
           ),
         ),

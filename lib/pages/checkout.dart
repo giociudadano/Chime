@@ -83,10 +83,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return getDeliveryFee() + widget.subtotal;
   }
 
-  void addOrder(
-      String placeID, Map items, String deliveryMethod, String paymentMethod) {
-    print(
-        "PlaceID: $placeID\nItems: $items\n Delivery Method: $deliveryMethod \n Payment Method: $paymentMethod");
+  void addOrder(String deliveryMethod, String paymentMethod) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    Map items = {};
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("cart")
+        .doc(widget.placeID)
+        .get()
+        .then((document) {
+      items = document.data()!;
+    }).then((res) {
+      db
+          .collection("users")
+          .doc(uid)
+          .collection("cart")
+          .doc(widget.placeID)
+          .delete();
+      db.collection("places").doc(widget.placeID).collection("orders").add({
+        "deliveryMethod": deliveryMethod,
+        "items": items,
+        "paymentMethod": paymentMethod,
+        "userID": uid
+      }).then((docRef) {
+        db.collection("users").doc(uid).update({
+          "orders": FieldValue.arrayUnion([docRef.id])
+        });
+      });
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const OrderSuccessPage()),
+          (Route<dynamic> route) => false);
+    });
   }
 
   // Initializes a selected address listener.
@@ -300,8 +330,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        addOrder(widget.placeID, {}, deliveryMethod!,
-                            paymentMethod!);
+                        addOrder(deliveryMethod!, paymentMethod!);
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(

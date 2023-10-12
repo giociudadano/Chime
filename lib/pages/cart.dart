@@ -35,6 +35,93 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
+  // Shows a reminder when clicking on the 'information' button at the upper right of the screen.
+  Future showReminder(BuildContext context) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          title: Text(
+            "Reminder",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  "By default, delivery address is expected to be within the locality. However, you may contact the seller for special requests.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 400),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 14,
+                      height: 1.1,
+                      letterSpacing: -0.3),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.onPrimary),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "I understand",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 600),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     getProducts();
@@ -80,9 +167,7 @@ class _CartPageState extends State<CartPage> {
               icon: Icon(Icons.info_outline,
                   color: Theme.of(context).colorScheme.outline),
               onPressed: () {
-                //TODO: Add information about the cart page.
-                throw UnimplementedError(
-                    "TODO: Add information about the cart page.");
+                showReminder(context);
               },
             ),
           ),
