@@ -99,13 +99,13 @@ class _OrderCardState extends State<OrderCard> {
                     widget.placeName,
                     maxLines: 1,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontFamily: 'Bahnschrift',
                         fontVariations: const [
                           FontVariation('wght', 700),
                           FontVariation('wdth', 100),
                         ],
-                        fontSize: 16,
+                        fontSize: 18,
                         letterSpacing: -0.3,
                         height: 0.85,
                         overflow: TextOverflow.ellipsis),
@@ -147,17 +147,20 @@ class _OrderCardState extends State<OrderCard> {
                         child: ValueListenableBuilder<bool>(
                             valueListenable: valueNotifierTotal,
                             builder: (context, val, child) {
-                              return Text(
-                                "${AppLocalizations.of(context)!.checkout} (₱$total)",
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 500),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 14,
+                              return Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(
+                                  "${AppLocalizations.of(context)!.checkout} (₱$total)",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 500),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 15,
+                                  ),
                                 ),
                               );
                             }),

@@ -162,8 +162,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     }
                   },
                   child: SizedBox(
-                      width: 80,
-                      height: 80,
+                      width: 85,
+                      height: 85,
                       child: FittedBox(
                         clipBehavior: Clip.hardEdge,
                         fit: BoxFit.cover,
@@ -216,7 +216,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                             FontVariation('wght', 700),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 20,
+                          fontSize: 22,
                           letterSpacing: -0.3),
                     ),
                     const SizedBox(height: 5),
@@ -246,8 +246,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                           ),
                         ),
                         Container(
-                          color:
-                              MaterialColors.getSurfaceContainerLow(darkMode),
+                          color: MaterialColors.getSurfaceContainerLowest(
+                              darkMode),
                           width: 40,
                           height: 32,
                           child: Center(

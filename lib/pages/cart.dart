@@ -83,7 +83,8 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
+              ListView(
+                scrollDirection: Axis.horizontal,
                 children: [
                   Expanded(
                     child: ElevatedButton(

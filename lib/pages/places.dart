@@ -24,7 +24,6 @@ class _PlacesPageState extends State<PlacesPage> {
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
   StreamSubscription? favoritesListener;
-  StreamSubscription? cartListener;
 
   // Variables for pagination.
   List<PlaceModel> places = [];
@@ -39,7 +38,6 @@ class _PlacesPageState extends State<PlacesPage> {
 
   // Variables for user information.
   List<PlaceModel> placesFavorited = [];
-  int cartItems = 0;
 
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
@@ -145,28 +143,6 @@ class _PlacesPageState extends State<PlacesPage> {
     });
   }
 
-  void addCartListener() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    cartListener = db
-        .collection("users")
-        .doc(uid)
-        .collection("cart")
-        .snapshots()
-        .listen((event) async {
-      db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
-        int cartItems = 0;
-        for (var place in snapshot.docs) {
-          cartItems += place.data().length;
-        }
-        setState(() {
-          this.cartItems = cartItems;
-        });
-      });
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -174,14 +150,11 @@ class _PlacesPageState extends State<PlacesPage> {
     addFavoritesListener();
     addPlaces();
     addSearchListener();
-    addCartListener();
   }
 
   @override
   void dispose() {
     _searchBox.dispose();
-    favoritesListener!.cancel();
-    cartListener!.cancel();
     _debounce?.cancel();
     super.dispose();
   }
@@ -194,96 +167,48 @@ class _PlacesPageState extends State<PlacesPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            color: MaterialColors.getSurfaceContainerLow(darkMode),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.appName,
-                        style: const TextStyle(
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: [
-                              FontVariation('wght', 700),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 22,
-                            letterSpacing: -0.3),
-                      ),
-                      Stack(children: [
-                        IconButton(
-                          icon: const Icon(Icons.shopping_cart_outlined),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const CartPage()));
-                          },
-                        ),
-                        if (cartItems != 0)
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: CircleAvatar(
-                                radius: 10,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                child: Text(
-                                  cartItems.toString(),
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 14,
-                                      letterSpacing: -0.3),
-                                )),
-                          )
-                      ])
-                    ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: TextField(
+              focusNode: focus,
+              controller: _searchBox,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 0.5,
                   ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    focusNode: focus,
-                    controller: _searchBox,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      contentPadding: EdgeInsets.zero,
-                      hintText:
-                          AppLocalizations.of(context)!.placesSearchBoxHint,
-                      hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
-                      filled: true,
-                      fillColor:
-                          MaterialColors.getSurfaceContainerLowest(darkMode),
-                      isDense: true,
-                      prefixIcon: const Icon(Icons.search_outlined),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.mic_outlined),
-                        onPressed: () {
-                          //TODO: Add method that converts speech to text.
-                        },
-                      ),
-                    ),
-                    style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 13,
-                    ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 0.5,
                   ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                contentPadding: EdgeInsets.zero,
+                hintText: AppLocalizations.of(context)!.placesSearchBoxHint,
+                hintStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.outline),
+                filled: true,
+                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+                isDense: true,
+                prefixIcon: const Icon(Icons.search_outlined),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.mic_outlined),
+                  onPressed: () {
+                    //TODO: Add method that converts speech to text.
+                  },
+                ),
+              ),
+              style: const TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: [
+                  FontVariation('wght', 300),
+                  FontVariation('wdth', 100),
                 ],
+                fontSize: 13,
               ),
             ),
           ),
