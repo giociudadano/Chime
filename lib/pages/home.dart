@@ -8,19 +8,42 @@
 
 part of main;
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  String profilePictureURL = '';
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  // Variables for listeners and controllers.
   StreamSubscription? cartListener;
   late TabController tabController;
 
+  // Variables for personal data.
   int cartItems = 0;
 
+  void getProfilePictureURL() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    String url = '';
+    String ref = "profilePictures/$uid.png";
+    try {
+      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    } catch (e) {
+      //
+    } finally {
+      if (mounted) {
+        setState(() {
+          widget.profilePictureURL = url;
+        });
+      }
+    }
+  }
+
+  // Adds a cart listener that updates the number of items bubble when the cart
+  //  recieves an update.
   void addCartListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -53,6 +76,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     tabController.addListener(() {
       setState(() {});
     });
+    getProfilePictureURL();
     addCartListener();
     super.initState();
   }
@@ -78,10 +102,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  ),
+                  IconButton(
+                      icon: CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        foregroundImage:
+                            Image.network(widget.profilePictureURL).image,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const ProfilePage()));
+                      }),
                   Stack(children: [
                     IconButton(
                       icon: Icon(
@@ -120,110 +151,128 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Opacity(
-                  opacity: tabController.index == 0 ? 1 : 0.5,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          MaterialColors.getSurfaceContainerLow(darkMode)),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
+                height: 30,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Opacity(
+                      opacity: tabController.index == 0 ? 1 : 0.5,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              tabController.index == 0
+                                  ? MaterialColors.getSurfaceContainerLow(
+                                      darkMode)
+                                  : MaterialColors.getSurfaceContainerLowest(
+                                      darkMode)),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              "Places",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 15,
+                                  letterSpacing: -0.3,
+                                  height: 0.85,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        onPressed: () {
+                          tabController.animateTo(0);
+                        },
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          "Places",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 15,
-                              letterSpacing: -0.3,
-                              height: 0.85,
-                              overflow: TextOverflow.ellipsis),
-                        )),
-                    onPressed: () {
-                      tabController.animateTo(0);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Opacity(
-                  opacity: tabController.index == 1 ? 1 : 0.5,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          MaterialColors.getSurfaceContainerLow(darkMode)),
+                    const SizedBox(width: 10),
+                    Opacity(
+                      opacity: tabController.index == 1 ? 1 : 0.5,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              tabController.index == 1
+                                  ? MaterialColors.getSurfaceContainerLow(
+                                      darkMode)
+                                  : MaterialColors.getSurfaceContainerLowest(
+                                      darkMode)),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              "Products",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 15,
+                                  letterSpacing: -0.3,
+                                  height: 0.85,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        onPressed: () {
+                          tabController.animateTo(1);
+                        },
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          "Products",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 15,
-                              letterSpacing: -0.3,
-                              height: 0.85,
-                              overflow: TextOverflow.ellipsis),
-                        )),
-                    onPressed: () {
-                      tabController.animateTo(1);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Opacity(
-                  opacity: tabController.index == 2 ? 1 : 0.5,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(
-                          MaterialColors.getSurfaceContainerLow(darkMode)),
+                    const SizedBox(width: 10),
+                    Opacity(
+                      opacity: tabController.index == 2 ? 1 : 0.5,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              tabController.index == 2
+                                  ? MaterialColors.getSurfaceContainerLow(
+                                      darkMode)
+                                  : MaterialColors.getSurfaceContainerLowest(
+                                      darkMode)),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              "My Orders",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 15,
+                                  letterSpacing: -0.3,
+                                  height: 0.85,
+                                  overflow: TextOverflow.ellipsis),
+                            )),
+                        onPressed: () {
+                          tabController.animateTo(2);
+                        },
+                      ),
                     ),
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(
-                          "My Store",
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 15,
-                              letterSpacing: -0.3,
-                              height: 0.85,
-                              overflow: TextOverflow.ellipsis),
-                        )),
-                    onPressed: () {
-                      tabController.animateTo(2);
-                    },
-                  ),
+                  ],
                 ),
-              ]),
+              ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: TabBarView(
                 controller: tabController,
-                children: [
-                  const PlacesPage(),
-                  const ProductsPage(),
-                  const Text("Hello!"),
+                children: const [
+                  PlacesPage(),
+                  ProductsPage(),
+                  OrdersPage(),
                 ],
               ),
             )

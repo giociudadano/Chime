@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
           .signInWithEmailAndPassword(email: email, password: password);
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage()),
             (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
@@ -289,8 +289,7 @@ class _LoginPageState extends State<LoginPage> {
                                   if (context.mounted && response == true) {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomePage()),
+                                            builder: (context) => HomePage()),
                                         (Route<dynamic> route) => false);
                                   }
                                 });

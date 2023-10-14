@@ -103,13 +103,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
           .collection("cart")
           .doc(widget.placeID)
           .delete();
-      db.collection("places").doc(widget.placeID).collection("orders").add({
+      db.collection("orders").add({
         "deliveryMethod": deliveryMethod,
         "items": items,
         "paymentMethod": paymentMethod,
-        "userID": uid
+        "userID": uid,
+        "placeID": widget.placeID,
+        "status": "Pending",
+        "createdAt": FieldValue.serverTimestamp()
       }).then((docRef) {
         db.collection("users").doc(uid).update({
+          "orders": FieldValue.arrayUnion([docRef.id])
+        });
+        db.collection("places").doc(widget.placeID).update({
           "orders": FieldValue.arrayUnion([docRef.id])
         });
       });

@@ -12,8 +12,8 @@
 part of main;
 
 // ignore: must_be_immutable
-class OrderItemCard extends StatefulWidget {
-  OrderItemCard(
+class CartItemCard extends StatefulWidget {
+  CartItemCard(
       {super.key,
       required this.placeID,
       required this.productID,
@@ -29,10 +29,10 @@ class OrderItemCard extends StatefulWidget {
   final Function(int delta)? updateTotal;
 
   @override
-  State<OrderItemCard> createState() => _OrderItemCardState();
+  State<CartItemCard> createState() => _CartItemCardState();
 }
 
-class _OrderItemCardState extends State<OrderItemCard> {
+class _CartItemCardState extends State<CartItemCard> {
   // Variable for debouncing. Used when modifying item quantity to prevent numerous database calls.
   Timer? _debounce;
 

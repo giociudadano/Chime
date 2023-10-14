@@ -62,7 +62,7 @@ class _SignupPageState extends State<SignupPage> {
             .set({"username": username, "displayName": username});
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => HomePage()),
               (Route<dynamic> route) => false);
           bool darkMode = Theme.of(context).brightness == Brightness.dark;
           ScaffoldMessenger.of(context).showSnackBar(

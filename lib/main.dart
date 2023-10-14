@@ -40,13 +40,15 @@ part 'pages/cart.dart';
 part 'pages/checkout.dart';
 part 'pages/addresses.dart';
 part 'pages/order_success.dart';
+part 'pages/orders.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
 part 'objects/product_card.dart';
 part 'objects/place_card.dart';
+part 'objects/cart_card.dart';
+part 'objects/cart_item_card.dart';
 part 'objects/order_card.dart';
-part 'objects/order_item_card.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -167,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
     loginStateListener.listen((User? user) async {
       if (user != null) {
         Navigator.of(navigatorKey.currentContext!).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage()),
             (Route<dynamic> route) => false);
       }
     });

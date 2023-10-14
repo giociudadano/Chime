@@ -187,7 +187,7 @@ class _CartPageState extends State<CartPage> {
                       itemCount: orders.length,
                       itemBuilder: (context, index) {
                         String key = orders.keys.elementAt(index);
-                        return OrderCard(placeID: key, orderItems: orders[key]);
+                        return CartCard(placeID: key, orderItems: orders[key]);
                       }),
                 ),
               ],
