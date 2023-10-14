@@ -42,6 +42,7 @@ part 'pages/checkout.dart';
 part 'pages/addresses.dart';
 part 'pages/order_success.dart';
 part 'pages/orders.dart';
+part 'pages/store.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
