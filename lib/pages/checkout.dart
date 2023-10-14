@@ -105,10 +105,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
           .delete();
       db.collection("orders").add({
         "deliveryMethod": deliveryMethod,
+        "address": deliveryMethod == 'Pick Up'
+            ? null
+            : addresses[selectedAddress!]["address"],
         "items": items,
         "paymentMethod": paymentMethod,
         "userID": uid,
         "placeID": widget.placeID,
+        "price": getTotal(),
         "status": "Pending",
         "createdAt": FieldValue.serverTimestamp()
       }).then((docRef) {
