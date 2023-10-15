@@ -168,7 +168,7 @@ class _ProductCardState extends State<ProductCard> {
                     ))
               ]),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 8),
+                padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +183,7 @@ class _ProductCardState extends State<ProductCard> {
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                             fontFamily: 'Bahnschrift',
                             fontVariations: const [
-                              FontVariation('wght', 500),
+                              FontVariation('wght', 550),
                               FontVariation('wdth', 100),
                             ],
                             fontSize: 13,
@@ -201,7 +201,8 @@ class _ProductCardState extends State<ProductCard> {
                             FontVariation('wght', 700),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 15,
+                          fontSize: 24,
+                          height: 0.85,
                           letterSpacing: -0.3),
                     ),
                     Text(
@@ -214,7 +215,8 @@ class _ProductCardState extends State<ProductCard> {
                             FontVariation('wght', 400),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 11,
+                          fontSize: 11.5,
+                          height: 1.3,
                           letterSpacing: -0.3,
                           overflow: TextOverflow.ellipsis),
                     ),

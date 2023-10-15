@@ -8,7 +8,7 @@ class PlaceModel {
   // Passed properties
   String placeID;
   String placeName = "";
-  String placeTagline = "";
+  String? placeTagline;
 
   PlaceModel(this.placeID, data) {
     placeName = data["placeName"];

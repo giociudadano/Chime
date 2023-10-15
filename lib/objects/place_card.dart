@@ -18,7 +18,8 @@ class PlaceCard extends StatefulWidget {
     required this.placeName,
     required this.placeTagline,
   });
-  String placeName, placeTagline, placeImageURL = ' ', placeID;
+  String placeName, placeImageURL = ' ', placeID;
+  String? placeTagline;
   bool isFavorited = false;
 
   @override
@@ -154,25 +155,26 @@ class _PlaceCardState extends State<PlaceCard> {
                               overflow: TextOverflow.ellipsis),
                         ),
                       ),
-                      SizedBox(
-                        width: 200,
-                        child: Text(
-                          widget.placeTagline,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 12,
-                            letterSpacing: -0.3,
-                            overflow: TextOverflow.ellipsis,
-                            height: 0.85,
+                      if (widget.placeTagline != null)
+                        SizedBox(
+                          width: 200,
+                          child: Text(
+                            widget.placeTagline!,
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 12,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis,
+                              height: 0.85,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

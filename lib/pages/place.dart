@@ -16,7 +16,8 @@ part of main;
 class PlacePage extends StatefulWidget {
   // Variables used for place information.
   String placeID;
-  String placeName = '', placeTagline = '', placeImageURL = '';
+  String? placeTagline;
+  String placeName = '', placeImageURL = '';
   List<ProductModel> products = [];
 
   // Variables used for user-related information.
@@ -260,25 +261,25 @@ class _PlacePageState extends State<PlacePage> {
                             ],
                             fontSize: 16,
                             letterSpacing: -0.3,
-                            height: 0.85,
+                            height: 1.2,
                             overflow: TextOverflow.ellipsis),
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        widget.placeTagline,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 12,
-                            letterSpacing: -0.3,
-                            height: 0.85,
-                            overflow: TextOverflow.ellipsis),
-                      ),
+                      if (widget.placeTagline != null)
+                        Text(
+                          widget.placeTagline!,
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 12,
+                              letterSpacing: -0.3,
+                              height: 0.85,
+                              overflow: TextOverflow.ellipsis),
+                        ),
                     ],
                   ),
                 ),

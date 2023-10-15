@@ -43,6 +43,7 @@ part 'pages/addresses.dart';
 part 'pages/order_success.dart';
 part 'pages/orders.dart';
 part 'pages/store.dart';
+part 'pages/store_create.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
