@@ -146,8 +146,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                           if (context.mounted) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const StoreCreatePage()),
+                                  builder: (context) => const StoreAddPage()),
                             );
                           }
                         },

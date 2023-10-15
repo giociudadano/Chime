@@ -42,9 +42,12 @@ part 'pages/checkout.dart';
 part 'pages/addresses.dart';
 part 'pages/order_success.dart';
 part 'pages/orders.dart';
+
+// Store Management
 part 'pages/store.dart';
-part 'pages/store_create.dart';
+part 'pages/store_add.dart';
 part 'pages/store_products.dart';
+part 'pages/store_products_add.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';

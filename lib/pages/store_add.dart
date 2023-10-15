@@ -1,13 +1,13 @@
 part of main;
 
-class StoreCreatePage extends StatefulWidget {
-  const StoreCreatePage({super.key});
+class StoreAddPage extends StatefulWidget {
+  const StoreAddPage({super.key});
 
   @override
-  State<StoreCreatePage> createState() => _StoreCreatePageState();
+  State<StoreAddPage> createState() => _StoreAddPageState();
 }
 
-class _StoreCreatePageState extends State<StoreCreatePage> {
+class _StoreAddPageState extends State<StoreAddPage> {
   // Variables for controllers.
   final GlobalKey<FormState> formAddStoreKey = GlobalKey<FormState>();
   final inputAddStoreName = TextEditingController();

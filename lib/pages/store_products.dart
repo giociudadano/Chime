@@ -60,84 +60,103 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (products.isEmpty && productsFeatured.isEmpty) {
-      // TODO: Add display for when shop has no products.
-      return const SizedBox.shrink();
-    }
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          children: [
-            if (productsFeatured.isNotEmpty)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      floatingActionButton: FloatingActionButton.small(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(
+          Icons.add,
+          color: MaterialColors.getSurfaceContainerLowest(darkMode),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => StoreProductsAddPage(widget.placeID)),
+          );
+        },
+      ),
+      body: (products.isEmpty && productsFeatured.isEmpty)
+          ? const SizedBox.shrink()
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView(
                 children: [
-                  Text(
-                    "Featured Products",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 16,
-                        letterSpacing: -0.5),
-                  ),
-                  const SizedBox(height: 10),
-                  GridView.builder(
-                      key: UniqueKey(),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              mainAxisExtent: 205,
-                              maxCrossAxisExtent: 200,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 0),
-                      itemCount: productsFeatured.length,
-                      itemBuilder: (context, index) {
-                        String key = productsFeatured.keys.elementAt(index);
-                        return ProductCardEditable(key, productsFeatured[key],
-                            setFeaturedProductCallback: setFeaturedProduct);
-                      })
+                  if (productsFeatured.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Featured Products",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.5),
+                        ),
+                        const SizedBox(height: 10),
+                        GridView.builder(
+                            key: UniqueKey(),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 205,
+                                    maxCrossAxisExtent: 200,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                            itemCount: productsFeatured.length,
+                            itemBuilder: (context, index) {
+                              String key =
+                                  productsFeatured.keys.elementAt(index);
+                              return ProductCardEditable(
+                                  key, productsFeatured[key],
+                                  setFeaturedProductCallback:
+                                      setFeaturedProduct);
+                            })
+                      ],
+                    ),
+                  if (products.isNotEmpty)
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "All Products",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 16,
+                                letterSpacing: -0.5),
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.builder(
+                            key: UniqueKey(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 205,
+                                    maxCrossAxisExtent: 200,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                            itemCount: products.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String key = products.keys.elementAt(index);
+                              return ProductCardEditable(key, products[key],
+                                  setFeaturedProductCallback:
+                                      setFeaturedProduct);
+                            },
+                          ),
+                        ])
                 ],
               ),
-            if (products.isNotEmpty)
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  "All Products",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 700),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 16,
-                      letterSpacing: -0.5),
-                ),
-                const SizedBox(height: 10),
-                GridView.builder(
-                  key: UniqueKey(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      mainAxisExtent: 205,
-                      maxCrossAxisExtent: 200,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 0),
-                  itemCount: products.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String key = products.keys.elementAt(index);
-                    return ProductCardEditable(key, products[key],
-                        setFeaturedProductCallback: setFeaturedProduct);
-                  },
-                ),
-              ])
-          ],
-        ),
-      ),
+            ),
     );
   }
 }
