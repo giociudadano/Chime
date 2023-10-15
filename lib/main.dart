@@ -44,6 +44,7 @@ part 'pages/order_success.dart';
 part 'pages/orders.dart';
 part 'pages/store.dart';
 part 'pages/store_create.dart';
+part 'pages/store_products.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';

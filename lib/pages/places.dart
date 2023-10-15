@@ -214,7 +214,7 @@ class _PlacesPageState extends State<PlacesPage> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: ListView(
                 controller: _scrollController,
                 children: [

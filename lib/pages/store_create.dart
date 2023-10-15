@@ -20,11 +20,16 @@ class _StoreCreatePageState extends State<StoreCreatePage> {
       String name, String description, String deliveryFee, String phoneNumber) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
+      String uid = FirebaseAuth.instance.currentUser!.uid;
       db.collection("places").add({
         "placeName": name,
         "placeTagline": description == '' ? null : description,
         "deliveryPrice": deliveryFee == '' ? 0 : int.parse(deliveryFee),
         "phoneNumber": phoneNumber == '' ? null : phoneNumber,
+      }).then((docRef) {
+        db.collection("users").doc(uid).update({
+          "places": FieldValue.arrayUnion([docRef.id])
+        });
       });
       Navigator.pop(context);
     } catch (e) {
@@ -42,6 +47,19 @@ class _StoreCreatePageState extends State<StoreCreatePage> {
 
   // Checks if the delivery fee field is a non-integer and returns an error if so.
   String? _verifyDeliveryFeeField(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    try {
+      int.parse(value);
+      return null;
+    } on FormatException {
+      return 'Please enter a whole number';
+    }
+  }
+
+  // Checks if the delivery fee field is a non-integer and returns an error if so.
+  String? _verifyContactNumberField(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
@@ -237,6 +255,7 @@ class _StoreCreatePageState extends State<StoreCreatePage> {
               ]),
               const SizedBox(height: 5),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: 100,
@@ -245,7 +264,7 @@ class _StoreCreatePageState extends State<StoreCreatePage> {
                       controller: inputAddStoreDeliveryFee,
                       decoration: InputDecoration(
                         prefixIcon: const Padding(
-                            padding: EdgeInsets.all(15), child: Text('₱ ')),
+                            padding: EdgeInsets.all(12), child: Text('₱ ')),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.outline,
@@ -320,7 +339,7 @@ class _StoreCreatePageState extends State<StoreCreatePage> {
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
-                        return null;
+                        return _verifyContactNumberField(value);
                       },
                     ),
                   )
