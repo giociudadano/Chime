@@ -2,9 +2,12 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreProductsAddPage extends StatefulWidget {
-  StoreProductsAddPage(this.placeID, {super.key});
+  StoreProductsAddPage(this.placeID, {super.key, this.addProductCallback});
 
   String placeID;
+
+  final Function(String productID, Map data)? addProductCallback;
+
   @override
   State<StoreProductsAddPage> createState() => _StoreProductsAddPageState();
 }
@@ -20,15 +23,18 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
   void addProduct(String name, String description, String price) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("products").add({
+      Map<String, Object?> data = {
         "placeID": widget.placeID,
         "productName": name,
         "productDesc": description == '' ? null : description,
         "productPrice": price == '' ? 0 : int.parse(price),
-      }).then((docRef) {
+        "categories": []
+      };
+      db.collection("products").add(data).then((docRef) {
         db.collection("places").doc(widget.placeID).update({
           "products": FieldValue.arrayUnion([docRef.id])
         });
+        widget.addProductCallback!(docRef.id, data);
       });
       Navigator.pop(context);
     } catch (e) {

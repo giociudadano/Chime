@@ -11,10 +11,11 @@ class StoreProductsPage extends StatefulWidget {
 }
 
 class _StoreProductsPageState extends State<StoreProductsPage> {
+  StreamSubscription? productsListener;
   Map productsFeatured = {};
   Map products = {};
 
-  void addProducts() async {
+  void initProducts() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     for (String productID in widget.productIDs) {
       db.collection("products").doc(productID).get().then((document) {
@@ -47,14 +48,23 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     }
   }
 
+  void addProduct(String productID, Map data) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    products[productID] = data;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
-    addProducts();
+    initProducts();
     super.initState();
   }
 
   @override
   void dispose() {
+    productsListener!.cancel();
     super.dispose();
   }
 
@@ -71,7 +81,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => StoreProductsAddPage(widget.placeID)),
+                builder: (context) => StoreProductsAddPage(widget.placeID,
+                    addProductCallback: addProduct)),
           );
         },
       ),
@@ -138,6 +149,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           const SizedBox(height: 10),
                           GridView.builder(
                             key: UniqueKey(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
