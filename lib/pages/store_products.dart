@@ -11,6 +11,7 @@ class StoreProductsPage extends StatefulWidget {
 }
 
 class _StoreProductsPageState extends State<StoreProductsPage> {
+  Map productsFeatured = {};
   Map products = {};
 
   void addProducts() async {
@@ -18,12 +19,31 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     for (String productID in widget.productIDs) {
       db.collection("products").doc(productID).get().then((document) {
         if (mounted) {
-          setState(() {
-            products[productID] = document.data()!;
-            print(products);
-          });
+          List categories = document.data()!['categories'] ?? [];
+          if (categories.contains('Featured')) {
+            setState(() {
+              productsFeatured[productID] = document.data()!;
+            });
+          } else {
+            setState(() {
+              products[productID] = document.data()!;
+            });
+          }
         }
       });
+    }
+  }
+
+  void setFeaturedProduct(String productID, bool state) {
+    if (state) {
+      productsFeatured[productID] = products.remove(productID);
+      productsFeatured[productID]['categories'].add('Featured');
+    } else {
+      products[productID] = productsFeatured.remove(productID);
+      products[productID]['categories'].remove('Featured');
+    }
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -40,30 +60,82 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    if (products.isEmpty) {
-      return SizedBox.shrink();
+    if (products.isEmpty && productsFeatured.isEmpty) {
+      // TODO: Add display for when shop has no products.
+      return const SizedBox.shrink();
     }
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: GridView.builder(
-          key: UniqueKey(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              mainAxisExtent: 220,
-              maxCrossAxisExtent: 200,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 0),
-          itemCount: products.length,
-          itemBuilder: (BuildContext context, int index) {
-            String key = products.keys.elementAt(index);
-            return ProductCard(
-                productID: key,
-                productName: products[key]["productName"],
-                productPrice: products[key]["productPrice"],
-                placeID: products[key]["placeID"]);
-          },
+        child: ListView(
+          children: [
+            if (productsFeatured.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Featured Products",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 700),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 16,
+                        letterSpacing: -0.5),
+                  ),
+                  const SizedBox(height: 10),
+                  GridView.builder(
+                      key: UniqueKey(),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              mainAxisExtent: 205,
+                              maxCrossAxisExtent: 200,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 0),
+                      itemCount: productsFeatured.length,
+                      itemBuilder: (context, index) {
+                        String key = productsFeatured.keys.elementAt(index);
+                        return ProductCardEditable(key, productsFeatured[key],
+                            setFeaturedProductCallback: setFeaturedProduct);
+                      })
+                ],
+              ),
+            if (products.isNotEmpty)
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(
+                  "All Products",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
+                GridView.builder(
+                  key: UniqueKey(),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisExtent: 205,
+                      maxCrossAxisExtent: 200,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 0),
+                  itemCount: products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String key = products.keys.elementAt(index);
+                    return ProductCardEditable(key, products[key],
+                        setFeaturedProductCallback: setFeaturedProduct);
+                  },
+                ),
+              ])
+          ],
         ),
       ),
     );

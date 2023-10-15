@@ -49,6 +49,7 @@ part 'pages/store_products.dart';
 // Imports all services and objects.
 part 'services/auth_service.dart';
 part 'objects/product_card.dart';
+part 'objects/product_card_editable.dart';
 part 'objects/place_card.dart';
 part 'objects/cart_card.dart';
 part 'objects/cart_item_card.dart';
