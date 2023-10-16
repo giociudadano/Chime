@@ -3,11 +3,12 @@ part of main;
 // ignore: must_be_immutable
 class ProductCardEditable extends StatefulWidget {
   ProductCardEditable(this.productID, this.product,
-      {super.key, this.setFeaturedProductCallback});
+      {super.key, this.setFeaturedProductCallback, this.deleteProductCallback});
   String productID;
   Map product = {};
 
   final Function(String productID, bool state)? setFeaturedProductCallback;
+  final Function(String productID)? deleteProductCallback;
 
   @override
   State<ProductCardEditable> createState() => _ProductCardEditableState();
@@ -40,7 +41,24 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
           ? FieldValue.arrayRemove(['Featured'])
           : FieldValue.arrayUnion(['Featured'])
     });
+    db.collection("places").doc(widget.product['placeID']).update({
+      "categories.Featured": isFeatured
+          ? FieldValue.arrayRemove([productID])
+          : FieldValue.arrayUnion([productID])
+    });
     widget.setFeaturedProductCallback!(productID, !isFeatured);
+  }
+
+  void editProduct(String name, String price) {
+    widget.product['productName'] = name;
+    widget.product['productPrice'] = int.parse(price);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void deleteProduct(String productID) {
+    widget.deleteProductCallback!(productID);
   }
 
   @override
@@ -62,8 +80,13 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
       child: InkWell(
         onTap: () {
           if (context.mounted) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductPage(widget.productID)));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => StoreProductsEditPage(
+                      widget.productID, widget.product,
+                      editProductCallback: editProduct,
+                      deleteProductCallback: deleteProduct)),
+            );
           }
         },
         child: SizedBox(

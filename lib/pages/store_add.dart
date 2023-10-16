@@ -26,6 +26,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
         "placeTagline": description == '' ? null : description,
         "deliveryPrice": deliveryFee == '' ? 0 : int.parse(deliveryFee),
         "phoneNumber": phoneNumber == '' ? null : phoneNumber,
+        "categories": {"Featured": []}
       }).then((docRef) {
         db.collection("users").doc(uid).update({
           "places": FieldValue.arrayUnion([docRef.id])

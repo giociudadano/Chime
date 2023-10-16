@@ -12,26 +12,6 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   late TabController tabController;
   Map places = {};
 
-  // Fetches a list of owned places from the user.
-  void getPlaces() {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    db.collection("users").doc(uid).get().then((document) {
-      if (document.exists) {
-        List placeIDs = document.data()!['places'];
-        for (String placeID in placeIDs) {
-          db.collection("places").doc(placeID).get().then((document) {
-            if (mounted) {
-              setState(() {
-                places[placeID] = document.data()!;
-              });
-            }
-          });
-        }
-      }
-    });
-  }
-
   // Adds a place listener
   void addPlacesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -73,6 +53,22 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
         });
       }
     }
+  }
+
+  void setFeaturedProduct(String placeID, String productID, bool state) {
+    if (state) {
+      (places[placeID]['categories']['Featured']).add(productID);
+    } else {
+      (places[placeID]['categories']['Featured']).remove(productID);
+    }
+  }
+
+  void addProduct(String placeID, String productID) {
+    places[placeID]['products'].add(productID);
+  }
+
+  void deleteProduct(String placeID, String productID) {
+    places[placeID]['products'].remove(productID);
   }
 
   @override
@@ -385,8 +381,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      StoreProductsPage(key, places[key]['products']),
-                      const Scaffold(body: Text("Screen 2")),
+                      StoreProductsPage(key, places[key]['products'],
+                          setFeaturedProductCallback: setFeaturedProduct,
+                          addProductCallback: addProduct,
+                          deleteProductCallback: deleteProduct),
+                      StoreCategoriesPage(key, places[key]['categories'] ?? []),
                       const Scaffold(body: Text("Screen 3")),
                     ],
                   ),

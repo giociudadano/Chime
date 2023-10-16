@@ -1,41 +1,40 @@
 part of main;
 
 // ignore: must_be_immutable
-class StoreProductsAddPage extends StatefulWidget {
-  StoreProductsAddPage(this.placeID, {super.key, this.addProductCallback});
+class StoreProductsEditPage extends StatefulWidget {
+  StoreProductsEditPage(this.productID, this.product,
+      {super.key, this.editProductCallback, this.deleteProductCallback});
 
-  String placeID;
+  String productID;
+  Map product;
 
-  final Function(String productID, Map data)? addProductCallback;
+  final Function(String name, String price)? editProductCallback;
+  final Function(String productID)? deleteProductCallback;
 
   @override
-  State<StoreProductsAddPage> createState() => _StoreProductsAddPageState();
+  State<StoreProductsEditPage> createState() => _StoreProductsEditPageState();
 }
 
-class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
+class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   // Variables for controllers.
-  final GlobalKey<FormState> formAddProductKey = GlobalKey<FormState>();
-  final inputAddProductName = TextEditingController();
-  final inputAddProductDesc = TextEditingController();
-  final inputAddProductPrice = TextEditingController();
+  final GlobalKey<FormState> formEditProductKey = GlobalKey<FormState>();
+  late final inputEditProductName =
+      TextEditingController(text: widget.product['productName']);
+  late final inputEditProductDesc =
+      TextEditingController(text: widget.product['productDesc']);
+  late final inputEditProductPrice =
+      TextEditingController(text: widget.product['productPrice'].toString());
 
-  // Writes a new product to database.
-  void addProduct(String name, String description, String price) {
+  // Edits the current product at database.
+  void editProduct(String name, String description, String price) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      Map<String, Object?> data = {
-        "placeID": widget.placeID,
+      db.collection("products").doc(widget.productID).update({
         "productName": name,
         "productDesc": description == '' ? null : description,
-        "productPrice": price == '' ? 0 : int.parse(price),
-        "categories": []
-      };
-      db.collection("products").add(data).then((product) {
-        db.collection("places").doc(widget.placeID).update({
-          "products": FieldValue.arrayUnion([product.id])
-        });
-        widget.addProductCallback!(product.id, data);
+        "productPrice": price == '' ? 0 : int.parse(price)
       });
+      widget.editProductCallback!(name, price);
       Navigator.pop(context);
     } catch (e) {
       return;
@@ -63,6 +62,16 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
     }
   }
 
+  void deleteProduct() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("products").doc(widget.productID).delete();
+    db.collection("places").doc(widget.product['placeID']).update({
+      "products": FieldValue.arrayRemove([widget.productID])
+    });
+    Navigator.pop(context);
+    widget.deleteProductCallback!(widget.productID);
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -82,7 +91,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
             child: Padding(
               padding: const EdgeInsets.only(right: 50),
               child: Text(
-                "Add a new product",
+                "Edit product",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontFamily: 'Bahnschrift',
@@ -99,7 +108,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(
-            key: formAddProductKey,
+            key: formEditProductKey,
             child: ListView(
               children: [
                 const SizedBox(height: 20),
@@ -118,7 +127,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                 ),
                 const SizedBox(height: 5),
                 TextFormField(
-                  controller: inputAddProductName,
+                  controller: inputEditProductName,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -169,7 +178,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                 ),
                 const SizedBox(height: 5),
                 TextFormField(
-                  controller: inputAddProductDesc,
+                  controller: inputEditProductDesc,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -185,7 +194,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                       ),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    hintText: "Insert your store's description",
+                    hintText: "Insert your product's description",
                     hintStyle:
                         TextStyle(color: Theme.of(context).colorScheme.outline),
                     filled: true,
@@ -233,7 +242,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                       width: 100,
                       child: TextFormField(
                         keyboardType: TextInputType.number,
-                        controller: inputAddProductPrice,
+                        controller: inputEditProductPrice,
                         decoration: InputDecoration(
                           prefixIcon: const Padding(
                               padding: EdgeInsets.all(12), child: Text('₱ ')),
@@ -282,11 +291,11 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (formAddProductKey.currentState!.validate()) {
-                            addProduct(
-                              inputAddProductName.text,
-                              inputAddProductDesc.text,
-                              inputAddProductPrice.text,
+                          if (formEditProductKey.currentState!.validate()) {
+                            editProduct(
+                              inputEditProductName.text,
+                              inputEditProductDesc.text,
+                              inputEditProductPrice.text,
                             );
                           }
                         },
@@ -299,9 +308,44 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "Add new product",
+                            "Save changes",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 600),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          deleteProduct();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                MaterialColors.getSurfaceContainerLowest(
+                                    darkMode),
+                            side: BorderSide(
+                              width: 2.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            )),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Delete product",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
                               fontFamily: 'Bahnschrift',
                               fontVariations: const [
                                 FontVariation('wght', 600),

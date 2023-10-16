@@ -157,8 +157,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       icon: CircleAvatar(
                         radius: 20,
                         backgroundColor: Theme.of(context).colorScheme.surface,
-                        foregroundImage:
-                            Image.network(widget.profilePictureURL).image,
+                        foregroundImage: NetworkImage(widget.profilePictureURL),
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(

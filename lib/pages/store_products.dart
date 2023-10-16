@@ -2,16 +2,25 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreProductsPage extends StatefulWidget {
-  StoreProductsPage(this.placeID, this.productIDs, {super.key});
+  StoreProductsPage(this.placeID, this.productIDs,
+      {super.key,
+      this.setFeaturedProductCallback,
+      this.addProductCallback,
+      this.deleteProductCallback});
 
   String placeID = '';
   List productIDs = [];
+
+  final Function(String placeID, String productID, bool state)?
+      setFeaturedProductCallback;
+  final Function(String placeID, String productID)? addProductCallback;
+  final Function(String placeID, String productID)? deleteProductCallback;
+
   @override
   State<StoreProductsPage> createState() => _StoreProductsPageState();
 }
 
 class _StoreProductsPageState extends State<StoreProductsPage> {
-  StreamSubscription? productsListener;
   Map productsFeatured = {};
   Map products = {};
 
@@ -43,14 +52,23 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
       products[productID] = productsFeatured.remove(productID);
       products[productID]['categories'].remove('Featured');
     }
+    widget.setFeaturedProductCallback!(widget.placeID, productID, state);
     if (mounted) {
       setState(() {});
     }
   }
 
   void addProduct(String productID, Map data) {
-    FirebaseFirestore db = FirebaseFirestore.instance;
     products[productID] = data;
+    widget.addProductCallback!(widget.placeID, productID);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void deleteProduct(String productID) {
+    products.remove(productID);
+    widget.deleteProductCallback!(widget.placeID, productID);
     if (mounted) {
       setState(() {});
     }
@@ -64,7 +82,6 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   @override
   void dispose() {
-    productsListener!.cancel();
     super.dispose();
   }
 
@@ -126,7 +143,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               return ProductCardEditable(
                                   key, productsFeatured[key],
                                   setFeaturedProductCallback:
-                                      setFeaturedProduct);
+                                      setFeaturedProduct,
+                                  deleteProductCallback: deleteProduct);
                             })
                       ],
                     ),
@@ -162,7 +180,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               String key = products.keys.elementAt(index);
                               return ProductCardEditable(key, products[key],
                                   setFeaturedProductCallback:
-                                      setFeaturedProduct);
+                                      setFeaturedProduct,
+                                  deleteProductCallback: deleteProduct);
                             },
                           ),
                         ])

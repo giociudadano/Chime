@@ -48,6 +48,9 @@ part 'pages/store.dart';
 part 'pages/store_add.dart';
 part 'pages/store_products.dart';
 part 'pages/store_products_add.dart';
+part 'pages/store_products_edit.dart';
+part 'pages/store_categories.dart';
+part 'pages/store_categories_list.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
