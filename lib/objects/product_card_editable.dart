@@ -4,6 +4,7 @@ part of main;
 class ProductCardEditable extends StatefulWidget {
   ProductCardEditable(this.productID, this.product,
       {super.key, this.setFeaturedProductCallback, this.deleteProductCallback});
+
   String productID;
   Map product = {};
 
@@ -15,24 +16,7 @@ class ProductCardEditable extends StatefulWidget {
 }
 
 class _ProductCardEditableState extends State<ProductCardEditable> {
-  String productImageURL = '';
   bool isFeatured = false;
-
-  // Fetches and sets the product's image.
-  void getProductImageURL() async {
-    String url = '';
-    String ref = "products/${widget.productID}.jpg";
-    try {
-      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-      if (mounted) {
-        setState(() {
-          productImageURL = url;
-        });
-      }
-    } catch (e) {
-      return;
-    }
-  }
 
   void setFeaturedProduct(String productID) {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -63,7 +47,6 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
 
   @override
   void initState() {
-    getProductImageURL();
     List categories = widget.product['categories'] ?? [];
     isFeatured = categories.contains('Featured');
     super.initState();
@@ -102,7 +85,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       clipBehavior: Clip.hardEdge,
                       fit: BoxFit.cover,
                       child: CachedNetworkImage(
-                        imageUrl: productImageURL,
+                        imageUrl: widget.product['productImageURL'] ?? '',
                         placeholder: (context, url) => const Padding(
                           padding: EdgeInsets.all(40.0),
                           child: CircularProgressIndicator(),

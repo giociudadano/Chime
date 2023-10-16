@@ -24,21 +24,33 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
   Map productsFeatured = {};
   Map products = {};
 
-  void initProducts() async {
+  void initProducts() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     for (String productID in widget.productIDs) {
-      db.collection("products").doc(productID).get().then((document) {
+      db.collection("products").doc(productID).get().then((document) async {
+        List categories = document.data()!['categories'] ?? [];
+        if (categories.contains('Featured')) {
+          productsFeatured[productID] = document.data()!;
+        } else {
+          products[productID] = document.data()!;
+        }
+        setProductImageURL(productID, categories.contains('Featured'));
         if (mounted) {
-          List categories = document.data()!['categories'] ?? [];
-          if (categories.contains('Featured')) {
-            setState(() {
-              productsFeatured[productID] = document.data()!;
-            });
-          } else {
-            setState(() {
-              products[productID] = document.data()!;
-            });
-          }
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  void setProductImageURL(String productID, bool isFeatured) async {
+    String ref = "products/$productID.jpg";
+    String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    if (mounted) {
+      setState(() {
+        if (isFeatured) {
+          productsFeatured[productID]['productImageURL'] = url;
+        } else {
+          products[productID]['productImageURL'] = url;
         }
       });
     }

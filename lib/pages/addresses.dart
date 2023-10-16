@@ -503,7 +503,7 @@ class _AddressesPageState extends State<AddressesPage> {
   // Checks if the name field is empty and returns an error if so.
   String? _verifyNameField(String? value) {
     if (value == null || value.isEmpty) {
-      return "Please enter your name";
+      return "Please enter a name";
     }
     return null;
   }

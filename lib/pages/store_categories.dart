@@ -11,9 +11,172 @@ class StoreCategoriesPage extends StatefulWidget {
 }
 
 class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
+  Future<dynamic> showAddCategoryForm(BuildContext context) {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    final GlobalKey<FormState> formAddCategoryKey = GlobalKey<FormState>();
+    final inputAddCategoryName = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            title: const Text(
+              "Add a new category",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: [
+                    FontVariation('wght', 700),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 20,
+                  letterSpacing: -0.3),
+            ),
+            content: Form(
+              key: formAddCategoryKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: inputAddCategoryName,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText: "Name",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14),
+                    validator: (String? value) {
+                      return _verifyNameField(value);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formAddCategoryKey.currentState!.validate()) {
+                              addCategory(inputAddCategoryName.text);
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.primary),
+                            foregroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onPrimary),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // Checks if the name field is empty and returns an error if so.
+  String? _verifyNameField(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter a name";
+    } else if (widget.categories[value] != null) {
+      return "Category already exists";
+    }
+    return null;
+  }
+
+  void addCategory(String name) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db
+        .collection("places")
+        .doc(widget.placeID)
+        .update({"categories.$name": []});
+    if (mounted) {
+      setState(() {
+        widget.categories[name] = [];
+      });
+    }
+
+    Navigator.pop(context);
+  }
+
+  void renameCategory(String oldName, String newName) {
+    List data = widget.categories[oldName];
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("places").doc(widget.placeID).update({
+      "categories.$oldName": FieldValue.delete(),
+      "categories.$newName": data
+    });
+    if (mounted) {
+      setState(() {
+        widget.categories.remove(oldName);
+        widget.categories[newName] = data;
+      });
+    }
+  }
+
+  void deleteCategory(String name) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db
+        .collection("places")
+        .doc(widget.placeID)
+        .update({"categories.$name": FieldValue.delete()});
+    if (mounted) {
+      setState(() {
+        widget.categories.remove(name);
+      });
+    }
+  }
+
   @override
   void initState() {
-    print(widget.categories);
     super.initState();
   }
 
@@ -33,7 +196,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
             color: MaterialColors.getSurfaceContainerLowest(darkMode),
           ),
           onPressed: () {
-            // Add function to add a new category.
+            showAddCategoryForm(context);
           },
         ),
         body: Padding(
@@ -57,9 +220,16 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                     child: InkWell(
                       onTap: () {
                         if (context.mounted) {
-                          Navigator.of(context).push(MaterialPageRoute(
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
                               builder: (context) => StoreCategoriesListPage(
-                                  key, widget.categories[key])));
+                                  key,
+                                  widget.categories.keys.toList(),
+                                  widget.categories[key],
+                                  renameCategoryCallback: renameCategory,
+                                  deleteCategoryCallback: deleteCategory),
+                            ),
+                          );
                         }
                       },
                       child: Padding(
