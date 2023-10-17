@@ -69,7 +69,9 @@ class _OrderCardState extends State<OrderCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        DateFormat('yMMMMd').format(createdAt).toUpperCase(),
+                        DateFormat('MMMM dd, yyyy')
+                            .format(createdAt)
+                            .toUpperCase(),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.outline,
                           fontFamily: 'Bahnschrift',

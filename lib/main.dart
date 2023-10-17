@@ -50,7 +50,9 @@ part 'pages/store_products.dart';
 part 'pages/store_products_add.dart';
 part 'pages/store_products_edit.dart';
 part 'pages/store_categories.dart';
-part 'pages/store_categories_list.dart';
+part 'pages/store_categories_more.dart';
+part 'pages/store_orders.dart';
+part 'pages/store_orders_more.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';
@@ -60,6 +62,7 @@ part 'objects/place_card.dart';
 part 'objects/cart_card.dart';
 part 'objects/cart_item_card.dart';
 part 'objects/order_card.dart';
+part 'objects/order_card_editable.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

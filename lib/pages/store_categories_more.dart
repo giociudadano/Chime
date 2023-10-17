@@ -1,8 +1,8 @@
 part of main;
 
 // ignore: must_be_immutable
-class StoreCategoriesListPage extends StatefulWidget {
-  StoreCategoriesListPage(this.categoryName, this.categories, this.productIDs,
+class StoreCategoriesMorePage extends StatefulWidget {
+  StoreCategoriesMorePage(this.categoryName, this.categories, this.productIDs,
       {super.key, this.renameCategoryCallback, this.deleteCategoryCallback});
 
   String categoryName;
@@ -12,11 +12,10 @@ class StoreCategoriesListPage extends StatefulWidget {
   final Function(String name)? deleteCategoryCallback;
 
   @override
-  State<StoreCategoriesListPage> createState() =>
-      _StoreCategoriesListPageState();
+  State<StoreCategoriesMorePage> createState() => _StoreCategoriesMoreState();
 }
 
-class _StoreCategoriesListPageState extends State<StoreCategoriesListPage> {
+class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   GlobalKey? dropdownButtonKey = GlobalKey();
 
   Future<dynamic> showRenameCategoryForm(BuildContext context) {

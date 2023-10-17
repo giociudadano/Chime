@@ -222,7 +222,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                         if (context.mounted) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => StoreCategoriesListPage(
+                              builder: (context) => StoreCategoriesMorePage(
                                   key,
                                   widget.categories.keys.toList(),
                                   widget.categories[key],

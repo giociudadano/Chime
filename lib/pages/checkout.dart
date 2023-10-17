@@ -96,6 +96,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .get()
         .then((document) {
       items = document.data()!;
+      print(items);
+      for (var item in items.keys) {
+        items[item] = {
+          "name": "Placeholder Name",
+          "quantity": items[item],
+          "price": 0, //TODO
+        };
+      }
     }).then((res) {
       db
           .collection("users")
@@ -104,17 +112,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
           .doc(widget.placeID)
           .delete();
       db.collection("orders").add({
-        "deliveryMethod": deliveryMethod,
         "address": deliveryMethod == 'Pick Up'
             ? null
             : addresses[selectedAddress!]["address"],
+        "createdAt": FieldValue.serverTimestamp(),
+        "deliveryFee": getDeliveryFee(),
+        "deliveryMethod": deliveryMethod,
+        "displayName": "John Doe", //TODO
         "items": items,
         "paymentMethod": paymentMethod,
-        "userID": uid,
+        "phoneNumber": "09123456789", //TODO
         "placeID": widget.placeID,
         "price": getTotal(),
         "status": "Pending",
-        "createdAt": FieldValue.serverTimestamp()
+        "userID": uid,
       }).then((docRef) {
         db.collection("users").doc(uid).update({
           "orders": FieldValue.arrayUnion([docRef.id])

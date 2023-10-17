@@ -386,7 +386,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                           addProductCallback: addProduct,
                           deleteProductCallback: deleteProduct),
                       StoreCategoriesPage(key, places[key]['categories'] ?? []),
-                      const Scaffold(body: Text("Screen 3")),
+                      StoreOrdersPage(key),
                     ],
                   ),
                 ),
