@@ -478,7 +478,7 @@ class _StoreOrdersMoreState extends State<StoreOrdersMorePage> {
                               )
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 40),
                         ]);
                       }),
                 )

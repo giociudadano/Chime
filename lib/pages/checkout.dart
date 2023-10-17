@@ -96,12 +96,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .get()
         .then((document) {
       items = document.data()!;
-      print(items);
       for (var item in items.keys) {
         items[item] = {
           "name": "Placeholder Name",
           "quantity": items[item],
-          "price": 0, //TODO
+          "price":
+              0, //TODO Hardcoded. Create a function that retrieves place data.
         };
       }
     }).then((res) {
@@ -118,10 +118,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "createdAt": FieldValue.serverTimestamp(),
         "deliveryFee": getDeliveryFee(),
         "deliveryMethod": deliveryMethod,
-        "displayName": "John Doe", //TODO
+        "displayName":
+            "John Doe", //TODO Hardcoded. Create a function that retrieves user data.
         "items": items,
         "paymentMethod": paymentMethod,
-        "phoneNumber": "09123456789", //TODO
+        "phoneNumber":
+            "09123456789", //TODO Hardcoded. Create a function that retrieves user data.
         "placeID": widget.placeID,
         "price": getTotal(),
         "status": "Pending",

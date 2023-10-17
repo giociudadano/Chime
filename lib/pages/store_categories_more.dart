@@ -3,13 +3,17 @@ part of main;
 // ignore: must_be_immutable
 class StoreCategoriesMorePage extends StatefulWidget {
   StoreCategoriesMorePage(this.categoryName, this.categories, this.productIDs,
-      {super.key, this.renameCategoryCallback, this.deleteCategoryCallback});
+      {super.key,
+      this.renameCategoryCallback,
+      this.deleteCategoryCallback,
+      this.setFeaturedProductCallback});
 
   String categoryName;
   List productIDs, categories;
 
   final Function(String oldName, String newName)? renameCategoryCallback;
   final Function(String name)? deleteCategoryCallback;
+  final Function(String productID, bool state)? setFeaturedProductCallback;
 
   @override
   State<StoreCategoriesMorePage> createState() => _StoreCategoriesMoreState();
@@ -17,6 +21,7 @@ class StoreCategoriesMorePage extends StatefulWidget {
 
 class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   GlobalKey? dropdownButtonKey = GlobalKey();
+  Map products = {};
 
   Future<dynamic> showRenameCategoryForm(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -175,6 +180,48 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     detector?.onTap?.call();
   }
 
+  void initProducts() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    for (String productID in widget.productIDs) {
+      db.collection("products").doc(productID).get().then((document) async {
+        List categories = document.data()!['categories'] ?? [];
+        products[productID] = document.data()!;
+        setProductImageURL(productID);
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  void setProductImageURL(String productID) async {
+    String ref = "products/$productID.jpg";
+    String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    if (mounted) {
+      setState(() {
+        products[productID]['productImageURL'] = url;
+      });
+    }
+  }
+
+  void setFeaturedProduct(String productID, bool state) {
+    if (state) {
+      products[productID]['categories'].add('Featured');
+    } else {
+      products[productID]['categories'].remove('Featured');
+    }
+    widget.setFeaturedProductCallback!(productID, state);
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    initProducts();
+    super.initState;
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -261,8 +308,24 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             showDropdown();
                           }))
             ]),
-        body: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Hello!')));
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: GridView.builder(
+            key: UniqueKey(),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                mainAxisExtent: 205,
+                maxCrossAxisExtent: 200,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 0),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              String key = products.keys.elementAt(index);
+              return ProductCardEditable(key, products[key],
+                  setFeaturedProductCallback: setFeaturedProduct);
+            },
+          ),
+        ));
   }
 }

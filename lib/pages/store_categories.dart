@@ -6,6 +6,7 @@ class StoreCategoriesPage extends StatefulWidget {
 
   String placeID = '';
   Map categories;
+
   @override
   State<StoreCategoriesPage> createState() => _StoreCategoriesPageState();
 }
@@ -175,6 +176,18 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
     }
   }
 
+  void setFeaturedProduct(String productID, bool state) {
+    print(widget.categories);
+    if (state) {
+      widget.categories['Featured'].add(productID);
+    } else {
+      widget.categories['Featured'].remove(productID);
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -227,7 +240,9 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                   widget.categories.keys.toList(),
                                   widget.categories[key],
                                   renameCategoryCallback: renameCategory,
-                                  deleteCategoryCallback: deleteCategory),
+                                  deleteCategoryCallback: deleteCategory,
+                                  setFeaturedProductCallback:
+                                      setFeaturedProduct),
                             ),
                           );
                         }

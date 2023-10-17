@@ -30,7 +30,9 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
           ? FieldValue.arrayRemove([productID])
           : FieldValue.arrayUnion([productID])
     });
-    widget.setFeaturedProductCallback!(productID, !isFeatured);
+    if (widget.setFeaturedProductCallback != null) {
+      widget.setFeaturedProductCallback!(productID, !isFeatured);
+    }
   }
 
   void editProduct(String name, String price) {
@@ -42,7 +44,9 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
   }
 
   void deleteProduct(String productID) {
-    widget.deleteProductCallback!(productID);
+    if (widget.deleteProductCallback != null) {
+      widget.deleteProductCallback!(productID);
+    }
   }
 
   @override
