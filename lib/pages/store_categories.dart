@@ -177,7 +177,6 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
   }
 
   void setFeaturedProduct(String productID, bool state) {
-    print(widget.categories);
     if (state) {
       widget.categories['Featured'].add(productID);
     } else {

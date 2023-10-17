@@ -113,6 +113,19 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               children: [
                 const SizedBox(height: 20),
                 Text(
+                  "Basic Information",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
+                Text(
                   'Name',
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -285,6 +298,19 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 30),
+                Text(
+                  "Categories",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -324,7 +350,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
