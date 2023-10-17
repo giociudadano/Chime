@@ -2,14 +2,15 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreProductsPage extends StatefulWidget {
-  StoreProductsPage(this.placeID, this.productIDs,
+  StoreProductsPage(this.placeID, this.categories, this.productIDs,
       {super.key,
       this.setFeaturedProductCallback,
       this.addProductCallback,
       this.deleteProductCallback});
 
-  String placeID = '';
-  List productIDs = [];
+  String placeID;
+  List productIDs;
+  List categories;
 
   final Function(String placeID, String productID, bool state)?
       setFeaturedProductCallback;
@@ -153,7 +154,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               String key =
                                   productsFeatured.keys.elementAt(index);
                               return ProductCardEditable(
-                                  key, productsFeatured[key],
+                                  key, widget.categories, productsFeatured[key],
                                   setFeaturedProductCallback:
                                       setFeaturedProduct,
                                   deleteProductCallback: deleteProduct);
@@ -190,7 +191,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                             itemCount: products.length,
                             itemBuilder: (BuildContext context, int index) {
                               String key = products.keys.elementAt(index);
-                              return ProductCardEditable(key, products[key],
+                              return ProductCardEditable(
+                                  key, widget.categories, products[key],
                                   setFeaturedProductCallback:
                                       setFeaturedProduct,
                                   deleteProductCallback: deleteProduct);

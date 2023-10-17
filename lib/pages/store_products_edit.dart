@@ -2,11 +2,12 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreProductsEditPage extends StatefulWidget {
-  StoreProductsEditPage(this.productID, this.product,
+  StoreProductsEditPage(this.productID, this.categories, this.product,
       {super.key, this.editProductCallback, this.deleteProductCallback});
 
   String productID;
   Map product;
+  List categories;
 
   final Function(String name, String price)? editProductCallback;
   final Function(String productID)? deleteProductCallback;
@@ -24,6 +25,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       TextEditingController(text: widget.product['productDesc']);
   late final inputEditProductPrice =
       TextEditingController(text: widget.product['productPrice'].toString());
+
+  late List selectedValue = widget.product['categories'];
+
+  void setSelectedValue(List<dynamic> value) {
+    setState(() => selectedValue = value);
+  }
 
   // Edits the current product at database.
   void editProduct(String name, String description, String price) {
@@ -311,6 +318,29 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                       fontSize: 16,
                       letterSpacing: -0.5),
                 ),
+                const SizedBox(height: 10),
+                InlineChoice<dynamic>(
+                  multiple: true,
+                  clearable: true,
+                  value: selectedValue,
+                  onChanged: setSelectedValue,
+                  itemCount: widget.categories.length,
+                  itemBuilder: (selection, i) {
+                    return ChoiceChip(
+                      selected: selection.selected(widget.categories[i]),
+                      onSelected: selection.onSelected(widget.categories[i]),
+                      label: Text(widget.categories[i]),
+                    );
+                  },
+                  listBuilder: ChoiceList.createWrapped(
+                    spacing: 10,
+                    runSpacing: 10,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 0,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -385,6 +415,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 40),
               ],
             ),
           ),

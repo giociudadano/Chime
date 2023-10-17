@@ -381,7 +381,10 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: tabController,
                     children: [
-                      StoreProductsPage(key, places[key]['products'],
+                      StoreProductsPage(
+                          key,
+                          places[key]['categories'].keys.toList(),
+                          places[key]['products'],
                           setFeaturedProductCallback: setFeaturedProduct,
                           addProductCallback: addProduct,
                           deleteProductCallback: deleteProduct),

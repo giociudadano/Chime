@@ -321,7 +321,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               String key = products.keys.elementAt(index);
-              return ProductCardEditable(key, products[key],
+              return ProductCardEditable(key, widget.categories, products[key],
                   setFeaturedProductCallback: setFeaturedProduct);
             },
           ),

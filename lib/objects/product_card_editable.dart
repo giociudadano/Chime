@@ -2,11 +2,12 @@ part of main;
 
 // ignore: must_be_immutable
 class ProductCardEditable extends StatefulWidget {
-  ProductCardEditable(this.productID, this.product,
+  ProductCardEditable(this.productID, this.categories, this.product,
       {super.key, this.setFeaturedProductCallback, this.deleteProductCallback});
 
   String productID;
-  Map product = {};
+  Map product;
+  List categories;
 
   final Function(String productID, bool state)? setFeaturedProductCallback;
   final Function(String productID)? deleteProductCallback;
@@ -70,7 +71,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
             Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => StoreProductsEditPage(
-                      widget.productID, widget.product,
+                      widget.productID, widget.categories, widget.product,
                       editProductCallback: editProduct,
                       deleteProductCallback: deleteProduct)),
             );

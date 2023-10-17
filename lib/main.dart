@@ -6,6 +6,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
+// Imports external widgets.
+import 'package:choice/choice.dart';
+
 // Imports Firebase libraries. Responsible for authentication and reading and writing to database.
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';

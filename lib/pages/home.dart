@@ -102,8 +102,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       bottomNavigationBar: TabBar(
         controller: tabControllerOuter,
-        tabs: [
-          const Tab(
+        tabs: const [
+          Tab(
             height: 60,
             child: Column(
               children: [
@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
           ),
-          const Tab(
+          Tab(
             height: 60,
             child: Column(
               children: [
