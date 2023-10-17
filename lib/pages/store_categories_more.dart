@@ -184,7 +184,6 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     FirebaseFirestore db = FirebaseFirestore.instance;
     for (String productID in widget.productIDs) {
       db.collection("products").doc(productID).get().then((document) async {
-        List categories = document.data()!['categories'] ?? [];
         products[productID] = document.data()!;
         setProductImageURL(productID);
         if (mounted) {
@@ -309,7 +308,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           }))
             ]),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: GridView.builder(
             key: UniqueKey(),
             physics: const NeverScrollableScrollPhysics(),

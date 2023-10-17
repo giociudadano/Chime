@@ -103,10 +103,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       bottomNavigationBar: TabBar(
         controller: tabControllerOuter,
         tabs: [
-          Tab(
+          const Tab(
             height: 60,
             child: Column(
-              children: const [
+              children: [
                 SizedBox(height: 10),
                 Icon(Icons.local_mall_outlined),
                 Text(
@@ -123,10 +123,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
           ),
-          Tab(
+          const Tab(
             height: 60,
             child: Column(
-              children: const [
+              children: [
                 SizedBox(height: 10),
                 Icon(Icons.storefront_outlined),
                 Text(

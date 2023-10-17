@@ -430,7 +430,7 @@ class _StoreOrdersMoreState extends State<StoreOrdersMorePage> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
                                     "₱${widget.order['items'][key]['price']}",
                                     style: TextStyle(
@@ -447,7 +447,7 @@ class _StoreOrdersMoreState extends State<StoreOrdersMorePage> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   Container(
                                     color:
                                         MaterialColors.getSurfaceContainerLow(
