@@ -12,9 +12,9 @@ part of main;
 
 // ignore: must_be_immutable
 class CartCard extends StatefulWidget {
-  CartCard({super.key, required this.placeID, required this.orderItems});
-  String placeID = '', placeName = '';
-  Map orderItems = {};
+  CartCard(this.placeID, this.items, {super.key});
+  String placeID;
+  Map items;
   bool isVisible = true;
 
   @override
@@ -22,12 +22,13 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
+  String placeName = '';
   int total = 0;
   final ValueNotifier<bool> valueNotifierTotal = ValueNotifier(false);
 
   // Retrieves and sets the place information given the place ID of the page.
   // Place ID is retrieved when obtaining product information.
-  Future getPlaceName() async {
+  void getPlaceName() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db
         .collection("places")
@@ -37,7 +38,7 @@ class _CartCardState extends State<CartCard> {
       if (document.exists) {
         if (mounted) {
           setState(() {
-            widget.placeName = document.data()!['placeName'] ?? '';
+            placeName = document.data()!['placeName'] ?? '';
           });
         }
       }
@@ -45,13 +46,11 @@ class _CartCardState extends State<CartCard> {
   }
 
   void getTotal() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    for (var orderItem in widget.orderItems.entries) {
-      await db.collection("products").doc(orderItem.key).get().then((document) {
-        int productPrice = document.data()!['productPrice'] * orderItem.value;
-        setState(() {
-          total += productPrice;
-        });
+    for (String key in widget.items.keys) {
+      int itemPrice =
+          widget.items[key]['price'] * widget.items[key]['quantity'];
+      setState(() {
+        total += itemPrice;
       });
     }
   }
@@ -96,7 +95,7 @@ class _CartCardState extends State<CartCard> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
                   child: Text(
-                    widget.placeName,
+                    placeName,
                     maxLines: 1,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -116,13 +115,11 @@ class _CartCardState extends State<CartCard> {
                   physics: const NeverScrollableScrollPhysics(),
                   key: UniqueKey(),
                   shrinkWrap: true,
-                  itemCount: widget.orderItems.length,
+                  itemCount: widget.items.length,
                   itemBuilder: (BuildContext context, int index) {
-                    String key = widget.orderItems.keys.elementAt(index);
+                    String key = widget.items.keys.elementAt(index);
                     return CartItemCard(
-                        placeID: widget.placeID,
-                        productID: key,
-                        quantity: widget.orderItems[key],
+                        widget.placeID, key, widget.items[key],
                         deleteFrame: deleteFrame,
                         updateTotal: updateTotal);
                   },

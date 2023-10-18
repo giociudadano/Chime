@@ -350,7 +350,16 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     return ChoiceChip(
                       selected: selection.selected(widget.categories[i]),
                       onSelected: selection.onSelected(widget.categories[i]),
-                      label: Text(widget.categories[i]),
+                      label: Text(widget.categories[i],
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 450),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 13.5,
+                              letterSpacing: -0.3)),
                     );
                   },
                   listBuilder: ChoiceList.createWrapped(

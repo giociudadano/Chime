@@ -33,7 +33,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   // Variables for user information.
   String? selectedAddress;
+  Map user = {};
   Map addresses = {};
+
+  void getUserInfo() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    db.collection("users").doc(uid).get().then((snapshot) {
+      user = snapshot.data()!;
+    });
+  }
 
   // Gets a list of addresses from the database.
   void getAddresses() async {
@@ -96,14 +105,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .get()
         .then((document) {
       items = document.data()!;
-      for (var item in items.keys) {
-        items[item] = {
-          "name": "Placeholder Name",
-          "quantity": items[item],
-          "price":
-              0, //TODO Hardcoded. Create a function that retrieves place data.
-        };
-      }
     }).then((res) {
       db
           .collection("users")
@@ -118,12 +119,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "createdAt": FieldValue.serverTimestamp(),
         "deliveryFee": getDeliveryFee(),
         "deliveryMethod": deliveryMethod,
-        "displayName":
-            "John Doe", //TODO Hardcoded. Create a function that retrieves user data.
+        "displayName": user['displayName'],
         "items": items,
         "paymentMethod": paymentMethod,
-        "phoneNumber":
-            "09123456789", //TODO Hardcoded. Create a function that retrieves user data.
+        "phoneNumber": user['phoneNumber'],
         "placeID": widget.placeID,
         "price": getTotal(),
         "status": "Pending",
@@ -422,6 +421,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void initState() {
+    getUserInfo();
     getAddresses();
     getDeliveryPrice();
     initSelectedAddressListener();

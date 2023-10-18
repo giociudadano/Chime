@@ -133,7 +133,7 @@ class _ProductPageState extends State<ProductPage> {
       if (document.data() != null) {
         if (document.data()![widget.productID] != null) {
           isInCart = true;
-          itemQuantity = document.data()![widget.productID];
+          itemQuantity = document.data()![widget.productID]['quantity'];
         }
       }
     });
@@ -174,7 +174,13 @@ class _ProductPageState extends State<ProductPage> {
           .doc(uid)
           .collection("cart")
           .doc(widget.placeID)
-          .set({widget.productID: itemQuantity}, SetOptions(merge: true));
+          .set({
+        widget.productID: {
+          "name": widget.productName,
+          "quantity": itemQuantity,
+          "price": widget.productPrice,
+        }
+      }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(

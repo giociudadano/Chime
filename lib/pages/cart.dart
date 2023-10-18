@@ -21,8 +21,8 @@ class _CartPageState extends State<CartPage> {
   final _scrollController = ScrollController();
   Map orders = {};
 
-  // Fetches a list of products from the user's cart.
-  void getProducts() {
+  // Fetches the user's cart.
+  void getCart() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
     db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
@@ -125,7 +125,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void initState() {
-    getProducts();
+    getCart();
     super.initState();
   }
 
@@ -187,7 +187,7 @@ class _CartPageState extends State<CartPage> {
                       itemCount: orders.length,
                       itemBuilder: (context, index) {
                         String key = orders.keys.elementAt(index);
-                        return CartCard(placeID: key, orderItems: orders[key]);
+                        return CartCard(key, orders[key]);
                       }),
                 ),
               ],

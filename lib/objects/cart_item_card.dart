@@ -13,15 +13,10 @@ part of main;
 
 // ignore: must_be_immutable
 class CartItemCard extends StatefulWidget {
-  CartItemCard(
-      {super.key,
-      required this.placeID,
-      required this.productID,
-      required this.quantity,
-      this.deleteFrame,
-      this.updateTotal});
-  String placeID, productID, productImageURL = '', productName = '';
-  int quantity, productPrice = 0;
+  CartItemCard(this.placeID, this.productID, this.item,
+      {super.key, this.deleteFrame, this.updateTotal});
+  String placeID, productID;
+  Map item;
   bool isVisible = true;
 
   // Variable callbacks used in updating OrderCard.
@@ -47,29 +42,10 @@ class _CartItemCardState extends State<CartItemCard> {
     } finally {
       if (mounted) {
         setState(() {
-          widget.productImageURL = url;
+          widget.item['productImageURL'] = url;
         });
       }
     }
-  }
-
-  // Fetches and gets the product name and price.
-  void getProductInfo() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db
-        .collection("products")
-        .doc(widget.productID)
-        .get()
-        .then((document) {
-      if (document.exists) {
-        if (mounted) {
-          setState(() {
-            widget.productName = document.data()!['productName'];
-            widget.productPrice = document.data()!['productPrice'];
-          });
-        }
-      }
-    });
   }
 
   // Updates the item's quantity in database when the amount is modified.
@@ -87,7 +63,7 @@ class _CartItemCardState extends State<CartItemCard> {
             .doc(uid)
             .collection("cart")
             .doc(widget.placeID)
-            .set({widget.productID: widget.quantity}, SetOptions(merge: true));
+            .update({"${widget.productID}.quantity": widget.item['quantity']});
       } catch (e) {
         return;
       }
@@ -107,7 +83,7 @@ class _CartItemCardState extends State<CartItemCard> {
         .update({
       widget.productID: FieldValue.delete(),
     });
-    widget.updateTotal!(-(widget.productPrice * widget.quantity));
+    widget.updateTotal!(-(widget.item['price'] * widget.item['quantity']));
     setState(() {
       widget.isVisible = false;
     });
@@ -135,7 +111,6 @@ class _CartItemCardState extends State<CartItemCard> {
   void initState() {
     super.initState();
     getProductImageURL();
-    getProductInfo();
   }
 
   @override
@@ -168,7 +143,7 @@ class _CartItemCardState extends State<CartItemCard> {
                         clipBehavior: Clip.hardEdge,
                         fit: BoxFit.cover,
                         child: CachedNetworkImage(
-                          imageUrl: widget.productImageURL,
+                          imageUrl: widget.item['productImageURL'],
                           placeholder: (context, url) => const Padding(
                             padding: EdgeInsets.all(40.0),
                             child: CircularProgressIndicator(),
@@ -193,7 +168,7 @@ class _CartItemCardState extends State<CartItemCard> {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      widget.productName,
+                      widget.item['name'],
                       maxLines: 2,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -208,7 +183,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           overflow: TextOverflow.ellipsis),
                     ),
                     Text(
-                      '₱${widget.productPrice}',
+                      '₱${widget.item['price']}',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Bahnschrift',
@@ -235,11 +210,11 @@ class _CartItemCardState extends State<CartItemCard> {
                               size: 18,
                             ),
                             onPressed: () {
-                              if (widget.quantity > 1) {
+                              if (widget.item['quantity'] > 1) {
                                 setProductQuantityAtDatabase();
-                                widget.updateTotal!(-widget.productPrice);
+                                widget.updateTotal!(-widget.item['price']);
                                 setState(() {
-                                  widget.quantity -= 1;
+                                  widget.item['quantity'] -= 1;
                                 });
                               }
                             },
@@ -251,7 +226,7 @@ class _CartItemCardState extends State<CartItemCard> {
                           width: 40,
                           height: 32,
                           child: Center(
-                            child: Text(widget.quantity.toString(),
+                            child: Text(widget.item['quantity'].toString(),
                                 style: const TextStyle(
                                     fontFamily: 'Bahnschrift',
                                     fontVariations: [
@@ -276,9 +251,9 @@ class _CartItemCardState extends State<CartItemCard> {
                             ),
                             onPressed: () {
                               setProductQuantityAtDatabase();
-                              widget.updateTotal!(widget.productPrice);
+                              widget.updateTotal!(widget.item['price']);
                               setState(() {
-                                widget.quantity += 1;
+                                widget.item['quantity'] += 1;
                               });
                             },
                           ),
