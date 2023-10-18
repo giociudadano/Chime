@@ -383,7 +383,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     children: [
                       StoreProductsPage(
                           key,
-                          places[key]['categories'].keys.toList(),
+                          places[key]['categories'].keys.toList()
+                            ..sort(),
                           places[key]['products'],
                           setFeaturedProductCallback: setFeaturedProduct,
                           addProductCallback: addProduct,

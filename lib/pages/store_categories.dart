@@ -199,6 +199,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    List categoryKeys = widget.categories.keys.toList()..sort();
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         floatingActionButton: FloatingActionButton.small(
@@ -219,7 +220,6 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                 shrinkWrap: true,
                 itemCount: widget.categories.length,
                 itemBuilder: (BuildContext context, int index) {
-                  String key = widget.categories.keys.elementAt(index);
                   return Card(
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -235,9 +235,9 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => StoreCategoriesMorePage(
-                                  key,
+                                  categoryKeys[index],
                                   widget.categories.keys.toList(),
-                                  widget.categories[key],
+                                  widget.categories[categoryKeys[index]],
                                   renameCategoryCallback: renameCategory,
                                   deleteCategoryCallback: deleteCategory,
                                   setFeaturedProductCallback:
@@ -255,7 +255,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                             Row(
                               children: [
                                 Text(
-                                  key,
+                                  categoryKeys[index],
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -273,7 +273,8 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  widget.categories[key].length.toString(),
+                                  widget.categories[categoryKeys[index]].length
+                                      .toString(),
                                   style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.outline,

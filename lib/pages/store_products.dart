@@ -45,8 +45,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   void setProductImageURL(String productID, bool isFeatured) async {
     String ref = "products/$productID.jpg";
-    String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    if (mounted) {
+    try {
+      String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
       setState(() {
         if (isFeatured) {
           productsFeatured[productID]['productImageURL'] = url;
@@ -54,6 +54,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
           products[productID]['productImageURL'] = url;
         }
       });
+    } catch (e) {
+      return;
     }
   }
 
