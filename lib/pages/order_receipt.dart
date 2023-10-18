@@ -1,17 +1,17 @@
 part of main;
 
 // ignore: must_be_immutable
-class StoreOrdersMorePage extends StatefulWidget {
-  StoreOrdersMorePage(this.orderID, this.order, {super.key});
+class OrderReceiptPage extends StatefulWidget {
+  OrderReceiptPage(this.orderID, this.order, {super.key});
 
   String orderID;
   Map order;
 
   @override
-  State<StoreOrdersMorePage> createState() => _StoreOrdersMoreState();
+  State<OrderReceiptPage> createState() => _OrderReceiptPageState();
 }
 
-class _StoreOrdersMoreState extends State<StoreOrdersMorePage> {
+class _OrderReceiptPageState extends State<OrderReceiptPage> {
   void initProducts() {
     for (var productID in widget.order['items'].keys) {
       setProductImageURL(productID);

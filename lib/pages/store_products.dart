@@ -6,6 +6,7 @@ class StoreProductsPage extends StatefulWidget {
       {super.key,
       this.setFeaturedProductCallback,
       this.addProductCallback,
+      this.editProductCallback,
       this.deleteProductCallback});
 
   String placeID;
@@ -15,6 +16,8 @@ class StoreProductsPage extends StatefulWidget {
   final Function(String placeID, String productID, bool state)?
       setFeaturedProductCallback;
   final Function(String placeID, String productID)? addProductCallback;
+  final Function(String placeID, String productID, List addedCategories,
+      List removedCategories)? editProductCallback;
   final Function(String placeID, String productID)? deleteProductCallback;
 
   @override
@@ -79,6 +82,19 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     if (mounted) {
       setState(() {});
     }
+  }
+
+  void editProduct(String productID, List categories, List addedCategories,
+      List removedCategories) {
+    if (addedCategories.remove('Featured')) {
+      setFeaturedProduct(productID, true);
+      categories.remove('Featured');
+    } else if (removedCategories.remove('Featured')) {
+      setFeaturedProduct(productID, false);
+      categories.remove('Featured');
+    }
+    widget.editProductCallback!(
+        widget.placeID, productID, addedCategories, removedCategories);
   }
 
   void deleteProduct(String productID) {
@@ -159,6 +175,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                   key, widget.categories, productsFeatured[key],
                                   setFeaturedProductCallback:
                                       setFeaturedProduct,
+                                  editProductCallback: editProduct,
                                   deleteProductCallback: deleteProduct);
                             })
                       ],
@@ -197,6 +214,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                   key, widget.categories, products[key],
                                   setFeaturedProductCallback:
                                       setFeaturedProduct,
+                                  editProductCallback: editProduct,
                                   deleteProductCallback: deleteProduct);
                             },
                           ),

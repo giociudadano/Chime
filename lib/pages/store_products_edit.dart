@@ -9,8 +9,9 @@ class StoreProductsEditPage extends StatefulWidget {
   Map product;
   List categories;
 
-  final Function(String name, String price)? editProductCallback;
-  final Function(String productID)? deleteProductCallback;
+  final Function(String name, String price, List categories,
+      List addedCategories, List removedCategories)? editProductCallback;
+  final Function()? deleteProductCallback;
 
   @override
   State<StoreProductsEditPage> createState() => _StoreProductsEditPageState();
@@ -33,16 +34,36 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   }
 
   // Edits the current product at database.
-  void editProduct(String name, String description, String price) {
+  void editProduct(
+      String name, String description, String price, List categories) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       db.collection("products").doc(widget.productID).update({
         "productName": name,
         "productDesc": description == '' ? null : description,
-        "productPrice": price == '' ? 0 : int.parse(price)
+        "productPrice": price == '' ? 0 : int.parse(price),
+        "categories": categories,
       });
-      widget.editProductCallback!(name, price);
+
+      List oldCategories = widget.product['categories'];
+      Set addedCategories =
+          categories.toSet().difference(oldCategories.toSet());
+      for (String category in addedCategories) {
+        db.collection("places").doc(widget.product['placeID']).update({
+          "categories.$category": FieldValue.arrayUnion([widget.productID])
+        });
+      }
+
+      Set removedCategories =
+          oldCategories.toSet().difference(categories.toSet());
+      for (String category in removedCategories) {
+        db.collection("places").doc(widget.product['placeID']).update({
+          "categories.$category": FieldValue.arrayRemove([widget.productID])
+        });
+      }
       Navigator.pop(context);
+      widget.editProductCallback!(name, price, categories,
+          addedCategories.toList(), removedCategories.toList());
     } catch (e) {
       return;
     }
@@ -76,7 +97,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       "products": FieldValue.arrayRemove([widget.productID])
     });
     Navigator.pop(context);
-    widget.deleteProductCallback!(widget.productID);
+    widget.deleteProductCallback!();
   }
 
   @override
@@ -352,6 +373,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                               inputEditProductName.text,
                               inputEditProductDesc.text,
                               inputEditProductPrice.text,
+                              selectedValue,
                             );
                           }
                         },

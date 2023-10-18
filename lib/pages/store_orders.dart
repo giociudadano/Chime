@@ -60,7 +60,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage> {
             itemCount: orders.length,
             itemBuilder: (BuildContext context, int index) {
               String key = orders.keys.elementAt(index);
-              return OrderCardEditable(key, orders[key]);
+              return OrderCard(key, orders[key], adminControls: true);
             }),
       ),
     );

@@ -63,6 +63,16 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     }
   }
 
+  void editProduct(String placeID, String productID, List addedCategories,
+      List removedCategories) {
+    for (String addedCategory in addedCategories) {
+      (places[placeID]['categories'][addedCategory]).add(productID);
+    }
+    for (String removedCategory in removedCategories) {
+      (places[placeID]['categories'][removedCategory]).remove(productID);
+    }
+  }
+
   void addProduct(String placeID, String productID) {
     places[placeID]['products'].add(productID);
   }
@@ -383,11 +393,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     children: [
                       StoreProductsPage(
                           key,
-                          places[key]['categories'].keys.toList()
-                            ..sort(),
+                          places[key]['categories'].keys.toList()..sort(),
                           places[key]['products'],
                           setFeaturedProductCallback: setFeaturedProduct,
                           addProductCallback: addProduct,
+                          editProductCallback: editProduct,
                           deleteProductCallback: deleteProduct),
                       StoreCategoriesPage(key, places[key]['categories'] ?? []),
                       StoreOrdersPage(key),

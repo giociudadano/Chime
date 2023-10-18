@@ -3,13 +3,18 @@ part of main;
 // ignore: must_be_immutable
 class ProductCardEditable extends StatefulWidget {
   ProductCardEditable(this.productID, this.categories, this.product,
-      {super.key, this.setFeaturedProductCallback, this.deleteProductCallback});
+      {super.key,
+      this.setFeaturedProductCallback,
+      this.editProductCallback,
+      this.deleteProductCallback});
 
   String productID;
   Map product;
   List categories;
 
   final Function(String productID, bool state)? setFeaturedProductCallback;
+  final Function(String productID, List categories, List addedCategories,
+      List removedCategories)? editProductCallback;
   final Function(String productID)? deleteProductCallback;
 
   @override
@@ -36,30 +41,35 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
     }
   }
 
-  void editProduct(String name, String price) {
+  void editProduct(String name, String price, List categories,
+      List addedCategories, List removedCategories) {
     widget.product['productName'] = name;
     widget.product['productPrice'] = int.parse(price);
+    widget.product['categories'] = categories;
+    if (widget.editProductCallback != null) {
+      widget.editProductCallback!(
+          widget.productID, categories, addedCategories, removedCategories);
+    }
     if (mounted) {
       setState(() {});
     }
   }
 
-  void deleteProduct(String productID) {
+  void deleteProduct() {
     if (widget.deleteProductCallback != null) {
-      widget.deleteProductCallback!(productID);
+      widget.deleteProductCallback!(widget.productID);
     }
   }
 
   @override
   void initState() {
-    List categories = widget.product['categories'] ?? [];
-    isFeatured = categories.contains('Featured');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    isFeatured = widget.product['categories'].contains('Featured');
     return Card(
       color: MaterialColors.getSurfaceContainerLow(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,

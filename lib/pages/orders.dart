@@ -15,7 +15,7 @@ class _OrdersPageState extends State<OrdersPage> {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        List orderIDs = document.data()!['orders'];
+        List orderIDs = document.data()!['orders'].reversed.toList();
         for (String orderID in orderIDs) {
           db.collection("orders").doc(orderID).get().then((document) {
             if (mounted) {
@@ -130,7 +130,7 @@ class _OrdersPageState extends State<OrdersPage> {
             itemCount: orders.length,
             itemBuilder: (BuildContext context, int index) {
               String key = orders.keys.elementAt(index);
-              return OrderCard(orders[key]);
+              return OrderCard(key, orders[key], adminControls: false);
             }),
       ),
     );
