@@ -19,7 +19,8 @@ class StoreProductsPage extends StatefulWidget {
       addProductCallback;
   final Function(String placeID, String productID, List addedCategories,
       List removedCategories)? editProductCallback;
-  final Function(String placeID, String productID)? deleteProductCallback;
+  final Function(String placeID, String productID, List categories)?
+      deleteProductCallback;
 
   @override
   State<StoreProductsPage> createState() => _StoreProductsPageState();
@@ -78,9 +79,13 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
   }
 
   void addProduct(String productID, Map data) {
-    products[productID] = data;
-    widget.addProductCallback!(
-        widget.placeID, productID, products[productID]['categories']);
+    if (data['categories'].contains('Featured')) {
+      productsFeatured[productID] = data;
+    } else {
+      products[productID] = data;
+    }
+
+    widget.addProductCallback!(widget.placeID, productID, data['categories']);
     if (mounted) {
       setState(() {});
     }
@@ -99,9 +104,10 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
         widget.placeID, productID, addedCategories, removedCategories);
   }
 
-  void deleteProduct(String productID) {
+  void deleteProduct(String productID, List categories) {
     products.remove(productID);
-    widget.deleteProductCallback!(widget.placeID, productID);
+    productsFeatured.remove(productID);
+    widget.deleteProductCallback!(widget.placeID, productID, categories);
     if (mounted) {
       setState(() {});
     }

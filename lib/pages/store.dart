@@ -80,8 +80,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     }
   }
 
-  void deleteProduct(String placeID, String productID) {
+  void deleteProduct(String placeID, String productID, List categories) {
     places[placeID]['products'].remove(productID);
+    for (String category in categories) {
+      places[placeID]['categories'][category].remove(productID);
+    }
   }
 
   @override

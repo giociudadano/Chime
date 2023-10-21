@@ -38,6 +38,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       String name, String description, String price, List categories) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
+
+      // 1. Update product with new name, description, price, and categories
       db.collection("products").doc(widget.productID).update({
         "productName": name,
         "productDesc": description == '' ? null : description,
@@ -45,6 +47,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
         "categories": categories,
       });
 
+      // 2. Add product reference to added categories
       List oldCategories = widget.product['categories'];
       Set addedCategories =
           categories.toSet().difference(oldCategories.toSet());
@@ -54,6 +57,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
         });
       }
 
+      // 3. Remove product reference on removed categories
       Set removedCategories =
           oldCategories.toSet().difference(categories.toSet());
       for (String category in removedCategories) {
@@ -92,10 +96,21 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
 
   void deleteProduct() {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    db.collection("products").doc(widget.productID).delete();
+
+    // 1. Remove product reference from place
     db.collection("places").doc(widget.product['placeID']).update({
       "products": FieldValue.arrayRemove([widget.productID])
     });
+
+    // 2. Remove product reference from place categories
+    for (String category in widget.categories) {
+      db.collection("places").doc(widget.product['placeID']).update({
+        "categories.$category": FieldValue.arrayRemove([widget.productID])
+      });
+    }
+
+    // 3. Delete product from list of products
+    db.collection("products").doc(widget.productID).delete();
     Navigator.pop(context);
     widget.deleteProductCallback!();
   }

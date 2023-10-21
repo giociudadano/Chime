@@ -15,7 +15,7 @@ class ProductCardEditable extends StatefulWidget {
   final Function(String productID, bool state)? setFeaturedProductCallback;
   final Function(String productID, List categories, List addedCategories,
       List removedCategories)? editProductCallback;
-  final Function(String productID)? deleteProductCallback;
+  final Function(String productID, List categories)? deleteProductCallback;
 
   @override
   State<ProductCardEditable> createState() => _ProductCardEditableState();
@@ -57,7 +57,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
 
   void deleteProduct() {
     if (widget.deleteProductCallback != null) {
-      widget.deleteProductCallback!(widget.productID);
+      widget.deleteProductCallback!(widget.productID, widget.categories);
     }
   }
 
