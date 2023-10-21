@@ -143,7 +143,7 @@ class _CartItemCardState extends State<CartItemCard> {
                         clipBehavior: Clip.hardEdge,
                         fit: BoxFit.cover,
                         child: CachedNetworkImage(
-                          imageUrl: widget.item['productImageURL'],
+                          imageUrl: widget.item['productImageURL'] ?? '',
                           placeholder: (context, url) => const Padding(
                             padding: EdgeInsets.all(40.0),
                             child: CircularProgressIndicator(),

@@ -221,14 +221,15 @@ class _PlacesPageState extends State<PlacesPage> {
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
                     Text(
                       AppLocalizations.of(context)!.placesFavorited,
-                      style: const TextStyle(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.outline,
                           fontFamily: 'Bahnschrift',
-                          fontVariations: [
+                          fontVariations: const [
                             FontVariation('wght', 700),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 18,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.5),
                     ),
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
                     const SizedBox(height: 10),
@@ -256,14 +257,15 @@ class _PlacesPageState extends State<PlacesPage> {
                         ? AppLocalizations.of(context)!.placesNear
                         : AppLocalizations.of(context)!
                             .placesSearch(_searchBox.text.toLowerCase()),
-                    style: const TextStyle(
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
                         fontFamily: 'Bahnschrift',
-                        fontVariations: [
+                        fontVariations: const [
                           FontVariation('wght', 700),
                           FontVariation('wdth', 100),
                         ],
-                        fontSize: 18,
-                        letterSpacing: -0.3),
+                        fontSize: 16,
+                        letterSpacing: -0.5),
                   ),
                   const SizedBox(height: 10),
                   GridView.builder(

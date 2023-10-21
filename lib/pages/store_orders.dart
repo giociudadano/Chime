@@ -17,21 +17,22 @@ class _StoreOrdersPageState extends State<StoreOrdersPage> {
   void initOrdersListener() {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
-    ordersListener = db
-        .collection("places")
-        .doc(widget.placeID)
-        .snapshots()
-        .listen((event) async {
+    ordersListener =
+        db.collection("places").doc(widget.placeID).snapshots().listen((event) {
       db.collection("places").doc(widget.placeID).get().then((document) {
-        List orderIDs = document.data()!['orders'].reversed.toList();
-        for (String orderID in orderIDs) {
-          db.collection("orders").doc(orderID).get().then((document) {
-            if (mounted) {
-              setState(() {
-                orders[orderID] = document.data()!;
-              });
-            }
-          });
+        if (document.exists) {
+          List orderIDs = document.data()!['orders'].reversed.toList();
+          for (String orderID in orderIDs) {
+            db.collection("orders").doc(orderID).get().then((document) {
+              if (document.exists) {
+                if (mounted) {
+                  setState(() {
+                    orders[orderID] = document.data()!;
+                  });
+                }
+              }
+            });
+          }
         }
       });
     });
@@ -54,14 +55,30 @@ class _StoreOrdersPageState extends State<StoreOrdersPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView.builder(
-            key: UniqueKey(),
-            shrinkWrap: true,
-            itemCount: orders.length,
-            itemBuilder: (BuildContext context, int index) {
-              String key = orders.keys.elementAt(index);
-              return OrderCard(key, orders[key], adminControls: true);
-            }),
+        child: ListView(children: [
+          Text(
+            "Orders",
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.outline,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                fontSize: 16,
+                letterSpacing: -0.5),
+          ),
+          const SizedBox(height: 10),
+          ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              key: UniqueKey(),
+              shrinkWrap: true,
+              itemCount: orders.length,
+              itemBuilder: (BuildContext context, int index) {
+                String key = orders.keys.elementAt(index);
+                return OrderCard(key, orders[key], adminControls: true);
+              }),
+        ]),
       ),
     );
   }

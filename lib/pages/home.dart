@@ -146,203 +146,211 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
       body: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      icon: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        foregroundImage: NetworkImage(widget.profilePictureURL),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const ProfilePage()));
-                      }),
-                  Stack(children: [
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     IconButton(
-                      icon: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Theme.of(context).colorScheme.primary,
+                        icon: CircleAvatar(
+                          radius: 20,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          foregroundImage:
+                              NetworkImage(widget.profilePictureURL),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ProfilePage()));
+                        }),
+                    Stack(children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const CartPage()));
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const CartPage()));
-                      },
-                    ),
-                    if (cartItems != 0)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: CircleAvatar(
-                            radius: 10,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            child: Text(
-                              cartItems.toString(),
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 14,
-                                  letterSpacing: -0.3),
-                            )),
-                      )
-                  ])
-                ],
+                      if (cartItems != 0)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: CircleAvatar(
+                              radius: 10,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              child: Text(
+                                cartItems.toString(),
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 700),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3),
+                              )),
+                        )
+                    ])
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: tabControllerOuter,
-                children: [
-                  Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: SizedBox(
-                        height: 30,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Opacity(
-                              opacity: tabController.index == 0 ? 1 : 0.5,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      tabController.index == 0
-                                          ? MaterialColors
-                                              .getSurfaceContainerLow(darkMode)
-                                          : MaterialColors
-                                              .getSurfaceContainerLowest(
-                                                  darkMode)),
+              Expanded(
+                child: TabBarView(
+                  controller: tabControllerOuter,
+                  children: [
+                    Column(children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: SizedBox(
+                          height: 30,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Opacity(
+                                opacity: tabController.index == 0 ? 1 : 0.5,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        tabController.index == 0
+                                            ? MaterialColors
+                                                .getSurfaceContainerLow(
+                                                    darkMode)
+                                            : MaterialColors
+                                                .getSurfaceContainerLowest(
+                                                    darkMode)),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(
+                                        "Places",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 15,
+                                            letterSpacing: -0.3,
+                                            height: 0.85,
+                                            overflow: TextOverflow.ellipsis),
+                                      )),
+                                  onPressed: () {
+                                    tabController.animateTo(0);
+                                  },
                                 ),
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      "Places",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.3,
-                                          height: 0.85,
-                                          overflow: TextOverflow.ellipsis),
-                                    )),
-                                onPressed: () {
-                                  tabController.animateTo(0);
-                                },
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Opacity(
-                              opacity: tabController.index == 1 ? 1 : 0.5,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      tabController.index == 1
-                                          ? MaterialColors
-                                              .getSurfaceContainerLow(darkMode)
-                                          : MaterialColors
-                                              .getSurfaceContainerLowest(
-                                                  darkMode)),
+                              const SizedBox(width: 10),
+                              Opacity(
+                                opacity: tabController.index == 1 ? 1 : 0.5,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        tabController.index == 1
+                                            ? MaterialColors
+                                                .getSurfaceContainerLow(
+                                                    darkMode)
+                                            : MaterialColors
+                                                .getSurfaceContainerLowest(
+                                                    darkMode)),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(
+                                        "Products",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 15,
+                                            letterSpacing: -0.3,
+                                            height: 0.85,
+                                            overflow: TextOverflow.ellipsis),
+                                      )),
+                                  onPressed: () {
+                                    tabController.animateTo(1);
+                                  },
                                 ),
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      "Products",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.3,
-                                          height: 0.85,
-                                          overflow: TextOverflow.ellipsis),
-                                    )),
-                                onPressed: () {
-                                  tabController.animateTo(1);
-                                },
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Opacity(
-                              opacity: tabController.index == 2 ? 1 : 0.5,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      tabController.index == 2
-                                          ? MaterialColors
-                                              .getSurfaceContainerLow(darkMode)
-                                          : MaterialColors
-                                              .getSurfaceContainerLowest(
-                                                  darkMode)),
+                              const SizedBox(width: 10),
+                              Opacity(
+                                opacity: tabController.index == 2 ? 1 : 0.5,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        tabController.index == 2
+                                            ? MaterialColors
+                                                .getSurfaceContainerLow(
+                                                    darkMode)
+                                            : MaterialColors
+                                                .getSurfaceContainerLowest(
+                                                    darkMode)),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Text(
+                                        "My Orders",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 15,
+                                            letterSpacing: -0.3,
+                                            height: 0.85,
+                                            overflow: TextOverflow.ellipsis),
+                                      )),
+                                  onPressed: () {
+                                    tabController.animateTo(2);
+                                  },
                                 ),
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      "My Orders",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.3,
-                                          height: 0.85,
-                                          overflow: TextOverflow.ellipsis),
-                                    )),
-                                onPressed: () {
-                                  tabController.animateTo(2);
-                                },
                               ),
-                            ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: TabBarView(
+                          controller: tabController,
+                          children: const [
+                            PlacesPage(),
+                            ProductsPage(),
+                            OrdersPage(),
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: TabBarView(
-                        controller: tabController,
-                        children: const [
-                          PlacesPage(),
-                          ProductsPage(),
-                          OrdersPage(),
-                        ],
-                      ),
-                    ),
-                  ]),
-                  const StorePage()
-                ],
+                    ]),
+                    const StorePage()
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -98,14 +98,14 @@ class _CartCardState extends State<CartCard> {
                     placeName,
                     maxLines: 1,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: Theme.of(context).colorScheme.outline,
                         fontFamily: 'Bahnschrift',
                         fontVariations: const [
-                          FontVariation('wght', 700),
+                          FontVariation('wght', 750),
                           FontVariation('wdth', 100),
                         ],
-                        fontSize: 18,
-                        letterSpacing: -0.3,
+                        fontSize: 16,
+                        letterSpacing: -0.5,
                         height: 0.85,
                         overflow: TextOverflow.ellipsis),
                   ),
@@ -118,10 +118,8 @@ class _CartCardState extends State<CartCard> {
                   itemCount: widget.items.length,
                   itemBuilder: (BuildContext context, int index) {
                     String key = widget.items.keys.elementAt(index);
-                    return CartItemCard(
-                        widget.placeID, key, widget.items[key],
-                        deleteFrame: deleteFrame,
-                        updateTotal: updateTotal);
+                    return CartItemCard(widget.placeID, key, widget.items[key],
+                        deleteFrame: deleteFrame, updateTotal: updateTotal);
                   },
                 ),
                 Row(

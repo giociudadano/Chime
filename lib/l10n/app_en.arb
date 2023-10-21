@@ -34,9 +34,9 @@
   "navTabStore": "My Store",
   "navTabProfile": "Profile",
   "productsSearchBoxHint": "Search for a product",
-  "productsFavorited": "Favorited products",
-  "productsNear": "Recommended products near you",
-  "productsSearch": "Recommended products named '{search}'",
+  "productsFavorited": "Favorited Products",
+  "productsNear": "Recommended Products",
+  "productsSearch": "Recommended Products named '{search}'",
   "@productsSearch": {
     "placeholders": {
       "search": {
@@ -45,9 +45,9 @@
     }
   },
   "placesSearchBoxHint": "Search for a place",
-  "placesFavorited": "Favorited places",
-  "placesNear": "Recommended places near you",
-  "placesSearch": "Recommended places named '{search}'",
+  "placesFavorited": "Favorited Places",
+  "placesNear": "Recommended Places",
+  "placesSearch": "Recommended Places named '{search}'",
   "@placesSearch": {
     "placeholders": {
       "search": {

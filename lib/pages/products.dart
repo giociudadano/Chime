@@ -185,6 +185,7 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
@@ -249,14 +250,16 @@ class _ProductsPageState extends State<ProductsPage> {
                                 Text(
                                   AppLocalizations.of(context)!
                                       .productsFavorited,
-                                  style: const TextStyle(
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
                                       fontFamily: 'Bahnschrift',
-                                      fontVariations: [
+                                      fontVariations: const [
                                         FontVariation('wght', 700),
                                         FontVariation('wdth', 100),
                                       ],
-                                      fontSize: 18,
-                                      letterSpacing: -0.3),
+                                      fontSize: 16,
+                                      letterSpacing: -0.5),
                                 ),
                                 const SizedBox(height: 10),
                                 SizedBox(
@@ -296,14 +299,15 @@ class _ProductsPageState extends State<ProductsPage> {
                         ? AppLocalizations.of(context)!.productsNear
                         : AppLocalizations.of(context)!
                             .productsSearch(_searchBox.text.toLowerCase()),
-                    style: const TextStyle(
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
                         fontFamily: 'Bahnschrift',
-                        fontVariations: [
+                        fontVariations: const [
                           FontVariation('wght', 700),
                           FontVariation('wdth', 100),
                         ],
-                        fontSize: 18,
-                        letterSpacing: -0.3),
+                        fontSize: 16,
+                        letterSpacing: -0.5),
                   ),
                   const SizedBox(height: 10),
                   ValueListenableBuilder<bool>(
