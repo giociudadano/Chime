@@ -195,11 +195,15 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
 
   void setProductImageURL(String productID) async {
     String ref = "products/$productID.jpg";
-    String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    if (mounted) {
-      setState(() {
-        products[productID]['productImageURL'] = url;
-      });
+    try {
+      String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+      if (mounted) {
+        setState(() {
+          products[productID]['productImageURL'] = url;
+        });
+      }
+    } catch (e) {
+      return;
     }
   }
 

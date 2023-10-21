@@ -73,8 +73,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     }
   }
 
-  void addProduct(String placeID, String productID) {
+  void addProduct(String placeID, String productID, List categories) {
     places[placeID]['products'].add(productID);
+    for (String category in categories) {
+      places[placeID]['categories'][category].add(productID);
+    }
   }
 
   void deleteProduct(String placeID, String productID) {

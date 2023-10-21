@@ -15,7 +15,8 @@ class StoreProductsPage extends StatefulWidget {
 
   final Function(String placeID, String productID, bool state)?
       setFeaturedProductCallback;
-  final Function(String placeID, String productID)? addProductCallback;
+  final Function(String placeID, String productID, List categories)?
+      addProductCallback;
   final Function(String placeID, String productID, List addedCategories,
       List removedCategories)? editProductCallback;
   final Function(String placeID, String productID)? deleteProductCallback;
@@ -78,7 +79,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   void addProduct(String productID, Map data) {
     products[productID] = data;
-    widget.addProductCallback!(widget.placeID, productID);
+    widget.addProductCallback!(
+        widget.placeID, productID, products[productID]['categories']);
     if (mounted) {
       setState(() {});
     }
@@ -129,7 +131,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => StoreProductsAddPage(widget.placeID,
+                builder: (context) => StoreProductsAddPage(
+                    widget.placeID, widget.categories,
                     addProductCallback: addProduct)),
           );
         },

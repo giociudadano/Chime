@@ -2,9 +2,11 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreProductsAddPage extends StatefulWidget {
-  StoreProductsAddPage(this.placeID, {super.key, this.addProductCallback});
+  StoreProductsAddPage(this.placeID, this.categories,
+      {super.key, this.addProductCallback});
 
   String placeID;
+  List categories;
 
   final Function(String productID, Map data)? addProductCallback;
 
@@ -18,28 +20,45 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
   final inputAddProductName = TextEditingController();
   final inputAddProductDesc = TextEditingController();
   final inputAddProductPrice = TextEditingController();
+  List selectedValue = [];
 
   // Writes a new product to database.
-  void addProduct(String name, String description, String price) {
+  void addProduct(
+      String name, String description, String price, List categories) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
+
+      // 1. Add new product to list of products
       Map<String, Object?> data = {
         "placeID": widget.placeID,
         "productName": name,
         "productDesc": description == '' ? null : description,
         "productPrice": price == '' ? 0 : int.parse(price),
-        "categories": []
+        "categories": categories
       };
+
       db.collection("products").add(data).then((product) {
+        // 2. Add product reference to place
         db.collection("places").doc(widget.placeID).update({
           "products": FieldValue.arrayUnion([product.id])
         });
+
+        // 3. Add product reference to place categories
+        for (String category in categories) {
+          db.collection("places").doc(widget.placeID).update({
+            "categories.$category": FieldValue.arrayUnion([product.id])
+          });
+        }
         widget.addProductCallback!(product.id, data);
       });
       Navigator.pop(context);
     } catch (e) {
       return;
     }
+  }
+
+  void setSelectedValue(List<dynamic> value) {
+    setState(() => selectedValue = value);
   }
 
   // Checks if the name field is empty and returns an error if so.
@@ -103,6 +122,19 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
             child: ListView(
               children: [
                 const SizedBox(height: 20),
+                Text(
+                  "Basic Information",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
                 Text(
                   'Name',
                   style: TextStyle(
@@ -276,6 +308,51 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 30),
+                Text(
+                  "Categories",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
+                InlineChoice<dynamic>(
+                  multiple: true,
+                  clearable: true,
+                  value: selectedValue,
+                  onChanged: setSelectedValue,
+                  itemCount: widget.categories.length,
+                  itemBuilder: (selection, i) {
+                    return ChoiceChip(
+                      selected: selection.selected(widget.categories[i]),
+                      onSelected: selection.onSelected(widget.categories[i]),
+                      label: Text(widget.categories[i],
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 450),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 13.5,
+                              letterSpacing: -0.3)),
+                    );
+                  },
+                  listBuilder: ChoiceList.createWrapped(
+                    spacing: 10,
+                    runSpacing: 10,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 0,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -287,6 +364,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                               inputAddProductName.text,
                               inputAddProductDesc.text,
                               inputAddProductPrice.text,
+                              selectedValue,
                             );
                           }
                         },
