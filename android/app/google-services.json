@@ -13,7 +13,20 @@
           "package_name": "com.giociudadano.cmsc198.cmsc198"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "134846671691-sgr509q76531laj2jbkp9qih72l9ucle.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.giociudadano.cmsc198.cmsc198",
+            "certificate_hash": "5c8b10960efe18e90d2f052b741d2c9f71bd9748"
+          }
+        },
+        {
+          "client_id": "134846671691-mgg82par9l8qe5eev0317uqk4j6mq9ae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAh2wbMonUlknnMBWB8W1XYif5DIUDwbug"
@@ -21,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134846671691-70ira0m6hi6jea7q65c78lefngj5nnph.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "134846671691-sfe52grrk4i2bnq8obks6q9smlicu4d2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.giociudadano.cmsc198.cmsc198"
+              }
+            }
+          ]
         }
       }
     }

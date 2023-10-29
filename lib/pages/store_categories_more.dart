@@ -312,23 +312,38 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           }))
             ]),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: GridView.builder(
-            key: UniqueKey(),
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 205,
-                maxCrossAxisExtent: 200,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 0),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              String key = products.keys.elementAt(index);
-              return ProductCardEditable(key, widget.categories, products[key],
-                  setFeaturedProductCallback: setFeaturedProduct);
-            },
-          ),
-        ));
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ListView(children: [
+              Text(
+                "Products under '${widget.categoryName}'",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.5),
+              ),
+              const SizedBox(height: 10),
+              GridView.builder(
+                key: UniqueKey(),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    mainAxisExtent: 205,
+                    maxCrossAxisExtent: 200,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 0),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  String key = products.keys.elementAt(index);
+                  return ProductCardEditable(
+                      key, widget.categories..sort(), products[key],
+                      setFeaturedProductCallback: setFeaturedProduct);
+                },
+              ),
+            ])));
   }
 }

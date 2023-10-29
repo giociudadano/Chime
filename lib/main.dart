@@ -1,13 +1,16 @@
 library main;
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter/foundation.dart';
 
 // Imports external widgets.
 import 'package:choice/choice.dart';
+import 'package:image_picker/image_picker.dart';
 
 // Imports Firebase libraries. Responsible for authentication and reading and writing to database.
 import 'package:firebase_core/firebase_core.dart';
@@ -73,7 +76,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  if (foundation.kIsWeb) {
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
+  );
+  if (kIsWeb) {
     await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
   runApp(const MyApp());

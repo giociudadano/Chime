@@ -9,13 +9,21 @@ class StoreProductsEditPage extends StatefulWidget {
   Map product;
   List categories;
 
-  final Function(String name, String price, List categories,
-      List addedCategories, List removedCategories)? editProductCallback;
+  final Function(
+      String name,
+      String price,
+      String? productImageURL,
+      List categories,
+      List addedCategories,
+      List removedCategories)? editProductCallback;
   final Function()? deleteProductCallback;
 
   @override
   State<StoreProductsEditPage> createState() => _StoreProductsEditPageState();
 }
+
+typedef OnPickImageCallback = void Function(
+    double? maxWidth, double? maxHeight, int? quality);
 
 class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   // Variables for controllers.
@@ -29,13 +37,68 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
 
   late List selectedValue = widget.product['categories'];
 
+  // Variables for image picker.
+  final ImagePicker _picker = ImagePicker();
+  File? newImage;
+  bool toDeleteProductImage = false;
+
+  void deleteProductImage() {
+    setState(() {
+      toDeleteProductImage = true;
+      newImage = null;
+    });
+  }
+
+  Future setProductImage(
+    ImageSource source, {
+    required BuildContext context,
+    bool isMultiImage = false,
+    bool isMedia = false,
+  }) async {
+    if (kIsWeb) {
+      bool darkMode = Theme.of(context).brightness == Brightness.dark;
+      ScaffoldMessenger.of(context).showSnackBar(
+        // TODO: Add functionality to edit images on web devices.
+        SnackBar(
+          content: Text(
+              "Sorry, you cannot edit product images on web devices at this time.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 350),
+                  FontVariation('wdth', 100),
+                ],
+              )),
+          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+        ),
+      );
+      return;
+    } else {
+      try {
+        final List<XFile> pickedFileList = <XFile>[];
+        final XFile? media = await _picker.pickMedia();
+        if (media != null) {
+          pickedFileList.add(media);
+          setState(() {
+            toDeleteProductImage = false;
+            newImage = File(media.path);
+          });
+        }
+      } catch (e) {
+        //
+      }
+    }
+  }
+
   void setSelectedValue(List<dynamic> value) {
     setState(() => selectedValue = value);
   }
 
   // Edits the current product at database.
   void editProduct(
-      String name, String description, String price, List categories) {
+      String name, String description, String price, List categories) async {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -65,11 +128,39 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
           "categories.$category": FieldValue.arrayRemove([widget.productID])
         });
       }
+
       Navigator.pop(context);
-      widget.editProductCallback!(name, price, categories,
-          addedCategories.toList(), removedCategories.toList());
+
+      // 4. Update new profile picture
+      Reference ref =
+          FirebaseStorage.instance.ref('products/${widget.productID}.jpg');
+      if (toDeleteProductImage) {
+        await ref.delete();
+      }
+      if (newImage != null) {
+        try {
+          await ref.putFile(
+              newImage!,
+              SettableMetadata(
+                contentType: "image/jpeg",
+              ));
+          String productImageURL = await ref.getDownloadURL();
+          widget.editProductCallback!(name, price, productImageURL, categories,
+              addedCategories.toList(), removedCategories.toList());
+        } catch (e) {
+          // ...
+        }
+      } else {
+        widget.editProductCallback!(
+            name,
+            price,
+            toDeleteProductImage ? '' : null,
+            categories,
+            addedCategories.toList(),
+            removedCategories.toList());
+      }
     } catch (e) {
-      return;
+      //
     }
   }
 
@@ -109,10 +200,20 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       });
     }
 
-    // 3. Delete product from list of products
+    // 3. Delete image from storage
+    Reference ref =
+        FirebaseStorage.instance.ref('products/${widget.productID}.jpg');
+    ref.delete();
+
+    // 4. Delete product from list of products
     db.collection("products").doc(widget.productID).delete();
     Navigator.pop(context);
     widget.deleteProductCallback!();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -155,6 +256,86 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
             child: ListView(
               children: [
                 const SizedBox(height: 20),
+                Text(
+                  "Appearance",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  color: MaterialColors.getSurfaceContainerLow(darkMode),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 0,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 400,
+                        height: 200,
+                        child: FittedBox(
+                          clipBehavior: Clip.hardEdge,
+                          fit: BoxFit.cover,
+                          child: newImage != null
+                              ? Image.file(newImage!)
+                              : CachedNetworkImage(
+                                  imageUrl: toDeleteProductImage
+                                      ? ''
+                                      : widget.product['productImageURL'] ?? '',
+                                  placeholder: (context, url) => const Padding(
+                                    padding: EdgeInsets.all(40.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) => Padding(
+                                    padding: const EdgeInsets.all(40.0),
+                                    child: Icon(Icons.local_mall_outlined,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outlineVariant),
+                                  ),
+                                  fadeInCurve: Curves.easeIn,
+                                  fadeOutCurve: Curves.easeOut,
+                                ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 50,
+                        child: IconButton(
+                          onPressed: () {
+                            setProductImage(ImageSource.gallery,
+                                context: context);
+                          },
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconButton(
+                          onPressed: () {
+                            deleteProductImage();
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
                 Text(
                   "Basic Information",
                   style: TextStyle(

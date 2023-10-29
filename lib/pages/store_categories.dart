@@ -261,7 +261,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,7 +281,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                     ],
                                     fontSize: 15,
                                     letterSpacing: -0.3,
-                                    height: 1,
+                                    height: 1.2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -299,7 +299,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                     ],
                                     fontSize: 15,
                                     letterSpacing: -0.3,
-                                    height: 1,
+                                    height: 1.2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
