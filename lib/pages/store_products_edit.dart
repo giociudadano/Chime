@@ -201,9 +201,11 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     }
 
     // 3. Delete image from storage
-    Reference ref =
-        FirebaseStorage.instance.ref('products/${widget.productID}.jpg');
-    ref.delete();
+    if (widget.product['productImageURL'] != null) {
+      Reference ref =
+          FirebaseStorage.instance.ref('products/${widget.productID}.jpg');
+      ref.delete();
+    }
 
     // 4. Delete product from list of products
     db.collection("products").doc(widget.productID).delete();

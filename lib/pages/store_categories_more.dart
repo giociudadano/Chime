@@ -272,6 +272,16 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
 
     return Scaffold(
         backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: Icon(
+            Icons.drive_folder_upload,
+            color: MaterialColors.getSurfaceContainerLowest(darkMode),
+          ),
+          onPressed: () {
+            //
+          },
+        ),
         appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,

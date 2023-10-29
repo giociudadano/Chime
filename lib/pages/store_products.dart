@@ -133,11 +133,19 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    Map productsSorted = Map.fromEntries(products.entries.toList()
+      ..sort((a, b) => (a.value['productName'].toLowerCase())
+          .compareTo(b.value['productName'].toLowerCase())));
+    Map productsFeaturedSorted = Map.fromEntries(
+        productsFeatured.entries.toList()
+          ..sort((a, b) => (a.value['productName'].toLowerCase())
+              .compareTo(b.value['productName'].toLowerCase())));
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton.small(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         child: Icon(
-          Icons.add,
+          Icons.upload_file,
           color: MaterialColors.getSurfaceContainerLowest(darkMode),
         ),
         onPressed: () {
@@ -159,18 +167,36 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Featured Products",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 16,
-                              letterSpacing: -0.5),
-                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Featured Products",
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 700),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 16,
+                                    letterSpacing: -0.5),
+                              ),
+                              Text(
+                                "Sorted A-Z",
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.5),
+                              ),
+                            ]),
                         const SizedBox(height: 10),
                         GridView.builder(
                             key: UniqueKey(),
@@ -185,7 +211,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                             itemCount: productsFeatured.length,
                             itemBuilder: (context, index) {
                               String key =
-                                  productsFeatured.keys.elementAt(index);
+                                  productsFeaturedSorted.keys.elementAt(index);
                               return ProductCardEditable(
                                   key, widget.categories, productsFeatured[key],
                                   setFeaturedProductCallback:
@@ -199,18 +225,36 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "All Products",
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 16,
-                                letterSpacing: -0.5),
-                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "All Products",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.5),
+                                ),
+                                Text(
+                                  "Sorted A-Z",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 400),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 14,
+                                      letterSpacing: -0.5),
+                                ),
+                              ]),
                           const SizedBox(height: 10),
                           GridView.builder(
                             key: UniqueKey(),
@@ -224,7 +268,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                     mainAxisSpacing: 0),
                             itemCount: products.length,
                             itemBuilder: (BuildContext context, int index) {
-                              String key = products.keys.elementAt(index);
+                              String key = productsSorted.keys.elementAt(index);
                               return ProductCardEditable(
                                   key, widget.categories, products[key],
                                   setFeaturedProductCallback:

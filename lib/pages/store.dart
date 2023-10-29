@@ -57,7 +57,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   void setFeaturedProduct(String placeID, String productID, bool state) {
     if (state) {
-      (places[placeID]['categories']['Featured']).add(productID);
+      (places[placeID]['categories']['Featured']).insert(0, productID);
     } else {
       (places[placeID]['categories']['Featured']).remove(productID);
     }

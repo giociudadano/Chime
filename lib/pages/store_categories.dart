@@ -202,7 +202,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
     List categoryKeys = widget.categories.keys.toList()..sort();
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-        floatingActionButton: FloatingActionButton.small(
+        floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.primary,
           child: Icon(
             Icons.create_new_folder_outlined,
