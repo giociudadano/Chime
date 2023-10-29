@@ -311,10 +311,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             setProductImage(ImageSource.gallery,
                                 context: context);
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.edit_outlined,
                             size: 25,
-                            color: Colors.white,
+                            color: (widget.product['productImageURL'] == null &&
+                                        newImage == null) ||
+                                    toDeleteProductImage
+                                ? Theme.of(context).colorScheme.outline
+                                : Colors.grey[100],
                           ),
                         ),
                       ),
@@ -325,10 +329,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           onPressed: () {
                             deleteProductImage();
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
                             size: 25,
-                            color: Colors.white,
+                            color: (widget.product['productImageURL'] == null &&
+                                        newImage == null) ||
+                                    toDeleteProductImage
+                                ? Theme.of(context).colorScheme.outline
+                                : Colors.grey[100],
                           ),
                         ),
                       ),

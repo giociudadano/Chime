@@ -8,7 +8,8 @@ class StoreProductsAddPage extends StatefulWidget {
   String placeID;
   List categories;
 
-  final Function(String productID, Map data)? addProductCallback;
+  final Function(String productID, String? productImageURL, Map data)?
+      addProductCallback;
 
   @override
   State<StoreProductsAddPage> createState() => _StoreProductsAddPageState();
@@ -21,6 +22,52 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
   final inputAddProductDesc = TextEditingController();
   final inputAddProductPrice = TextEditingController();
   List selectedValue = [];
+
+  // Variables for image picker.
+  final ImagePicker _picker = ImagePicker();
+  File? newImage;
+
+  Future setProductImage(
+    ImageSource source, {
+    required BuildContext context,
+    bool isMultiImage = false,
+    bool isMedia = false,
+  }) async {
+    if (kIsWeb) {
+      bool darkMode = Theme.of(context).brightness == Brightness.dark;
+      ScaffoldMessenger.of(context).showSnackBar(
+        // TODO: Add functionality to edit images on web devices.
+        SnackBar(
+          content: Text(
+              "Sorry, you cannot add product images on web devices at this time.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 350),
+                  FontVariation('wdth', 100),
+                ],
+              )),
+          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+        ),
+      );
+      return;
+    } else {
+      try {
+        final List<XFile> pickedFileList = <XFile>[];
+        final XFile? media = await _picker.pickMedia();
+        if (media != null) {
+          pickedFileList.add(media);
+          setState(() {
+            newImage = File(media.path);
+          });
+        }
+      } catch (e) {
+        //
+      }
+    }
+  }
 
   // Writes a new product to database.
   void addProduct(
@@ -37,7 +84,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
         "categories": categories
       };
 
-      db.collection("products").add(data).then((product) {
+      db.collection("products").add(data).then((product) async {
         // 2. Add product reference to place
         db.collection("places").doc(widget.placeID).update({
           "products": FieldValue.arrayUnion([product.id])
@@ -49,7 +96,20 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
             "categories.$category": FieldValue.arrayUnion([product.id])
           });
         }
-        widget.addProductCallback!(product.id, data);
+
+        // 4. Add product image
+        String? productImageURL;
+        if (newImage != null) {
+          Reference ref =
+              FirebaseStorage.instance.ref('products/${product.id}.jpg');
+          await ref.putFile(
+              newImage!,
+              SettableMetadata(
+                contentType: "image/jpeg",
+              ));
+          productImageURL = await ref.getDownloadURL();
+        }
+        widget.addProductCallback!(product.id, productImageURL, data);
       });
       Navigator.pop(context);
     } catch (e) {
@@ -122,6 +182,81 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
             child: ListView(
               children: [
                 const SizedBox(height: 20),
+                Text(
+                  "Appearance",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                const SizedBox(height: 10),
+                Card(
+                  color: MaterialColors.getSurfaceContainerLow(darkMode),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 0,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 400,
+                        height: 200,
+                        child: FittedBox(
+                          clipBehavior: Clip.hardEdge,
+                          fit: BoxFit.cover,
+                          child: newImage != null
+                              ? Image.file(newImage!)
+                              : Padding(
+                                  padding: const EdgeInsets.all(40.0),
+                                  child: Icon(Icons.local_mall_outlined,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant),
+                                ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 50,
+                        child: IconButton(
+                          onPressed: () {
+                            setProductImage(ImageSource.gallery,
+                                context: context);
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            size: 25,
+                            color: newImage == null
+                                ? Theme.of(context).colorScheme.outline
+                                : Colors.grey[100],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              newImage = null;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            size: 25,
+                            color: newImage == null
+                                ? Theme.of(context).colorScheme.outline
+                                : Colors.grey[100],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
                 Text(
                   "Basic Information",
                   style: TextStyle(
@@ -393,6 +528,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 30),
               ],
             ),
           ),

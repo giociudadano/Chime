@@ -78,16 +78,22 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     }
   }
 
-  void addProduct(String productID, Map data) {
-    if (data['categories'].contains('Featured')) {
-      productsFeatured[productID] = data;
-    } else {
-      products[productID] = data;
-    }
-
+  void addProduct(String productID, String? productImageURL, Map data) {
     widget.addProductCallback!(widget.placeID, productID, data['categories']);
     if (mounted) {
-      setState(() {});
+      setState(() {
+        if (data['categories'].contains('Featured')) {
+          productsFeatured[productID] = data;
+          if (productImageURL != null) {
+            productsFeatured[productID]['productImageURL'] = productImageURL;
+          }
+        } else {
+          products[productID] = data;
+          if (productImageURL != null) {
+            products[productID]['productImageURL'] = productImageURL;
+          }
+        }
+      });
     }
   }
 

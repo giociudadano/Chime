@@ -47,7 +47,11 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
     widget.product['productPrice'] = int.parse(price);
     if (productImageURL != null) {
       await CachedNetworkImage.evictFromCache(productImageURL);
-      widget.product['productImageURL'] = productImageURL;
+      if (productImageURL == '') {
+        widget.product['productImageURL'] = null;
+      } else {
+        widget.product['productImageURL'] = productImageURL;
+      }
     }
     widget.product['categories'] = categories;
     if (widget.editProductCallback != null) {
@@ -126,7 +130,11 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       icon: Icon(
                         isFeatured ? Icons.bookmark : Icons.bookmark_outline,
                         size: 30,
-                        color: isFeatured ? Colors.orangeAccent : Colors.white,
+                        color: isFeatured
+                            ? Colors.orangeAccent
+                            : (widget.product['productImageURL'] == null)
+                                ? Theme.of(context).colorScheme.outline
+                                : Colors.white,
                       ),
                       onPressed: () {
                         setFeaturedProduct(widget.productID);
