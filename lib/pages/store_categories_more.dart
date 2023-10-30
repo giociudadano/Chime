@@ -2,18 +2,26 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreCategoriesMorePage extends StatefulWidget {
-  StoreCategoriesMorePage(this.categoryName, this.categories, this.productIDs,
+  StoreCategoriesMorePage(this.placeID, this.categoryName, this.categories,
+      this.products, this.productIDsInCategory,
       {super.key,
       this.renameCategoryCallback,
       this.deleteCategoryCallback,
-      this.setFeaturedProductCallback});
+      this.setFeaturedProductCallback,
+      this.editProductCallback,
+      this.editProductsInCategoryCallback});
 
-  String categoryName;
-  List productIDs, categories;
+  String placeID, categoryName;
+  List categories, productIDsInCategory;
+  Map products;
 
   final Function(String oldName, String newName)? renameCategoryCallback;
   final Function(String name)? deleteCategoryCallback;
   final Function(String productID, bool state)? setFeaturedProductCallback;
+  final Function(String placeID, String productID, List addedCategories,
+      List removedCategories)? editProductCallback;
+  final Function(String categoryName, List oldProducts, List newProducts)?
+      editProductsInCategoryCallback;
 
   @override
   State<StoreCategoriesMorePage> createState() => _StoreCategoriesMoreState();
@@ -21,7 +29,11 @@ class StoreCategoriesMorePage extends StatefulWidget {
 
 class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   GlobalKey? dropdownButtonKey = GlobalKey();
-  Map products = {};
+
+  List multipleSelected = [];
+  void setMultipleSelected(List value) {
+    setState(() => multipleSelected = value);
+  }
 
   Future<dynamic> showAddProductsForm(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -39,7 +51,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
             title: const Text(
-              "Add products to category",
+              "Edit products in category",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Bahnschrift',
@@ -55,15 +67,52 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  SizedBox(
+                    height: 150,
+                    width: double.maxFinite,
+                    child: ListView(children: [
+                      InlineChoice(
+                        multiple: true,
+                        clearable: true,
+                        value: multipleSelected,
+                        onChanged: setMultipleSelected,
+                        itemCount: widget.products.length,
+                        itemBuilder: (selection, i) {
+                          String key = widget.products.keys.elementAt(i);
+                          return ChoiceChip(
+                            selected: selection.selected(key),
+                            onSelected: selection.onSelected(key),
+                            label: Text(widget.products[key]['productName'],
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 450),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 12.5,
+                                    letterSpacing: -0.3)),
+                          );
+                        },
+                        listBuilder: ChoiceList.createWrapped(
+                          spacing: 10,
+                          runSpacing: 10,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 25,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (formAddProductsKey.currentState!.validate()) {
-                              //TODO
-                            }
+                            editProductsInCategory(multipleSelected);
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(
@@ -254,38 +303,33 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     detector?.onTap?.call();
   }
 
-  void initProducts() {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    for (String productID in widget.productIDs) {
-      db.collection("products").doc(productID).get().then((document) async {
-        products[productID] = document.data()!;
-        setProductImageURL(productID);
-        if (mounted) {
-          setState(() {});
-        }
+  void editProduct(String productID, List categories, List addedCategories,
+      List removedCategories) {
+    // 1. Special condition for 'Featured' category
+    if (addedCategories.remove('Featured')) {
+      setFeaturedProduct(productID, true);
+      categories.remove('Featured');
+    } else if (removedCategories.remove('Featured')) {
+      setFeaturedProduct(productID, false);
+      categories.remove('Featured');
+    }
+
+    // 2. Special condition for removing same category as active page
+    if (removedCategories.contains(widget.categoryName)) {
+      setState(() {
+        widget.productIDsInCategory.remove(productID);
       });
     }
-  }
 
-  void setProductImageURL(String productID) async {
-    String ref = "products/$productID.jpg";
-    try {
-      String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-      if (mounted) {
-        setState(() {
-          products[productID]['productImageURL'] = url;
-        });
-      }
-    } catch (e) {
-      return;
-    }
+    widget.editProductCallback!(
+        widget.placeID, productID, addedCategories, removedCategories);
   }
 
   void setFeaturedProduct(String productID, bool state) {
     if (state) {
-      products[productID]['categories'].add('Featured');
+      widget.products[productID]['categories'].add('Featured');
     } else {
-      products[productID]['categories'].remove('Featured');
+      widget.products[productID]['categories'].remove('Featured');
     }
     widget.setFeaturedProductCallback!(productID, state);
     if (mounted) {
@@ -293,9 +337,51 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     }
   }
 
+  void editProductsInCategory(List editedProducts) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    // 1. Write to database all added products in category
+    List oldProducts = widget.productIDsInCategory;
+    Set addedProducts = editedProducts.toSet().difference(oldProducts.toSet());
+    for (String productID in addedProducts) {
+      db.collection("products").doc(productID).update({
+        "categories": FieldValue.arrayUnion([widget.categoryName])
+      });
+      db.collection("places").doc(widget.placeID).update({
+        "categories.${widget.categoryName}": FieldValue.arrayUnion([productID])
+      });
+      widget.products[productID]['categories'].add(widget.categoryName);
+    }
+
+    // 2. Write to database all removed products in category
+    Set removedProducts =
+        oldProducts.toSet().difference(editedProducts.toSet());
+    for (String productID in removedProducts) {
+      db.collection("products").doc(productID).update({
+        "categories": FieldValue.arrayRemove([widget.categoryName])
+      });
+      db.collection("places").doc(widget.placeID).update({
+        "categories.${widget.categoryName}": FieldValue.arrayRemove([productID])
+      });
+      widget.products[productID]['categories'].remove(widget.categoryName);
+    }
+
+    // 3. Update products to display
+    setState(() {
+      widget.productIDsInCategory = editedProducts;
+    });
+    widget.editProductsInCategoryCallback!(
+        widget.categoryName, addedProducts.toList(), removedProducts.toList());
+
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
-    initProducts();
+    widget.productIDsInCategory = widget.productIDsInCategory
+      ..sort((a, b) => (widget.products[a]['productName'])
+          .compareTo(widget.products[b]['productName']));
+    multipleSelected = widget.productIDsInCategory;
     super.initState;
   }
 
@@ -398,18 +484,32 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView(children: [
-              Text(
-                "Products under '${widget.categoryName}'",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 16,
-                    letterSpacing: -0.5),
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(
+                  "Products under '${widget.categoryName}'",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.5),
+                ),
+                Text(
+                  "Sorted A-Z   🡻",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 400),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 12.5,
+                      letterSpacing: -0.5),
+                ),
+              ]),
               const SizedBox(height: 10),
               GridView.builder(
                 key: UniqueKey(),
@@ -420,12 +520,13 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                     maxCrossAxisExtent: 200,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 0),
-                itemCount: products.length,
+                itemCount: widget.productIDsInCategory.length,
                 itemBuilder: (context, index) {
-                  String key = products.keys.elementAt(index);
+                  String key = widget.productIDsInCategory[index];
                   return ProductCardEditable(
-                      key, widget.categories..sort(), products[key],
-                      setFeaturedProductCallback: setFeaturedProduct);
+                      key, widget.categories..sort(), widget.products[key],
+                      setFeaturedProductCallback: setFeaturedProduct,
+                      editProductCallback: editProduct);
                 },
               ),
             ])));

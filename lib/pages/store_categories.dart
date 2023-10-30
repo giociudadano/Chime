@@ -2,16 +2,44 @@ part of main;
 
 // ignore: must_be_immutable
 class StoreCategoriesPage extends StatefulWidget {
-  StoreCategoriesPage(this.placeID, this.categories, {super.key});
+  StoreCategoriesPage(this.placeID, this.categories, this.productIDs,
+      {super.key});
 
   String placeID = '';
   Map categories;
+  List productIDs;
 
   @override
   State<StoreCategoriesPage> createState() => _StoreCategoriesPageState();
 }
 
 class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
+  Map products = {};
+
+  void initProducts() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    for (String productID in widget.productIDs) {
+      db.collection("products").doc(productID).get().then((document) async {
+        products[productID] = document.data()!;
+        setProductImageURL(productID);
+      });
+    }
+  }
+
+  void setProductImageURL(String productID) async {
+    String ref = "products/$productID.jpg";
+    try {
+      String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+      if (mounted) {
+        setState(() {
+          products[productID]['productImageURL'] = url;
+        });
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<dynamic> showAddCategoryForm(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formAddCategoryKey = GlobalKey<FormState>();
@@ -176,6 +204,33 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
     }
   }
 
+  void editProduct(String placeID, String productID, List addedCategories,
+      List removedCategories) {
+    for (String addedCategory in addedCategories) {
+      (widget.categories[addedCategory]).add(productID);
+    }
+    for (String removedCategory in removedCategories) {
+      (widget.categories[removedCategory]).remove(productID);
+    }
+    if (mounted) {
+      setState(() {
+      });
+    }
+  }
+
+  void editProductsInCategory(
+      String categoryName, List addedProducts, List removedProducts) {
+    for (String addedProduct in addedProducts) {
+      widget.categories[categoryName].add(addedProduct);
+    }
+    for (String removedProduct in removedProducts) {
+      widget.categories[categoryName].remove(removedProduct);
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   void setFeaturedProduct(String productID, bool state) {
     if (state) {
       widget.categories['Featured'].add(productID);
@@ -189,6 +244,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
 
   @override
   void initState() {
+    initProducts();
     super.initState();
   }
 
@@ -268,13 +324,18 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => StoreCategoriesMorePage(
+                                  widget.placeID,
                                   categoryKeys[index],
                                   widget.categories.keys.toList(),
+                                  products,
                                   widget.categories[categoryKeys[index]],
                                   renameCategoryCallback: renameCategory,
                                   deleteCategoryCallback: deleteCategory,
                                   setFeaturedProductCallback:
-                                      setFeaturedProduct),
+                                      setFeaturedProduct,
+                                  editProductCallback: editProduct,
+                                  editProductsInCategoryCallback:
+                                      editProductsInCategory),
                             ),
                           );
                         }
