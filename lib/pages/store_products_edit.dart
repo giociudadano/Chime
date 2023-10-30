@@ -306,39 +306,69 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         ),
                       ),
                       Positioned(
-                        top: 5,
-                        right: 50,
-                        child: IconButton(
-                          onPressed: () {
-                            setProductImage(ImageSource.gallery,
-                                context: context);
-                          },
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            size: 25,
+                        top: 8,
+                        right: 45,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
                             color: (widget.product['productImageURL'] == null &&
                                         newImage == null) ||
                                     toDeleteProductImage
-                                ? Theme.of(context).colorScheme.outline
-                                : Colors.grey[100],
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                size: 20,
+                                color: (widget.product['productImageURL'] ==
+                                                null &&
+                                            newImage == null) ||
+                                        toDeleteProductImage
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                setProductImage(ImageSource.gallery,
+                                    context: context);
+                              },
+                            ),
                           ),
                         ),
                       ),
                       Positioned(
-                        top: 5,
-                        right: 5,
-                        child: IconButton(
-                          onPressed: () {
-                            deleteProductImage();
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            size: 25,
+                        top: 8,
+                        right: 8,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
                             color: (widget.product['productImageURL'] == null &&
                                         newImage == null) ||
                                     toDeleteProductImage
-                                ? Theme.of(context).colorScheme.outline
-                                : Colors.grey[100],
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.close,
+                                size: 22,
+                                color: (widget.product['productImageURL'] ==
+                                                null &&
+                                            newImage == null) ||
+                                        toDeleteProductImage
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                deleteProductImage();
+                              },
+                            ),
                           ),
                         ),
                       ),

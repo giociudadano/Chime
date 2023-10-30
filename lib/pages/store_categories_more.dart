@@ -23,6 +23,80 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   GlobalKey? dropdownButtonKey = GlobalKey();
   Map products = {};
 
+  Future<dynamic> showAddProductsForm(BuildContext context) {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    final GlobalKey<FormState> formAddProductsKey = GlobalKey<FormState>();
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            title: const Text(
+              "Add products to category",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: [
+                    FontVariation('wght', 700),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 20,
+                  letterSpacing: -0.3),
+            ),
+            content: Form(
+              key: formAddProductsKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formAddProductsKey.currentState!.validate()) {
+                              //TODO
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.primary),
+                            foregroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.onPrimary),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   Future<dynamic> showRenameCategoryForm(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formRenameCategoryKey = GlobalKey<FormState>();
@@ -279,7 +353,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             color: MaterialColors.getSurfaceContainerLowest(darkMode),
           ),
           onPressed: () {
-            //
+            showAddProductsForm(context);
           },
         ),
         appBar: AppBar(

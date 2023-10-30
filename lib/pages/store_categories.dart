@@ -215,17 +215,36 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView(children: [
-              Text(
-                "Categories",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 16,
-                    letterSpacing: -0.5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Categories",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 700),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 16,
+                            letterSpacing: -0.5),
+                      ),
+                      Text(
+                        "Sorted A-Z   🡻",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 12.5,
+                            letterSpacing: -0.5),
+                      ),
+                    ]),
               ),
               const SizedBox(height: 10),
               GridView.builder(

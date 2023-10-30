@@ -219,37 +219,61 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                         ),
                       ),
                       Positioned(
-                        top: 5,
-                        right: 50,
-                        child: IconButton(
-                          onPressed: () {
-                            setProductImage(ImageSource.gallery,
-                                context: context);
-                          },
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            size: 25,
+                        top: 8,
+                        right: 45,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
                             color: newImage == null
-                                ? Theme.of(context).colorScheme.outline
-                                : Colors.grey[100],
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                size: 20,
+                                color: newImage == null
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                setProductImage(ImageSource.gallery,
+                                    context: context);
+                              },
+                            ),
                           ),
                         ),
                       ),
                       Positioned(
-                        top: 5,
-                        right: 5,
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              newImage = null;
-                            });
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            size: 25,
+                        top: 8,
+                        right: 8,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
                             color: newImage == null
-                                ? Theme.of(context).colorScheme.outline
-                                : Colors.grey[100],
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.close,
+                                size: 22,
+                                color: newImage == null
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  newImage = null;
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ),

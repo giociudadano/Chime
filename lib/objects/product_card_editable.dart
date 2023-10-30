@@ -124,22 +124,34 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       ),
                     )),
                 Positioned(
-                    right: 5,
-                    top: 5,
-                    child: IconButton(
-                      icon: Icon(
-                        isFeatured ? Icons.bookmark : Icons.bookmark_outline,
-                        size: 30,
-                        color: isFeatured
-                            ? Colors.orangeAccent
-                            : (widget.product['productImageURL'] == null)
-                                ? Theme.of(context).colorScheme.outline
-                                : Colors.white,
+                  right: 8,
+                  top: 8,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      color: (widget.product['productImageURL'] == null)
+                          ? Colors.transparent
+                          : const Color.fromARGB(120, 0, 0, 0),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          isFeatured ? Icons.bookmark : Icons.bookmark_outline,
+                          size: 22,
+                          color: isFeatured
+                              ? Colors.orangeAccent
+                              : (widget.product['productImageURL'] == null)
+                                  ? Theme.of(context).colorScheme.outline
+                                  : Colors.white,
+                        ),
+                        onPressed: () {
+                          setFeaturedProduct(widget.productID);
+                        },
                       ),
-                      onPressed: () {
-                        setFeaturedProduct(widget.productID);
-                      },
-                    ))
+                    ),
+                  ),
+                ),
               ]),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
