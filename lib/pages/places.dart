@@ -127,17 +127,29 @@ class _PlacesPageState extends State<PlacesPage> {
           _debounce!.cancel();
         }
         _debounce = Timer(const Duration(milliseconds: 800), () {
+          placesSearched.clear();
+          places.forEach((placeID, place) {
+            if (place['placeName']
+                .toLowerCase()
+                .contains(_searchBox.value.text.toString().toLowerCase())) {
+              placesSearched[placeID] = place;
+              placesSearched = Map.fromEntries(placesSearched.entries.toList()
+                ..sort((a, b) => (a.value['placeName'].toLowerCase())
+                    .compareTo(b.value['placeName'].toLowerCase())));
+            }
+          });
+          placesFavorited.forEach((placeID, place) {
+            if (place['placeName']
+                .toLowerCase()
+                .contains(_searchBox.value.text.toString().toLowerCase())) {
+              placesSearched[placeID] = place;
+              placesSearched = Map.fromEntries(placesSearched.entries.toList()
+                ..sort((a, b) => (a.value['placeName'].toLowerCase())
+                    .compareTo(b.value['placeName'].toLowerCase())));
+            }
+          });
           if (mounted) {
-            setState(() {
-              placesSearched = {};
-              places.forEach((placeID, place) {
-                if (place['placeName']
-                    .toLowerCase()
-                    .contains(_searchBox.value.text.toString().toLowerCase())) {
-                  placesSearched[placeID] = place;
-                }
-              });
-            });
+            setState(() {});
           }
         });
       }
@@ -290,40 +302,91 @@ class _PlacesPageState extends State<PlacesPage> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  if (_searchBox.text.isEmpty ||
+                      (_searchBox.text.isNotEmpty && placesSearched.isNotEmpty))
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _searchBox.text.isEmpty
+                                    ? AppLocalizations.of(context)!.placesNear
+                                    : AppLocalizations.of(context)!
+                                        .placesSearch(
+                                            _searchBox.text.toLowerCase()),
+                                maxLines: 2,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 700),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 16,
+                                    letterSpacing: -0.5,
+                                    height: 1.2,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Sorted A-Z   🡻",
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 12.5,
+                                    letterSpacing: -0.5),
+                              ),
+                            )
+                          ]),
+                    ),
+                  if (placesSearched.isEmpty && _searchBox.text.isNotEmpty)
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            _searchBox.text.isEmpty
-                                ? AppLocalizations.of(context)!.placesNear
-                                : AppLocalizations.of(context)!.placesSearch(
-                                    _searchBox.text.toLowerCase()),
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 16,
-                                letterSpacing: -0.5),
+                          const SizedBox(height: 40),
+                          SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: Image.network(
+                                "https://em-content.zobj.net/source/microsoft-teams/363/rabbit-face_1f430.png"),
                           ),
-                          Text(
-                            "Sorted A-Z   🡻",
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 400),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 12.5,
-                                letterSpacing: -0.5),
-                          ),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Text.rich(
+                              const TextSpan(children: [
+                                TextSpan(
+                                    text: 'Search for place(s) not found. ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text:
+                                        'Please check for spelling errors or try a different name.'),
+                              ]),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontSize: 15,
+                                  height: 1.1,
+                                  letterSpacing: -0.3),
+                            ),
+                          )
                         ]),
-                  ),
                   const SizedBox(height: 10),
                   GridView.builder(
                       key: UniqueKey(),
@@ -340,7 +403,9 @@ class _PlacesPageState extends State<PlacesPage> {
                           ? places.length
                           : placesSearched.length,
                       itemBuilder: (context, index) {
-                        String key = places.keys.elementAt(index);
+                        String key = _searchBox.text.isEmpty
+                            ? places.keys.elementAt(index)
+                            : placesSearched.keys.elementAt(index);
                         return PlaceCard(
                             key,
                             _searchBox.text.isEmpty
