@@ -31,7 +31,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Imports helper functions and models.
 import 'models/material_colors_model.dart';
 part 'models/product_model.dart';
-part 'models/place_model.dart';
 
 // Defines all page components.
 part 'pages/onboarding.dart';

@@ -12,83 +12,50 @@ part of main;
 
 // ignore: must_be_immutable
 class PlaceCard extends StatefulWidget {
-  PlaceCard({
+  PlaceCard(
+    this.placeID,
+    this.place, {
     super.key,
-    required this.placeID,
-    required this.placeName,
-    required this.placeTagline,
+    this.setFavoritePlaceCallback,
   });
-  String placeName, placeImageURL = ' ', placeID;
-  String? placeTagline;
+  String placeID;
+  Map place;
   bool isFavorited = false;
+
+  final Function(String placeID, bool state)? setFavoritePlaceCallback;
 
   @override
   State<PlaceCard> createState() => _PlaceCardState();
 }
 
 class _PlaceCardState extends State<PlaceCard> {
-  void setFavoritePlace(bool isFavorited) async {
+  void setFavoritePlace(bool state) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      if (isFavorited) {
-        db.collection("users").doc(uid).update({
-          "favoritePlaces": FieldValue.arrayRemove([widget.placeID])
-        });
-      } else {
+      if (state) {
         db.collection("users").doc(uid).update({
           "favoritePlaces": FieldValue.arrayUnion([widget.placeID])
         });
-      }
-      if (mounted) {
-        setState(() {
-          widget.isFavorited = !isFavorited;
+      } else {
+        db.collection("users").doc(uid).update({
+          "favoritePlaces": FieldValue.arrayRemove([widget.placeID])
         });
+      }
+      widget.isFavorited = state;
+      if (widget.setFavoritePlaceCallback != null) {
+        widget.setFavoritePlaceCallback!(widget.placeID, state);
       }
     } catch (e) {
       return;
     }
   }
 
-  // Fetches and sets the product's image.
-  void getPlaceImageURL() async {
-    String url = '';
-    String ref = "places/${widget.placeID}.jpg";
-    try {
-      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    } catch (e) {
-      //
-    } finally {
-      if (mounted) {
-        setState(() {
-          widget.placeImageURL = url;
-        });
-      }
-    }
-  }
-
-  // Retrieves and sets user information (e.g. favorited) on the place.
-  Future _getUserInfo() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("users").doc(uid).get().then((document) {
-      if (document.exists) {
-        List favorites = document.data()!['favoritePlaces'];
-        if (favorites.contains(widget.placeID)) {
-          if (mounted) {
-            setState(() {
-              widget.isFavorited = true;
-            });
-          }
-        }
-      }
-    });
-  }
-
   @override
   void initState() {
-    getPlaceImageURL();
-    _getUserInfo();
+    if (widget.place['isFavorited'] != null) {
+      widget.isFavorited = widget.place['isFavorited'];
+    }
     super.initState();
   }
 
@@ -109,94 +76,102 @@ class _PlaceCardState extends State<PlaceCard> {
         },
         child: SizedBox(
           height: 100,
-          child: Row(
-            children: [
-              SizedBox(
-                width: 90,
-                child: FittedBox(
-                  clipBehavior: Clip.hardEdge,
-                  fit: BoxFit.cover,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.placeImageURL,
-                    placeholder: (context, url) => const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: SizedBox(
+                    width: 60,
+                    child: FittedBox(
+                      clipBehavior: Clip.hardEdge,
+                      fit: BoxFit.cover,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.place['placeImageURL'] ?? '',
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Icon(Icons.storefront_outlined,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant),
+                        ),
+                        fadeInCurve: Curves.easeIn,
+                        fadeOutCurve: Curves.easeOut,
+                      ),
                     ),
-                    errorWidget: (context, url, error) => Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Icon(Icons.storefront_outlined,
-                          color: Theme.of(context).colorScheme.outlineVariant),
-                    ),
-                    fadeInCurve: Curves.easeIn,
-                    fadeOutCurve: Curves.easeOut,
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        child: Text(
-                          widget.placeName,
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ),
-                      if (widget.placeTagline != null)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         SizedBox(
-                          width: 200,
                           child: Text(
-                            widget.placeTagline!,
-                            maxLines: 2,
+                            widget.place['placeName'],
+                            maxLines: 1,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 12,
-                              letterSpacing: -0.3,
-                              overflow: TextOverflow.ellipsis,
-                              height: 0.85,
-                            ),
+                                color: Theme.of(context).colorScheme.primary,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                                letterSpacing: -0.3,
+                                overflow: TextOverflow.ellipsis),
                           ),
                         ),
-                    ],
+                        if (widget.place['placeTagline'] != null)
+                          SizedBox(
+                            width: 200,
+                            child: Text(
+                              widget.place['placeTagline'],
+                              maxLines: 2,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 12,
+                                letterSpacing: -0.3,
+                                overflow: TextOverflow.ellipsis,
+                                height: 0.85,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconButton(
-                  icon: Icon(
-                    widget.isFavorited
-                        ? Icons.favorite_outlined
-                        : Icons.favorite_outline,
-                    size: 24,
-                    color: widget.isFavorited
-                        ? Colors.redAccent
-                        : Theme.of(context).colorScheme.outline,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      widget.isFavorited
+                          ? Icons.favorite_outlined
+                          : Icons.favorite_outline,
+                      size: 20,
+                      color: widget.isFavorited
+                          ? Colors.redAccent
+                          : Theme.of(context).colorScheme.outline,
+                    ),
+                    onPressed: () {
+                      setFavoritePlace(!widget.isFavorited);
+                    },
                   ),
-                  onPressed: () {
-                    setFavoritePlace(widget.isFavorited);
-                  },
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

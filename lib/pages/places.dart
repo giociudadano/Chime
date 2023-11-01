@@ -26,8 +26,9 @@ class _PlacesPageState extends State<PlacesPage> {
   StreamSubscription? favoritesListener;
 
   // Variables for pagination.
-  List<PlaceModel> places = [];
-  List<PlaceModel> placesSearched = [];
+  Map places = {};
+  Map placesFavorited = {};
+  Map placesSearched = {};
   int placesPerPage = 5;
   int placesDisplayed = 0;
   String? lastVisible;
@@ -36,60 +37,31 @@ class _PlacesPageState extends State<PlacesPage> {
   FocusNode focus = FocusNode();
   Timer? _debounce;
 
-  // Variables for user information.
-  List<PlaceModel> placesFavorited = [];
-
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
   void addScrollListener() {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge &&
           _scrollController.position.pixels != 0) {
-        addPlaces();
-      }
-    });
-  }
-
-  // Initializes a listener that tracks if the current pkace favorites have changed from other screens.
-  void addFavoritesListener() {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    favoritesListener =
-        db.collection("users").doc(uid).snapshots().listen((event) async {
-      placesFavorited = [];
-      var favorites = event.data()!['favoritePlaces'];
-      for (String favorite in favorites) {
-        await db
-            .collection("places")
-            .doc(favorite)
-            .get()
-            .then((document2) async {
-          if (document2.exists) {
-            PlaceModel placeFavorited =
-                PlaceModel(document2.id, document2.data());
-            placesFavorited.add(placeFavorited);
-
-            /* Removes the item from the recommended list.
-            for (var place in places) {
-              if (place.placeID == placeFavorited.placeID) {
-                places.remove(place);
-              }
-            }
-            */
-          }
-        });
-      }
-      if (mounted) {
-        setState(() {});
+        initPlaces();
       }
     });
   }
 
   // Queries a list of places sorted by distance from the device. Called on page initialization
   // and on reaching the bottom of the ListView.
-  void addPlaces() async {
+  void initPlaces() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    List favoritePlaces = [];
+    await db.collection("users").doc(uid).get().then((document) {
+      if (document.exists) {
+        favoritePlaces = document.data()!['favoritePlaces'];
+      }
+    });
+
     Query getQuery() {
-      FirebaseFirestore db = FirebaseFirestore.instance;
       if (lastVisible == null) {
         return db
             .collection("places")
@@ -103,22 +75,51 @@ class _PlacesPageState extends State<PlacesPage> {
       }
     }
 
-    getQuery().get().then((querySnapshot) async {
-      for (var docSnapshot in querySnapshot.docs) {
+    getQuery().get().then((querySnapshot) {
+      for (var place in querySnapshot.docs) {
         if (mounted) {
-          PlaceModel place = PlaceModel(docSnapshot.id, docSnapshot.data());
-          setState(() {
-            places.add(place);
-            placesDisplayed += placesPerPage;
-            lastVisible = docSnapshot.id;
+          places[place.id] = place.data();
+          setPlaceImageURL(place.id).then((res) {
+            setFavoriteState(favoritePlaces, place.id);
           });
+          placesDisplayed += placesPerPage;
+          lastVisible = place.id;
         }
       }
+      setState(() {
+        places = Map.fromEntries(places.entries.toList()
+          ..sort((a, b) => (a.value['placeName'].toLowerCase())
+              .compareTo(b.value['placeName'].toLowerCase())));
+      });
     });
   }
 
-  // Adds a listener that detects if an item is added to cart.
-  // Used in displaying the number of current items in cart.
+  void setFavoriteState(List favoritePlaces, String placeID) {
+    if (favoritePlaces.contains(placeID)) {
+      placesFavorited[placeID] = places.remove(placeID);
+      placesFavorited[placeID]['isFavorited'] = true;
+      placesFavorited = Map.fromEntries(placesFavorited.entries.toList()
+        ..sort((a, b) => (a.value['placeName'].toLowerCase())
+            .compareTo(b.value['placeName'].toLowerCase())));
+    }
+  }
+
+  Future setPlaceImageURL(String placeID) async {
+    String url = '';
+    String ref = "places/$placeID.jpg";
+    try {
+      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    } catch (e) {
+      //
+    } finally {
+      if (mounted) {
+        setState(() {
+          places[placeID]['placeImageURL'] = url;
+        });
+      }
+    }
+  }
+
   void addSearchListener() {
     _searchBox.addListener(() {
       if (focus.hasFocus) {
@@ -128,14 +129,14 @@ class _PlacesPageState extends State<PlacesPage> {
         _debounce = Timer(const Duration(milliseconds: 800), () {
           if (mounted) {
             setState(() {
-              placesSearched = [];
-              for (PlaceModel place in places) {
-                if (place.placeName
+              placesSearched = {};
+              places.forEach((placeID, place) {
+                if (place['placeName']
                     .toLowerCase()
                     .contains(_searchBox.value.text.toString().toLowerCase())) {
-                  placesSearched.add(place);
+                  placesSearched[placeID] = place;
                 }
-              }
+              });
             });
           }
         });
@@ -143,12 +144,30 @@ class _PlacesPageState extends State<PlacesPage> {
     });
   }
 
+  void setFavoritePlace(String placeID, bool state) {
+    if (state) {
+      placesFavorited[placeID] = places.remove(placeID);
+      placesFavorited[placeID]['isFavorited'] = true;
+      placesFavorited = Map.fromEntries(placesFavorited.entries.toList()
+        ..sort((a, b) => (a.value['placeName'].toLowerCase())
+            .compareTo(b.value['placeName'].toLowerCase())));
+    } else {
+      places[placeID] = placesFavorited.remove(placeID);
+      places[placeID]['isFavorited'] = false;
+      places = Map.fromEntries(places.entries.toList()
+        ..sort((a, b) => (a.value['placeName'].toLowerCase())
+            .compareTo(b.value['placeName'].toLowerCase())));
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     addScrollListener();
-    addFavoritesListener();
-    addPlaces();
+    initPlaces();
     addSearchListener();
   }
 
@@ -219,30 +238,49 @@ class _PlacesPageState extends State<PlacesPage> {
                 controller: _scrollController,
                 children: [
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
-                    Text(
-                      AppLocalizations.of(context)!.placesFavorited,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: const [
-                            FontVariation('wght', 700),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 16,
-                          letterSpacing: -0.5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.placesFavorited,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.5),
+                            ),
+                            Text(
+                              "Sorted A-Z   🡻",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 12.5,
+                                  letterSpacing: -0.5),
+                            ),
+                          ]),
                     ),
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
                     const SizedBox(height: 10),
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
                     GridView.builder(
                       key: UniqueKey(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: placesFavorited.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return PlaceCard(
-                            placeID: placesFavorited[index].placeID,
-                            placeName: placesFavorited[index].placeName,
-                            placeTagline: placesFavorited[index].placeTagline);
+                        String key = placesFavorited.keys.elementAt(index);
+                        return PlaceCard(key, placesFavorited[key],
+                            setFavoritePlaceCallback: setFavoritePlace);
                       },
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -252,20 +290,39 @@ class _PlacesPageState extends State<PlacesPage> {
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 0),
                     ),
-                  Text(
-                    _searchBox.text.isEmpty
-                        ? AppLocalizations.of(context)!.placesNear
-                        : AppLocalizations.of(context)!
-                            .placesSearch(_searchBox.text.toLowerCase()),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 16,
-                        letterSpacing: -0.5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _searchBox.text.isEmpty
+                                ? AppLocalizations.of(context)!.placesNear
+                                : AppLocalizations.of(context)!.placesSearch(
+                                    _searchBox.text.toLowerCase()),
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 16,
+                                letterSpacing: -0.5),
+                          ),
+                          Text(
+                            "Sorted A-Z   🡻",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 12.5,
+                                letterSpacing: -0.5),
+                          ),
+                        ]),
                   ),
                   const SizedBox(height: 10),
                   GridView.builder(
@@ -283,19 +340,13 @@ class _PlacesPageState extends State<PlacesPage> {
                           ? places.length
                           : placesSearched.length,
                       itemBuilder: (context, index) {
-                        if (_searchBox.text.isEmpty) {
-                          return PlaceCard(
-                            placeID: places[index].placeID,
-                            placeName: places[index].placeName,
-                            placeTagline: places[index].placeTagline,
-                          );
-                        } else {
-                          return PlaceCard(
-                            placeID: placesSearched[index].placeID,
-                            placeName: placesSearched[index].placeName,
-                            placeTagline: placesSearched[index].placeTagline,
-                          );
-                        }
+                        String key = places.keys.elementAt(index);
+                        return PlaceCard(
+                            key,
+                            _searchBox.text.isEmpty
+                                ? places[key]
+                                : placesSearched[key],
+                            setFavoritePlaceCallback: setFavoritePlace);
                       }),
                 ],
               ),
