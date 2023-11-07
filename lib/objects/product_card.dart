@@ -12,15 +12,10 @@ part of main;
 
 // ignore: must_be_immutable
 class ProductCard extends StatefulWidget {
-  ProductCard(
-      {super.key,
-      required this.productID,
-      required this.productName,
-      required this.productPrice,
-      required this.placeID});
-  String productName, productImageURL = '', placeName = '', productID, placeID;
-  int productPrice;
-  bool isFavorited = false;
+  String productID;
+  Map product;
+
+  ProductCard(this.productID, this.product, {super.key});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -42,67 +37,16 @@ class _ProductCardState extends State<ProductCard> {
       }
       if (mounted) {
         setState(() {
-          widget.isFavorited = !isFavorited;
+          widget.product['isFavorited'] = !isFavorited;
         });
       }
     } catch (e) {
       return;
     }
-  }
-
-  // Fetches and sets the product's image.
-  void getProductImageURL() async {
-    String url = '';
-    String ref = "products/${widget.productID}.jpg";
-    try {
-      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-      if (mounted) {
-        setState(() {
-          widget.productImageURL = url;
-        });
-      }
-    } catch (e) {
-      return;
-    }
-  }
-
-  // Fetches and gets the product name.
-  void getPlaceName() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("places").doc(widget.placeID).get().then((document) {
-      if (document.exists) {
-        if (mounted) {
-          setState(() {
-            widget.placeName = document.data()!['placeName'];
-          });
-        }
-      }
-    });
-  }
-
-  // Retrieves and sets user information (e.g. favorited) on the place.
-  Future _getUserInfo() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("users").doc(uid).get().then((document) {
-      if (document.exists) {
-        List favorites = document.data()!['favoriteProducts'];
-        if (favorites.contains(widget.productID)) {
-          if (mounted) {
-            setState(() {
-              widget.isFavorited = true;
-            });
-          }
-        }
-      }
-    });
   }
 
   @override
   void initState() {
-    getProductImageURL();
-    getPlaceName();
-    _getUserInfo();
     super.initState();
   }
 
@@ -122,7 +66,7 @@ class _ProductCardState extends State<ProductCard> {
           }
         },
         child: SizedBox(
-          height: 220,
+          height: 195,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -134,7 +78,7 @@ class _ProductCardState extends State<ProductCard> {
                       clipBehavior: Clip.hardEdge,
                       fit: BoxFit.cover,
                       child: CachedNetworkImage(
-                        imageUrl: widget.productImageURL,
+                        imageUrl: widget.product['productImageURL'] ?? '',
                         placeholder: (context, url) => const Padding(
                           padding: EdgeInsets.all(40.0),
                           child: CircularProgressIndicator(),
@@ -154,16 +98,17 @@ class _ProductCardState extends State<ProductCard> {
                     top: 5,
                     child: IconButton(
                       icon: Icon(
-                        widget.isFavorited
+                        widget.product['isFavorited'] ?? false
                             ? Icons.favorite_outlined
                             : Icons.favorite_outline,
                         size: 24,
-                        color: widget.isFavorited
+                        color: widget.product['isFavorited'] ?? false
                             ? Colors.redAccent
                             : Colors.white,
                       ),
                       onPressed: () {
-                        setFavoriteProduct(widget.isFavorited);
+                        setFavoriteProduct(
+                            widget.product['isFavorited'] ?? false);
                       },
                     ))
               ]),
@@ -176,7 +121,7 @@ class _ProductCardState extends State<ProductCard> {
                     SizedBox(
                       height: 25,
                       child: Text(
-                        widget.productName,
+                        widget.product['productName'],
                         maxLines: 2,
                         style: TextStyle(
                             color:
@@ -193,7 +138,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                     ),
                     Text(
-                      '₱${widget.productPrice}',
+                      '₱${widget.product['productPrice']}',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Bahnschrift',
@@ -204,21 +149,6 @@ class _ProductCardState extends State<ProductCard> {
                           fontSize: 24,
                           height: 0.85,
                           letterSpacing: -0.3),
-                    ),
-                    Text(
-                      widget.placeName,
-                      maxLines: 1,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: const [
-                            FontVariation('wght', 400),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 11.5,
-                          height: 1.3,
-                          letterSpacing: -0.3,
-                          overflow: TextOverflow.ellipsis),
                     ),
                   ],
                 ),

@@ -548,8 +548,10 @@ class _ProductPageState extends State<ProductPage> {
                   child: InkWell(
                     onTap: () {
                       if (context.mounted) {
+                        //TODO
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PlacePage(widget.placeID)));
+                            builder: (context) =>
+                                PlacePage(widget.placeID, const {})));
                       }
                     },
                     child: SizedBox(

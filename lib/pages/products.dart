@@ -262,6 +262,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                       letterSpacing: -0.5),
                                 ),
                                 const SizedBox(height: 10),
+                                /*
                                 SizedBox(
                                   height: 220,
                                   child: GridView.builder(
@@ -289,6 +290,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                             mainAxisSpacing: 10),
                                   ),
                                 )
+                                */
                               ]);
                         } else {
                           return const SizedBox.shrink();
@@ -310,6 +312,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         letterSpacing: -0.5),
                   ),
                   const SizedBox(height: 10),
+                  /*
                   ValueListenableBuilder<bool>(
                       valueListenable: valueNotifierFavorites,
                       builder: (context, val, child) {
@@ -345,6 +348,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               }
                             });
                       }),
+                      */
                 ],
               ),
             ),

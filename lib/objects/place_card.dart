@@ -20,7 +20,6 @@ class PlaceCard extends StatefulWidget {
   });
   String placeID;
   Map place;
-  bool isFavorited = false;
 
   final Function(String placeID, bool state)? setFavoritePlaceCallback;
 
@@ -42,7 +41,7 @@ class _PlaceCardState extends State<PlaceCard> {
           "favoritePlaces": FieldValue.arrayRemove([widget.placeID])
         });
       }
-      widget.isFavorited = state;
+      widget.place['isFavorited'] = state;
       if (widget.setFavoritePlaceCallback != null) {
         widget.setFavoritePlaceCallback!(widget.placeID, state);
       }
@@ -53,15 +52,13 @@ class _PlaceCardState extends State<PlaceCard> {
 
   @override
   void initState() {
-    if (widget.place['isFavorited'] != null) {
-      widget.isFavorited = widget.place['isFavorited'];
-    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       color: MaterialColors.getSurfaceContainerLow(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -71,7 +68,7 @@ class _PlaceCardState extends State<PlaceCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlacePage(widget.placeID)));
+                builder: (context) => PlacePage(widget.placeID, widget.place)));
           }
         },
         child: SizedBox(
@@ -157,16 +154,16 @@ class _PlaceCardState extends State<PlaceCard> {
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
-                      widget.isFavorited
+                      widget.place['isFavorited'] ?? false
                           ? Icons.favorite_outlined
                           : Icons.favorite_outline,
                       size: 20,
-                      color: widget.isFavorited
+                      color: widget.place['isFavorited'] ?? false
                           ? Colors.redAccent
                           : Theme.of(context).colorScheme.outline,
                     ),
                     onPressed: () {
-                      setFavoritePlace(!widget.isFavorited);
+                      setFavoritePlace(!(widget.place['isFavorited'] ?? false));
                     },
                   ),
                 )
