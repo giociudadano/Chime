@@ -48,6 +48,16 @@ class _CartItemCardState extends State<CartItemCard> {
     }
   }
 
+  Future getProduct(String productID) async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    Map product = {};
+    await db.collection("products").doc(productID).get().then((document) async {
+      product = document.data()!;
+      product['productImageURL'] = widget.item['productImageURL'];
+    });
+    return product;
+  }
+
   // Updates the item's quantity in database when the amount is modified.
   // Uses a debounce variable to prevent successive calls.
   void setProductQuantityAtDatabase() {
@@ -130,10 +140,12 @@ class _CartItemCardState extends State<CartItemCard> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    Map product = await getProduct(widget.productID);
                     if (context.mounted) {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductPage(widget.productID)));
+                          builder: (context) => ProductPage(
+                              widget.productID, product, widget.placeID)));
                     }
                   },
                   child: SizedBox(

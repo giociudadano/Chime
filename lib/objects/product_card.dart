@@ -12,10 +12,10 @@ part of main;
 
 // ignore: must_be_immutable
 class ProductCard extends StatefulWidget {
-  String productID;
+  String productID, placeID;
   Map product;
 
-  ProductCard(this.productID, this.product, {super.key});
+  ProductCard(this.productID, this.product, this.placeID, {super.key});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -62,7 +62,8 @@ class _ProductCardState extends State<ProductCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductPage(widget.productID)));
+                builder: (context) => ProductPage(
+                    widget.productID, widget.product, widget.placeID, setFavoriteProductCallback: setFavoriteProduct)));
           }
         },
         child: SizedBox(
@@ -72,45 +73,60 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               Stack(children: [
                 SizedBox(
-                    width: 200,
-                    height: 120,
-                    child: FittedBox(
-                      clipBehavior: Clip.hardEdge,
-                      fit: BoxFit.cover,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.product['productImageURL'] ?? '',
-                        placeholder: (context, url) => const Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => Padding(
-                          padding: const EdgeInsets.all(40.0),
-                          child: Icon(Icons.local_mall_outlined,
-                              color:
-                                  Theme.of(context).colorScheme.outlineVariant),
-                        ),
-                        fadeInCurve: Curves.easeIn,
-                        fadeOutCurve: Curves.easeOut,
+                  width: 200,
+                  height: 120,
+                  child: FittedBox(
+                    clipBehavior: Clip.hardEdge,
+                    fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.product['productImageURL'] ?? '',
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: CircularProgressIndicator(),
                       ),
-                    )),
+                      errorWidget: (context, url, error) => Padding(
+                        padding: const EdgeInsets.all(40.0),
+                        child: Icon(Icons.local_mall_outlined,
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      fadeInCurve: Curves.easeIn,
+                      fadeOutCurve: Curves.easeOut,
+                    ),
+                  ),
+                ),
                 Positioned(
-                    right: 5,
-                    top: 5,
-                    child: IconButton(
-                      icon: Icon(
-                        widget.product['isFavorited'] ?? false
-                            ? Icons.favorite_outlined
-                            : Icons.favorite_outline,
-                        size: 24,
-                        color: widget.product['isFavorited'] ?? false
-                            ? Colors.redAccent
-                            : Colors.white,
+                  right: 8,
+                  top: 8,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      color: (widget.product['productImageURL'] == null)
+                          ? Colors.transparent
+                          : const Color.fromARGB(120, 0, 0, 0),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          widget.product['isFavorited'] ?? false
+                              ? Icons.favorite_outlined
+                              : Icons.favorite_outline,
+                          size: 22,
+                          color: widget.product['isFavorited'] ?? false
+                              ? Colors.redAccent
+                              : (widget.product['productImageURL'] == null)
+                                  ? Theme.of(context).colorScheme.outline
+                                  : Colors.white,
+                        ),
+                        onPressed: () {
+                          setFavoriteProduct(
+                              widget.product['isFavorited'] ?? false);
+                        },
                       ),
-                      onPressed: () {
-                        setFavoriteProduct(
-                            widget.product['isFavorited'] ?? false);
-                      },
-                    ))
+                    ),
+                  ),
+                ),
               ]),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),

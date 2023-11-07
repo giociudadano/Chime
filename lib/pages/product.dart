@@ -15,20 +15,12 @@ part of main;
 // ignore: must_be_immutable
 class ProductPage extends StatefulWidget {
   // Variables for product information.
-  String productID;
-  String productName = '',
-      productDesc = '',
-      productImageURL = '',
-      placeID = '',
-      placeName = '',
-      placeImageURL = '';
-  int productPrice = 0;
+  String productID, placeID;
+  Map product;
 
-  // Variables for user information.
-
-  bool isFavorited = false;
-
-  ProductPage(this.productID, {super.key});
+  ProductPage(this.productID, this.product, this.placeID,
+      {super.key, this.setFavoriteProductCallback});
+  final Function(bool state)? setFavoriteProductCallback;
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -39,105 +31,6 @@ class _ProductPageState extends State<ProductPage> {
   int cartItems = 0;
   int itemQuantity = 1;
   bool isInCart = false;
-
-  // Retrieves and sets product information from FirebaseDB given the product ID of the page.
-  Future _getProductInfo() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db
-        .collection("products")
-        .doc(widget.productID)
-        .get()
-        .then((document) {
-      if (document.exists) {
-        setState(() {
-          widget.productName = document.data()!['productName'] ?? '';
-          widget.productDesc = document.data()!['productDesc'] ?? '';
-          widget.productPrice = document.data()!['productPrice'] ?? 0;
-          widget.placeID = document.data()!['placeID'] ?? '';
-        });
-      }
-    });
-  }
-
-  // Retrieves and sets the product image from FirebaseStorage given the product ID of the page.
-  Future _getProductImageURL() async {
-    String url = '';
-    String ref = "products/${widget.productID}.jpg";
-    try {
-      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    } catch (e) {
-      //
-    } finally {
-      if (mounted) {
-        setState(() {
-          widget.productImageURL = url;
-        });
-      }
-    }
-  }
-
-  // Retrieves and sets the place information given the place ID of the page.
-  // Place ID is retrieved when obtaining product information.
-  Future _getPlaceInfo() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("places").doc(widget.placeID).get().then((document) {
-      if (document.exists) {
-        setState(() {
-          widget.placeName = document.data()!['placeName'] ?? '';
-        });
-      }
-    });
-  }
-
-  // Retrieves and sets the place image given the place ID of the page.
-  // Place ID is retrieved when obtaining product information.
-  Future _getPlaceImageURL() async {
-    String url = '';
-    String ref = "places/${widget.placeID}.jpg";
-    try {
-      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    } catch (e) {
-      //
-    } finally {
-      if (mounted) {
-        setState(() {
-          widget.placeImageURL = url;
-        });
-      }
-    }
-  }
-
-  // Retrieves and sets user information (e.g. favorited) on the product.
-  Future _getUserInfo() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    db.collection("users").doc(uid).get().then((document) {
-      if (document.exists) {
-        List favorites = document.data()!['favoriteProducts'];
-        if (favorites.contains(widget.productID)) {
-          if (mounted) {
-            setState(() {
-              widget.isFavorited = true;
-            });
-          }
-        }
-      }
-    });
-    db
-        .collection("users")
-        .doc(uid)
-        .collection("cart")
-        .doc(widget.placeID)
-        .get()
-        .then((document) {
-      if (document.data() != null) {
-        if (document.data()![widget.productID] != null) {
-          isInCart = true;
-          itemQuantity = document.data()![widget.productID]['quantity'];
-        }
-      }
-    });
-  }
 
   // Sets the product as a favorite/unfavorite.
   void setFavoriteProduct(bool isFavorited) async {
@@ -153,9 +46,10 @@ class _ProductPageState extends State<ProductPage> {
           "favoriteProducts": FieldValue.arrayUnion([widget.productID])
         });
       }
+      widget.setFavoriteProductCallback!(!isFavorited);
       if (mounted) {
         setState(() {
-          widget.isFavorited = !isFavorited;
+          widget.product['isFavorited'] = !isFavorited;
         });
       }
     } catch (e) {
@@ -176,17 +70,17 @@ class _ProductPageState extends State<ProductPage> {
           .doc(widget.placeID)
           .set({
         widget.productID: {
-          "name": widget.productName,
+          "name": widget.product['productName'],
           "quantity": itemQuantity,
-          "price": widget.productPrice,
+          "price": widget.product['productPrice'],
         }
       }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
               isInCart
-                  ? "${widget.productName} updated in cart!"
-                  : "${widget.productName} added to cart!",
+                  ? "${widget.product['productName']} updated in cart!"
+                  : "${widget.product['productName']} added to cart!",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
@@ -238,16 +132,6 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void initState() {
     super.initState();
-
-    void initProduct() async {
-      await _getProductInfo();
-      _getProductImageURL();
-      _getPlaceInfo();
-      _getPlaceImageURL();
-      _getUserInfo();
-    }
-
-    initProduct();
     addCartListener();
   }
 
@@ -361,7 +245,7 @@ class _ProductPageState extends State<ProductPage> {
               clipBehavior: Clip.hardEdge,
               fit: BoxFit.cover,
               child: CachedNetworkImage(
-                imageUrl: widget.productImageURL,
+                imageUrl: widget.product['productImageURL'] ?? '',
                 placeholder: (context, url) => const Padding(
                   padding: EdgeInsets.all(40.0),
                   child: CircularProgressIndicator(),
@@ -389,7 +273,7 @@ class _ProductPageState extends State<ProductPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.productName,
+                              widget.product['productName'],
                               maxLines: 2,
                               style: TextStyle(
                                   color:
@@ -406,7 +290,7 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              "₱${widget.productPrice.toString()}",
+                              "₱${widget.product['productPrice'].toString()}",
                               maxLines: 2,
                               style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
@@ -427,26 +311,27 @@ class _ProductPageState extends State<ProductPage> {
                         padding: const EdgeInsets.only(left: 20),
                         child: IconButton(
                           icon: Icon(
-                            widget.isFavorited
+                            widget.product['isFavorited'] ?? false
                                 ? Icons.favorite_outlined
                                 : Icons.favorite_outline,
                             size: 28,
-                            color: widget.isFavorited
+                            color: widget.product['isFavorited'] ?? false
                                 ? Colors.redAccent
                                 : Theme.of(context).colorScheme.outline,
                           ),
                           onPressed: () {
-                            setFavoriteProduct(widget.isFavorited);
+                            setFavoriteProduct(
+                                widget.product['isFavorited'] ?? false);
                           },
                         ),
                       ),
                     ]),
               ),
-              widget.productDesc != ''
+              widget.product['productDesc'] != null
                   ? Padding(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: Text(
-                        widget.productDesc,
+                        widget.product['productDesc'],
                         maxLines: 3,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.outline,
@@ -536,104 +421,6 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Card(
-                  color: MaterialColors.getSurfaceContainerLow(darkMode),
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  elevation: 0,
-                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
-                  child: InkWell(
-                    onTap: () {
-                      if (context.mounted) {
-                        //TODO
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                PlacePage(widget.placeID, const {})));
-                      }
-                    },
-                    child: SizedBox(
-                      height: 70,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 70,
-                            child: FittedBox(
-                              clipBehavior: Clip.hardEdge,
-                              fit: BoxFit.cover,
-                              child: CachedNetworkImage(
-                                imageUrl: widget.placeImageURL,
-                                placeholder: (context, url) => const Padding(
-                                  padding: EdgeInsets.all(20.0),
-                                  child: CircularProgressIndicator(),
-                                ),
-                                errorWidget: (context, url, error) => Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: Icon(Icons.storefront_outlined,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant),
-                                ),
-                                fadeInCurve: Curves.easeIn,
-                                fadeOutCurve: Curves.easeOut,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                      child: Text(
-                                    AppLocalizations.of(context)!.soldBy,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 500),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        height: 0.9,
-                                        fontSize: 13,
-                                        letterSpacing: -0.3,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
-                                  const SizedBox(height: 5),
-                                  SizedBox(
-                                    child: Text(
-                                      widget.placeName,
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.3,
-                                          height: 0.9,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(height: 40),

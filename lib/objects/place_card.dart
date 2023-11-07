@@ -68,7 +68,7 @@ class _PlaceCardState extends State<PlaceCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlacePage(widget.placeID, widget.place)));
+                builder: (context) => PlacePage(widget.placeID, widget.place, setFavoritePlaceCallback: setFavoritePlace)));
           }
         },
         child: SizedBox(

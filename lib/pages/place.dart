@@ -22,15 +22,18 @@ class PlacePage extends StatefulWidget {
   late bool isFavorited = place['isFavorited'] ?? false;
   int cartItems = 0;
 
-  PlacePage(this.placeID, this.place, {super.key});
+  PlacePage(this.placeID, this.place,
+      {super.key, this.setFavoritePlaceCallback});
 
   @override
   State<PlacePage> createState() => _PlacePageState();
+  final Function(bool state)? setFavoritePlaceCallback;
 }
 
 class _PlacePageState extends State<PlacePage> {
   StreamSubscription? cartListener;
   Map products = {};
+  List favoriteProducts = [];
 
   void setFavoritePlace(bool isFavorited) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -45,6 +48,7 @@ class _PlacePageState extends State<PlacePage> {
           "favoritePlaces": FieldValue.arrayUnion([widget.placeID])
         });
       }
+      widget.setFavoritePlaceCallback!(!isFavorited);
       if (mounted) {
         setState(() {
           widget.isFavorited = !isFavorited;
@@ -60,12 +64,25 @@ class _PlacePageState extends State<PlacePage> {
     for (String productID in widget.place['products']) {
       db.collection("products").doc(productID).get().then((document) async {
         products[productID] = document.data()!;
+        if (favoriteProducts.contains(productID)) {
+          products[productID]['isFavorited'] = true;
+        }
         setProductImageURL(productID);
         if (mounted) {
           setState(() {});
         }
       });
     }
+  }
+
+  void initFavorites() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    await db.collection("users").doc(uid).get().then((document) {
+      if (document.exists) {
+        favoriteProducts = document.data()!['favoriteProducts'];
+      }
+    });
   }
 
   void setProductImageURL(String productID) async {
@@ -104,6 +121,7 @@ class _PlacePageState extends State<PlacePage> {
 
   @override
   void initState() {
+    initFavorites();
     initProducts();
     addCartListener();
     super.initState();
@@ -306,7 +324,7 @@ class _PlacePageState extends State<PlacePage> {
                       itemCount: products.length,
                       itemBuilder: (BuildContext context, int index) {
                         String key = productsSorted.keys.elementAt(index);
-                        return ProductCard(key, products[key]);
+                        return ProductCard(key, products[key], widget.placeID);
                       },
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(

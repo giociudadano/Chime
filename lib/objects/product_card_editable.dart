@@ -102,27 +102,28 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
             children: [
               Stack(children: [
                 SizedBox(
-                    width: 200,
-                    height: 120,
-                    child: FittedBox(
-                      clipBehavior: Clip.hardEdge,
-                      fit: BoxFit.cover,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.product['productImageURL'] ?? '',
-                        placeholder: (context, url) => const Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) => Padding(
-                          padding: const EdgeInsets.all(40.0),
-                          child: Icon(Icons.local_mall_outlined,
-                              color:
-                                  Theme.of(context).colorScheme.outlineVariant),
-                        ),
-                        fadeInCurve: Curves.easeIn,
-                        fadeOutCurve: Curves.easeOut,
+                  width: 200,
+                  height: 120,
+                  child: FittedBox(
+                    clipBehavior: Clip.hardEdge,
+                    fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.product['productImageURL'] ?? '',
+                      placeholder: (context, url) => const Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: CircularProgressIndicator(),
                       ),
-                    )),
+                      errorWidget: (context, url, error) => Padding(
+                        padding: const EdgeInsets.all(40.0),
+                        child: Icon(Icons.local_mall_outlined,
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      fadeInCurve: Curves.easeIn,
+                      fadeOutCurve: Curves.easeOut,
+                    ),
+                  ),
+                ),
                 Positioned(
                   right: 8,
                   top: 8,
