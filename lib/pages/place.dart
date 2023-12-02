@@ -43,9 +43,15 @@ class _PlacePageState extends State<PlacePage> {
         db.collection("users").doc(uid).update({
           "favoritePlaces": FieldValue.arrayRemove([widget.placeID])
         });
+        db.collection("places").doc(widget.placeID).update({
+          "usersFavorited": FieldValue.arrayRemove([uid])
+        });
       } else {
         db.collection("users").doc(uid).update({
           "favoritePlaces": FieldValue.arrayUnion([widget.placeID])
+        });
+        db.collection("places").doc(widget.placeID).update({
+          "usersFavorited": FieldValue.arrayUnion([uid])
         });
       }
       widget.setFavoritePlaceCallback!(!isFavorited);
@@ -117,6 +123,99 @@ class _PlacePageState extends State<PlacePage> {
         });
       });
     });
+  }
+
+  void _showAdditionalDetails(Offset offset) async {
+    await showMenu(
+      elevation: 0,
+      context: context,
+      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+      items: [
+        PopupMenuItem(
+          onTap: () {
+            _showQRCode();
+          },
+          child: Row(children: [
+            Icon(Icons.qr_code_scanner,
+                color: Theme.of(context).colorScheme.outline),
+            const SizedBox(width: 5),
+            Text(
+              "Share QR Code",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: const [
+                    FontVariation('wght', 500),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 13,
+                  letterSpacing: -0.3),
+            )
+          ]),
+        ),
+      ],
+    );
+  }
+
+  void _showQRCode() async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: QrImageView(
+                  data: widget.placeID,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Here's your code",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20,
+                    letterSpacing: -0.3),
+              ),
+              Text(
+                "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
+                maxLines: 3,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3,
+                    height: 1.1,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -193,9 +292,10 @@ class _PlacePageState extends State<PlacePage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 80,
+                    width: 65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: FittedBox(
@@ -240,42 +340,71 @@ class _PlacePageState extends State<PlacePage> {
                               height: 1.2,
                               overflow: TextOverflow.ellipsis),
                         ),
-                        if (widget.place['placeTagline'] != null)
-                          Text(
-                            widget.place['placeTagline'],
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 400),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 12,
-                                letterSpacing: -0.3,
-                                height: 0.85,
-                                overflow: TextOverflow.ellipsis),
-                          ),
+                        Text(
+                          widget.place['placeTagline'] ?? '',
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 12.5,
+                              letterSpacing: -0.3,
+                              height: 0.85,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  widget.isFavorited
+                                      ? Icons.favorite_outlined
+                                      : Icons.favorite_outline,
+                                  size: 20,
+                                  color: widget.isFavorited
+                                      ? Colors.redAccent
+                                      : Theme.of(context).colorScheme.outline,
+                                ),
+                                onPressed: () {
+                                  setFavoritePlace(widget.isFavorited);
+                                },
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "${widget.place['usersFavorited'] != null ? widget.place['usersFavorited'].length : 0}",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 500),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                  height: 0.7,
+                                ),
+                              ),
+                            ])
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: IconButton(
-                      icon: Icon(
-                        widget.isFavorited
-                            ? Icons.favorite_outlined
-                            : Icons.favorite_outline,
-                        size: 24,
-                        color: widget.isFavorited
-                            ? Colors.redAccent
-                            : Theme.of(context).colorScheme.outline,
-                      ),
-                      onPressed: () {
-                        setFavoritePlace(widget.isFavorited);
-                      },
+                  GestureDetector(
+                    onTapDown: (TapDownDetails details) {
+                      _showAdditionalDetails(details.globalPosition);
+                    },
+                    child: Icon(
+                      Icons.more_vert,
+                      size: 22,
+                      color: Theme.of(context).colorScheme.outline,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

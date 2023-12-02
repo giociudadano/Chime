@@ -157,15 +157,18 @@ class _PlacesPageState extends State<PlacesPage> {
   }
 
   void setFavoritePlace(String placeID, bool state) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
     if (state) {
       placesFavorited[placeID] = places.remove(placeID);
       placesFavorited[placeID]['isFavorited'] = true;
+      placesFavorited[placeID]['usersFavorited'].add(uid);
       placesFavorited = Map.fromEntries(placesFavorited.entries.toList()
         ..sort((a, b) => (a.value['placeName'].toLowerCase())
             .compareTo(b.value['placeName'].toLowerCase())));
     } else {
       places[placeID] = placesFavorited.remove(placeID);
       places[placeID]['isFavorited'] = false;
+      places[placeID]['usersFavorited'].remove(uid);
       places = Map.fromEntries(places.entries.toList()
         ..sort((a, b) => (a.value['placeName'].toLowerCase())
             .compareTo(b.value['placeName'].toLowerCase())));

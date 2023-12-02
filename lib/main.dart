@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 // Imports external widgets.
 import 'package:choice/choice.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 // Imports Firebase libraries. Responsible for authentication and reading and writing to database.
 import 'package:firebase_core/firebase_core.dart';

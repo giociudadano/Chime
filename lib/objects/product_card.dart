@@ -33,6 +33,7 @@ class _ProductCardState extends State<ProductCard> {
         db.collection("products").doc(widget.productID).update({
           "usersFavorited": FieldValue.arrayRemove([uid])
         });
+        widget.product['usersFavorited'].remove(uid);
       } else {
         db.collection("users").doc(uid).update({
           "favoriteProducts": FieldValue.arrayUnion([widget.productID])
@@ -40,6 +41,7 @@ class _ProductCardState extends State<ProductCard> {
         db.collection("products").doc(widget.productID).update({
           "usersFavorited": FieldValue.arrayUnion([uid])
         });
+        widget.product['usersFavorited'].add(uid);
       }
       if (mounted) {
         setState(() {
