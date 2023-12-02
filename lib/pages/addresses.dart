@@ -54,6 +54,7 @@ class _AddressesPageState extends State<AddressesPage> {
     });
   }
 
+  // Sets the currently selected address.
   void setSelectedAddress(String? id) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
