@@ -256,6 +256,7 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -305,6 +306,7 @@ class _ProductPageState extends State<ProductPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
                               padding: EdgeInsets.zero,

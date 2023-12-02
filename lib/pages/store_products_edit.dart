@@ -200,14 +200,21 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       });
     }
 
-    // 3. Delete image from storage
+    // 3. Remove favorite product reference from users
+    for (String uid in widget.product['usersFavorited']) {
+      db.collection("users").doc(uid).update({
+        "favoriteProducts": FieldValue.arrayRemove([widget.productID])
+      });
+    }
+
+    // 4. Delete image from storage
     if (widget.product['productImageURL'] != null) {
       Reference ref =
           FirebaseStorage.instance.ref('products/${widget.productID}.jpg');
       ref.delete();
     }
 
-    // 4. Delete product from list of products
+    // 5. Delete product from list of products
     db.collection("products").doc(widget.productID).delete();
     Navigator.pop(context);
     widget.deleteProductCallback!();
