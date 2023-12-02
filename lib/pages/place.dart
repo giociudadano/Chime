@@ -30,8 +30,9 @@ class PlacePage extends StatefulWidget {
   final Function(bool state)? setFavoritePlaceCallback;
 }
 
-class _PlacePageState extends State<PlacePage> {
+class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   StreamSubscription? cartListener;
+  late TabController tabController;
   Map products = {};
   List favoriteProducts = [];
 
@@ -197,7 +198,7 @@ class _PlacePageState extends State<PlacePage> {
                     letterSpacing: -0.3),
               ),
               Text(
-                "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
+                "Scanning this QR Code will redirect a user to this place. Share it to a friend or save it for later!",
                 maxLines: 3,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.outline,
@@ -220,6 +221,14 @@ class _PlacePageState extends State<PlacePage> {
 
   @override
   void initState() {
+    tabController = TabController(
+      initialIndex: 0,
+      length: 2,
+      vsync: this,
+    );
+    tabController.addListener(() {
+      setState(() {});
+    });
     initFavorites();
     initProducts();
     addCartListener();
@@ -228,6 +237,7 @@ class _PlacePageState extends State<PlacePage> {
 
   @override
   void dispose() {
+    tabController.dispose();
     cartListener!.cancel();
     super.dispose();
   }
@@ -238,6 +248,10 @@ class _PlacePageState extends State<PlacePage> {
     Map productsSorted = Map.fromEntries(products.entries.toList()
       ..sort((a, b) => (a.value['productName'].toLowerCase())
           .compareTo(b.value['productName'].toLowerCase())));
+    List categoryKeys = widget.place['categories'] == null
+        ? []
+        : widget.place['categories'].keys.toList()
+      ..sort();
 
     return Scaffold(
       appBar: AppBar(
@@ -285,7 +299,7 @@ class _PlacePageState extends State<PlacePage> {
             ),
           ]),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-      body: ListView(
+      body: Column(
         children: [
           Container(
             color: MaterialColors.getSurfaceContainerLow(darkMode),
@@ -409,61 +423,248 @@ class _PlacePageState extends State<PlacePage> {
               ),
             ),
           ),
-          if (products.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "All Products",
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 16,
-                                  letterSpacing: -0.5),
-                            ),
-                            Text(
-                              "Sorted A-Z   🡻",
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 12.5,
-                                  letterSpacing: -0.5),
-                            ),
-                          ]),
-                    ),
-                    const SizedBox(height: 10),
-                    GridView.builder(
-                      key: UniqueKey(),
-                      shrinkWrap: true,
-                      itemCount: products.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        String key = productsSorted.keys.elementAt(index);
-                        return ProductCard(key, products[key], widget.placeID);
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: SizedBox(
+              height: 30,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Opacity(
+                    opacity: tabController.index == 0 ? 1 : 0.5,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(tabController
+                                    .index ==
+                                0
+                            ? MaterialColors.getSurfaceContainerLow(darkMode)
+                            : MaterialColors.getSurfaceContainerLowest(
+                                darkMode)),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(
+                            "Food",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                                letterSpacing: -0.3,
+                                height: 0.85,
+                                overflow: TextOverflow.ellipsis),
+                          )),
+                      onPressed: () {
+                        tabController.animateTo(0);
                       },
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              mainAxisExtent: 205,
-                              maxCrossAxisExtent: 200,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 0),
                     ),
-                  ]),
-            )
+                  ),
+                  const SizedBox(width: 10),
+                  Opacity(
+                    opacity: tabController.index == 1 ? 1 : 0.5,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(tabController
+                                    .index ==
+                                1
+                            ? MaterialColors.getSurfaceContainerLow(darkMode)
+                            : MaterialColors.getSurfaceContainerLowest(
+                                darkMode)),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(
+                            "Categories",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 15,
+                                letterSpacing: -0.3,
+                                height: 0.85,
+                                overflow: TextOverflow.ellipsis),
+                          )),
+                      onPressed: () {
+                        tabController.animateTo(1);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: [
+                if (products.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "All Products",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 16,
+                                        letterSpacing: -0.5),
+                                  ),
+                                  Text(
+                                    "Sorted A-Z   🡻",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 400),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 12.5,
+                                        letterSpacing: -0.5),
+                                  ),
+                                ]),
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            key: UniqueKey(),
+                            shrinkWrap: true,
+                            itemCount: products.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String key = productsSorted.keys.elementAt(index);
+                              return ProductCard(
+                                  key, products[key], widget.placeID);
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 205,
+                                    maxCrossAxisExtent: 200,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                          ),
+                        ]),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: GridView.builder(
+                    key: UniqueKey(),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.place['categories'] == null
+                        ? 0
+                        : widget.place['categories'].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            //<-- SEE HERE
+                            side: BorderSide(
+                              color: MaterialColors.getSurfaceContainerHighest(
+                                  darkMode),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: InkWell(
+                          onTap: () {
+                            if (context.mounted) {}
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      categoryKeys[index],
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 650),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 15,
+                                        letterSpacing: -0.3,
+                                        height: 1.2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      widget
+                                          .place['categories']
+                                              [categoryKeys[index]]
+                                          .length
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 500),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 15,
+                                        letterSpacing: -0.3,
+                                        height: 1.2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Icon(Icons.arrow_forward_ios,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    size: 15)
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            mainAxisExtent: 60,
+                            maxCrossAxisExtent: 450,
+                            childAspectRatio: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 0),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
