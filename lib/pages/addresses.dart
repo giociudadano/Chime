@@ -1,7 +1,16 @@
 part of main;
 
 class AddressesPage extends StatefulWidget {
-  const AddressesPage({super.key});
+  // ignore: prefer_const_constructors_in_immutables
+  AddressesPage(
+      {super.key,
+      this.setSelectedAddressCallback,
+      this.addAddressCallback,
+      this.editAddressCallback});
+
+  final Function(String? addressID)? setSelectedAddressCallback;
+  final Function(String addressID, Map data)? addAddressCallback;
+  final Function(String addressID, Map data)? editAddressCallback;
 
   @override
   State<AddressesPage> createState() => _AddressesPageState();
@@ -13,22 +22,75 @@ class _AddressesPageState extends State<AddressesPage> {
   final _inputAddAddressName = TextEditingController();
   final _inputAddAddressAddress = TextEditingController();
 
-  // Variables for listeners.
-  StreamSubscription? addressesListener;
-  StreamSubscription? selectedAddressListener;
-
   // Variables for user information.
   Map addresses = {};
   String? selectedAddress;
+
+  // Fetches all user addresses and currently selected address.
+  void initAddresses() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    // 1. Fetches all user addresses
+    db
+        .collection("users")
+        .doc(uid)
+        .collection("addresses")
+        .get()
+        .then((snapshot) {
+      for (var address in snapshot.docs) {
+        addresses[address.id] = address.data();
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    // 2. Fetches currently selected address
+    db.collection("users").doc(uid).get().then((document) {
+      if (mounted) {
+        setState(() {
+          selectedAddress = document.data()!['selectedAddress'];
+        });
+      }
+    });
+  }
+
+  void setSelectedAddress(String? id) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("users").doc(uid).update({"selectedAddress": id});
+      if (mounted) {
+        setState(() {
+          selectedAddress = id;
+        });
+      }
+      widget.setSelectedAddressCallback!(id);
+    } catch (e) {
+      return;
+    }
+  }
 
   // Writes a new address to database.
   void _addAddress(String name, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).collection("addresses").add({
+      Map<String, dynamic> data = {
         "name": name,
         "address": address,
+      };
+      db
+          .collection("users")
+          .doc(uid)
+          .collection("addresses")
+          .add(data)
+          .then((document) {
+        if (mounted) {
+          setState(() {
+            addresses[document.id] = data;
+          });
+          widget.addAddressCallback!(document.id, data);
+        }
       });
       Navigator.pop(context);
     } catch (e) {
@@ -41,10 +103,22 @@ class _AddressesPageState extends State<AddressesPage> {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).collection("addresses").doc(id).update({
+      Map<String, dynamic> data = {
         "name": name,
         "address": address,
-      });
+      };
+      db
+          .collection("users")
+          .doc(uid)
+          .collection("addresses")
+          .doc(id)
+          .update(data);
+      if (mounted) {
+        setState(() {
+          addresses[id] = data;
+        });
+        widget.editAddressCallback!(id, data);
+      }
       Navigator.pop(context);
     } catch (e) {
       return;
@@ -56,73 +130,19 @@ class _AddressesPageState extends State<AddressesPage> {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).collection("addresses").doc(id).delete();
-      addresses.remove(id);
-      if (selectedAddress == id) {
-        setSelectedAddress(null);
+      if (mounted) {
+        setState(() {
+          addresses.remove(id);
+          if (selectedAddress == id) {
+            setSelectedAddress(null);
+          }
+        });
       }
+      db.collection("users").doc(uid).collection("addresses").doc(id).delete();
       Navigator.pop(context);
     } catch (e) {
       return;
     }
-  }
-
-  void setSelectedAddress(String? id) {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    try {
-      FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("users").doc(uid).update({"selectedAddress": id});
-    } catch (e) {
-      return;
-    }
-  }
-
-  // Initializes an addresses list listener.
-  // Periodically checks the user's profile for updates and modifies
-  // the addresses list and selected address index if so.
-  void initAddressesListener() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    addressesListener = db
-        .collection("users")
-        .doc(uid)
-        .collection("addresses")
-        .snapshots()
-        .listen((event) async {
-      db
-          .collection("users")
-          .doc(uid)
-          .collection("addresses")
-          .get()
-          .then((snapshot) {
-        for (var address in snapshot.docs) {
-          addresses[address.id] = {
-            "name": address.data()["name"],
-            "address": address.data()["address"]
-          };
-        }
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    });
-  }
-
-  // Initializes a selected address listener.
-  // Periodically checks the user's profile in database for write updates and modifies the
-  // addresses list and selected address if so.
-  void initSelectedAddressListener() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    selectedAddressListener =
-        db.collection("users").doc(uid).snapshots().listen((event) async {
-      if (mounted) {
-        setState(() {
-          selectedAddress = event.data()!['selectedAddress'];
-        });
-      }
-    });
   }
 
   // Shows a form that allows the user to add an address.
@@ -518,14 +538,12 @@ class _AddressesPageState extends State<AddressesPage> {
 
   @override
   void initState() {
-    initAddressesListener();
-    initSelectedAddressListener();
+    initAddresses();
     super.initState();
   }
 
   @override
   void dispose() {
-    addressesListener!.cancel();
     super.dispose();
   }
 

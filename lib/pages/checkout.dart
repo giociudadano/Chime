@@ -21,9 +21,6 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  // Variables for listeners.
-  StreamSubscription? selectedAddressListener;
-
   // Form variables.
   String? deliveryMethod;
   String? paymentMethod = 'Cash on delivery';
@@ -55,10 +52,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .get()
         .then((snapshot) {
       for (var address in snapshot.docs) {
-        addresses[address.id] = {
-          "name": address.data()["name"],
-          "address": address.data()["address"]
-        };
+        addresses[address.id] = address.data();
       }
       if (mounted) {
         setState(() {});
@@ -141,24 +135,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
   }
 
-  // Initializes a selected address listener.
-  // Periodically checks the user's profile in database for write updates and modifies the
-  // addresses list and selected address if so.
-  void initSelectedAddressListener() async {
+  void initSelectedAddress() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    selectedAddressListener =
-        db.collection("users").doc(uid).snapshots().listen((event) async {
+    db.collection("users").doc(uid).get().then((document) {
       if (mounted) {
         setState(() {
-          selectedAddress = event.data()!['selectedAddress'];
+          selectedAddress = document.data()!['selectedAddress'];
           if (selectedAddress == null && deliveryMethod == 'Delivery') {
             deliveryMethod = null;
           }
         });
       }
     });
+  }
+
+  void setSelectedAddress(String? id) {
+    if (mounted) {
+      setState(() {
+        selectedAddress = id;
+        if (selectedAddress == null && deliveryMethod == 'Delivery') {
+          deliveryMethod = null;
+        }
+      });
+    }
+  }
+
+  void editAddress(String? id, Map data) {
+    if (mounted) {
+      setState(() {
+        addresses[id] = data;
+      });
+    }
   }
 
   // Shows a reminder when clicking on the 'information' button at the upper right of the screen.
@@ -424,13 +433,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
     getUserInfo();
     getAddresses();
     getDeliveryPrice();
-    initSelectedAddressListener();
+    initSelectedAddress();
     super.initState();
   }
 
   @override
   void dispose() {
-    selectedAddressListener!.cancel();
     super.dispose();
   }
 
@@ -659,7 +667,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const AddressesPage()),
+                                                  AddressesPage(
+                                                      setSelectedAddressCallback:
+                                                          setSelectedAddress,
+                                                      addAddressCallback:
+                                                          editAddress,
+                                                      editAddressCallback:
+                                                          editAddress)),
                                         );
                                       }
                                     },
@@ -673,8 +687,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   if (context.mounted) {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const AddressesPage()));
+                                            builder: (context) => AddressesPage(
+                                                setSelectedAddressCallback:
+                                                    setSelectedAddress,
+                                                addAddressCallback: editAddress,
+                                                editAddressCallback:
+                                                    editAddress)));
                                   }
                                 },
                                 child: Card(
