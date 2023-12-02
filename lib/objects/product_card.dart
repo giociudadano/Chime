@@ -30,9 +30,15 @@ class _ProductCardState extends State<ProductCard> {
         db.collection("users").doc(uid).update({
           "favoriteProducts": FieldValue.arrayRemove([widget.productID])
         });
+        db.collection("products").doc(widget.productID).update({
+          "usersFavorited": FieldValue.arrayRemove([uid])
+        });
       } else {
         db.collection("users").doc(uid).update({
           "favoriteProducts": FieldValue.arrayUnion([widget.productID])
+        });
+        db.collection("products").doc(widget.productID).update({
+          "usersFavorited": FieldValue.arrayUnion([uid])
         });
       }
       if (mounted) {
@@ -63,7 +69,8 @@ class _ProductCardState extends State<ProductCard> {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProductPage(
-                    widget.productID, widget.product, widget.placeID, setFavoriteProductCallback: setFavoriteProduct)));
+                    widget.productID, widget.product, widget.placeID,
+                    setFavoriteProductCallback: setFavoriteProduct)));
           }
         },
         child: SizedBox(

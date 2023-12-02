@@ -33,20 +33,15 @@ class _ProductPageState extends State<ProductPage> {
   bool isInCart = false;
 
   // Sets the product as a favorite/unfavorite.
-  void setFavoriteProduct(bool isFavorited) async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
+  void setFavoriteProduct(bool isFavorited) {
     try {
-      FirebaseFirestore db = FirebaseFirestore.instance;
+      String uid = FirebaseAuth.instance.currentUser!.uid;
       if (isFavorited) {
-        db.collection("users").doc(uid).update({
-          "favoriteProducts": FieldValue.arrayRemove([widget.productID])
-        });
+        widget.product['usersFavorited'].remove(uid);
       } else {
-        db.collection("users").doc(uid).update({
-          "favoriteProducts": FieldValue.arrayUnion([widget.productID])
-        });
+        widget.product['usersFavorited'].add(uid);
       }
-      widget.setFavoriteProductCallback!(!isFavorited);
+      widget.setFavoriteProductCallback!(isFavorited);
       if (mounted) {
         setState(() {
           widget.product['isFavorited'] = !isFavorited;
@@ -309,43 +304,60 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
-                        child: IconButton(
-                          icon: Icon(
-                            widget.product['isFavorited'] ?? false
-                                ? Icons.favorite_outlined
-                                : Icons.favorite_outline,
-                            size: 28,
-                            color: widget.product['isFavorited'] ?? false
-                                ? Colors.redAccent
-                                : Theme.of(context).colorScheme.outline,
-                          ),
-                          onPressed: () {
-                            setFavoriteProduct(
-                                widget.product['isFavorited'] ?? false);
-                          },
+                        child: Column(
+                          children: [
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                widget.product['isFavorited'] ?? false
+                                    ? Icons.favorite_outlined
+                                    : Icons.favorite_outline,
+                                size: 28,
+                                color: widget.product['isFavorited'] ?? false
+                                    ? Colors.redAccent
+                                    : Theme.of(context).colorScheme.outline,
+                              ),
+                              onPressed: () {
+                                setFavoriteProduct(
+                                    widget.product['isFavorited'] ?? false);
+                              },
+                            ),
+                            Text(
+                              "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 500),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3,
+                                height: 0.7,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ]),
               ),
-              widget.product['productDesc'] != null
-                  ? Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      child: Text(
-                        widget.product['productDesc'],
-                        maxLines: 3,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 300),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1.1,
-                            overflow: TextOverflow.ellipsis),
-                      ))
-                  : const SizedBox.shrink(),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  child: Text(
+                    widget.product['productDesc'] ?? 'No added description',
+                    maxLines: 3,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 300),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                        height: 1.1,
+                        overflow: TextOverflow.ellipsis),
+                  )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: Text(
