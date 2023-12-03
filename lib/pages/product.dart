@@ -35,12 +35,6 @@ class _ProductPageState extends State<ProductPage> {
   // Sets the product as a favorite/unfavorite.
   void setFavoriteProduct(bool isFavorited) {
     try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      if (isFavorited) {
-        widget.product['usersFavorited'].remove(uid);
-      } else {
-        widget.product['usersFavorited'].add(uid);
-      }
       widget.setFavoriteProductCallback!(isFavorited);
       if (mounted) {
         setState(() {

@@ -42,6 +42,7 @@ part 'pages/products.dart';
 part 'pages/product.dart';
 part 'pages/places.dart';
 part 'pages/place.dart';
+part 'pages/place_category.dart';
 part 'pages/profile.dart';
 part 'pages/cart.dart';
 part 'pages/checkout.dart';
