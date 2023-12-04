@@ -416,7 +416,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                     },
                     child: Icon(
                       Icons.more_vert,
-                      size: 22,
+                      size: 20,
                       color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
@@ -510,10 +510,75 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               controller: tabController,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                   child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [
+                        if (widget.place['noticeTitle'] != null ||
+                            widget.place['noticeDesc'] != null)
+                          Card(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                //<-- SEE HERE
+                                side: BorderSide(
+                                  color:
+                                      MaterialColors.getSurfaceContainerHighest(
+                                          darkMode),
+                                ),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.place['noticeTitle'] ?? 'Notice',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 650),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 15,
+                                      letterSpacing: -0.3,
+                                      height: 1.2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (!(widget.place['noticeDesc'] == null &&
+                                      widget.place['noticeTitle'] != null))
+                                    const SizedBox(height: 10),
+                                  if (!(widget.place['noticeDesc'] == null &&
+                                      widget.place['noticeTitle'] != null))
+                                    Text(
+                                      widget.place['noticeDesc'],
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 400),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 13,
+                                        letterSpacing: -0.3,
+                                        height: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 5,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (!(widget.place['noticeTitle'] == null &&
+                            widget.place['noticeDesc'] == null))
+                          const SizedBox(height: 15),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Row(
@@ -658,7 +723,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                             ],
                                             fontSize: 15,
                                             letterSpacing: -0.3,
-                                            height: 1.2,
+                                            height: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
@@ -680,7 +745,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                             ],
                                             fontSize: 15,
                                             letterSpacing: -0.3,
-                                            height: 1.2,
+                                            height: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),

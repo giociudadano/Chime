@@ -199,11 +199,12 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
         children: [
           SizedBox(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 80,
+                    width: 65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: FittedBox(
@@ -248,25 +249,32 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                               height: 1.2,
                               overflow: TextOverflow.ellipsis),
                         ),
-                        if (places[key]["placeTagline"] != null)
-                          Text(
-                            places[key]["placeTagline"],
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 400),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 13.5,
-                                letterSpacing: -0.3,
-                                height: 0.85,
-                                overflow: TextOverflow.ellipsis),
-                          ),
+                        Text(
+                          places[key]["placeTagline"] ?? '',
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 13.5,
+                              letterSpacing: -0.3,
+                              height: 0.85,
+                              overflow: TextOverflow.ellipsis),
+                        ),
                       ],
                     ),
-                  )
+                  ),
+                  GestureDetector(
+                    onTapDown: (TapDownDetails details) {},
+                    child: Icon(
+                      Icons.more_vert,
+                      size: 22,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -401,6 +409,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                           key,
                           places[key]['categories'].keys.toList()..sort(),
                           places[key]['products'],
+                          places[key]['noticeTitle'],
+                          places[key]['noticeDesc'],
                           setFeaturedProductCallback: setFeaturedProduct,
                           addProductCallback: addProduct,
                           editProductCallback: editProduct,

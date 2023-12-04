@@ -3,6 +3,7 @@ part of main;
 // ignore: must_be_immutable
 class StoreProductsPage extends StatefulWidget {
   StoreProductsPage(this.placeID, this.categories, this.productIDs,
+      this.noticeTitle, this.noticeDesc,
       {super.key,
       this.setFeaturedProductCallback,
       this.addProductCallback,
@@ -10,6 +11,7 @@ class StoreProductsPage extends StatefulWidget {
       this.deleteProductCallback});
 
   String placeID;
+  String? noticeTitle, noticeDesc;
   List productIDs;
   List categories;
 
@@ -119,6 +121,212 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     }
   }
 
+  Future showEditNoticeForm(BuildContext context) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    // Variables for controllers.
+    final GlobalKey<FormState> formEditNoticeKey = GlobalKey<FormState>();
+    final inputEditNoticeTitle =
+        TextEditingController(text: widget.noticeTitle);
+    final inputEditNoticeDesc = TextEditingController(text: widget.noticeDesc);
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          title: const Text(
+            "Edit Notice",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
+          content: Form(
+            key: formEditNoticeKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: inputEditNoticeTitle,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    hintText: "Title",
+                    hintStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                    filled: true,
+                    fillColor:
+                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                    isDense: true,
+                  ),
+                  style: const TextStyle(
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: [
+                        FontVariation('wght', 300),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 14),
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: inputEditNoticeDesc,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    hintText: "Description",
+                    hintStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                    filled: true,
+                    fillColor:
+                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                    isDense: true,
+                  ),
+                  style: const TextStyle(
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: [
+                        FontVariation('wght', 300),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 14),
+                  minLines: 3,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (formEditNoticeKey.currentState!.validate()) {
+                            {
+                              editNotice(
+                                  widget.placeID,
+                                  inputEditNoticeTitle.text,
+                                  inputEditNoticeDesc.text);
+                            }
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              Theme.of(context).colorScheme.primary),
+                          foregroundColor: MaterialStatePropertyAll(
+                              Theme.of(context).colorScheme.onPrimary),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 600),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                              MaterialColors.getSurfaceContainerLow(darkMode)),
+                          foregroundColor: MaterialStatePropertyAll(
+                              MaterialColors.getSurfaceContainerLow(darkMode)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 600),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void editNotice(String placeID, String title, String desc) {
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      Map<String, dynamic> data = {
+        "noticeTitle": title.isEmpty ? null : title,
+        "noticeDesc": desc.isEmpty ? null : desc,
+      };
+      db.collection("places").doc(placeID).update(data);
+      if (mounted) {
+        setState(() {
+          widget.noticeTitle = title.isEmpty ? null : title;
+          widget.noticeDesc = desc.isEmpty ? null : desc;
+        });
+      }
+      Navigator.pop(context);
+    } catch (e) {
+      return;
+    }
+  }
+
   @override
   void initState() {
     initProducts();
@@ -163,6 +371,84 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
+                  Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        //<-- SEE HERE
+                        side: BorderSide(
+                          color: MaterialColors.getSurfaceContainerHighest(
+                              darkMode),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  widget.noticeTitle ??
+                                      ((widget.noticeDesc == null)
+                                          ? 'Add a notice'
+                                          : 'Notice'),
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 650),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 15,
+                                    letterSpacing: -0.3,
+                                    height: 1.1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      size: 20,
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                                    onPressed: () {
+                                      showEditNoticeForm(context);
+                                    })
+                              ]),
+                          if (!(widget.noticeTitle != null &&
+                              widget.noticeDesc == null))
+                            const SizedBox(height: 10),
+                          if (!(widget.noticeTitle != null &&
+                              widget.noticeDesc == null))
+                            Text(
+                              widget.noticeDesc ??
+                                  'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 13,
+                                letterSpacing: -0.3,
+                                height: 1.2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 5,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   if (productsFeatured.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
