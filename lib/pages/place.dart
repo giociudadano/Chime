@@ -138,12 +138,12 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
           },
           child: Row(children: [
             Icon(Icons.qr_code_scanner,
-                color: Theme.of(context).colorScheme.outline),
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
             const SizedBox(width: 5),
             Text(
               "Share QR Code",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontFamily: 'Bahnschrift',
                   fontVariations: const [
                     FontVariation('wght', 500),

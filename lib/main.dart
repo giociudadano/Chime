@@ -54,6 +54,7 @@ part 'pages/order_receipt.dart';
 // Store Management
 part 'pages/store.dart';
 part 'pages/store_add.dart';
+part 'pages/store_edit.dart';
 part 'pages/store_products.dart';
 part 'pages/store_products_add.dart';
 part 'pages/store_products_edit.dart';

@@ -12,6 +12,17 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   late TabController tabController;
   Map places = {};
 
+  void editStore(String placeID, Map data) {
+    if (mounted) {
+      setState(() {
+        places[placeID]['placeName'] = data['placeName'];
+        places[placeID]['placeTagline'] = data['placeTagline'];
+        places[placeID]['deliveryPrice'] = data['deliveryPrice'];
+        places[placeID]['phoneNumber'] = data['phoneNumber'];
+      });
+    }
+  }
+
   // Adds a place listener
   void addPlacesListener() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -85,6 +96,134 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     for (String category in categories) {
       places[placeID]['categories'][category].remove(productID);
     }
+  }
+
+  void _showAdditionalDetails(Offset offset) async {
+    await showMenu(
+      elevation: 0,
+      context: context,
+      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+      items: [
+        PopupMenuItem(
+          onTap: () {
+            String key = places.keys.elementAt(0);
+            if (context.mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => StoreEditPage(key, places[key],
+                        editStoreCallback: editStore)),
+              );
+            }
+          },
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(children: [
+            Icon(Icons.edit,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                size: 18),
+            const SizedBox(width: 5),
+            Text(
+              "Edit Store",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: const [
+                    FontVariation('wght', 400),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 13,
+                  letterSpacing: -0.3),
+            )
+          ]),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            _showQRCode();
+          },
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(children: [
+            Icon(Icons.qr_code_scanner,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                size: 18),
+            const SizedBox(width: 5),
+            Text(
+              "Share QR Code",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontFamily: 'Bahnschrift',
+                  fontVariations: const [
+                    FontVariation('wght', 400),
+                    FontVariation('wdth', 100),
+                  ],
+                  fontSize: 13,
+                  letterSpacing: -0.3),
+            )
+          ]),
+        ),
+      ],
+    );
+  }
+
+  void _showQRCode() async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    String key = places.keys.elementAt(0);
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: QrImageView(
+                  data: key,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Here's your code",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20,
+                    letterSpacing: -0.3),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
+                maxLines: 3,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3,
+                    height: 1.1,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -197,9 +336,10 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          Container(
+            color: MaterialColors.getSurfaceContainerLow(darkMode),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -268,10 +408,12 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     ),
                   ),
                   GestureDetector(
-                    onTapDown: (TapDownDetails details) {},
+                    onTapDown: (TapDownDetails details) {
+                      _showAdditionalDetails(details.globalPosition);
+                    },
                     child: Icon(
                       Icons.more_vert,
-                      size: 22,
+                      size: 20,
                       color: Theme.of(context).colorScheme.outline,
                     ),
                   ),
@@ -282,6 +424,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
           Expanded(
             child: Column(
               children: [
+                const SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: SizedBox(

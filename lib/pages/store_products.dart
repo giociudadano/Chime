@@ -371,82 +371,85 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
-                  Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        //<-- SEE HERE
-                        side: BorderSide(
-                          color: MaterialColors.getSurfaceContainerHighest(
-                              darkMode),
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                  Stack(
+                    children: [
+                      Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            //<-- SEE HERE
+                            side: BorderSide(
+                              color: MaterialColors.getSurfaceContainerHighest(
+                                  darkMode),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.noticeTitle ??
+                                    ((widget.noticeDesc == null)
+                                        ? 'Add a notice'
+                                        : 'Notice'),
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 650),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 15,
+                                  letterSpacing: -0.3,
+                                  height: 1.1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (!(widget.noticeTitle != null &&
+                                  widget.noticeDesc == null))
+                                const SizedBox(height: 10),
+                              if (!(widget.noticeTitle != null &&
+                                  widget.noticeDesc == null))
                                 Text(
-                                  widget.noticeTitle ??
-                                      ((widget.noticeDesc == null)
-                                          ? 'Add a notice'
-                                          : 'Notice'),
+                                  widget.noticeDesc ??
+                                      'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
                                     fontFamily: 'Bahnschrift',
                                     fontVariations: const [
-                                      FontVariation('wght', 650),
+                                      FontVariation('wght', 400),
                                       FontVariation('wdth', 100),
                                     ],
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     letterSpacing: -0.3,
                                     height: 1.1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                  maxLines: 5,
                                 ),
-                                IconButton(
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    icon: Icon(
-                                      Icons.edit,
-                                      size: 20,
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                    ),
-                                    onPressed: () {
-                                      showEditNoticeForm(context);
-                                    })
-                              ]),
-                          if (!(widget.noticeTitle != null &&
-                              widget.noticeDesc == null))
-                            const SizedBox(height: 10),
-                          if (!(widget.noticeTitle != null &&
-                              widget.noticeDesc == null))
-                            Text(
-                              widget.noticeDesc ??
-                                  'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 400),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 13,
-                                letterSpacing: -0.3,
-                                height: 1.2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              maxLines: 5,
-                            ),
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      Positioned(
+                        right: 15,
+                        top: 15,
+                        child: IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: Icon(
+                              Icons.edit,
+                              size: 20,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                            onPressed: () {
+                              showEditNoticeForm(context);
+                            }),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   if (productsFeatured.isNotEmpty)
