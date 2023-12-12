@@ -7,7 +7,8 @@ class StoreEditPage extends StatefulWidget {
   String placeID;
   Map place;
 
-  final Function(String placeID, Map data)? editStoreCallback;
+  final Function(String placeID, String? placeImageURL, Map data)?
+      editStoreCallback;
 
   @override
   State<StoreEditPage> createState() => _StoreEditPageState();
@@ -21,14 +22,42 @@ class _StoreEditPageState extends State<StoreEditPage> {
   final inputEditStoreDeliveryFee = TextEditingController();
   final inputEditStorePhoneNumber = TextEditingController();
 
-  void editStore(String placeID, Map data) {
+  final ImagePicker _picker = ImagePicker();
+  File? newImage;
+  bool toDeletePlaceImage = false;
+
+  void editStore(String placeID, Map data) async {
     try {
+      // 1. Updates store data
       FirebaseFirestore db = FirebaseFirestore.instance;
       db.collection("places").doc(placeID).update(Map.from(data));
-      widget.editStoreCallback!(placeID, data);
       Navigator.pop(context);
+
+      // 2. Updates profile picture
+      Reference ref =
+          FirebaseStorage.instance.ref('places/${widget.placeID}.jpg');
+      if (toDeletePlaceImage) {
+        await ref.delete();
+      }
+
+      if (newImage != null) {
+        try {
+          await ref.putFile(
+              newImage!,
+              SettableMetadata(
+                contentType: "image/jpeg",
+              ));
+          String placeImageURL = await ref.getDownloadURL();
+          widget.editStoreCallback!(placeID, placeImageURL, data);
+        } catch (e) {
+          // ...
+        }
+      } else {
+        widget.editStoreCallback!(
+            placeID, toDeletePlaceImage ? '' : null, data);
+      }
     } catch (e) {
-      return;
+      //
     }
   }
 
@@ -64,6 +93,56 @@ class _StoreEditPageState extends State<StoreEditPage> {
     } on FormatException {
       return 'Please enter a whole number';
     }
+  }
+
+  Future setPlaceImage(
+    ImageSource source, {
+    required BuildContext context,
+    bool isMultiImage = false,
+    bool isMedia = false,
+  }) async {
+    if (kIsWeb) {
+      bool darkMode = Theme.of(context).brightness == Brightness.dark;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              "Sorry, you cannot edit place images on web devices at this time.",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 13.5,
+                fontFamily: 'Bahnschrift',
+                fontVariations: const [
+                  FontVariation('wght', 350),
+                  FontVariation('wdth', 100),
+                ],
+                letterSpacing: -0.5,
+              )),
+          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+        ),
+      );
+      return;
+    } else {
+      try {
+        final List<XFile> pickedFileList = <XFile>[];
+        final XFile? media = await _picker.pickMedia();
+        if (media != null) {
+          pickedFileList.add(media);
+          setState(() {
+            toDeletePlaceImage = false;
+            newImage = File(media.path);
+          });
+        }
+      } catch (e) {
+        //
+      }
+    }
+  }
+
+  void deletePlaceImage() {
+    setState(() {
+      toDeletePlaceImage = true;
+      newImage = null;
+    });
   }
 
   @override
@@ -116,6 +195,124 @@ class _StoreEditPageState extends State<StoreEditPage> {
           key: formEditStoreKey,
           child: ListView(
             children: [
+              Text(
+                "Appearance",
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.5),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Card(
+                  color: MaterialColors.getSurfaceContainerLow(darkMode),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 0,
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        height: 150,
+                        child: FittedBox(
+                          clipBehavior: Clip.hardEdge,
+                          fit: BoxFit.cover,
+                          child: newImage != null
+                              ? Image.file(newImage!)
+                              : CachedNetworkImage(
+                                  imageUrl: toDeletePlaceImage
+                                      ? ''
+                                      : widget.place['placeImageURL'] ?? '',
+                                  placeholder: (context, url) => const Padding(
+                                    padding: EdgeInsets.all(40.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) => Padding(
+                                    padding: const EdgeInsets.all(40.0),
+                                    child: Icon(Icons.storefront_outlined,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outlineVariant),
+                                  ),
+                                  fadeInCurve: Curves.easeIn,
+                                  fadeOutCurve: Curves.easeOut,
+                                ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 45,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            color: (widget.place['placeImageURL'] == null &&
+                                        newImage == null) ||
+                                    toDeletePlaceImage
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                size: 20,
+                                color: (widget.place['placeImageURL'] == null &&
+                                            newImage == null) ||
+                                        toDeletePlaceImage
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                setPlaceImage(ImageSource.gallery,
+                                    context: context);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            color: (widget.place['placeImageURL'] == null &&
+                                        newImage == null) ||
+                                    toDeletePlaceImage
+                                ? Colors.transparent
+                                : const Color.fromARGB(120, 0, 0, 0),
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.close,
+                                size: 22,
+                                color: (widget.place['placeImageURL'] == null &&
+                                            newImage == null) ||
+                                        toDeletePlaceImage
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Colors.grey[100],
+                              ),
+                              onPressed: () {
+                                deletePlaceImage();
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
               Text(
                 "Basic Information",
                 style: TextStyle(
@@ -173,7 +370,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       FontVariation('wght', 300),
                       FontVariation('wdth', 100),
                     ],
-                    fontSize: 14),
+                    fontSize: 13.5,
+                    letterSpacing: -0.5),
                 validator: (String? value) {
                   return _verifyNameField(value);
                 },
@@ -223,7 +421,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       FontVariation('wght', 300),
                       FontVariation('wdth', 100),
                     ],
-                    fontSize: 14),
+                    fontSize: 13.5,
+                    letterSpacing: -0.5),
                 minLines: 3,
                 maxLines: 3,
                 validator: (String? value) {
@@ -300,7 +499,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             FontVariation('wght', 300),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 14),
+                          fontSize: 13.5,
+                          letterSpacing: -0.5),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
@@ -342,7 +542,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             FontVariation('wght', 300),
                             FontVariation('wdth', 100),
                           ],
-                          fontSize: 14),
+                          fontSize: 13.5,
+                          letterSpacing: -0.5),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {

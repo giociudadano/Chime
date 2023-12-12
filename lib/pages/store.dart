@@ -12,7 +12,15 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   late TabController tabController;
   Map places = {};
 
-  void editStore(String placeID, Map data) {
+  void editStore(String placeID, String? placeImageURL, Map data) async {
+    if (placeImageURL != null) {
+      await CachedNetworkImage.evictFromCache(placeImageURL);
+      if (placeImageURL == '') {
+        places[placeID]['placeImageURL'] = null;
+      } else {
+        places[placeID]['placeImageURL'] = placeImageURL;
+      }
+    }
     if (mounted) {
       setState(() {
         places[placeID]['placeName'] = data['placeName'];
@@ -55,14 +63,13 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     String ref = "places/$key.jpg";
     try {
       url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-    } catch (e) {
-      //
-    } finally {
       if (mounted) {
         setState(() {
           places[key]["placeImageURL"] = url;
         });
       }
+    } catch (e) {
+      //
     }
   }
 
@@ -345,6 +352,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                 children: [
                   SizedBox(
                     width: 65,
+                    height: 65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: FittedBox(
