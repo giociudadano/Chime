@@ -488,16 +488,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
           Expanded(
             child: ListView(
               children: [
-                const Text(
-                  "Delivery",
+                Text(
+                  "Select a delivery method",
+                  maxLines: 2,
                   style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
                       fontFamily: 'Bahnschrift',
-                      fontVariations: [
+                      fontVariations: const [
                         FontVariation('wght', 700),
                         FontVariation('wdth', 100),
                       ],
-                      fontSize: 18,
-                      letterSpacing: -0.3),
+                      fontSize: 16,
+                      letterSpacing: -0.5,
+                      height: 1.2,
+                      overflow: TextOverflow.ellipsis),
                 ),
                 const SizedBox(height: 5),
                 Card(
@@ -629,25 +633,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
                                   child: Text(
-                                    "My address",
-                                    maxLines: 1,
+                                    "Selected Address",
+                                    maxLines: 2,
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurface,
+                                            .onSurfaceVariant,
                                         fontFamily: 'Bahnschrift',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                           FontVariation('wdth', 100),
                                         ],
-                                        fontSize: 18,
-                                        letterSpacing: -0.3,
+                                        fontSize: 16,
+                                        letterSpacing: -0.5,
+                                        height: 1.2,
                                         overflow: TextOverflow.ellipsis),
                                   ),
                                 ),
@@ -718,18 +724,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .onSurfaceVariant,
+                                                    .primary,
                                                 fontFamily: 'Bahnschrift',
                                                 fontVariations: const [
                                                   FontVariation('wght', 700),
                                                   FontVariation('wdth', 100),
                                                 ],
-                                                fontSize: 14,
+                                                fontSize: 17,
                                                 letterSpacing: -0.3,
                                                 overflow:
                                                     TextOverflow.ellipsis),
                                           ),
                                           const SizedBox(height: 5),
+                                          if (addresses[selectedAddress] !=
+                                              null)
+                                            Text(
+                                              addresses[selectedAddress]
+                                                      ["landmark"] ??
+                                                  'No Landmark',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurfaceVariant,
+                                                  fontFamily: 'Bahnschrift',
+                                                  fontVariations: const [
+                                                    FontVariation('wght', 700),
+                                                    FontVariation('wdth', 100),
+                                                  ],
+                                                  fontSize: 14,
+                                                  letterSpacing: -0.3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            ),
                                           Text(
                                             selectedAddress == null ||
                                                     addresses[

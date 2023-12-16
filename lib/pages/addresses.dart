@@ -591,95 +591,139 @@ class _AddressesPageState extends State<AddressesPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: ListView.builder(
-            itemCount: addresses.length,
-            itemBuilder: (context, index) {
-              String key = addresses.keys.elementAt(index);
-              return Card(
-                elevation: 0,
-                color: MaterialColors.getSurfaceContainerLow(darkMode),
-                shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    side: BorderSide(
-                      width: 3,
-                      color: selectedAddress == key
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
-                    )),
-                child: InkWell(
-                  onTap: () {
-                    setSelectedAddress(key);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      addresses[key]["name"],
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 14,
-                                          letterSpacing: -0.3,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      addresses[key]["address"],
-                                      maxLines: 3,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 500),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 14,
-                                          letterSpacing: -0.3,
-                                          height: 0.9,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  ]),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                            height: 25,
-                            width: 25,
-                            child: IconButton(
-                              padding: const EdgeInsets.all(0),
-                              icon: Icon(
-                                Icons.edit,
-                                size: 18,
-                                color: Theme.of(context).colorScheme.outline,
+          child: ListView(
+            children: [
+              Text(
+                "Select an address",
+                maxLines: 2,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.5,
+                    height: 1.2,
+                    overflow: TextOverflow.ellipsis),
+              ),
+              const SizedBox(height: 5),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: addresses.length,
+                itemBuilder: (context, index) {
+                  String key = addresses.keys.elementAt(index);
+                  return Card(
+                    elevation: 0,
+                    color: MaterialColors.getSurfaceContainerLow(darkMode),
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        side: BorderSide(
+                          width: 3,
+                          color: selectedAddress == key
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.transparent,
+                        )),
+                    child: InkWell(
+                      onTap: () {
+                        setSelectedAddress(key);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          addresses[key]["name"],
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontFamily: 'Bahnschrift',
+                                              fontVariations: const [
+                                                FontVariation('wght', 700),
+                                                FontVariation('wdth', 100),
+                                              ],
+                                              fontSize: 18,
+                                              letterSpacing: -0.3,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                          addresses[key]["landmark"] ??
+                                              'No Landmark',
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                              fontFamily: 'Bahnschrift',
+                                              fontVariations: const [
+                                                FontVariation('wght', 700),
+                                                FontVariation('wdth', 100),
+                                              ],
+                                              fontSize: 14,
+                                              letterSpacing: -0.3,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        Text(
+                                          addresses[key]["address"],
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline,
+                                              fontFamily: 'Bahnschrift',
+                                              fontVariations: const [
+                                                FontVariation('wght', 500),
+                                                FontVariation('wdth', 100),
+                                              ],
+                                              fontSize: 14,
+                                              letterSpacing: -0.3,
+                                              height: 0.9,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                      ]),
+                                ),
                               ),
-                              onPressed: () {
-                                showEditAddressForm(
-                                    context,
-                                    key,
-                                    addresses[key]["name"],
-                                    addresses[key]["address"]);
-                              },
-                            ),
-                          )
-                        ]),
-                  ),
-                ),
-              );
-            },
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                  onPressed: () {
+                                    showEditAddressForm(
+                                        context,
+                                        key,
+                                        addresses[key]["name"],
+                                        addresses[key]["address"]);
+                                  },
+                                ),
+                              )
+                            ]),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ));
   }
