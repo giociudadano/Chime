@@ -620,8 +620,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           itemCount: products.length,
                           itemBuilder: (BuildContext context, int index) {
                             String key = productsSorted.keys.elementAt(index);
-                            return ProductCard(
-                                key, products[key], widget.placeID);
+                            return ProductCard(key, products[key],
+                                widget.placeID, widget.place);
                           },
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -694,6 +694,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => PlaceCategoryPage(
                                           widget.placeID,
+                                          widget.place,
                                           categoryKeys[index],
                                           products,
                                           widget.place['categories']

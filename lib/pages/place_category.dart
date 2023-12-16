@@ -2,12 +2,12 @@ part of main;
 
 // ignore: must_be_immutable
 class PlaceCategoryPage extends StatefulWidget {
-  PlaceCategoryPage(
-      this.placeID, this.categoryName, this.products, this.productIDsInCategory,
+  PlaceCategoryPage(this.placeID, this.place, this.categoryName, this.products,
+      this.productIDsInCategory,
       {super.key});
 
   String placeID, categoryName;
-  Map products;
+  Map products, place;
   List productIDsInCategory;
   @override
   State<PlaceCategoryPage> createState() => _PlaceCategoryPageState();
@@ -89,7 +89,8 @@ class _PlaceCategoryPageState extends State<PlaceCategoryPage> {
                 itemCount: widget.productIDsInCategory.length,
                 itemBuilder: (context, index) {
                   String key = widget.productIDsInCategory[index];
-                  return ProductCard(key, widget.products[key], widget.placeID);
+                  return ProductCard(
+                      key, widget.products[key], widget.placeID, widget.place);
                 },
               ),
             ])));

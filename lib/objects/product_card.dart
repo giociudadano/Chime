@@ -13,9 +13,10 @@ part of main;
 // ignore: must_be_immutable
 class ProductCard extends StatefulWidget {
   String productID, placeID;
-  Map product;
+  Map product, place;
 
-  ProductCard(this.productID, this.product, this.placeID, {super.key});
+  ProductCard(this.productID, this.product, this.placeID, this.place,
+      {super.key});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -70,8 +71,8 @@ class _ProductCardState extends State<ProductCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductPage(
-                    widget.productID, widget.product, widget.placeID,
+                builder: (context) => ProductPage(widget.productID,
+                    widget.product, widget.placeID, widget.place,
                     setFavoriteProductCallback: setFavoriteProduct)));
           }
         },
