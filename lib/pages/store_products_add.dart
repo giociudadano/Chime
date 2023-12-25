@@ -21,11 +21,15 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
   final inputAddProductName = TextEditingController();
   final inputAddProductDesc = TextEditingController();
   final inputAddProductPrice = TextEditingController();
+  final inputAddProductOrdersRemaining = TextEditingController();
   List selectedValue = [];
 
   // Variables for image picker.
   final ImagePicker _picker = ImagePicker();
   File? newImage;
+
+  // Variables for buttons.
+  bool isLimited = false, isAcceptPreorders = false;
 
   Future setProductImage(
     ImageSource source, {
@@ -70,8 +74,8 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
   }
 
   // Writes a new product to database.
-  void addProduct(
-      String name, String description, String price, List categories) {
+  void addProduct(String name, String description, String price,
+      List categories, String ordersRemaining) {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -81,7 +85,11 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
         "productName": name,
         "productDesc": description == '' ? null : description,
         "productPrice": price == '' ? 0 : int.parse(price),
-        "categories": categories
+        "categories": categories,
+        "ordersRemaining":
+            ordersRemaining == '' ? 0 : int.parse(ordersRemaining),
+        "isLimited": isLimited,
+        "isAcceptPreorders": isAcceptPreorders,
       };
 
       db.collection("products").add(data).then((product) async {
@@ -280,7 +288,11 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   "Basic Information",
                   style: TextStyle(
@@ -334,12 +346,14 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14),
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 300),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13.5,
+                    letterSpacing: -0.5,
+                  ),
                   validator: (String? value) {
                     return _verifyNameField(value);
                   },
@@ -385,12 +399,14 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14),
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 300),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13.5,
+                    letterSpacing: -0.5,
+                  ),
                   minLines: 3,
                   maxLines: 3,
                   validator: (String? value) {
@@ -452,12 +468,14 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                           isDense: true,
                         ),
                         style: const TextStyle(
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: [
-                              FontVariation('wght', 300),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14),
+                          fontFamily: 'Bahnschrift',
+                          fontVariations: [
+                            FontVariation('wght', 300),
+                            FontVariation('wdth', 100),
+                          ],
+                          fontSize: 13.5,
+                          letterSpacing: -0.5,
+                        ),
                         minLines: 1,
                         maxLines: 1,
                         validator: (String? value) {
@@ -467,7 +485,142 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Order Options",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.3),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Limited quantity',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 14,
+                            height: 1,
+                            letterSpacing: -0.3),
+                        textAlign: TextAlign.left,
+                      ),
+                      Row(children: [
+                        SizedBox(
+                          width: 60,
+                          child: TextFormField(
+                            enabled: isLimited,
+                            keyboardType: TextInputType.number,
+                            controller: inputAddProductOrdersRemaining,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              errorMaxLines: 3,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              hintText: "0",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline),
+                              filled: true,
+                              fillColor:
+                                  MaterialColors.getSurfaceContainerLowest(
+                                      darkMode),
+                              isDense: true,
+                            ),
+                            style: const TextStyle(
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: [
+                                FontVariation('wght', 300),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 13.5,
+                              letterSpacing: -0.5,
+                            ),
+                            minLines: 1,
+                            maxLines: 1,
+                            validator: (String? value) {
+                              return _verifyProductPriceField(value);
+                            },
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Switch(
+                            value: isLimited,
+                            onChanged: (bool value) {
+                              setState(() {
+                                isLimited = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ])
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Pre-orders',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 14,
+                            height: 1,
+                            letterSpacing: -0.3),
+                        textAlign: TextAlign.left,
+                      ),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: isAcceptPreorders,
+                          onChanged: (bool value) {
+                            setState(() {
+                              isAcceptPreorders = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ]),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   "Categories",
                   style: TextStyle(
@@ -524,6 +677,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                               inputAddProductDesc.text,
                               inputAddProductPrice.text,
                               selectedValue,
+                              inputAddProductOrdersRemaining.text,
                             );
                           }
                         },
