@@ -10,12 +10,14 @@ class StoreProductsEditPage extends StatefulWidget {
   List categories;
 
   final Function(
-      String name,
-      String price,
-      String? productImageURL,
-      List categories,
-      List addedCategories,
-      List removedCategories)? editProductCallback;
+    String name,
+    String price,
+    String? productImageURL,
+    List categories,
+    List addedCategories,
+    List removedCategories,
+    String ordersRemaining,
+  )? editProductCallback;
   final Function()? deleteProductCallback;
 
   @override
@@ -41,6 +43,11 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   final ImagePicker _picker = ImagePicker();
   File? newImage;
   bool toDeleteProductImage = false;
+
+  late bool isAcceptPreorders = widget.product['isAcceptPreorders'] ?? false;
+  late bool isLimited = widget.product['isLimited'] ?? false;
+  late final inputEditProductOrdersRemaining =
+      TextEditingController(text: widget.product['ordersRemaining'].toString());
 
   void deleteProductImage() {
     setState(() {
@@ -97,8 +104,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   }
 
   // Edits the current product at database.
-  void editProduct(
-      String name, String description, String price, List categories) async {
+  void editProduct(String name, String description, String price,
+      String ordersRemaining, List categories) async {
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -108,6 +115,10 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
         "productDesc": description == '' ? null : description,
         "productPrice": price == '' ? 0 : int.parse(price),
         "categories": categories,
+        "ordersRemaining":
+            ordersRemaining == '' ? 0 : int.parse(ordersRemaining),
+        "isLimited": isLimited,
+        "isAcceptPreorders": isAcceptPreorders,
       });
 
       // 2. Add product reference to added categories
@@ -145,19 +156,27 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                 contentType: "image/jpeg",
               ));
           String productImageURL = await ref.getDownloadURL();
-          widget.editProductCallback!(name, price, productImageURL, categories,
-              addedCategories.toList(), removedCategories.toList());
+          widget.editProductCallback!(
+              name,
+              price,
+              productImageURL,
+              categories,
+              addedCategories.toList(),
+              removedCategories.toList(),
+              ordersRemaining);
         } catch (e) {
           // ...
         }
       } else {
         widget.editProductCallback!(
-            name,
-            price,
-            toDeleteProductImage ? '' : null,
-            categories,
-            addedCategories.toList(),
-            removedCategories.toList());
+          name,
+          price,
+          toDeleteProductImage ? '' : null,
+          categories,
+          addedCategories.toList(),
+          removedCategories.toList(),
+          ordersRemaining,
+        );
       }
     } catch (e) {
       //
@@ -382,7 +401,11 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   "Basic Information",
                   style: TextStyle(
@@ -436,12 +459,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14),
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 300),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13.5,
+                    letterSpacing: -0.5,
+                  ),
                   validator: (String? value) {
                     return _verifyNameField(value);
                   },
@@ -487,12 +512,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14),
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: [
+                      FontVariation('wght', 300),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13.5,
+                    letterSpacing: -0.5,
+                  ),
                   minLines: 3,
                   maxLines: 3,
                   validator: (String? value) {
@@ -554,12 +581,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           isDense: true,
                         ),
                         style: const TextStyle(
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: [
-                              FontVariation('wght', 300),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14),
+                          fontFamily: 'Bahnschrift',
+                          fontVariations: [
+                            FontVariation('wght', 300),
+                            FontVariation('wdth', 100),
+                          ],
+                          fontSize: 13.5,
+                          letterSpacing: -0.5,
+                        ),
                         minLines: 1,
                         maxLines: 1,
                         validator: (String? value) {
@@ -569,7 +598,142 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Order Options",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.outline,
+                      fontFamily: 'Bahnschrift',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                        FontVariation('wdth', 100),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.3),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Limited quantity',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 14,
+                            height: 1,
+                            letterSpacing: -0.3),
+                        textAlign: TextAlign.left,
+                      ),
+                      Row(children: [
+                        SizedBox(
+                          width: 60,
+                          child: TextFormField(
+                            enabled: isLimited,
+                            keyboardType: TextInputType.number,
+                            controller: inputEditProductOrdersRemaining,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              errorMaxLines: 3,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              hintText: "0",
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline),
+                              filled: true,
+                              fillColor:
+                                  MaterialColors.getSurfaceContainerLowest(
+                                      darkMode),
+                              isDense: true,
+                            ),
+                            style: const TextStyle(
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: [
+                                FontVariation('wght', 300),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 13.5,
+                              letterSpacing: -0.5,
+                            ),
+                            minLines: 1,
+                            maxLines: 1,
+                            validator: (String? value) {
+                              return _verifyProductPriceField(value);
+                            },
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Switch(
+                            value: isLimited,
+                            onChanged: (bool value) {
+                              setState(() {
+                                isLimited = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ])
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Pre-orders',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Bahnschrift',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                              FontVariation('wdth', 100),
+                            ],
+                            fontSize: 14,
+                            height: 1,
+                            letterSpacing: -0.3),
+                        textAlign: TextAlign.left,
+                      ),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: Switch(
+                          value: isAcceptPreorders,
+                          onChanged: (bool value) {
+                            setState(() {
+                              isAcceptPreorders = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ]),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   "Categories",
                   style: TextStyle(
@@ -580,7 +744,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         FontVariation('wdth', 100),
                       ],
                       fontSize: 16,
-                      letterSpacing: -0.5),
+                      letterSpacing: -0.3),
                 ),
                 const SizedBox(height: 10),
                 InlineChoice<dynamic>(
@@ -602,7 +766,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 FontVariation('wdth', 100),
                               ],
                               fontSize: 13.5,
-                              letterSpacing: -0.3)),
+                              letterSpacing: -0.5)),
                     );
                   },
                   listBuilder: ChoiceList.createWrapped(
@@ -614,7 +778,11 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -625,6 +793,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                               inputEditProductName.text,
                               inputEditProductDesc.text,
                               inputEditProductPrice.text,
+                              inputEditProductOrdersRemaining.text,
                               selectedValue,
                             );
                           }

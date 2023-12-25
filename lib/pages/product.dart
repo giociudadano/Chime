@@ -650,16 +650,17 @@ class _ProductPageState extends State<ProductPage> {
                         FontVariation('wght', 600),
                         FontVariation('wdth', 100),
                       ],
-                      fontSize: 14,
-                      letterSpacing: -0.3,
+                      fontSize: 13.5,
+                      letterSpacing: -0.5,
                       height: 1.1,
                       overflow: TextOverflow.ellipsis),
                 ),
                 if (widget.product['isAcceptPreorders'] ?? false)
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Preorders available",
+                        "Pre-orders available",
                         maxLines: 1,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.outline,
@@ -668,9 +669,9 @@ class _ProductPageState extends State<ProductPage> {
                               FontVariation('wght', 600),
                               FontVariation('wdth', 100),
                             ],
-                            fontSize: 14,
+                            fontSize: 13.5,
                             letterSpacing: -0.3,
-                            height: 1.1,
+                            height: 1,
                             overflow: TextOverflow.ellipsis),
                       ),
                       const SizedBox(width: 5),
@@ -679,7 +680,7 @@ class _ProductPageState extends State<ProductPage> {
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           Icons.help,
-                          size: 18,
+                          size: 13,
                           color: Theme.of(context).colorScheme.outline,
                         ),
                         onPressed: () {
@@ -688,12 +689,16 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ],
                   ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                const SizedBox(height: 10),
                 Text(
                   "Description",
                   maxLines: 3,
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.outline,
                       fontFamily: 'Bahnschrift',
                       fontVariations: const [
                         FontVariation('wght', 650),
@@ -715,8 +720,8 @@ class _ProductPageState extends State<ProductPage> {
                         FontVariation('wght', 350),
                         FontVariation('wdth', 100),
                       ],
-                      fontSize: 14,
-                      letterSpacing: -0.3,
+                      fontSize: 13.5,
+                      letterSpacing: -0.5,
                       height: 1.1,
                       overflow: TextOverflow.ellipsis),
                 ),

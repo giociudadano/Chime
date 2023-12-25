@@ -41,8 +41,14 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
     }
   }
 
-  void editProduct(String name, String price, String? productImageURL,
-      List categories, List addedCategories, List removedCategories) async {
+  void editProduct(
+      String name,
+      String price,
+      String? productImageURL,
+      List categories,
+      List addedCategories,
+      List removedCategories,
+      String ordersRemaining) async {
     widget.product['productName'] = name;
     widget.product['productPrice'] = int.parse(price);
     if (productImageURL != null) {
@@ -54,6 +60,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
       }
     }
     widget.product['categories'] = categories;
+    widget.product['ordersRemaining'] = ordersRemaining;
     if (widget.editProductCallback != null) {
       widget.editProductCallback!(
           widget.productID, categories, addedCategories, removedCategories);
