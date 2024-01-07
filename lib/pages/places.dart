@@ -57,7 +57,7 @@ class _PlacesPageState extends State<PlacesPage> {
     List favoritePlaces = [];
     await db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        favoritePlaces = document.data()!['favoritePlaces'];
+        favoritePlaces = document.data()!['favoritePlaces'] ?? [];
       }
     });
 

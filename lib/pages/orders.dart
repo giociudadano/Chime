@@ -16,7 +16,11 @@ class _OrdersPageState extends State<OrdersPage> {
     List orderIDs = [];
     await db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        orderIDs = document.data()!['orders'].reversed.toList();
+        if (document.data()!['orders'] != null) {
+          orderIDs = document.data()!['orders'].reversed.toList();
+        } else {
+          orderIDs = [];
+        }
       }
     });
     for (String orderID in orderIDs) {

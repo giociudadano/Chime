@@ -643,12 +643,12 @@ class _ProductPageState extends State<ProductPage> {
                   maxLines: 1,
                   style: TextStyle(
                       color: widget.product['isLimited'] ?? false
-                          ? Colors.red[darkMode ? 200 : 900]
+                          ? Colors.amber[darkMode ? 400 : 900]
                           : Theme.of(context).colorScheme.primary,
                       fontFamily: 'Bahnschrift',
                       fontVariations: const [
                         FontVariation('wght', 600),
-                        FontVariation('wdth', 100),
+                        FontVariation('wdth', 400),
                       ],
                       fontSize: 13.5,
                       letterSpacing: -0.5,

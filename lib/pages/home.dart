@@ -155,19 +155,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (widget.profilePictureURL != '')
-                      IconButton(
-                          icon: CircleAvatar(
-                            radius: 20,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surface,
-                            foregroundImage:
-                                NetworkImage(widget.profilePictureURL),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const ProfilePage()));
-                          }),
+                    IconButton(
+                        icon: CircleAvatar(
+                          radius: 20,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          foregroundImage:
+                              NetworkImage(widget.profilePictureURL),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ProfilePage()));
+                        }),
                     Stack(children: [
                       IconButton(
                         icon: Icon(

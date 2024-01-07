@@ -93,7 +93,7 @@ class _ProductsPageState extends State<ProductsPage> {
     favoritesListener =
         db.collection("users").doc(uid).snapshots().listen((event) async {
       productsFavorited = [];
-      var favorites = event.data()!['favoriteProducts'];
+      var favorites = event.data()!['favoriteProducts'] ?? [];
       for (String favorite in favorites) {
         await db
             .collection("products")
