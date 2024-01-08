@@ -34,6 +34,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   StreamSubscription? cartListener;
   late TabController tabController;
   Map products = {};
+  List productsFeatured = [], productsNotFeatured = [];
   List favoriteProducts = [];
 
   void setFavoritePlace(bool isFavorited) async {
@@ -75,10 +76,25 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
           products[productID]['isFavorited'] = true;
         }
         setProductImageURL(productID);
+        initFeaturedState(productID);
         if (mounted) {
           setState(() {});
         }
       });
+    }
+  }
+
+  void initFeaturedState(String productID) async {
+    if (widget.place['categories']['Featured'].contains(productID)) {
+      productsFeatured.add(productID);
+      productsFeatured.sort((a, b) => products[a]['productName']
+          .toLowerCase()
+          .compareTo(products[b]['productName'].toLowerCase()));
+    } else {
+      productsNotFeatured.add(productID);
+      productsNotFeatured.sort((a, b) => products[a]['productName']
+          .toLowerCase()
+          .compareTo(products[b]['productName'].toLowerCase()));
     }
   }
 
@@ -246,14 +262,10 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    Map productsSorted = Map.fromEntries(products.entries.toList()
-      ..sort((a, b) => (a.value['productName'].toLowerCase())
-          .compareTo(b.value['productName'].toLowerCase())));
     List categoryKeys = widget.place['categories'] == null
         ? []
         : widget.place['categories'].keys.toList()
       ..sort();
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: MaterialColors.getSurfaceContainerLow(darkMode),
@@ -579,6 +591,67 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         if (!(widget.place['noticeTitle'] == null &&
                             widget.place['noticeDesc'] == null))
                           const SizedBox(height: 15),
+                        if (productsFeatured.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Featured Products",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 16,
+                                        letterSpacing: -0.5),
+                                  ),
+                                  Text(
+                                    "Sorted A-Z   🡻",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 400),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 12.5,
+                                        letterSpacing: -0.5),
+                                  ),
+                                ]),
+                          ),
+                        if (productsFeatured.isNotEmpty)
+                          const SizedBox(height: 10),
+                        if (productsFeatured.isNotEmpty)
+                          GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            key: UniqueKey(),
+                            shrinkWrap: true,
+                            itemCount: productsFeatured.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ProductCard(
+                                  productsFeatured[index],
+                                  products[productsFeatured[index]],
+                                  widget.placeID,
+                                  widget.place);
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 205,
+                                    maxCrossAxisExtent: 200,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                          ),
+                        if (productsFeatured.isNotEmpty)
+                          const SizedBox(height: 15),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Row(
@@ -617,11 +690,13 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           key: UniqueKey(),
                           shrinkWrap: true,
-                          itemCount: products.length,
+                          itemCount: productsNotFeatured.length,
                           itemBuilder: (BuildContext context, int index) {
-                            String key = productsSorted.keys.elementAt(index);
-                            return ProductCard(key, products[key],
-                                widget.placeID, widget.place);
+                            return ProductCard(
+                                productsNotFeatured[index],
+                                products[productsNotFeatured[index]],
+                                widget.placeID,
+                                widget.place);
                           },
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
