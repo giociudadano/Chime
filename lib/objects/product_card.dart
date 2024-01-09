@@ -16,7 +16,9 @@ class ProductCard extends StatefulWidget {
   Map product, place;
 
   ProductCard(this.productID, this.product, this.placeID, this.place,
-      {super.key});
+      {super.key, this.setFavoriteProductCallback});
+
+  final Function(String productID, bool state)? setFavoriteProductCallback;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -43,6 +45,9 @@ class _ProductCardState extends State<ProductCard> {
           "usersFavorited": FieldValue.arrayUnion([uid])
         });
         widget.product['usersFavorited'].add(uid);
+      }
+      if (widget.setFavoriteProductCallback != null) {
+        widget.setFavoriteProductCallback!(widget.productID, !isFavorited);
       }
       if (mounted) {
         setState(() {
@@ -105,6 +110,20 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                 ),
+                
+                if (widget.product['isFeatured'] ?? false)
+                  Positioned(
+                    left: 7,
+                    top: 0,
+                    child: Icon(Icons.bookmark, size: 30, color: Colors.orange[700]),
+                  ),
+                if (widget.product['isFeatured'] ?? false)
+                  const Positioned(
+                    left: 7,
+                    top: -5,
+                    child: Icon(Icons.bookmark,
+                        size: 30, color: Colors.orangeAccent),
+                  ),
                 Positioned(
                   right: 8,
                   top: 8,

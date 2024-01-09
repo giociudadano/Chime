@@ -34,8 +34,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   StreamSubscription? cartListener;
   late TabController tabController;
   Map products = {};
-  List productsFeatured = [], productsNotFeatured = [];
-  List favoriteProducts = [];
+  List productsFeatured = [], productsNotFeatured = [], productsFavorited = [];
 
   void setFavoritePlace(bool isFavorited) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -67,16 +66,35 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     }
   }
 
+  void setFavoriteProduct(String productID, bool state) {
+    if (state == true) {
+      if (productsFeatured.contains(productID)) {
+        productsFeatured.remove(productID);
+      } else {
+        productsNotFeatured.remove(productID);
+      }
+      productsFavorited.add(productID);
+      productsFavorited.sort((a, b) => products[a]['productName']
+          .toLowerCase()
+          .compareTo(products[b]['productName'].toLowerCase()));
+    } else {
+      productsFavorited.remove(productID);
+      initProductState(productID);
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   void initProducts() {
     FirebaseFirestore db = FirebaseFirestore.instance;
     for (String productID in widget.place['products']) {
       db.collection("products").doc(productID).get().then((document) async {
         products[productID] = document.data()!;
-        if (favoriteProducts.contains(productID)) {
-          products[productID]['isFavorited'] = true;
+        if (!productsFavorited.contains(productID)) {
+          initProductState(productID);
         }
         setProductImageURL(productID);
-        initFeaturedState(productID);
         if (mounted) {
           setState(() {});
         }
@@ -84,8 +102,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     }
   }
 
-  void initFeaturedState(String productID) async {
+  void initProductState(String productID) async {
     if (widget.place['categories']['Featured'].contains(productID)) {
+      products[productID]['isFeatured'] = true;
       productsFeatured.add(productID);
       productsFeatured.sort((a, b) => products[a]['productName']
           .toLowerCase()
@@ -103,7 +122,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        favoriteProducts = document.data()!['favoriteProducts'] ?? [];
+        productsFavorited = document.data()!['favoriteProducts'] ?? [];
       }
     });
   }
@@ -591,67 +610,132 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         if (!(widget.place['noticeTitle'] == null &&
                             widget.place['noticeDesc'] == null))
                           const SizedBox(height: 15),
+                        if (productsFavorited.isNotEmpty)
+                          Column(children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Favorited Products",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 16,
+                                          letterSpacing: -0.5),
+                                    ),
+                                    Text(
+                                      "Sorted A-Z   🡻",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 12.5,
+                                          letterSpacing: -0.5),
+                                    ),
+                                  ]),
+                            ),
+                            const SizedBox(height: 10),
+                            GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              key: UniqueKey(),
+                              shrinkWrap: true,
+                              itemCount: productsFavorited.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductCard(
+                                    productsFavorited[index],
+                                    products[productsFavorited[index]],
+                                    widget.placeID,
+                                    widget.place,
+                                    setFavoriteProductCallback:
+                                        setFavoriteProduct);
+                              },
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      mainAxisExtent: 205,
+                                      maxCrossAxisExtent: 200,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 0),
+                            ),
+                            const SizedBox(height: 15),
+                          ]),
                         if (productsFeatured.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Featured Products",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 16,
-                                        letterSpacing: -0.5),
-                                  ),
-                                  Text(
-                                    "Sorted A-Z   🡻",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 400),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 12.5,
-                                        letterSpacing: -0.5),
-                                  ),
-                                ]),
-                          ),
-                        if (productsFeatured.isNotEmpty)
-                          const SizedBox(height: 10),
-                        if (productsFeatured.isNotEmpty)
-                          GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            key: UniqueKey(),
-                            shrinkWrap: true,
-                            itemCount: productsFeatured.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return ProductCard(
-                                  productsFeatured[index],
-                                  products[productsFeatured[index]],
-                                  widget.placeID,
-                                  widget.place);
-                            },
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    mainAxisExtent: 205,
-                                    maxCrossAxisExtent: 200,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 0),
-                          ),
-                        if (productsFeatured.isNotEmpty)
-                          const SizedBox(height: 15),
+                          Column(children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Featured Products",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 16,
+                                          letterSpacing: -0.5),
+                                    ),
+                                    Text(
+                                      "Sorted A-Z   🡻",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 12.5,
+                                          letterSpacing: -0.5),
+                                    ),
+                                  ]),
+                            ),
+                            const SizedBox(height: 10),
+                            GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              key: UniqueKey(),
+                              shrinkWrap: true,
+                              itemCount: productsFeatured.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProductCard(
+                                    productsFeatured[index],
+                                    products[productsFeatured[index]],
+                                    widget.placeID,
+                                    widget.place,
+                                    setFavoriteProductCallback:
+                                        setFavoriteProduct);
+                              },
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      mainAxisExtent: 205,
+                                      maxCrossAxisExtent: 200,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 0),
+                            ),
+                            const SizedBox(height: 15),
+                          ]),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Row(
@@ -696,7 +780,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                 productsNotFeatured[index],
                                 products[productsNotFeatured[index]],
                                 widget.placeID,
-                                widget.place);
+                                widget.place,
+                                setFavoriteProductCallback: setFavoriteProduct);
                           },
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
