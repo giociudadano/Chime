@@ -28,7 +28,7 @@ class PlaceCard extends StatefulWidget {
 }
 
 class _PlaceCardState extends State<PlaceCard> {
-  void setFavoritePlace(bool state) {
+  void setFavoritePlace(String placeID, bool state) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
@@ -68,7 +68,8 @@ class _PlaceCardState extends State<PlaceCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlacePage(widget.placeID, widget.place, setFavoritePlaceCallback: setFavoritePlace)));
+                builder: (context) => PlacePage(widget.placeID, widget.place,
+                    setFavoritePlaceCallback: setFavoritePlace)));
           }
         },
         child: SizedBox(
@@ -163,7 +164,8 @@ class _PlaceCardState extends State<PlaceCard> {
                           : Theme.of(context).colorScheme.outline,
                     ),
                     onPressed: () {
-                      setFavoritePlace(!(widget.place['isFavorited'] ?? false));
+                      setFavoritePlace(widget.placeID,
+                          !(widget.place['isFavorited'] ?? false));
                     },
                   ),
                 )

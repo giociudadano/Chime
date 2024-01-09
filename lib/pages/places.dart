@@ -37,11 +37,9 @@ class _PlacesPageState extends State<PlacesPage> {
   FocusNode focus = FocusNode();
   Timer? _debounce;
 
-  MobileScannerController cameraController = MobileScannerController(
-    detectionSpeed: DetectionSpeed.noDuplicates,
-    facing: CameraFacing.front,
-    torchEnabled: true,
-  );
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
 
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
@@ -193,6 +191,16 @@ class _PlacesPageState extends State<PlacesPage> {
   }
 
   @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
+  }
+
+  @override
   void dispose() {
     _searchBox.dispose();
     _debounce?.cancel();
@@ -203,6 +211,21 @@ class _PlacesPageState extends State<PlacesPage> {
   Widget QRScreen(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.flashlight_on_outlined),
+              onPressed: () {
+                controller!.toggleFlash();
+              }),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+                icon: const Icon(Icons.flip_camera_ios_outlined),
+                onPressed: () {
+                  controller!.flipCamera();
+                }),
+          )
+        ],
         title: const Center(
           child: Text(
             "Scan a Place",
@@ -216,63 +239,95 @@ class _PlacesPageState extends State<PlacesPage> {
                 letterSpacing: -0.3),
           ),
         ),
-        actions: [
-          IconButton(
-            color: Colors.white,
-            icon: ValueListenableBuilder(
-              valueListenable: cameraController.torchState,
-              builder: (context, state, child) {
-                switch (state) {
-                  case TorchState.off:
-                    return Icon(Icons.flash_off,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        size: 24);
-                  case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
-                }
-              },
-            ),
-            iconSize: 32.0,
-            onPressed: () => cameraController.toggleTorch(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              color: Colors.white,
-              icon: ValueListenableBuilder(
-                valueListenable: cameraController.cameraFacingState,
-                builder: (context, state, child) {
-                  switch (state) {
-                    case CameraFacing.front:
-                      return Icon(Icons.camera_front,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          size: 24);
-                    case CameraFacing.back:
-                      return Icon(Icons.camera_rear,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          size: 24);
-                  }
-                },
-              ),
-              iconSize: 32.0,
-              onPressed: () => cameraController.switchCamera(),
-            ),
-          ),
-        ],
       ),
-      body: MobileScanner(
-        // fit: BoxFit.contain,
-        controller: cameraController,
-        onDetect: (capture) {
-          final List<Barcode> barcodes = capture.barcodes;
-          for (final barcode in barcodes) {
-            debugPrint('Barcode found! ${barcode.rawValue}');
-          }
-          cameraController.dispose();
-          Navigator.pop(context);
+      body: QRView(
+        key: qrKey,
+        onQRViewCreated: (controller) {
+          bool scannedData = false;
+          controller.scannedDataStream.listen((scanData) {
+            setState(() {
+              result = scanData;
+            });
+            if (!scannedData) {
+              scannedData = true;
+              Navigator.pop(context);
+            }
+          });
         },
+        overlay: QrScannerOverlayShape(
+            borderColor: Theme.of(context).colorScheme.primary,
+            borderRadius: 10,
+            borderLength: 30,
+            borderWidth: 10,
+            cutOutSize: 300),
       ),
     );
+  }
+
+  void viewPlaceFromScan(String? data) {
+    if (places[data] != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => PlacePage(data!, places[data],
+              setFavoritePlaceCallback: setFavoritePlace)));
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            bool darkMode = Theme.of(context).brightness == Brightness.dark;
+            return AlertDialog(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
+              elevation: 0,
+              backgroundColor:
+                  MaterialColors.getSurfaceContainerLowest(darkMode),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 150,
+                    width: 150,
+                    child: Image.network(
+                        "https://em-content.zobj.net/source/microsoft-teams/363/rabbit-face_1f430.png"),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "This place does not exist",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 700),
+                          FontVariation('wdth', 100),
+                        ],
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 20,
+                        letterSpacing: -0.3),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Sorry, we couldn't find the place you were looking for. Please try scanning the code again.",
+                    maxLines: 3,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.outline,
+                        fontFamily: 'Bahnschrift',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 13,
+                        letterSpacing: -0.3,
+                        height: 1.1,
+                        overflow: TextOverflow.ellipsis),
+                  ),
+                ],
+              ),
+            );
+          });
+    }
+    result = null;
   }
 
   @override
@@ -283,12 +338,14 @@ class _PlacesPageState extends State<PlacesPage> {
         height: 50,
         child: FittedBox(
           child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => QRScreen(context)),
                 );
-                cameraController.dispose();
+                if (result != null) {
+                  viewPlaceFromScan(result!.code);
+                }
               },
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(50))),
@@ -516,6 +573,7 @@ class _PlacesPageState extends State<PlacesPage> {
                                 : placesSearched[key],
                             setFavoritePlaceCallback: setFavoritePlace);
                       }),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

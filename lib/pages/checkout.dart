@@ -8,7 +8,7 @@
     address through the AddressesPage.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class CheckoutPage extends StatefulWidget {

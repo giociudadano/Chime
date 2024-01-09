@@ -27,7 +27,7 @@ class PlacePage extends StatefulWidget {
 
   @override
   State<PlacePage> createState() => _PlacePageState();
-  final Function(bool state)? setFavoritePlaceCallback;
+  final Function(String placeID, bool state)? setFavoritePlaceCallback;
 }
 
 class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
@@ -55,7 +55,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
           "usersFavorited": FieldValue.arrayUnion([uid])
         });
       }
-      widget.setFavoritePlaceCallback!(!isFavorited);
+      widget.setFavoritePlaceCallback!(widget.placeID, !isFavorited);
       if (mounted) {
         setState(() {
           widget.isFavorited = !isFavorited;
