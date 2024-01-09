@@ -9,7 +9,7 @@
   Visited as a tab in the HomePage.
 */
 
-part of main;
+part of '../main.dart';
 
 // The 'Places' page displays a list of places for the user to buy from.
 class PlacesPage extends StatefulWidget {
@@ -36,6 +36,12 @@ class _PlacesPageState extends State<PlacesPage> {
   // Variables for search function.
   FocusNode focus = FocusNode();
   Timer? _debounce;
+
+  MobileScannerController cameraController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    facing: CameraFacing.front,
+    torchEnabled: true,
+  );
 
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
@@ -193,10 +199,104 @@ class _PlacesPageState extends State<PlacesPage> {
     super.dispose();
   }
 
+  // ignore: non_constant_identifier_names
+  Widget QRScreen(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Center(
+          child: Text(
+            "Scan a Place",
+            style: TextStyle(
+                fontFamily: 'Bahnschrift',
+                fontVariations: [
+                  FontVariation('wght', 700),
+                  FontVariation('wdth', 100),
+                ],
+                fontSize: 20,
+                letterSpacing: -0.3),
+          ),
+        ),
+        actions: [
+          IconButton(
+            color: Colors.white,
+            icon: ValueListenableBuilder(
+              valueListenable: cameraController.torchState,
+              builder: (context, state, child) {
+                switch (state) {
+                  case TorchState.off:
+                    return Icon(Icons.flash_off,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 24);
+                  case TorchState.on:
+                    return const Icon(Icons.flash_on, color: Colors.yellow);
+                }
+              },
+            ),
+            iconSize: 32.0,
+            onPressed: () => cameraController.toggleTorch(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              color: Colors.white,
+              icon: ValueListenableBuilder(
+                valueListenable: cameraController.cameraFacingState,
+                builder: (context, state, child) {
+                  switch (state) {
+                    case CameraFacing.front:
+                      return Icon(Icons.camera_front,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          size: 24);
+                    case CameraFacing.back:
+                      return Icon(Icons.camera_rear,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          size: 24);
+                  }
+                },
+              ),
+              iconSize: 32.0,
+              onPressed: () => cameraController.switchCamera(),
+            ),
+          ),
+        ],
+      ),
+      body: MobileScanner(
+        // fit: BoxFit.contain,
+        controller: cameraController,
+        onDetect: (capture) {
+          final List<Barcode> barcodes = capture.barcodes;
+          for (final barcode in barcodes) {
+            debugPrint('Barcode found! ${barcode.rawValue}');
+          }
+          cameraController.dispose();
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      floatingActionButton: SizedBox(
+        height: 50,
+        child: FittedBox(
+          child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QRScreen(context)),
+                );
+                cameraController.dispose();
+              },
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50))),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              child: Icon(Icons.qr_code_scanner,
+                  color: Theme.of(context).colorScheme.onPrimary)),
+        ),
+      ),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -8,7 +8,7 @@
   Created when visiting PlacesPage. Each place in the database has its own PlaceCard.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class PlaceCard extends StatefulWidget {

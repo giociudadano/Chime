@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-part of main;
+part of '../main.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

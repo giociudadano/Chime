@@ -9,7 +9,7 @@
   Created when OrderCard is called. Each product belonging to a place has its own OrderItemCard.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class CartItemCard extends StatefulWidget {

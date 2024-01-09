@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 class StorePage extends StatefulWidget {
   const StorePage({super.key});

@@ -8,7 +8,7 @@
   Visited when clicking on a ProductCard from ProductsPage.
 */
 
-part of main;
+part of '../main.dart';
 
 // The 'Product' page displays additional information about a product.
 // This page is visited when the user clicks on a product from the 'Products' page.

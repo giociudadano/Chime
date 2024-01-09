@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 /* Defines the model of a product in ProductsPage.
    Populates the 'distance' field using the passed device position coordinates by calculating the distance of
@@ -14,7 +14,6 @@ class ProductModel {
 
   // Populated Properties
   String placeName = "";
-  GeoPoint placePosition = const GeoPoint(0, 0);
   double distance = 0;
 
   ProductModel(this.productID, data) {

@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 class AddressesPage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables

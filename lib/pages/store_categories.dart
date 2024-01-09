@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class StoreCategoriesPage extends StatefulWidget {
@@ -213,8 +213,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
       (widget.categories[removedCategory]).remove(productID);
     }
     if (mounted) {
-      setState(() {
-      });
+      setState(() {});
     }
   }
 

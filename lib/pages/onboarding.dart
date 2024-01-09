@@ -6,7 +6,7 @@
   Displays instructions for the user when launching the program for the first time.
 */
 
-part of main;
+part of '../main.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({super.key});
@@ -143,11 +143,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 // Defines each swipable frame in OnBoardingPage.
 class OnBoardingPageContent extends StatelessWidget {
   const OnBoardingPageContent(
-      {Key? key,
+      {super.key,
       required this.image,
       required this.title,
-      required this.description})
-      : super(key: key);
+      required this.description});
 
   final String image, title, description;
 

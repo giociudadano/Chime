@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class StoreProductsAddPage extends StatefulWidget {

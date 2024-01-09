@@ -10,7 +10,7 @@
   Visited when the user is logged out or when the user exits OnBoardingPage for the first time.
 */
 
-part of main;
+part of '../main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -10,7 +10,7 @@
   Visited when the user taps on a call-to-action text from LoginPage.
 */
 
-part of main;
+part of '../main.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

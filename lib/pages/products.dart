@@ -9,7 +9,7 @@
   Visited as a tab in the HomePage.
 */
 
-part of main;
+part of '../main.dart';
 
 // The 'Products' page displays a list of recommended products for the user to buy.
 class ProductsPage extends StatefulWidget {

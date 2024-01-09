@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 class OrderSuccessPage extends StatefulWidget {
   const OrderSuccessPage({super.key});
@@ -96,8 +96,7 @@ class _OrderSuccessPageState extends State<OrderSuccessPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => HomePage()),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                             (Route<dynamic> route) => false);
                       },
                       style: ElevatedButton.styleFrom(

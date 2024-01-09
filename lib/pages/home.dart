@@ -6,7 +6,7 @@
   Container for all tab pages. Visited when the user logs in.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatefulWidget {

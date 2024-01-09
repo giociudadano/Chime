@@ -7,7 +7,7 @@
   Visited when the user clicks on a place from PlacesPage.
 */
 
-part of main;
+part of '../main.dart';
 
 // The 'place' page displays additional information about a place and its products.
 // This page is visited when the user clicks on a place from the 'places' page.
@@ -337,125 +337,191 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
             color: MaterialColors.getSurfaceContainerLow(darkMode),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: 65,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: FittedBox(
-                        clipBehavior: Clip.hardEdge,
-                        fit: BoxFit.cover,
-                        child: CachedNetworkImage(
-                          imageUrl: widget.place['placeImageURL'] ?? '',
-                          placeholder: (context, url) => const Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: CircularProgressIndicator(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 75,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: FittedBox(
+                            clipBehavior: Clip.hardEdge,
+                            fit: BoxFit.cover,
+                            child: CachedNetworkImage(
+                              imageUrl: widget.place['placeImageURL'] ?? '',
+                              placeholder: (context, url) => const Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Icon(Icons.storefront_outlined,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant),
+                              ),
+                              fadeInCurve: Curves.easeIn,
+                              fadeOutCurve: Curves.easeOut,
+                            ),
                           ),
-                          errorWidget: (context, url, error) => Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Icon(Icons.storefront_outlined,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant),
-                          ),
-                          fadeInCurve: Curves.easeIn,
-                          fadeOutCurve: Curves.easeOut,
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.place['placeName'],
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 16,
-                              letterSpacing: -0.3,
-                              height: 1.2,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        Text(
-                          widget.place['placeTagline'] ?? '',
-                          maxLines: 2,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 12.5,
-                              letterSpacing: -0.3,
-                              height: 0.85,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  widget.isFavorited
-                                      ? Icons.favorite_outlined
-                                      : Icons.favorite_outline,
-                                  size: 20,
-                                  color: widget.isFavorited
-                                      ? Colors.redAccent
-                                      : Theme.of(context).colorScheme.outline,
-                                ),
-                                onPressed: () {
-                                  setFavoritePlace(widget.isFavorited);
-                                },
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                "${widget.place['usersFavorited'] != null ? widget.place['usersFavorited'].length : 0}",
-                                style: TextStyle(
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.place['placeName'],
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 20,
+                                  letterSpacing: -0.3,
+                                  height: 1,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              widget.place['placeTagline'] ?? '',
+                              maxLines: 2,
+                              style: TextStyle(
                                   color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Bahnschrift',
                                   fontVariations: const [
-                                    FontVariation('wght', 500),
+                                    FontVariation('wght', 400),
                                     FontVariation('wdth', 100),
                                   ],
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   letterSpacing: -0.3,
-                                  height: 0.7,
+                                  height: 0.75,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTapDown: (TapDownDetails details) {
+                          _showAdditionalDetails(details.globalPosition);
+                        },
+                        child: Icon(
+                          Icons.more_vert,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            setFavoritePlace(widget.isFavorited);
+                          },
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)))),
+                          icon: Icon(
+                            widget.isFavorited
+                                ? Icons.favorite_outlined
+                                : Icons.favorite_outline,
+                            size: 20,
+                            color: widget.isFavorited
+                                ? Colors.redAccent
+                                : Theme.of(context).colorScheme.outline,
+                          ),
+                          label: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  widget.isFavorited ? "Liked" : "Like",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 600),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 14,
+                                      letterSpacing: -0.5),
                                 ),
-                              ),
-                            ])
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTapDown: (TapDownDetails details) {
-                      _showAdditionalDetails(details.globalPosition);
-                    },
-                    child: Icon(
-                      Icons.more_vert,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  "${widget.place['usersFavorited'] != null ? widget.place['usersFavorited'].length : 0}",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Bahnschrift',
+                                    fontVariations: const [
+                                      FontVariation('wght', 500),
+                                      FontVariation('wdth', 100),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                    height: 0.7,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                        const SizedBox(width: 5),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            _showQRCode();
+                          },
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)))),
+                          icon: Icon(
+                            Icons.qr_code_scanner,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          label: Text(
+                            "QR Code",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.5),
+                          ),
+                        ),
+                      ]),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SizedBox(
@@ -619,20 +685,25 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Favorited Products",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 16,
-                                          letterSpacing: -0.5),
-                                    ),
+                                    Row(children: [
+                                      const Icon(Icons.favorite,
+                                          color: Colors.redAccent, size: 16),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        "Favorited Products",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 16,
+                                            letterSpacing: -0.5),
+                                      ),
+                                    ]),
                                     Text(
                                       "Sorted A-Z   🡻",
                                       style: TextStyle(
@@ -682,20 +753,25 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Featured Products",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 16,
-                                          letterSpacing: -0.5),
-                                    ),
+                                    Row(children: [
+                                      const Icon(Icons.bookmark,
+                                          color: Colors.orangeAccent, size: 16),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        "Featured Products",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 16,
+                                            letterSpacing: -0.5),
+                                      ),
+                                    ]),
                                     Text(
                                       "Sorted A-Z   🡻",
                                       style: TextStyle(
@@ -741,19 +817,25 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "All Products",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.5),
-                                ),
+                                Row(children: [
+                                  const Icon(Icons.view_agenda,
+                                      color: Colors.grey, size: 16),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    "All Products",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 16,
+                                        letterSpacing: -0.5),
+                                  ),
+                                ]),
                                 Text(
                                   "Sorted A-Z   🡻",
                                   style: TextStyle(

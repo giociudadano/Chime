@@ -8,7 +8,7 @@
   Created when visiting the CartPage. Each place in the cart has its own OrderCard.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class CartCard extends StatefulWidget {

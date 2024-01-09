@@ -1,4 +1,4 @@
-part of main;
+part of '../main.dart';
 
 class AuthService {
   _writeUserToDatabase(UserCredential result, String username) {

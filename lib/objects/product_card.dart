@@ -8,7 +8,7 @@
   Created when visiting ProductsPage. Each product in the database has its own ProductsPage.
 */
 
-part of main;
+part of '../main.dart';
 
 // ignore: must_be_immutable
 class ProductCard extends StatefulWidget {
