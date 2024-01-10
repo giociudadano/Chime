@@ -374,6 +374,31 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(children: [
+                            const Icon(Icons.campaign,
+                                color: Colors.grey, size: 16),
+                            const SizedBox(width: 5),
+                            Text(
+                              "Announcements",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.5),
+                            ),
+                          ]),
+                        ]),
+                  ),
+                  const SizedBox(height: 10),
                   Stack(
                     children: [
                       Card(
@@ -464,19 +489,25 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Featured Products",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.5),
-                                ),
+                                Row(children: [
+                                  const Icon(Icons.bookmark,
+                                      color: Colors.orangeAccent, size: 16),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    "Featured",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Bahnschrift',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                          FontVariation('wdth', 100),
+                                        ],
+                                        fontSize: 16,
+                                        letterSpacing: -0.5),
+                                  ),
+                                ]),
                                 Text(
                                   "Sorted A-Z   🡻",
                                   style: TextStyle(
@@ -526,20 +557,25 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "All Products",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 16,
-                                        letterSpacing: -0.5),
-                                  ),
+                                  Row(children: [
+                                    const Icon(Icons.view_agenda,
+                                        color: Colors.grey, size: 16),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      "All",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 16,
+                                          letterSpacing: -0.5),
+                                    ),
+                                  ]),
                                   Text(
                                     "Sorted A-Z   🡻",
                                     style: TextStyle(

@@ -64,6 +64,8 @@ class _ProductPageState extends State<ProductPage> {
           "name": widget.product['productName'],
           "quantity": itemQuantity,
           "price": widget.product['productPrice'],
+          "limited": widget.product['isLimited'] ?? false,
+          "max": widget.product['ordersRemaining'] ?? -1
         }
       }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(

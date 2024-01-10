@@ -86,11 +86,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return getDeliveryFee() + widget.subtotal;
   }
 
+  // Creates an order.
   void addOrder(String deliveryMethod, String paymentMethod) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     Map items = {};
+    // 1. Fetch cart items from place to check out
     db
         .collection("users")
         .doc(uid)
@@ -100,12 +102,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
         .then((document) {
       items = document.data()!;
     }).then((res) {
+      // 2. Update inventories for limited items
+      for (var key in items.keys) {
+        if (items[key]['limited']) {
+          db.collection("products").doc(key).update({
+            "ordersRemaining": FieldValue.increment(-1 * items[key]['quantity'])
+          });
+        }
+      }
+      // 3. Remove items from cart
       db
           .collection("users")
           .doc(uid)
           .collection("cart")
           .doc(widget.placeID)
           .delete();
+      // 4. Add items as an order entry
       db.collection("orders").add({
         "address": deliveryMethod == 'Pick Up'
             ? null
@@ -122,9 +134,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "status": "Pending",
         "userID": uid,
       }).then((docRef) {
+        // 5. Add order to list of orders of user
         db.collection("users").doc(uid).update({
           "orders": FieldValue.arrayUnion([docRef.id])
         });
+        // 6. Add order to list of orders of place
         db.collection("places").doc(widget.placeID).update({
           "orders": FieldValue.arrayUnion([docRef.id])
         });

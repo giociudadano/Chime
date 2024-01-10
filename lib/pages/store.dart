@@ -105,71 +105,6 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     }
   }
 
-  void _showAdditionalDetails(Offset offset) async {
-    await showMenu(
-      elevation: 0,
-      context: context,
-      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
-      items: [
-        PopupMenuItem(
-          onTap: () {
-            String key = places.keys.elementAt(0);
-            if (context.mounted) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => StoreEditPage(key, places[key],
-                        editStoreCallback: editStore)),
-              );
-            }
-          },
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(children: [
-            Icon(Icons.edit,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 18),
-            const SizedBox(width: 5),
-            Text(
-              "Edit Store",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: const [
-                    FontVariation('wght', 400),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 13,
-                  letterSpacing: -0.3),
-            )
-          ]),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            _showQRCode();
-          },
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(children: [
-            Icon(Icons.qr_code_scanner,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                size: 18),
-            const SizedBox(width: 5),
-            Text(
-              "Share QR Code",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: const [
-                    FontVariation('wght', 400),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 13,
-                  letterSpacing: -0.3),
-            )
-          ]),
-        ),
-      ],
-    );
-  }
-
   void _showQRCode() async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     String key = places.keys.elementAt(0);
@@ -347,84 +282,173 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
             color: MaterialColors.getSurfaceContainerLow(darkMode),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
                 children: [
-                  SizedBox(
-                    width: 65,
-                    height: 65,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: FittedBox(
-                        clipBehavior: Clip.hardEdge,
-                        fit: BoxFit.cover,
-                        child: CachedNetworkImage(
-                          imageUrl: places[key]["placeImageURL"] ?? '',
-                          placeholder: (context, url) => const Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: CircularProgressIndicator(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 75,
+                        height: 75,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: FittedBox(
+                            clipBehavior: Clip.hardEdge,
+                            fit: BoxFit.cover,
+                            child: CachedNetworkImage(
+                              imageUrl: places[key]["placeImageURL"] ?? '',
+                              placeholder: (context, url) => const Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Icon(Icons.storefront_outlined,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant),
+                              ),
+                              fadeInCurve: Curves.easeIn,
+                              fadeOutCurve: Curves.easeOut,
+                            ),
                           ),
-                          errorWidget: (context, url, error) => Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Icon(Icons.storefront_outlined,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant),
-                          ),
-                          fadeInCurve: Curves.easeIn,
-                          fadeOutCurve: Curves.easeOut,
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              places[key]["placeName"],
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 20,
+                                  letterSpacing: -0.3,
+                                  height: 1,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                            const SizedBox(height: 7),
+                            Text(
+                              places[key]["placeTagline"] ?? '',
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Bahnschrift',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 13.5,
+                                  letterSpacing: -0.3,
+                                  height: 0.85,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTapDown: (TapDownDetails details) {
+                        },
+                        child: Icon(
+                          Icons.more_vert,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(height: 10),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          places[key]["placeName"],
-                          maxLines: 1,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 16,
-                              letterSpacing: -0.3,
-                              height: 1.2,
-                              overflow: TextOverflow.ellipsis),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            if (context.mounted) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => StoreEditPage(
+                                        key, places[key],
+                                        editStoreCallback: editStore)),
+                              );
+                            }
+                          },
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)))),
+                          icon: Icon(
+                            Icons.edit,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          label: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Edit Store",
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 600),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 14,
+                                      letterSpacing: -0.5),
+                                ),
+                              ]),
                         ),
-                        Text(
-                          places[key]["placeTagline"] ?? '',
-                          maxLines: 2,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 13.5,
-                              letterSpacing: -0.3,
-                              height: 0.85,
-                              overflow: TextOverflow.ellipsis),
+                        const SizedBox(width: 5),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            _showQRCode();
+                          },
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outlineVariant)))),
+                          icon: Icon(
+                            Icons.qr_code_scanner,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          label: Text(
+                            "QR Code",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontFamily: 'Bahnschrift',
+                                fontVariations: const [
+                                  FontVariation('wght', 600),
+                                  FontVariation('wdth', 100),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.5),
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTapDown: (TapDownDetails details) {
-                      _showAdditionalDetails(details.globalPosition);
-                    },
-                    child: Icon(
-                      Icons.more_vert,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
+                      ]),
                 ],
               ),
             ),

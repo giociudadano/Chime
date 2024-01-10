@@ -521,7 +521,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SizedBox(
@@ -602,80 +602,109 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               ),
             ),
           ),
+          const SizedBox(height: 15),
           Expanded(
             child: TabBarView(
               controller: tabController,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [
-                        if (widget.place['noticeTitle'] != null ||
-                            widget.place['noticeDesc'] != null)
-                          Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                //<-- SEE HERE
-                                side: BorderSide(
-                                  color:
-                                      MaterialColors.getSurfaceContainerHighest(
-                                          darkMode),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: Padding(
+                        if (!(widget.place['noticeTitle'] == null &&
+                            widget.place['noticeDesc'] == null))
+                          Column(children: [
+                            const SizedBox(height: 10),
+                            Padding(
                               padding:
-                                  const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.place['noticeTitle'] ?? 'Notice',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 650),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.3,
-                                      height: 1.2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      const Icon(Icons.campaign,
+                                          color: Colors.grey, size: 16),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        "Announcements",
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                            fontFamily: 'Bahnschrift',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                              FontVariation('wdth', 100),
+                                            ],
+                                            fontSize: 16,
+                                            letterSpacing: -0.5),
+                                      ),
+                                    ]),
+                                  ]),
+                            ),
+                            const SizedBox(height: 10),
+                            Card(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  //<-- SEE HERE
+                                  side: BorderSide(
+                                    color: MaterialColors
+                                        .getSurfaceContainerHighest(darkMode),
                                   ),
-                                  if (!(widget.place['noticeDesc'] == null &&
-                                      widget.place['noticeTitle'] != null))
-                                    const SizedBox(height: 10),
-                                  if (!(widget.place['noticeDesc'] == null &&
-                                      widget.place['noticeTitle'] != null))
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      widget.place['noticeDesc'],
+                                      widget.place['noticeTitle'] ?? 'Notice',
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .outline,
+                                            .onSurfaceVariant,
                                         fontFamily: 'Bahnschrift',
                                         fontVariations: const [
-                                          FontVariation('wght', 400),
+                                          FontVariation('wght', 650),
                                           FontVariation('wdth', 100),
                                         ],
-                                        fontSize: 13,
+                                        fontSize: 15,
                                         letterSpacing: -0.3,
-                                        height: 1,
+                                        height: 1.2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 5,
                                     ),
-                                ],
+                                    if (!(widget.place['noticeDesc'] == null &&
+                                        widget.place['noticeTitle'] != null))
+                                      const SizedBox(height: 10),
+                                    if (!(widget.place['noticeDesc'] == null &&
+                                        widget.place['noticeTitle'] != null))
+                                      Text(
+                                        widget.place['noticeDesc'],
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Bahnschrift',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                            FontVariation('wdth', 100),
+                                          ],
+                                          fontSize: 13,
+                                          letterSpacing: -0.3,
+                                          height: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        maxLines: 5,
+                                      ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        if (!(widget.place['noticeTitle'] == null &&
-                            widget.place['noticeDesc'] == null))
-                          const SizedBox(height: 15),
+                            const SizedBox(height: 15),
+                          ]),
                         if (productsFavorited.isNotEmpty)
                           Column(children: [
                             Padding(
@@ -690,7 +719,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                           color: Colors.redAccent, size: 16),
                                       const SizedBox(width: 5),
                                       Text(
-                                        "Favorited Products",
+                                        "Liked",
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -758,7 +787,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                           color: Colors.orangeAccent, size: 16),
                                       const SizedBox(width: 5),
                                       Text(
-                                        "Featured Products",
+                                        "Featured",
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -822,7 +851,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                       color: Colors.grey, size: 16),
                                   const SizedBox(width: 5),
                                   Text(
-                                    "All Products",
+                                    "All",
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -875,7 +904,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                       ]),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ListView(
                     children: [
                       Padding(
@@ -883,19 +912,24 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Categories",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 700),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 16,
-                                    letterSpacing: -0.5),
-                              ),
+                              Row(children: [
+                                const Icon(Icons.view_agenda,
+                                    color: Colors.grey, size: 16),
+                                const SizedBox(width: 5),
+                                Text(
+                                  "Categories",
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.5),
+                                ),
+                              ]),
                               Text(
                                 "Sorted A-Z   🡻",
                                 style: TextStyle(

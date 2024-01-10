@@ -275,18 +275,23 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Categories",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 700),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 16,
-                            letterSpacing: -0.5),
-                      ),
+                      Row(children: [
+                        const Icon(Icons.view_agenda,
+                            color: Colors.grey, size: 16),
+                        const SizedBox(width: 5),
+                        Text(
+                          "Categories",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Bahnschrift',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                                FontVariation('wdth', 100),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.5),
+                        ),
+                      ]),
                       Text(
                         "Sorted A-Z   🡻",
                         style: TextStyle(
