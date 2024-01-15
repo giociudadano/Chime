@@ -21,6 +21,7 @@ class _AddressesPageState extends State<AddressesPage> {
   final GlobalKey<FormState> _formAddAddressKey = GlobalKey<FormState>();
   final _inputAddAddressName = TextEditingController();
   final _inputAddAddressAddress = TextEditingController();
+  String? landmark;
 
   // Variables for user information.
   Map addresses = {};
@@ -72,12 +73,13 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   // Writes a new address to database.
-  void _addAddress(String name, String address) {
+  void _addAddress(String name, String? landmark, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
+        "landmark": landmark,
         "address": address,
       };
       db
@@ -100,12 +102,13 @@ class _AddressesPageState extends State<AddressesPage> {
   }
 
   // Overwrites an address in database.
-  void _editAddress(String id, String name, String address) {
+  void _editAddress(String id, String name, String? landmark, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
+        "landmark": landmark,
         "address": address,
       };
       db
@@ -150,6 +153,181 @@ class _AddressesPageState extends State<AddressesPage> {
   // Visible when clicking on the 'plus' button at the upper right of the page.
   Future showAddAddressForm(BuildContext context) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    // Variables for dropdown box.
+    List<DropdownMenuItem> landmarks = [
+      DropdownMenuItem(
+        value: null,
+        child: Text(
+          "No Landmark",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = null;
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CAS",
+        child: Text(
+          "UPV CAS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CAS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV New Admin",
+        child: Text(
+          "UPV New Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV New Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Old Admin",
+        child: Text(
+          "UPV Old Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Old Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CFOS",
+        child: Text(
+          "UPV CFOS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CFOS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Wet Lab",
+        child: Text(
+          "UPV Wet Lab",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Wet Lab";
+        },
+      ),
+      DropdownMenuItem(
+        value: "ISAT U",
+        child: Text(
+          "ISAT U",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "ISAT U";
+        },
+      ),
+      DropdownMenuItem(
+        value: "Miagao NHS",
+        child: Text(
+          "Miagao NHS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "Miagao NHS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Dorm Area",
+        child: Text(
+          "UPV Dorm Area",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Dorm Area";
+        },
+      ),
+    ];
+
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -215,6 +393,39 @@ class _AddressesPageState extends State<AddressesPage> {
                     },
                   ),
                   const SizedBox(height: 15),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: landmark,
+                      items: landmarks,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _inputAddAddressAddress,
                     decoration: InputDecoration(
@@ -261,7 +472,7 @@ class _AddressesPageState extends State<AddressesPage> {
                           onPressed: () {
                             if (_formAddAddressKey.currentState!.validate()) {
                               {
-                                _addAddress(_inputAddAddressName.text,
+                                _addAddress(_inputAddAddressName.text, landmark,
                                     _inputAddAddressAddress.text);
                               }
                             }
@@ -335,12 +546,187 @@ class _AddressesPageState extends State<AddressesPage> {
 
   // Shows a form that allows the user to edit an address.
   // Visible when clicking on the 'edit' button at an address card.
-  Future showEditAddressForm(
-      BuildContext context, String id, String name, String address) async {
+  Future showEditAddressForm(BuildContext context, String id, String name,
+      String? landmark, String address) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formEditAddressKey = GlobalKey<FormState>();
     final inputEditAddressName = TextEditingController(text: name);
     final inputEditAddressAddress = TextEditingController(text: address);
+
+    // Variables for dropdown box.
+    List<DropdownMenuItem> landmarks = [
+      DropdownMenuItem(
+        value: null,
+        child: Text(
+          "No Landmark",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = null;
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CAS",
+        child: Text(
+          "UPV CAS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CAS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV New Admin",
+        child: Text(
+          "UPV New Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV New Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Old Admin",
+        child: Text(
+          "UPV Old Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Old Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CFOS",
+        child: Text(
+          "UPV CFOS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CFOS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Wet Lab",
+        child: Text(
+          "UPV Wet Lab",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Wet Lab";
+        },
+      ),
+      DropdownMenuItem(
+        value: "ISAT U",
+        child: Text(
+          "ISAT U",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "ISAT U";
+        },
+      ),
+      DropdownMenuItem(
+        value: "Miagao NHS",
+        child: Text(
+          "Miagao NHS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "Miagao NHS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Dorm Area",
+        child: Text(
+          "UPV Dorm Area",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontFamily: 'Bahnschrift',
+            fontVariations: const [
+              FontVariation('wght', 400),
+              FontVariation('wdth', 100),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Dorm Area";
+        },
+      ),
+    ];
 
     return showDialog(
         context: context,
@@ -407,6 +793,39 @@ class _AddressesPageState extends State<AddressesPage> {
                     },
                   ),
                   const SizedBox(height: 15),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: landmark,
+                      items: landmarks,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: inputEditAddressAddress,
                     decoration: InputDecoration(
@@ -453,7 +872,7 @@ class _AddressesPageState extends State<AddressesPage> {
                           onPressed: () {
                             if (formEditAddressKey.currentState!.validate()) {
                               _editAddress(id, inputEditAddressName.text,
-                                  inputEditAddressAddress.text);
+                                  landmark, inputEditAddressAddress.text);
                             }
                           },
                           style: ButtonStyle(
@@ -713,6 +1132,7 @@ class _AddressesPageState extends State<AddressesPage> {
                                         context,
                                         key,
                                         addresses[key]["name"],
+                                        addresses[key]["landmark"],
                                         addresses[key]["address"]);
                                   },
                                 ),
