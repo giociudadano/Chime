@@ -209,7 +209,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                       ),
                     ),
                     Text(
-                      widget.order['phoneNumber'],
+                      widget.order['phoneNumber'] ?? 'N/A',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontFamily: 'Bahnschrift',
