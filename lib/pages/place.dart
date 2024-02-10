@@ -167,6 +167,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
       context: context,
       position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
       items: [
+        // TO REMOVE?
         PopupMenuItem(
           onTap: () {
             _showQRCode();
@@ -179,10 +180,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               "Share QR Code",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontFamily: 'Bahnschrift',
+                  fontFamily: 'Plus Jakarta Sans',
                   fontVariations: const [
-                    FontVariation('wght', 500),
-                    FontVariation('wdth', 100),
+                    FontVariation('wght', 700),
                   ],
                   fontSize: 13,
                   letterSpacing: -0.3),
@@ -223,13 +223,12 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                 "Here's your code",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Plus Jakarta Sans',
                     fontVariations: const [
                       FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
                     ],
                     color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
+                    fontSize: 16,
                     letterSpacing: -0.3),
               ),
               const SizedBox(height: 10),
@@ -238,7 +237,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                 maxLines: 3,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Source Sans 3',
                     fontVariations: const [
                       FontVariation('wght', 400),
                       FontVariation('wdth', 100),
@@ -287,7 +286,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
       ..sort();
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: MaterialColors.getSurfaceContainerLow(darkMode),
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
                 color: Theme.of(context).colorScheme.outline),
@@ -318,10 +317,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           widget.cartItems.toString(),
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onPrimary,
-                              fontFamily: 'Bahnschrift',
+                              fontFamily: 'Plus Jakarta Sans',
                               fontVariations: const [
                                 FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
                               ],
                               fontSize: 14,
                               letterSpacing: -0.3),
@@ -333,195 +331,200 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
         children: [
-          Container(
-            color: MaterialColors.getSurfaceContainerLow(darkMode),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 75,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: FittedBox(
-                            clipBehavior: Clip.hardEdge,
-                            fit: BoxFit.cover,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.place['placeImageURL'] ?? '',
-                              placeholder: (context, url) => const Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Icon(Icons.storefront_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant),
-                              ),
-                              fadeInCurve: Curves.easeIn,
-                              fadeOutCurve: Curves.easeOut,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 75,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: FittedBox(
+                          clipBehavior: Clip.hardEdge,
+                          fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.place['placeImageURL'] ?? '',
+                            placeholder: (context, url) => const Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(),
                             ),
+                            errorWidget: (context, url, error) => Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Icon(Icons.storefront_outlined,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant),
+                            ),
+                            fadeInCurve: Curves.easeIn,
+                            fadeOutCurve: Curves.easeOut,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.place['placeName'],
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 20,
-                                  letterSpacing: -0.3,
-                                  height: 1,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              widget.place['placeTagline'] ?? '',
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 13,
-                                  letterSpacing: -0.3,
-                                  height: 0.75,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                          ],
-                        ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.place['placeName'],
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 20,
+                                letterSpacing: -0.3,
+                                height: 1,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            widget.place['placeTagline'] ?? '',
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 13,
+                                letterSpacing: -0.3,
+                                height: 0.75,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ],
                       ),
-                      GestureDetector(
-                        onTapDown: (TapDownDetails details) {
-                          _showAdditionalDetails(details.globalPosition);
+                    ),
+                    GestureDetector(
+                      onTapDown: (TapDownDetails details) {
+                        _showAdditionalDetails(details.globalPosition);
+                      },
+                      child: Icon(
+                        Icons.more_vert,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setFavoritePlace(widget.isFavorited);
                         },
-                        child: Icon(
-                          Icons.more_vert,
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(
+                                  width: 0.5,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant),
+                            ),
+                          ),
+                        ),
+                        icon: Icon(
+                          widget.isFavorited
+                              ? Icons.favorite_outlined
+                              : Icons.favorite_outline,
+                          size: 20,
+                          color: widget.isFavorited
+                              ? Colors.redAccent
+                              : Theme.of(context).colorScheme.outline,
+                        ),
+                        label: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.isFavorited ? "Liked" : "Like",
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontVariations: const [
+                                      FontVariation('wght', 700),
+                                    ],
+                                    fontSize: 12,
+                                    letterSpacing: -0.3),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "${widget.place['usersFavorited'] != null ? widget.place['usersFavorited'].length : 0}",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 600),
+                                  ],
+                                  fontSize: 12,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                            ]),
+                      ),
+                      const SizedBox(width: 5),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          _showQRCode();
+                        },
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                          ),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(
+                                  width: 0.5,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant),
+                            ),
+                          ),
+                        ),
+                        icon: Icon(
+                          Icons.qr_code_scanner,
                           size: 20,
                           color: Theme.of(context).colorScheme.outline,
                         ),
+                        label: Text(
+                          "QR Code",
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 12,
+                              letterSpacing: -0.5),
+                        ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            setFavoritePlace(widget.isFavorited);
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outlineVariant)))),
-                          icon: Icon(
-                            widget.isFavorited
-                                ? Icons.favorite_outlined
-                                : Icons.favorite_outline,
-                            size: 20,
-                            color: widget.isFavorited
-                                ? Colors.redAccent
-                                : Theme.of(context).colorScheme.outline,
-                          ),
-                          label: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  widget.isFavorited ? "Liked" : "Like",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 600),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 14,
-                                      letterSpacing: -0.5),
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  "${widget.place['usersFavorited'] != null ? widget.place['usersFavorited'].length : 0}",
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 500),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 14,
-                                    letterSpacing: -0.3,
-                                    height: 0.7,
-                                  ),
-                                ),
-                              ]),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _showQRCode();
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outlineVariant)))),
-                          icon: Icon(
-                            Icons.qr_code_scanner,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          label: Text(
-                            "QR Code",
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 14,
-                                letterSpacing: -0.5),
-                          ),
-                        ),
-                      ]),
-                ],
-              ),
+                    ]),
+              ],
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: SizedBox(
@@ -529,74 +532,60 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  Opacity(
-                    opacity: tabController.index == 0 ? 1 : 0.5,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(tabController
-                                    .index ==
-                                0
-                            ? MaterialColors.getSurfaceContainerLow(darkMode)
-                            : MaterialColors.getSurfaceContainerLowest(
-                                darkMode)),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            "Food",
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 15,
-                                letterSpacing: -0.3,
-                                height: 0.85,
-                                overflow: TextOverflow.ellipsis),
-                          )),
-                      onPressed: () {
-                        tabController.animateTo(0);
-                      },
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          tabController.index == 0
+                              ? ChimeColors.getGreen800()
+                              : ChimeColors.getGreen100()),
                     ),
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          "Food",
+                          style: TextStyle(
+                              color: tabController.index == 0
+                                  ? ChimeColors.getGreen100()
+                                  : ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 13,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        )),
+                    onPressed: () {
+                      tabController.animateTo(0);
+                    },
                   ),
                   const SizedBox(width: 10),
-                  Opacity(
-                    opacity: tabController.index == 1 ? 1 : 0.5,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(tabController
-                                    .index ==
-                                1
-                            ? MaterialColors.getSurfaceContainerLow(darkMode)
-                            : MaterialColors.getSurfaceContainerLowest(
-                                darkMode)),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            "Categories",
-                            style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 15,
-                                letterSpacing: -0.3,
-                                height: 0.85,
-                                overflow: TextOverflow.ellipsis),
-                          )),
-                      onPressed: () {
-                        tabController.animateTo(1);
-                      },
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          tabController.index == 1
+                              ? ChimeColors.getGreen800()
+                              : ChimeColors.getGreen100()),
                     ),
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          "Categories",
+                          style: TextStyle(
+                              color: tabController.index == 1
+                                  ? ChimeColors.getGreen100()
+                                  : ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 13,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        )),
+                    onPressed: () {
+                      tabController.animateTo(1);
+                    },
                   ),
                 ],
               ),
@@ -616,36 +605,10 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                             widget.place['noticeDesc'] == null))
                           Column(children: [
                             const SizedBox(height: 10),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
-                                      const Icon(Icons.campaign,
-                                          color: Colors.grey, size: 16),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        "Announcements",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                            fontFamily: 'Bahnschrift',
-                                            fontVariations: const [
-                                              FontVariation('wght', 700),
-                                              FontVariation('wdth', 100),
-                                            ],
-                                            fontSize: 16,
-                                            letterSpacing: -0.5),
-                                      ),
-                                    ]),
-                                  ]),
-                            ),
-                            const SizedBox(height: 10),
                             Card(
                               elevation: 0,
+                              color: MaterialColors.getSurfaceContainerLowest(
+                                  darkMode),
                               shape: RoundedRectangleBorder(
                                   //<-- SEE HERE
                                   side: BorderSide(
@@ -662,17 +625,13 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                     Text(
                                       widget.place['noticeTitle'] ?? 'Notice',
                                       style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                        fontFamily: 'Bahnschrift',
+                                        color: ChimeColors.getGreen800(),
+                                        fontFamily: 'Plus Jakarta Sans',
                                         fontVariations: const [
-                                          FontVariation('wght', 650),
-                                          FontVariation('wdth', 100),
+                                          FontVariation('wght', 700),
                                         ],
                                         fontSize: 15,
                                         letterSpacing: -0.3,
-                                        height: 1.2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -687,12 +646,11 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .outline,
-                                          fontFamily: 'Bahnschrift',
+                                          fontFamily: 'Source Sans 3',
                                           fontVariations: const [
                                             FontVariation('wght', 400),
-                                            FontVariation('wdth', 100),
                                           ],
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           letterSpacing: -0.3,
                                           height: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -703,7 +661,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 25),
                           ]),
                         if (productsFavorited.isNotEmpty)
                           Column(children: [
@@ -714,37 +672,17 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(children: [
-                                      const Icon(Icons.favorite,
-                                          color: Colors.redAccent, size: 16),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        "Liked",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                            fontFamily: 'Bahnschrift',
-                                            fontVariations: const [
-                                              FontVariation('wght', 700),
-                                              FontVariation('wdth', 100),
-                                            ],
-                                            fontSize: 16,
-                                            letterSpacing: -0.5),
-                                      ),
-                                    ]),
                                     Text(
-                                      "Sorted A-Z   🡻",
+                                      "Liked",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
+                                              .onSurface,
+                                          fontFamily: 'Plus Jakarta Sans',
                                           fontVariations: const [
-                                            FontVariation('wght', 400),
-                                            FontVariation('wdth', 100),
+                                            FontVariation('wght', 700),
                                           ],
-                                          fontSize: 12.5,
+                                          fontSize: 15,
                                           letterSpacing: -0.5),
                                     ),
                                   ]),
@@ -771,7 +709,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 0),
                             ),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 25),
                           ]),
                         if (productsFeatured.isNotEmpty)
                           Column(children: [
@@ -782,37 +720,17 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(children: [
-                                      const Icon(Icons.bookmark,
-                                          color: Colors.orangeAccent, size: 16),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        "Featured",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                            fontFamily: 'Bahnschrift',
-                                            fontVariations: const [
-                                              FontVariation('wght', 700),
-                                              FontVariation('wdth', 100),
-                                            ],
-                                            fontSize: 16,
-                                            letterSpacing: -0.5),
-                                      ),
-                                    ]),
                                     Text(
-                                      "Sorted A-Z   🡻",
+                                      "Featured",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
+                                              .onSurface,
+                                          fontFamily: 'Plus Jakarta Sans',
                                           fontVariations: const [
-                                            FontVariation('wght', 400),
-                                            FontVariation('wdth', 100),
+                                            FontVariation('wght', 700),
                                           ],
-                                          fontSize: 12.5,
+                                          fontSize: 15,
                                           letterSpacing: -0.5),
                                     ),
                                   ]),
@@ -839,43 +757,24 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 0),
                             ),
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 25),
                           ]),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(children: [
-                                  const Icon(Icons.view_agenda,
-                                      color: Colors.grey, size: 16),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    "All",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 16,
-                                        letterSpacing: -0.5),
-                                  ),
-                                ]),
                                 Text(
-                                  "Sorted A-Z   🡻",
+                                  "All Posts",
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontFamily: 'Plus Jakarta Sans',
                                       fontVariations: const [
-                                        FontVariation('wght', 400),
-                                        FontVariation('wdth', 100),
+                                        FontVariation('wght', 700),
                                       ],
-                                      fontSize: 12.5,
+                                      fontSize: 15,
                                       letterSpacing: -0.5),
                                 ),
                               ]),
@@ -907,45 +806,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ListView(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(children: [
-                                const Icon(Icons.view_agenda,
-                                    color: Colors.grey, size: 16),
-                                const SizedBox(width: 5),
-                                Text(
-                                  "Categories",
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.5),
-                                ),
-                              ]),
-                              Text(
-                                "Sorted A-Z   🡻",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 400),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 12.5,
-                                    letterSpacing: -0.5),
-                              ),
-                            ]),
-                      ),
-                      const SizedBox(height: 10),
                       GridView.builder(
                         key: UniqueKey(),
                         shrinkWrap: true,
@@ -956,8 +816,9 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
                             elevation: 0,
+                            color: MaterialColors.getSurfaceContainerLowest(
+                                darkMode),
                             shape: RoundedRectangleBorder(
-                                //<-- SEE HERE
                                 side: BorderSide(
                                   color:
                                       MaterialColors.getSurfaceContainerHighest(
@@ -986,6 +847,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           categoryKeys[index],
@@ -993,36 +856,30 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurfaceVariant,
-                                            fontFamily: 'Bahnschrift',
+                                            fontFamily: 'Plus Jakarta Sans',
                                             fontVariations: const [
-                                              FontVariation('wght', 650),
-                                              FontVariation('wdth', 100),
+                                              FontVariation('wght', 700),
                                             ],
-                                            fontSize: 15,
-                                            letterSpacing: -0.3,
+                                            fontSize: 14,
                                             height: 1,
+                                            letterSpacing: -0.3,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                         const SizedBox(width: 10),
                                         Text(
-                                          widget
-                                              .place['categories']
-                                                  [categoryKeys[index]]
-                                              .length
-                                              .toString(),
+                                          "(${widget.place['categories'][categoryKeys[index]].length.toString()})",
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .outline,
-                                            fontFamily: 'Bahnschrift',
+                                            fontFamily: 'Source Sans 3',
                                             fontVariations: const [
-                                              FontVariation('wght', 500),
-                                              FontVariation('wdth', 100),
+                                              FontVariation('wght', 400),
                                             ],
-                                            fontSize: 15,
+                                            fontSize: 14,
+                                            height: 1.2,
                                             letterSpacing: -0.3,
-                                            height: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),

@@ -86,10 +86,17 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     isFeatured = widget.product['categories'].contains('Featured');
     return Card(
-      color: MaterialColors.getSurfaceContainerLow(darkMode),
+      color: MaterialColors.getSurfaceContainerLowest(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          width: 0.5,
+          color: MaterialColors.getSurfaceContainerHighest(darkMode),
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: InkWell(
         onTap: () {
           if (context.mounted) {
@@ -168,19 +175,18 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 25,
+                      height: 15,
                       child: Text(
                         widget.product['productName'],
                         maxLines: 2,
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Plus Jakarta Sans',
                             fontVariations: const [
-                              FontVariation('wght', 550),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 700),
                             ],
-                            fontSize: 13,
+                            fontSize: 12,
                             letterSpacing: -0.3,
                             height: 0.85,
                             overflow: TextOverflow.ellipsis),
@@ -189,13 +195,12 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                     Text(
                       '₱${widget.product['productPrice']}',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Bahnschrift',
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Plus Jakarta Sans',
                           fontVariations: const [
                             FontVariation('wght', 700),
-                            FontVariation('wdth', 100),
                           ],
-                          fontSize: 24,
+                          fontSize: 16,
                           height: 0.85,
                           letterSpacing: -0.3),
                     ),

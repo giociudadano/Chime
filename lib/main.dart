@@ -32,6 +32,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Imports helper functions and models.
 import 'models/material_colors_model.dart';
+import 'models/chime_colors_model.dart';
 part 'models/product_model.dart';
 
 // Defines all page components.

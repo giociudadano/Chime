@@ -112,5 +112,15 @@ flutter:
     - family: Bahnschrift
       fonts:
         - asset: lib/assets/fonts/bahnschrift/bahnschrift.TTF
+    - family: Source Sans 3
+      fonts:
+        - asset: lib/assets/fonts/source_sans/source_sans.TTF
+        - asset: lib/assets/fonts/source_sans/source_sans_italic.TTF
+          style: italic
+    - family: Plus Jakarta Sans
+      fonts:
+        - asset: lib/assets/fonts/plus_jakarta_sans/plus_jakarta_sans.TTF
+        - asset: lib/assets/fonts/plus_jakarta_sans/plus_jakarta_sans_italic.TTF
+          style: italic
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -36,10 +36,9 @@ class _PlaceCategoryPageState extends State<PlaceCategoryPage> {
                 widget.categoryName,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Plus Jakarta Sans',
                     fontVariations: const [
                       FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
                     ],
                     fontSize: 20,
                     letterSpacing: -0.3),
@@ -49,50 +48,21 @@ class _PlaceCategoryPageState extends State<PlaceCategoryPage> {
         ),
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(
-                  "Products under '${widget.categoryName}'",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 700),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 16,
-                      letterSpacing: -0.5),
-                ),
-                Text(
-                  "Sorted A-Z   🡻",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 400),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 12.5,
-                      letterSpacing: -0.5),
-                ),
-              ]),
-              const SizedBox(height: 10),
-              GridView.builder(
-                key: UniqueKey(),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 205,
-                    maxCrossAxisExtent: 200,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 0),
-                itemCount: widget.productIDsInCategory.length,
-                itemBuilder: (context, index) {
-                  String key = widget.productIDsInCategory[index];
-                  return ProductCard(
-                      key, widget.products[key], widget.placeID, widget.place);
-                },
-              ),
-            ])));
+            child: GridView.builder(
+              key: UniqueKey(),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  mainAxisExtent: 205,
+                  maxCrossAxisExtent: 200,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 0),
+              itemCount: widget.productIDsInCategory.length,
+              itemBuilder: (context, index) {
+                String key = widget.productIDsInCategory[index];
+                return ProductCard(
+                    key, widget.products[key], widget.placeID, widget.place);
+              },
+            )));
   }
 }

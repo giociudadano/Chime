@@ -60,9 +60,15 @@ class _PlaceCardState extends State<PlaceCard> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      color: MaterialColors.getSurfaceContainerLow(darkMode),
+      color: MaterialColors.getSurfaceContainerLowest(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: MaterialColors.getSurfaceContainerHighest(darkMode),
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
       child: InkWell(
         onTap: () {
@@ -115,13 +121,12 @@ class _PlaceCardState extends State<PlaceCard> {
                             widget.place['placeName'],
                             maxLines: 1,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontFamily: 'Bahnschrift',
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 800),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           ),
@@ -134,7 +139,7 @@ class _PlaceCardState extends State<PlaceCard> {
                               maxLines: 2,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
+                                fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                   FontVariation('wdth', 100),

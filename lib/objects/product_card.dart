@@ -68,10 +68,16 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      color: MaterialColors.getSurfaceContainerLow(darkMode),
+      color: MaterialColors.getSurfaceContainerLowest(darkMode),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+      shape: RoundedRectangleBorder(
+          //<-- SEE HERE
+          side: BorderSide(
+            color: MaterialColors.getSurfaceContainerHighest(darkMode),
+          ),
+          borderRadius: BorderRadius.circular(10.0)),
       child: InkWell(
         onTap: () {
           if (context.mounted) {
@@ -110,12 +116,12 @@ class _ProductCardState extends State<ProductCard> {
                     ),
                   ),
                 ),
-                
                 if (widget.product['isFeatured'] ?? false)
                   Positioned(
                     left: 7,
                     top: 0,
-                    child: Icon(Icons.bookmark, size: 30, color: Colors.orange[700]),
+                    child: Icon(Icons.bookmark,
+                        size: 30, color: Colors.orange[700]),
                   ),
                 if (widget.product['isFeatured'] ?? false)
                   const Positioned(
@@ -164,19 +170,18 @@ class _ProductCardState extends State<ProductCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 25,
+                      height: 15,
                       child: Text(
                         widget.product['productName'],
-                        maxLines: 2,
+                        maxLines: 1,
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Plus Jakarta Sans',
                             fontVariations: const [
-                              FontVariation('wght', 550),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 700),
                             ],
-                            fontSize: 13,
+                            fontSize: 12,
                             letterSpacing: -0.3,
                             height: 0.85,
                             overflow: TextOverflow.ellipsis),
@@ -185,13 +190,12 @@ class _ProductCardState extends State<ProductCard> {
                     Text(
                       '₱${widget.product['productPrice']}',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Bahnschrift',
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Plus Jakarta Sans',
                           fontVariations: const [
                             FontVariation('wght', 700),
-                            FontVariation('wdth', 100),
                           ],
-                          fontSize: 24,
+                          fontSize: 16,
                           height: 0.85,
                           letterSpacing: -0.3),
                     ),
