@@ -230,10 +230,9 @@ class _PlacesPageState extends State<PlacesPage> {
           child: Text(
             "Scan a Place",
             style: TextStyle(
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Plus Jakarta Sans',
                 fontVariations: [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 800),
                 ],
                 fontSize: 20,
                 letterSpacing: -0.3),
@@ -297,10 +296,9 @@ class _PlacesPageState extends State<PlacesPage> {
                     "This place does not exist",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Plus Jakarta Sans',
                         fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 800),
                         ],
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 20,
@@ -312,10 +310,9 @@ class _PlacesPageState extends State<PlacesPage> {
                     maxLines: 3,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 400),
-                          FontVariation('wdth', 100),
                         ],
                         fontSize: 13,
                         letterSpacing: -0.3,
@@ -348,10 +345,13 @@ class _PlacesPageState extends State<PlacesPage> {
                 }
               },
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: Icon(Icons.qr_code_scanner,
-                  color: Theme.of(context).colorScheme.onPrimary)),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              backgroundColor: ChimeColors.getGreen800(),
+              child: Icon(
+                Icons.qr_code_scanner,
+                color: Theme.of(context).colorScheme.onPrimary,
+                size: 24,
+              )),
         ),
       ),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
@@ -379,27 +379,24 @@ class _PlacesPageState extends State<PlacesPage> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 contentPadding: EdgeInsets.zero,
-                hintText: AppLocalizations.of(context)!.placesSearchBoxHint,
-                hintStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.outline),
+                hintText: "Search",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  letterSpacing: -0.3,
+                ),
                 filled: true,
                 fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
                 isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.mic_outlined),
-                  onPressed: () {
-                    //TODO: Add method that converts speech to text.
-                  },
-                ),
+                prefixIcon: const Icon(Icons.search_outlined, size: 16),
               ),
               style: const TextStyle(
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: [
-                  FontVariation('wght', 300),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
-                fontSize: 13,
+                height: 1.2,
+                letterSpacing: -0.3,
+                fontSize: 14,
               ),
             ),
           ),
@@ -409,106 +406,82 @@ class _PlacesPageState extends State<PlacesPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
+                  const SizedBox(height: 10),
+
+                  // If there are favorited places, display the items at the top of the list.
                   if (placesFavorited.isNotEmpty && _searchBox.text == '')
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.placesFavorited,
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              "Your favorites",
                               style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Plus Jakarta Sans',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
                                   ],
-                                  fontSize: 16,
-                                  letterSpacing: -0.5),
+                                  fontSize: 15,
+                                  letterSpacing: -0.3),
                             ),
-                            Text(
-                              "Sorted A-Z   🡻",
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 12.5,
-                                  letterSpacing: -0.5),
-                            ),
-                          ]),
-                    ),
-                  if (placesFavorited.isNotEmpty && _searchBox.text == '')
-                    const SizedBox(height: 10),
-                  if (placesFavorited.isNotEmpty && _searchBox.text == '')
-                    GridView.builder(
-                      key: UniqueKey(),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: placesFavorited.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        String key = placesFavorited.keys.elementAt(index);
-                        return PlaceCard(key, placesFavorited[key],
-                            setFavoritePlaceCallback: setFavoritePlace);
-                      },
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              mainAxisExtent: 100,
-                              maxCrossAxisExtent: 450,
-                              childAspectRatio: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 0),
-                    ),
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.builder(
+                            key: UniqueKey(),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: placesFavorited.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String key =
+                                  placesFavorited.keys.elementAt(index);
+                              return PlaceCard(key, placesFavorited[key],
+                                  setFavoritePlaceCallback: setFavoritePlace);
+                            },
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    mainAxisExtent: 100,
+                                    maxCrossAxisExtent: 450,
+                                    childAspectRatio: 2,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 0),
+                          ),
+                          const SizedBox(height: 20),
+                        ]),
+
+                  // If there are no places being searched, display the list of popular places.
+                  // If there are places being searched and there are results returned, display the list of
+                  // popular places with the matching search text.
                   if (_searchBox.text.isEmpty ||
                       (_searchBox.text.isNotEmpty && placesSearched.isNotEmpty))
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _searchBox.text.isEmpty
-                                    ? AppLocalizations.of(context)!.placesNear
-                                    : AppLocalizations.of(context)!
-                                        .placesSearch(
-                                            _searchBox.text.toLowerCase()),
-                                maxLines: 2,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 700),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 16,
-                                    letterSpacing: -0.5,
-                                    height: 1.2,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              _searchBox.text.isEmpty
+                                  ? "Popular places"
+                                  : 'Popular places named "${_searchBox.text.toLowerCase()}"',
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 15,
+                                  letterSpacing: -0.3,
+                                  height: 1.2,
+                                  overflow: TextOverflow.ellipsis),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                "Sorted A-Z   🡻",
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 400),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 12.5,
-                                    letterSpacing: -0.5),
-                              ),
-                            )
-                          ]),
-                    ),
+                          ),
+                        ]),
+
+                  // If there are places being searched which yields no results, display an error.
                   if (placesSearched.isEmpty && _searchBox.text.isNotEmpty)
                     Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -535,12 +508,12 @@ class _PlacesPageState extends State<PlacesPage> {
                               ]),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: 'Bahnschrift',
+                                  fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
                                   ],
-                                  color: Theme.of(context).colorScheme.outline,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   fontSize: 15,
                                   height: 1.1,
                                   letterSpacing: -0.3),

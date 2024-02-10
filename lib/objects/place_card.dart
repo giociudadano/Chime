@@ -142,7 +142,6 @@ class _PlaceCardState extends State<PlaceCard> {
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
-                                  FontVariation('wdth', 100),
                                 ],
                                 fontSize: 12,
                                 letterSpacing: -0.3,
