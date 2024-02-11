@@ -77,13 +77,12 @@ class _ProductPageState extends State<ProductPage> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(
               Theme.of(context).brightness == Brightness.dark),
         ),
       );
@@ -135,42 +134,49 @@ class _ProductPageState extends State<ProductPage> {
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          "Buying options",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 20,
-                              letterSpacing: -0.3),
-                        ),
-                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Options",
+                              style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 24,
+                                  letterSpacing: -0.3),
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 24,
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ]),
                       const SizedBox(height: 20),
                       Text(
-                        "Choose Variant",
-                        maxLines: 3,
+                        "Variant",
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 650),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 14.5,
-                            letterSpacing: -0.3,
-                            height: 1.3,
-                            overflow: TextOverflow.ellipsis),
+                          color: Theme.of(context).colorScheme.outline,
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontVariations: const [
+                            FontVariation('wght', 700),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                        ),
                       ),
                       const SizedBox(height: 5),
                       SizedBox(
-                        height: 50,
+                        height: 45,
                         child: DropdownButtonFormField(
+                          iconSize: 0,
                           isExpanded: true,
                           elevation: 1,
                           decoration: InputDecoration(
@@ -178,19 +184,19 @@ class _ProductPageState extends State<ProductPage> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               borderSide: BorderSide(
-                                  width: 3,
+                                  width: 0.5,
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .primary), //<-- SEE HERE
+                                      .outline), //<-- SEE HERE
                             ),
                             border: OutlineInputBorder(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               borderSide: BorderSide(
-                                  width: 3,
+                                  width: 0.5,
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .primary), //<-- SEE HERE
+                                      .outline), //<-- SEE HERE
                             ),
                           ),
                           value: variant,
@@ -203,12 +209,12 @@ class _ProductPageState extends State<ProductPage> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onSurfaceVariant,
-                                  fontFamily: 'Bahnschrift',
+                                  fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
                                   ],
-                                  fontSize: 15,
+                                  fontSize: 14,
+                                  height: 0.85,
                                   letterSpacing: -0.3,
                                 ),
                               ),
@@ -222,36 +228,42 @@ class _ProductPageState extends State<ProductPage> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Set Quantity",
-                            maxLines: 3,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Bahnschrift',
+                          SizedBox(
+                            width: 80,
+                            child: Text(
+                              "Quantity",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 650),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 14.5,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
-                                height: 1.3,
-                                overflow: TextOverflow.ellipsis),
+                              ),
+                            ),
                           ),
                           Row(children: [
                             Container(
-                              color: MaterialColors.getSurfaceContainerLow(
-                                  darkMode),
-                              width: 32,
-                              height: 32,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
+                              width: 28,
+                              height: 28,
                               child: IconButton(
+                                padding: EdgeInsets.zero,
                                 icon: Icon(
                                   Icons.remove,
-                                  color: Theme.of(context).colorScheme.outline,
-                                  size: 18,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 16,
                                 ),
                                 onPressed: () {
                                   if (itemQuantity > 1) {
@@ -263,17 +275,21 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                             ),
                             Container(
-                              color: MaterialColors.getSurfaceContainerLow(
-                                  darkMode),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
                               width: 40,
-                              height: 32,
+                              height: 28,
                               child: Center(
                                 child: Text(itemQuantity.toString(),
                                     style: const TextStyle(
-                                        fontFamily: 'Bahnschrift',
+                                        fontFamily: 'Source Sans 3',
                                         fontVariations: [
-                                          FontVariation('wght', 500),
-                                          FontVariation('wdth', 100),
+                                          FontVariation('wght', 400),
                                         ],
                                         fontSize: 16,
                                         letterSpacing: -0.3),
@@ -281,15 +297,21 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                             ),
                             Container(
-                              color: MaterialColors.getSurfaceContainerLow(
-                                  darkMode),
-                              width: 32,
-                              height: 32,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
+                              width: 28,
+                              height: 28,
                               child: IconButton(
+                                padding: EdgeInsets.zero,
                                 icon: Icon(
                                   Icons.add,
                                   color: Theme.of(context).colorScheme.outline,
-                                  size: 18,
+                                  size: 16,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -297,37 +319,117 @@ class _ProductPageState extends State<ProductPage> {
                                   });
                                 },
                               ),
-                            )
+                            ),
+                            const SizedBox(width: 30),
+
+                            // If the product is limited, show the number of stocks.
+                            if (widget.product['isLimited'] ?? false)
+                              Row(children: [
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    "Stock",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 14,
+                                      height: 1,
+                                      letterSpacing: -0.3,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "${widget.product['ordersRemaining']}",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ])
                           ]),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 50),
                       Row(
                         children: [
+                          // If the product is accepting pre-orders, add a pre-order button.
+                          if (widget.product['isAcceptPreorders'] ?? false)
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    //TODO: Create functionality to accept pre-orders.
+                                    throw UnimplementedError();
+                                  },
+                                  style: ButtonStyle(
+                                    elevation:
+                                        const MaterialStatePropertyAll(0),
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        MaterialColors
+                                            .getSurfaceContainerLowest(
+                                                darkMode)),
+                                    shape: MaterialStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: BorderSide(
+                                        color: ChimeColors.getGreen300(),
+                                      ),
+                                    )),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      "Pre-order",
+                                      style: TextStyle(
+                                        color: ChimeColors.getGreen800(),
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                        ],
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
                                 addToCart();
                               },
                               style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(
-                                    Theme.of(context).colorScheme.primary),
-                                foregroundColor: MaterialStatePropertyAll(
-                                    Theme.of(context).colorScheme.onPrimary),
-                              ),
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      ChimeColors.getGreen200()),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide.none,
+                                  ))),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
                                   "Add to Cart",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontFamily: 'Bahnschrift',
+                                    color: ChimeColors.getGreen800(),
+                                    fontFamily: 'Plus Jakarta Sans',
                                     fontVariations: const [
-                                      FontVariation('wght', 600),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 700),
                                     ],
-                                    fontSize: 15,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
@@ -335,45 +437,6 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                         ],
                       ),
-                      if (widget.product['isAcceptPreorders'] ?? false)
-                        const SizedBox(height: 10),
-                      if (widget.product['isAcceptPreorders'] ?? false)
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      MaterialColors.getSurfaceContainerLow(
-                                          darkMode)),
-                                  foregroundColor: MaterialStatePropertyAll(
-                                      MaterialColors.getSurfaceContainerLow(
-                                          darkMode)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    "Pre-Order",
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 600),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                     ]),
               );
             }),
@@ -472,24 +535,23 @@ class _ProductPageState extends State<ProductPage> {
                 //addToCart();
               },
               icon: Icon(Icons.shopping_cart_outlined,
-                  color: Theme.of(context).colorScheme.onPrimary),
+                  color: Theme.of(context).colorScheme.onPrimary, size: 24),
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               label: Text(
                   isInCart
-                      ? "Update cart"
+                      ? "Update Cart"
                       : AppLocalizations.of(context)!.addToCart,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Plus Jakarta Sans',
                     fontVariations: const [
-                      FontVariation('wght', 500),
-                      FontVariation('wdth', 100),
+                      FontVariation('wght', 700),
                     ],
-                    fontSize: 18,
+                    fontSize: 16,
                     letterSpacing: -0.3,
                   )),
-              backgroundColor: Theme.of(context).colorScheme.primary),
+              backgroundColor: ChimeColors.getGreen800()),
         ),
       ),
       body: ListView(
@@ -524,7 +586,7 @@ class _ProductPageState extends State<ProductPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
@@ -537,12 +599,11 @@ class _ProductPageState extends State<ProductPage> {
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Bahnschrift',
+                                  fontFamily: 'Plus Jakarta Sans',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
                                   ],
-                                  fontSize: 15,
+                                  fontSize: 20,
                                   letterSpacing: -0.3,
                                   height: 0.85,
                                   overflow: TextOverflow.ellipsis),
@@ -550,15 +611,15 @@ class _ProductPageState extends State<ProductPage> {
                             const SizedBox(height: 5),
                             Text(
                               "₱${widget.product['productPrice'].toString()}",
-                              maxLines: 2,
+                              maxLines: 1,
                               style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontFamily: 'Bahnschrift',
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Plus Jakarta Sans',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
                                   ],
-                                  fontSize: 28,
+                                  fontSize: 20,
                                   letterSpacing: -0.3,
                                   height: 0.85,
                                   overflow: TextOverflow.ellipsis),
@@ -566,184 +627,215 @@ class _ProductPageState extends State<ProductPage> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: Icon(
-                                widget.product['isFavorited'] ?? false
-                                    ? Icons.favorite_outlined
-                                    : Icons.favorite_outline,
-                                size: 24,
-                                color: widget.product['isFavorited'] ?? false
-                                    ? Colors.redAccent
-                                    : Theme.of(context).colorScheme.outline,
-                              ),
-                              onPressed: () {
-                                setFavoriteProduct(
-                                    widget.product['isFavorited'] ?? false);
-                              },
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 500),
-                                  FontVariation('wdth', 100),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    icon: Icon(
+                                      widget.product['isFavorited'] ?? false
+                                          ? Icons.favorite_outlined
+                                          : Icons.favorite_outline,
+                                      size: 24,
+                                      color:
+                                          widget.product['isFavorited'] ?? false
+                                              ? Colors.redAccent
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant,
+                                    ),
+                                    onPressed: () {
+                                      setFavoriteProduct(
+                                          widget.product['isFavorited'] ??
+                                              false);
+                                    },
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                      fontFamily: 'Source Sans 3',
+                                      fontVariations: const [
+                                        FontVariation('wght', 400),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                      height: 0.7,
+                                    ),
+                                  ),
                                 ],
-                                fontSize: 14,
-                                letterSpacing: -0.3,
-                                height: 0.7,
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  Icons.ios_share,
+                                  size: 24,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                                onPressed: () {
+                                  //TODO: Add functionality to share product.
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15),
+                              child: IconButton(
+                                constraints: const BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  size: 24,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                ),
+                                onPressed: () {
+                                  //TODO: Add functionality to do additional options to the product.
+                                },
+                              ),
+                            ),
+                          ])
+                    ]),
+                const SizedBox(height: 30),
+
+                // If accepting pre-orders, display pre-orders available.
+                if (widget.product['isAcceptPreorders'] ?? false)
+                  Column(children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          size: 16,
+                          color: ChimeColors.getGreen800(),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "Pre-Orders Available",
+                          style: TextStyle(
+                            color: ChimeColors.getGreen800(),
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                            height: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ]),
+
+                // If the product is limited, displays the number of stocks remaining.
+                if (widget.product['isLimited'] ?? false)
+                  Column(children: [
+                    Row(children: [
+                      Container(
+                        width: 100,
+                        child: Text(
+                          "Stock",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.outline,
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "${widget.product['ordersRemaining']}",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
                           ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: IconButton(
-                          constraints: const BoxConstraints(),
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                            Icons.ios_share,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          onPressed: () {
-                            //TODO: Add functionality to share product.
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: IconButton(
-                          constraints: const BoxConstraints(),
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                            Icons.more_vert,
-                            size: 24,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          onPressed: () {
-                            //TODO: Add functionality to do additional options to the product.
-                          },
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                          height: 1,
                         ),
                       ),
                     ]),
-                const SizedBox(height: 10),
-                Text(
-                  widget.product['isLimited'] ?? false
-                      ? "${widget.product['ordersRemaining']} orders remaining"
-                      : "Available",
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: widget.product['isLimited'] ?? false
-                          ? Colors.amber[darkMode ? 400 : 900]
-                          : Theme.of(context).colorScheme.primary,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 600),
-                        FontVariation('wdth', 400),
-                      ],
-                      fontSize: 13.5,
-                      letterSpacing: -0.5,
-                      height: 1.1,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                if (widget.product['isAcceptPreorders'] ?? false)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Pre-orders available",
-                        maxLines: 1,
-                        style: TextStyle(
+                    const SizedBox(height: 10),
+                  ]),
+
+                // If there is a description, display the description.
+                if (widget.product['productDesc'] != null)
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Description",
+                          style: TextStyle(
                             color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 13.5,
+                            fontSize: 14,
                             letterSpacing: -0.3,
                             height: 1,
-                            overflow: TextOverflow.ellipsis),
-                      ),
-                      const SizedBox(width: 5),
-                      IconButton(
-                        constraints: const BoxConstraints(),
-                        padding: EdgeInsets.zero,
-                        icon: Icon(
-                          Icons.help,
-                          size: 13,
-                          color: Theme.of(context).colorScheme.outline,
+                          ),
                         ),
-                        onPressed: () {
-                          //TODO: Add pop-up to explain preorders.
-                        },
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 10),
-                Divider(
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Description",
-                  maxLines: 3,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 650),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14,
-                      letterSpacing: -0.3,
-                      height: 1.3,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  widget.product['productDesc'] ?? 'No added description',
-                  maxLines: 3,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 350),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 13.5,
-                      letterSpacing: -0.5,
-                      height: 1.1,
-                      overflow: TextOverflow.ellipsis),
-                ),
-                const SizedBox(height: 20),
+                        const SizedBox(height: 5),
+                        Text(
+                          widget.product['productDesc'],
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                            height: 1,
+                          ),
+                        ),
+                      ]),
+
+                // Add a padding if any conditional column was added.
+                if ((widget.product['isAcceptPreorders'] ?? false) ||
+                    (widget.product['isLimited'] ?? false) ||
+                    (widget.product['productDesc'] != null))
+                  const SizedBox(height: 20),
+
                 Card(
                   elevation: 0,
+                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
                   shape: RoundedRectangleBorder(
-                      //<-- SEE HERE
                       side: BorderSide(
                         color:
                             MaterialColors.getSurfaceContainerHighest(darkMode),
                       ),
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 65,
+                          width: 50,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
                             child: FittedBox(
@@ -768,41 +860,37 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 15),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.place['placeName'],
-                                maxLines: 1,
+                                'Sold by',
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Bahnschrift',
+                                    fontFamily: 'Source Sans 3',
                                     fontVariations: const [
-                                      FontVariation('wght', 700),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 400),
                                     ],
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     letterSpacing: -0.3,
-                                    height: 1.2,
+                                    height: 1,
                                     overflow: TextOverflow.ellipsis),
                               ),
                               Text(
-                                widget.place['placeTagline'] ?? '',
-                                maxLines: 2,
+                                widget.place['placeName'],
+                                maxLines: 1,
                                 style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
+                                    color: ChimeColors.getGreen800(),
+                                    fontFamily: 'Plus Jakarta Sans',
                                     fontVariations: const [
-                                      FontVariation('wght', 400),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 700),
                                     ],
-                                    fontSize: 12.5,
+                                    fontSize: 16,
                                     letterSpacing: -0.3,
-                                    height: 0.85,
+                                    height: 1,
                                     overflow: TextOverflow.ellipsis),
                               ),
                             ],

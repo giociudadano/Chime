@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           items: [
             BottomNavigationBarItem(
                 icon: Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Card(
                     elevation: 0,
                     color: MaterialColors.getSurfaceContainerLowest(darkMode),
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Icon(Icons.local_mall,
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 24),
-                          Text(
+                          const Text(
                             "Places",
                             style: TextStyle(
                               fontFamily: 'Plus Jakarta Sans',
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 activeIcon: Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Card(
                     elevation: 0,
                     color: ChimeColors.getGreen200(),
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         Icon(Icons.fastfood,
                             color: Theme.of(context).colorScheme.onSurface,
                             size: 24),
-                        Text(
+                        const Text(
                           "Foods",
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',
@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Icon(Icons.receipt,
                               color: Theme.of(context).colorScheme.onSurface,
                               size: 24),
-                          Text(
+                          const Text(
                             "Orders",
                             style: TextStyle(
                               fontFamily: 'Plus Jakarta Sans',
@@ -241,7 +241,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
                 activeIcon: Padding(
-                  padding: EdgeInsets.only(right: 20),
+                  padding: const EdgeInsets.only(right: 20),
                   child: Card(
                     elevation: 0,
                     color: ChimeColors.getGreen200(),
@@ -273,6 +273,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ],
           showSelectedLabels: false,
           showUnselectedLabels: false,
+          selectedFontSize: 4,
+          unselectedFontSize: 4,
           currentIndex: tabController.index,
           onTap: (int i) {
             setState(() {
