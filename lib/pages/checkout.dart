@@ -119,19 +119,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
           .delete();
       // 4. Add items as an order entry
       db.collection("orders").add({
-        "address": deliveryMethod == 'Pick Up'
-            ? null
+        "address": deliveryMethod == 'Pickup'
+            ? "N/A (Pickup)"
             : addresses[selectedAddress!]["address"],
         "createdAt": FieldValue.serverTimestamp(),
+        "customerName": user['displayName'],
         "deliveryFee": getDeliveryFee(),
         "deliveryMethod": deliveryMethod,
-        "displayName": user['displayName'],
         "items": items,
+        "landmark": deliveryMethod == 'Pickup'
+            ? "N/A (Pickup)"
+            : addresses[selectedAddress]["landmark"],
         "paymentMethod": paymentMethod,
         "phoneNumber": user['phoneNumber'],
         "placeID": widget.placeID,
         "price": getTotal(),
-        "status": "Pending",
+        "status": "Unread",
+        "storeName": 'Store Name', //TODO: Fetch store name programatically
         "userID": uid,
       }).then((docRef) {
         // 5. Add order to list of orders of user
@@ -525,7 +529,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
                         Radio(
-                          value: 'Pick Up',
+                          value: 'Pickup',
                           groupValue: deliveryMethod,
                           onChanged: (String? value) {
                             setState(() {

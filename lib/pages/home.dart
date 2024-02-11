@@ -334,7 +334,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
           ),
-          const SizedBox(height: 20),
           Expanded(
             child: TabBarView(
               controller: tabController,
