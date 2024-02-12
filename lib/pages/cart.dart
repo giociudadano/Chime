@@ -136,9 +136,10 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -147,32 +148,22 @@ class _CartPageState extends State<CartPage> {
             Navigator.pop(context);
           },
         ),
-        title: Center(
-          child: Text(
-            AppLocalizations.of(context)!.cartHeader,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontFamily: 'Bahnschrift',
-                fontVariations: const [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
-                ],
-                fontSize: 20,
-                letterSpacing: -0.3),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: IconButton(
-              icon: Icon(Icons.info_outline,
-                  color: Theme.of(context).colorScheme.outline),
-              onPressed: () {
-                showReminder(context);
-              },
+        title: Padding(
+          padding: const EdgeInsets.only(right: 50),
+          child: Center(
+            child: Text(
+              "My Cart",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontVariations: const [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 20,
+                  letterSpacing: -0.3),
             ),
           ),
-        ],
+        ),
       ),
       body: orders.isNotEmpty
           ? ListView(

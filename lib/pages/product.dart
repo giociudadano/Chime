@@ -64,8 +64,9 @@ class _ProductPageState extends State<ProductPage> {
           "name": widget.product['productName'],
           "quantity": itemQuantity,
           "price": widget.product['productPrice'],
-          "limited": widget.product['isLimited'] ?? false,
-          "max": widget.product['ordersRemaining'] ?? -1
+          "isLimited": widget.product['isLimited'] ?? false,
+          if (widget.product['isLimited'] ?? false)
+            "ordersRemaining": widget.product['ordersRemaining']
         }
       }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(
@@ -314,9 +315,19 @@ class _ProductPageState extends State<ProductPage> {
                                   size: 16,
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    itemQuantity += 1;
-                                  });
+                                  // If product is not limited or it is and the current > remaining
+                                  if (!widget.product['isLimited']) {
+                                    setState(() {
+                                      itemQuantity += 1;
+                                    });
+                                  } else {
+                                    if (itemQuantity <=
+                                        widget.product['ordersRemaining'] - 1) {
+                                      setState(() {
+                                        itemQuantity += 1;
+                                      });
+                                    }
+                                  }
                                 },
                               ),
                             ),
@@ -357,7 +368,7 @@ class _ProductPageState extends State<ProductPage> {
                                     height: 1.3,
                                   ),
                                 ),
-                              ])
+                              ]),
                           ]),
                         ],
                       ),
@@ -746,7 +757,7 @@ class _ProductPageState extends State<ProductPage> {
                 if (widget.product['isLimited'] ?? false)
                   Column(children: [
                     Row(children: [
-                      Container(
+                      SizedBox(
                         width: 100,
                         child: Text(
                           "Stock",

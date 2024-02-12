@@ -582,7 +582,8 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                           ),
                         ),
                       );
-                    })
+                    }),
+                const SizedBox(height: 20),
               ],
             ),
           ],

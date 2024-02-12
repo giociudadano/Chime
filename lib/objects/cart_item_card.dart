@@ -140,7 +140,13 @@ class _CartItemCardState extends State<CartItemCard> {
         color: MaterialColors.getSurfaceContainerLowest(darkMode),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 0,
-        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: MaterialColors.getSurfaceContainerHighest(darkMode),
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -186,50 +192,53 @@ class _CartItemCardState extends State<CartItemCard> {
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
                     Text(
                       widget.item['name'],
                       maxLines: 2,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: const [
-                            FontVariation('wght', 500),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 13,
-                          letterSpacing: -0.3,
-                          height: 0.85,
-                          overflow: TextOverflow.ellipsis),
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontVariations: const [
+                          FontVariation('wght', 700),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                     ),
                     Text(
                       '₱${widget.item['price']}',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Bahnschrift',
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Plus Jakarta Sans',
                           fontVariations: const [
                             FontVariation('wght', 700),
-                            FontVariation('wdth', 100),
                           ],
-                          fontSize: 22,
+                          fontSize: 14,
+                          height: 0.85,
                           letterSpacing: -0.3),
                     ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 20),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          color:
-                              MaterialColors.getSurfaceContainerLow(darkMode),
-                          width: 32,
-                          height: 32,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant)),
+                          width: 28,
+                          height: 28,
                           child: IconButton(
+                            padding: EdgeInsets.zero,
                             icon: Icon(
                               Icons.remove,
-                              color: Theme.of(context).colorScheme.outline,
-                              size: 18,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              size: 16,
                             ),
                             onPressed: () {
                               if (widget.item['quantity'] > 1) {
@@ -243,17 +252,21 @@ class _CartItemCardState extends State<CartItemCard> {
                           ),
                         ),
                         Container(
-                          color: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant)),
                           width: 40,
-                          height: 32,
+                          height: 28,
                           child: Center(
                             child: Text(widget.item['quantity'].toString(),
                                 style: const TextStyle(
-                                    fontFamily: 'Bahnschrift',
+                                    fontFamily: 'Source Sans 3',
                                     fontVariations: [
-                                      FontVariation('wght', 500),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 400),
                                     ],
                                     fontSize: 16,
                                     letterSpacing: -0.3),
@@ -261,25 +274,71 @@ class _CartItemCardState extends State<CartItemCard> {
                           ),
                         ),
                         Container(
-                          color:
-                              MaterialColors.getSurfaceContainerLow(darkMode),
-                          width: 32,
-                          height: 32,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant)),
+                          width: 28,
+                          height: 28,
                           child: IconButton(
+                            padding: EdgeInsets.zero,
                             icon: Icon(
                               Icons.add,
                               color: Theme.of(context).colorScheme.outline,
-                              size: 18,
+                              size: 16,
                             ),
                             onPressed: () {
-                              setProductQuantityAtDatabase();
-                              widget.updateTotal!(widget.item['price']);
-                              setState(() {
-                                widget.item['quantity'] += 1;
-                              });
+                              if (widget.item['quantity'] <=
+                                  (widget.item['ordersRemaining'] - 1 ?? 99)) {
+                                setProductQuantityAtDatabase();
+                                widget.updateTotal!(widget.item['price']);
+                                setState(() {
+                                  widget.item['quantity'] += 1;
+                                });
+                              }
                             },
                           ),
                         ),
+                        const SizedBox(width: 10),
+                        if (widget.item['isLimited'] ?? false)
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 50,
+                                  child: Text(
+                                    "Stock",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 14,
+                                      letterSpacing: -0.3,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "${widget.item['ordersRemaining']}",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    height: 1.7,
+                                    letterSpacing: -0.3,
+                                  ),
+                                ),
+                              ]),
                       ],
                     ),
                   ],
@@ -299,7 +358,7 @@ class _CartItemCardState extends State<CartItemCard> {
                     removeProductFromCart();
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

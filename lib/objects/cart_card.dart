@@ -83,31 +83,33 @@ class _CartCardState extends State<CartCard> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     if (widget.isVisible) {
       return Card(
-          color: MaterialColors.getSurfaceContainerLow(darkMode),
+          color: MaterialColors.getSurfaceContainerLowest(darkMode),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 0,
-          margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: MaterialColors.getSurfaceContainerHighest(darkMode),
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Text(
-                    placeName,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 750),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 16,
-                        letterSpacing: -0.5,
-                        height: 0.85,
-                        overflow: TextOverflow.ellipsis),
+                Text(
+                  placeName,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontVariations: const [
+                      FontVariation('wght', 750),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -125,42 +127,38 @@ class _CartCardState extends State<CartCard> {
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (context.mounted) {
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (context.mounted) {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => CheckoutPage(
                                     placeID: widget.placeID, subtotal: total)));
                           }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.primary),
-                          foregroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.onPrimary),
-                        ),
-                        child: ValueListenableBuilder<bool>(
-                            valueListenable: valueNotifierTotal,
-                            builder: (context, val, child) {
-                              return Padding(
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      ChimeColors.getGreen200()),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide.none,
+                                  ))),
+                              child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
-                                  "${AppLocalizations.of(context)!.checkout} (₱$total)",
+                                  "Checkout (₱$total)",
                                   style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontFamily: 'Bahnschrift',
+                                    color: ChimeColors.getGreen800(),
+                                    fontFamily: 'Plus Jakarta Sans',
                                     fontVariations: const [
-                                      FontVariation('wght', 500),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 700),
                                     ],
-                                    fontSize: 15,
+                                    fontSize: 14,
                                   ),
                                 ),
-                              );
-                            }),
-                      ),
-                    ),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ],
