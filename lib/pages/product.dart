@@ -147,7 +147,7 @@ class _ProductPageState extends State<ProductPage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 24,
+                                  fontSize: 20,
                                   letterSpacing: -0.3),
                             ),
                             IconButton(

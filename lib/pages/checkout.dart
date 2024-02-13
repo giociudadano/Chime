@@ -253,7 +253,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       FontVariation('wght', 700),
                     ],
                     fontSize: 16,
-                    letterSpacing: -0.5,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -520,7 +520,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                       size: 16,
                                                       color: Theme.of(context)
                                                           .colorScheme
-                                                          .onSurface,
+                                                          .outline,
                                                     ),
                                                     const SizedBox(width: 10),
                                                     Text(

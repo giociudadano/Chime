@@ -160,11 +160,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "No Landmark",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -179,11 +178,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV CAS",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -198,11 +196,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV New Admin",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -217,11 +214,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV Old Admin",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -236,11 +232,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV CFOS",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -255,11 +250,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV Wet Lab",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -274,11 +268,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "ISAT U",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -293,11 +286,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "Miagao NHS",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -312,11 +304,10 @@ class _AddressesPageState extends State<AddressesPage> {
         child: Text(
           "UPV Dorm Area",
           style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
             fontVariations: const [
               FontVariation('wght', 400),
-              FontVariation('wdth', 100),
             ],
             fontSize: 14,
             letterSpacing: -0.3,
@@ -332,6 +323,7 @@ class _AddressesPageState extends State<AddressesPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            contentPadding: const EdgeInsets.all(20),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
@@ -339,23 +331,52 @@ class _AddressesPageState extends State<AddressesPage> {
             ),
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-            title: const Text(
-              "Add new address",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: [
-                    FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 20,
-                  letterSpacing: -0.3),
-            ),
             content: Form(
               key: _formAddAddressKey,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Add Address",
+                          style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: [
+                                const FontVariation('wght', 700),
+                              ],
+                              fontSize: 20,
+                              letterSpacing: -0.3),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              size: 24,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ]),
+                  const SizedBox(height: 15),
+                  Text.rich(
+                    TextSpan(text: "Label", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
                   TextFormField(
                     controller: _inputAddAddressName,
                     decoration: InputDecoration(
@@ -393,39 +414,21 @@ class _AddressesPageState extends State<AddressesPage> {
                     },
                   ),
                   const SizedBox(height: 15),
-                  SizedBox(
-                    height: 50,
-                    child: DropdownButtonFormField(
-                      isExpanded: true,
-                      elevation: 1,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant), //<-- SEE HERE
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant), //<-- SEE HERE
-                        ),
-                      ),
-                      value: landmark,
-                      items: landmarks,
-                      onChanged: (value) {
-                        value = value;
-                      },
-                    ),
+                  Text.rich(
+                    TextSpan(text: "Address", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
                   ),
-                  const SizedBox(height: 15),
                   TextFormField(
                     controller: _inputAddAddressAddress,
                     decoration: InputDecoration(
@@ -464,335 +467,22 @@ class _AddressesPageState extends State<AddressesPage> {
                       return _verifyAddressField(value);
                     },
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formAddAddressKey.currentState!.validate()) {
-                              {
-                                _addAddress(_inputAddAddressName.text, landmark,
-                                    _inputAddAddressAddress.text);
-                              }
-                            }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
-                            foregroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.onPrimary),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLow(
-                                    darkMode)),
-                            foregroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLow(
-                                    darkMode)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  // Shows a form that allows the user to edit an address.
-  // Visible when clicking on the 'edit' button at an address card.
-  Future showEditAddressForm(BuildContext context, String id, String name,
-      String? landmark, String address) async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    final GlobalKey<FormState> formEditAddressKey = GlobalKey<FormState>();
-    final inputEditAddressName = TextEditingController(text: name);
-    final inputEditAddressAddress = TextEditingController(text: address);
-
-    // Variables for dropdown box.
-    List<DropdownMenuItem> landmarks = [
-      DropdownMenuItem(
-        value: null,
-        child: Text(
-          "No Landmark",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = null;
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV CAS",
-        child: Text(
-          "UPV CAS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CAS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV New Admin",
-        child: Text(
-          "UPV New Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV New Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Old Admin",
-        child: Text(
-          "UPV Old Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Old Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV CFOS",
-        child: Text(
-          "UPV CFOS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CFOS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Wet Lab",
-        child: Text(
-          "UPV Wet Lab",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Wet Lab";
-        },
-      ),
-      DropdownMenuItem(
-        value: "ISAT U",
-        child: Text(
-          "ISAT U",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "ISAT U";
-        },
-      ),
-      DropdownMenuItem(
-        value: "Miagao NHS",
-        child: Text(
-          "Miagao NHS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "Miagao NHS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Dorm Area",
-        child: Text(
-          "UPV Dorm Area",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontFamily: 'Bahnschrift',
-            fontVariations: const [
-              FontVariation('wght', 400),
-              FontVariation('wdth', 100),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Dorm Area";
-        },
-      ),
-    ];
-
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              ),
-            ),
-            elevation: 0,
-            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-            title: const Text(
-              "Edit address",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: [
-                    FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 20,
-                  letterSpacing: -0.3),
-            ),
-            content: Form(
-              key: formEditAddressKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: inputEditAddressName,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                          width: 0.5,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                          width: 0.5,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      hintText: "Name",
-                      hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
-                      filled: true,
-                      fillColor:
-                          MaterialColors.getSurfaceContainerLowest(darkMode),
-                      isDense: true,
-                    ),
-                    style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14),
-                    validator: (String? value) {
-                      return _verifyNameField(value);
-                    },
-                  ),
                   const SizedBox(height: 15),
+                  Text.rich(
+                    TextSpan(text: "Landmark", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
                   SizedBox(
                     height: 50,
                     child: DropdownButtonFormField(
@@ -825,7 +515,374 @@ class _AddressesPageState extends State<AddressesPage> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                MaterialColors.getSurfaceContainerLowest(
+                                    darkMode)),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color: ChimeColors.getGreen300(),
+                              ),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formAddAddressKey.currentState!.validate()) {
+                              {
+                                _addAddress(_inputAddAddressName.text, landmark,
+                                    _inputAddAddressAddress.text);
+                              }
+                            }
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  ChimeColors.getGreen200()),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide.none,
+                              ))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Save",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // Shows a form that allows the user to edit an address.
+  // Visible when clicking on the 'edit' button at an address card.
+  Future showEditAddressForm(BuildContext context, String id, String name,
+      String? landmark, String address) async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    final GlobalKey<FormState> formEditAddressKey = GlobalKey<FormState>();
+    final inputEditAddressName = TextEditingController(text: name);
+    final inputEditAddressAddress = TextEditingController(text: address);
+
+    // Variables for dropdown box.
+    List<DropdownMenuItem> landmarks = [
+      DropdownMenuItem(
+        value: null,
+        child: Text(
+          "No Landmark",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = null;
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CAS",
+        child: Text(
+          "UPV CAS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CAS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV New Admin",
+        child: Text(
+          "UPV New Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV New Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Old Admin",
+        child: Text(
+          "UPV Old Admin",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Old Admin";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV CFOS",
+        child: Text(
+          "UPV CFOS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV CFOS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Wet Lab",
+        child: Text(
+          "UPV Wet Lab",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Wet Lab";
+        },
+      ),
+      DropdownMenuItem(
+        value: "ISAT U",
+        child: Text(
+          "ISAT U",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "ISAT U";
+        },
+      ),
+      DropdownMenuItem(
+        value: "Miagao NHS",
+        child: Text(
+          "Miagao NHS",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "Miagao NHS";
+        },
+      ),
+      DropdownMenuItem(
+        value: "UPV Dorm Area",
+        child: Text(
+          "UPV Dorm Area",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          landmark = "UPV Dorm Area";
+        },
+      ),
+    ];
+
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(20),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            content: Form(
+              key: formEditAddressKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Edit Address",
+                          style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: [
+                                const FontVariation('wght', 700),
+                              ],
+                              fontSize: 20,
+                              letterSpacing: -0.3),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              size: 24,
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ]),
                   const SizedBox(height: 15),
+                  Text.rich(
+                    TextSpan(text: "Label", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  TextFormField(
+                    controller: inputEditAddressName,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText: "Name",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        letterSpacing: -0.3,
+                        fontSize: 14),
+                    validator: (String? value) {
+                      return _verifyNameField(value);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  Text.rich(
+                    TextSpan(text: "Address", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
                   TextFormField(
                     controller: inputEditAddressAddress,
                     decoration: InputDecoration(
@@ -852,11 +909,11 @@ class _AddressesPageState extends State<AddressesPage> {
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
+                        letterSpacing: -0.3,
                         fontSize: 14),
                     minLines: 3,
                     maxLines: 3,
@@ -864,9 +921,87 @@ class _AddressesPageState extends State<AddressesPage> {
                       return _verifyAddressField(value);
                     },
                   ),
+                  const SizedBox(height: 15),
+                  Text.rich(
+                    TextSpan(text: "Landmark", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          const FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: landmark,
+                      items: landmarks,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _deleteAddress(id);
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                  ChimeColors.getRed200()),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide.none,
+                              ))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              "Delete",
+                              style: TextStyle(
+                                color: ChimeColors.getRed800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -876,56 +1011,24 @@ class _AddressesPageState extends State<AddressesPage> {
                             }
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
-                            foregroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.onPrimary),
-                          ),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  ChimeColors.getGreen200()),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide.none,
+                              ))),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Text(
-                              "Submit",
+                              "Save",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontFamily: 'Bahnschrift',
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _deleteAddress(id);
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Colors.red[darkMode ? 200 : 900]),
-                            foregroundColor: MaterialStatePropertyAll(
-                                Colors.red[darkMode ? 200 : 900]),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              "Delete",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.surface,
-                                fontFamily: 'Bahnschrift',
-                                fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
-                                ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -982,52 +1085,38 @@ class _AddressesPageState extends State<AddressesPage> {
             },
           ),
           title: Center(
-            child: Text(
-              "Addresses",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: const [
-                    FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 20,
-                  letterSpacing: -0.3),
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconButton(
-                icon: Icon(Icons.add,
-                    color: Theme.of(context).colorScheme.outline),
-                onPressed: () {
-                  showAddAddressForm(context);
-                },
-              ),
-            ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: ListView(
-            children: [
-              Text(
-                "Select an address",
-                maxLines: 2,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 40),
+              child: Text(
+                "Addresses",
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Plus Jakarta Sans',
                     fontVariations: const [
                       FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
                     ],
-                    fontSize: 16,
-                    letterSpacing: -0.5,
-                    height: 1.2,
-                    overflow: TextOverflow.ellipsis),
+                    fontSize: 20,
+                    letterSpacing: -0.3),
               ),
-              const SizedBox(height: 5),
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              showAddAddressForm(context);
+            },
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            backgroundColor: ChimeColors.getGreen800(),
+            child: Icon(
+              Icons.add_location_outlined,
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 24,
+            )),
+        body: Padding(
+          padding: const EdgeInsets.all(15),
+          child: ListView(
+            children: [
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: addresses.length,
@@ -1035,109 +1124,124 @@ class _AddressesPageState extends State<AddressesPage> {
                   String key = addresses.keys.elementAt(index);
                   return Card(
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLow(darkMode),
+                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
                     shape: RoundedRectangleBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        side: BorderSide(
-                          width: 3,
-                          color: selectedAddress == key
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                        )),
+                      side: BorderSide(
+                        color: selectedAddress == key
+                            ? ChimeColors.getGreen800()
+                            : MaterialColors.getSurfaceContainerHighest(
+                                darkMode),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     child: InkWell(
                       onTap: () {
                         setSelectedAddress(key);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(15),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          addresses[key]["name"],
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontFamily: 'Bahnschrift',
-                                              fontVariations: const [
-                                                FontVariation('wght', 700),
-                                                FontVariation('wdth', 100),
-                                              ],
-                                              fontSize: 18,
-                                              letterSpacing: -0.3,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          addresses[key]["landmark"] ??
-                                              'No Landmark',
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
-                                              fontFamily: 'Bahnschrift',
-                                              fontVariations: const [
-                                                FontVariation('wght', 700),
-                                                FontVariation('wdth', 100),
-                                              ],
-                                              fontSize: 14,
-                                              letterSpacing: -0.3,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        Text(
-                                          addresses[key]["address"],
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .outline,
-                                              fontFamily: 'Bahnschrift',
-                                              fontVariations: const [
-                                                FontVariation('wght', 500),
-                                                FontVariation('wdth', 100),
-                                              ],
-                                              fontSize: 14,
-                                              letterSpacing: -0.3,
-                                              height: 0.9,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ]),
+                        child: Stack(children: [
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: IconButton(
+                                padding: const EdgeInsets.all(0),
+                                icon: Icon(
+                                  Icons.arrow_forward,
+                                  size: 18,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                 ),
+                                onPressed: () {
+                                  showEditAddressForm(
+                                      context,
+                                      key,
+                                      addresses[key]["name"],
+                                      addresses[key]["landmark"],
+                                      addresses[key]["address"]);
+                                },
                               ),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                height: 25,
-                                width: 25,
-                                child: IconButton(
-                                  padding: const EdgeInsets.all(0),
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 18,
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
-                                  onPressed: () {
-                                    showEditAddressForm(
-                                        context,
-                                        key,
-                                        addresses[key]["name"],
-                                        addresses[key]["landmark"],
-                                        addresses[key]["address"]);
-                                  },
-                                ),
-                              )
-                            ]),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      addresses[key]["name"],
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        addresses[key]["address"],
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontFamily: 'Source Sans 3',
+                                            fontVariations: const [
+                                              FontVariation('wght', 400),
+                                            ],
+                                            fontSize: 14,
+                                            letterSpacing: -0.3,
+                                            height: 1,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.pin_drop_outlined,
+                                            size: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            addresses[key]["landmark"] ??
+                                                'No Landmark',
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                                fontFamily: 'Source Sans 3',
+                                                fontVariations: const [
+                                                  FontVariation('wght', 400),
+                                                ],
+                                                fontSize: 14,
+                                                letterSpacing: -0.3,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                   );

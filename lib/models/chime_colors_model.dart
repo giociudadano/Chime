@@ -38,6 +38,14 @@ class ChimeColors {
   }
 
   static Color getGreen1000() {
-    return const Color(0x005247FF);
+    return const Color(0xFF5247FF);
+  }
+
+  static Color getRed200() {
+    return const Color(0xFFF5E5E8);
+  }
+
+  static Color getRed800() {
+    return const Color(0xFF991D4D);
   }
 }
