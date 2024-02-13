@@ -149,215 +149,229 @@ class _CartItemCardState extends State<CartItemCard> {
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () async {
-                    Map product = await getProduct(widget.productID);
-                    Map place = await getPlace(widget.placeID);
-                    if (context.mounted) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ProductPage(widget.productID,
-                              product, widget.placeID, place)));
-                    }
-                  },
-                  child: SizedBox(
-                      width: 85,
-                      height: 85,
-                      child: FittedBox(
-                        clipBehavior: Clip.hardEdge,
-                        fit: BoxFit.cover,
-                        child: CachedNetworkImage(
-                          imageUrl: widget.item['productImageURL'] ?? '',
-                          placeholder: (context, url) => const Padding(
-                            padding: EdgeInsets.all(40.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (context, url, error) => Padding(
-                            padding: const EdgeInsets.all(40.0),
-                            child: Icon(Icons.local_mall_outlined,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant),
-                          ),
-                          fadeInCurve: Curves.easeIn,
-                          fadeOutCurve: Curves.easeOut,
-                        ),
-                      )),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: IconButton(
+                    padding: const EdgeInsets.all(0),
+                    icon: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                    onPressed: () {
+                      removeProductFromCart();
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.item['name'],
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                        ],
-                        fontSize: 14,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    Text(
-                      '₱${widget.item['price']}',
-                      style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontVariations: const [
-                            FontVariation('wght', 700),
-                          ],
-                          fontSize: 14,
-                          height: 0.85,
-                          letterSpacing: -0.3),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant)),
-                          width: 28,
-                          height: 28,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              Icons.remove,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              size: 16,
-                            ),
-                            onPressed: () {
-                              if (widget.item['quantity'] > 1) {
-                                setProductQuantityAtDatabase();
-                                widget.updateTotal!(-widget.item['price']);
-                                setState(() {
-                                  widget.item['quantity'] -= 1;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant)),
-                          width: 40,
-                          height: 28,
-                          child: Center(
-                            child: Text(widget.item['quantity'].toString(),
-                                style: const TextStyle(
-                                    fontFamily: 'Source Sans 3',
-                                    fontVariations: [
-                                      FontVariation('wght', 400),
-                                    ],
-                                    fontSize: 16,
-                                    letterSpacing: -0.3),
-                                textAlign: TextAlign.center),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant)),
-                          width: 28,
-                          height: 28,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.outline,
-                              size: 16,
-                            ),
-                            onPressed: () {
-                              if (widget.item['quantity'] <=
-                                  (widget.item['ordersRemaining'] - 1 ?? 99)) {
-                                setProductQuantityAtDatabase();
-                                widget.updateTotal!(widget.item['price']);
-                                setState(() {
-                                  widget.item['quantity'] += 1;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        if (widget.item['isLimited'] ?? false)
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                  child: Text(
-                                    "Stock",
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 14,
-                                      letterSpacing: -0.3,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "${widget.item['ordersRemaining']}",
-                                  style: TextStyle(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      onTap: () async {
+                        Map product = await getProduct(widget.productID);
+                        Map place = await getPlace(widget.placeID);
+                        if (context.mounted) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProductPage(
+                                  widget.productID,
+                                  product,
+                                  widget.placeID,
+                                  place)));
+                        }
+                      },
+                      child: SizedBox(
+                          width: 85,
+                          height: 85,
+                          child: FittedBox(
+                            clipBehavior: Clip.hardEdge,
+                            fit: BoxFit.cover,
+                            child: CachedNetworkImage(
+                              imageUrl: widget.item['productImageURL'] ?? '',
+                              placeholder: (context, url) => const Padding(
+                                padding: EdgeInsets.all(40.0),
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Padding(
+                                padding: const EdgeInsets.all(40.0),
+                                child: Icon(Icons.local_mall_outlined,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onSurfaceVariant,
-                                    fontFamily: 'Source Sans 3',
-                                    fontVariations: const [
-                                      FontVariation('wght', 400),
-                                    ],
-                                    fontSize: 14,
-                                    height: 1.7,
-                                    letterSpacing: -0.3,
-                                  ),
+                                        .outlineVariant),
+                              ),
+                              fadeInCurve: Curves.easeIn,
+                              fadeOutCurve: Curves.easeOut,
+                            ),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.item['name'],
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontVariations: const [
+                              FontVariation('wght', 700),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        Text(
+                          '₱${widget.item['price']}',
+                          style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 14,
+                              height: 0.85,
+                              letterSpacing: -0.3),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
+                              width: 28,
+                              height: 28,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  Icons.remove,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: 16,
                                 ),
-                              ]),
+                                onPressed: () {
+                                  if (widget.item['quantity'] > 1) {
+                                    setProductQuantityAtDatabase();
+                                    widget.updateTotal!(-widget.item['price']);
+                                    setState(() {
+                                      widget.item['quantity'] -= 1;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
+                              width: 40,
+                              height: 28,
+                              child: Center(
+                                child: Text(widget.item['quantity'].toString(),
+                                    style: const TextStyle(
+                                        fontFamily: 'Source Sans 3',
+                                        fontVariations: [
+                                          FontVariation('wght', 400),
+                                        ],
+                                        fontSize: 16,
+                                        letterSpacing: -0.3),
+                                    textAlign: TextAlign.center),
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(0),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
+                              width: 28,
+                              height: 28,
+                              child: IconButton(
+                                padding: EdgeInsets.zero,
+                                icon: Icon(
+                                  Icons.add,
+                                  color: Theme.of(context).colorScheme.outline,
+                                  size: 16,
+                                ),
+                                onPressed: () {
+                                  if (widget.item['quantity'] <=
+                                      (widget.item['ordersRemaining'] - 1 ??
+                                          99)) {
+                                    setProductQuantityAtDatabase();
+                                    widget.updateTotal!(widget.item['price']);
+                                    setState(() {
+                                      widget.item['quantity'] += 1;
+                                    });
+                                  }
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            if (widget.item['isLimited'] ?? false)
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 50,
+                                      child: Text(
+                                        "Stock",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${widget.item['ordersRemaining']}",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                        fontFamily: 'Source Sans 3',
+                                        fontVariations: const [
+                                          FontVariation('wght', 400),
+                                        ],
+                                        fontSize: 14,
+                                        height: 1.7,
+                                        letterSpacing: -0.3,
+                                      ),
+                                    ),
+                                  ]),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 25,
-                width: 25,
-                child: IconButton(
-                  padding: const EdgeInsets.all(0),
-                  icon: Icon(
-                    Icons.close,
-                    size: 18,
-                    color: Theme.of(context).colorScheme.outline,
                   ),
-                  onPressed: () {
-                    removeProductFromCart();
-                  },
-                ),
+                ],
               ),
             ],
           ),
@@ -368,3 +382,5 @@ class _CartItemCardState extends State<CartItemCard> {
     }
   }
 }
+                                                                                                        
+                                                  

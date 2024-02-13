@@ -199,12 +199,11 @@ class _CartPageState extends State<CartPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: const [
-                          FontVariation('wght', 500),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
-                        fontSize: 15,
+                        fontSize: 14,
                         letterSpacing: -0.3,
                         height: 0.85,
                         overflow: TextOverflow.ellipsis),

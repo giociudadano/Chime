@@ -12,9 +12,9 @@ part of '../main.dart';
 
 // ignore: must_be_immutable
 class CheckoutPage extends StatefulWidget {
-  CheckoutPage({super.key, required this.placeID, required this.subtotal});
+  CheckoutPage({super.key, required this.placeID, required this.items});
   String placeID = '';
-  int subtotal = 0;
+  Map items = {};
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -23,7 +23,7 @@ class CheckoutPage extends StatefulWidget {
 class _CheckoutPageState extends State<CheckoutPage> {
   // Form variables.
   String? deliveryMethod;
-  String? paymentMethod = 'Cash on delivery';
+  String? paymentMethod;
 
   // Variables for place information.
   int? deliveryPrice;
@@ -83,7 +83,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   // Gets the total price of the order.
   int getTotal() {
-    return getDeliveryFee() + widget.subtotal;
+    int subtotal = 0;
+    for (String key in widget.items.keys) {
+      int itemPrice =
+          widget.items[key]['price'] * widget.items[key]['quantity'];
+      subtotal += itemPrice;
+    }
+    return getDeliveryFee() + subtotal;
   }
 
   // Creates an order.
@@ -104,7 +110,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }).then((res) {
       // 2. Update inventories for limited items
       for (var key in items.keys) {
-        if (items[key]['limited']) {
+        if (items[key]['isLimited'] ?? false) {
           db.collection("products").doc(key).update({
             "ordersRemaining": FieldValue.increment(-1 * items[key]['quantity'])
           });
@@ -188,264 +194,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }
   }
 
-  // Shows a reminder when clicking on the 'information' button at the upper right of the screen.
-  Future showReminder(BuildContext context) async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-          title: Text(
-            "Reminder",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'Bahnschrift',
-                fontVariations: const [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
-                ],
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 20,
-                letterSpacing: -0.3),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "By default, delivery address is expected to be within the locality. However, you may contact the seller for special requests.",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 400),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14,
-                      height: 1.1,
-                      letterSpacing: -0.3),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.onPrimary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "I understand",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  // Shows a dialog that allows the user to select a payment method.
-  Future showPaymentMethodDialog(BuildContext context) async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-          title: Text(
-            "Pay ₱${getTotal()}",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'Bahnschrift',
-                fontVariations: const [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
-                ],
-                color: Theme.of(context).colorScheme.primary,
-                fontSize: 20,
-                letterSpacing: -0.3),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "E-wallet transactions will be verified through the automated text to the seller. Please pay in full to avoid delays in processing.",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 400),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 14,
-                      height: 1.1,
-                      letterSpacing: -0.3),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                child: DropdownButtonFormField(
-                  isExpanded: true,
-                  elevation: 1,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          width: 3,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary), //<-- SEE HERE
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          width: 3,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary), //<-- SEE HERE
-                    ),
-                  ),
-                  value: paymentMethod,
-                  items: [
-                    DropdownMenuItem(
-                      value: 'Cash on delivery',
-                      child: Text(
-                        "Cash on delivery",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: const [
-                            FontVariation('wght', 400),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 14,
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                      onTap: () {
-                        paymentMethod = "Cash on delivery";
-                      },
-                    ),
-                  ],
-                  onChanged: (value) {
-                    value = value;
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        addOrder(deliveryMethod!, paymentMethod!);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.onPrimary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "Pay now",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            MaterialColors.getSurfaceContainerLow(darkMode)),
-                        foregroundColor: MaterialStatePropertyAll(
-                            MaterialColors.getSurfaceContainerLow(darkMode)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
     getUserInfo();
@@ -465,7 +213,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -475,30 +223,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
           },
         ),
         title: Center(
-          child: Text(
-            AppLocalizations.of(context)!.checkout,
-            style: const TextStyle(
-                fontFamily: 'Bahnschrift',
-                fontVariations: [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
-                ],
-                fontSize: 20,
-                letterSpacing: -0.3),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: IconButton(
-              icon: Icon(Icons.info_outline,
-                  color: Theme.of(context).colorScheme.outline),
-              onPressed: () {
-                showReminder(context);
-              },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 40),
+            child: Text(
+              AppLocalizations.of(context)!.checkout,
+              style: const TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontVariations: [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 20,
+                  letterSpacing: -0.3),
             ),
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -507,24 +245,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: ListView(
               children: [
                 Text(
-                  "Select a delivery method",
-                  maxLines: 2,
+                  "Delivery",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 700),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 16,
-                      letterSpacing: -0.5,
-                      height: 1.2,
-                      overflow: TextOverflow.ellipsis),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.5,
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color:
+                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLow(darkMode),
+                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
@@ -545,17 +287,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 "Pickup",
                                 maxLines: 1,
                                 style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                    fontFamily: 'Bahnschrift',
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontFamily: 'Plus Jakarta Sans',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
-                                      FontVariation('wdth', 100),
                                     ],
                                     fontSize: 14,
                                     letterSpacing: -0.3,
-                                    height: 1.3,
                                     overflow: TextOverflow.ellipsis),
                               ),
                               Text(
@@ -564,13 +303,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
+                                    fontFamily: 'Source Sans 3',
                                     fontVariations: const [
-                                      FontVariation('wght', 500),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 400),
                                     ],
                                     fontSize: 14,
                                     letterSpacing: -0.3,
+                                    height: 0.7,
                                     overflow: TextOverflow.ellipsis),
                               ),
                             ])
@@ -581,8 +320,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: AbsorbPointer(
                     absorbing: selectedAddress == null,
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: MaterialColors.getSurfaceContainerHighest(
+                              darkMode),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                       elevation: 0,
-                      color: MaterialColors.getSurfaceContainerLow(darkMode),
+                      color: MaterialColors.getSurfaceContainerLowest(darkMode),
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Row(
@@ -607,10 +353,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
+                                      fontFamily: 'Plus Jakarta Sans',
                                       fontVariations: const [
                                         FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
                                       ],
                                       fontSize: 14,
                                       letterSpacing: -0.3,
@@ -625,10 +370,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
+                                      fontFamily: 'Source Sans 3',
                                       fontVariations: const [
-                                        FontVariation('wght', 500),
-                                        FontVariation('wdth', 100),
+                                        FontVariation('wght', 400),
                                       ],
                                       fontSize: 14,
                                       letterSpacing: -0.3,
@@ -643,336 +387,411 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color:
+                          MaterialColors.getSurfaceContainerHighest(darkMode),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                   elevation: 0,
-                  color: MaterialColors.getSurfaceContainerLow(darkMode),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  child: Text(
-                                    "Selected Address",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 16,
-                                        letterSpacing: -0.5,
-                                        height: 1.2,
-                                        overflow: TextOverflow.ellipsis),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 25,
-                                  width: 25,
-                                  child: IconButton(
-                                    padding: const EdgeInsets.all(0),
-                                    icon: Icon(
-                                      Icons.edit,
-                                      size: 18,
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                    ),
-                                    onPressed: () {
-                                      if (context.mounted) {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddressesPage(
-                                                      setSelectedAddressCallback:
-                                                          setSelectedAddress,
-                                                      addAddressCallback:
-                                                          editAddress,
-                                                      editAddressCallback:
-                                                          editAddress)),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ]),
-                          Row(children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  if (context.mounted) {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) => AddressesPage(
-                                                setSelectedAddressCallback:
-                                                    setSelectedAddress,
-                                                addAddressCallback: editAddress,
-                                                editAddressCallback:
-                                                    editAddress)));
-                                  }
-                                },
-                                child: Card(
-                                  elevation: 0,
-                                  color:
-                                      MaterialColors.getSurfaceContainerLowest(
-                                          darkMode),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            selectedAddress == null ||
-                                                    addresses[
-                                                            selectedAddress] ==
-                                                        null
-                                                ? "No address"
-                                                : addresses[selectedAddress]
-                                                    ["name"],
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                fontFamily: 'Bahnschrift',
-                                                fontVariations: const [
-                                                  FontVariation('wght', 700),
-                                                  FontVariation('wdth', 100),
-                                                ],
-                                                fontSize: 17,
-                                                letterSpacing: -0.3,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
+                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                if (context.mounted) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => AddressesPage(
+                                          setSelectedAddressCallback:
+                                              setSelectedAddress,
+                                          addAddressCallback: editAddress,
+                                          editAddressCallback: editAddress)));
+                                }
+                              },
+                              child: Card(
+                                elevation: 0,
+                                color: MaterialColors.getSurfaceContainerLowest(
+                                    darkMode),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: SizedBox(
+                                          height: 25,
+                                          width: 25,
+                                          child: IconButton(
+                                            padding: const EdgeInsets.all(0),
+                                            icon: Icon(
+                                              Icons.arrow_forward,
+                                              size: 18,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                            ),
+                                            onPressed: () {
+                                              if (context.mounted) {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) => AddressesPage(
+                                                          setSelectedAddressCallback:
+                                                              setSelectedAddress,
+                                                          addAddressCallback:
+                                                              editAddress,
+                                                          editAddressCallback:
+                                                              editAddress)),
+                                                );
+                                              }
+                                            },
                                           ),
-                                          const SizedBox(height: 5),
-                                          if (addresses[selectedAddress] !=
-                                              null)
+                                        ),
+                                      ),
+                                      Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
                                             Text(
-                                              addresses[selectedAddress]
-                                                      ["landmark"] ??
-                                                  'No Landmark',
+                                              selectedAddress == null ||
+                                                      addresses[
+                                                              selectedAddress] ==
+                                                          null
+                                                  ? "No address"
+                                                  : addresses[selectedAddress]
+                                                      ["name"],
                                               maxLines: 1,
                                               style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurfaceVariant,
-                                                  fontFamily: 'Bahnschrift',
-                                                  fontVariations: const [
-                                                    FontVariation('wght', 700),
-                                                    FontVariation('wdth', 100),
-                                                  ],
-                                                  fontSize: 14,
-                                                  letterSpacing: -0.3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            ),
-                                          Text(
-                                            selectedAddress == null ||
-                                                    addresses[
-                                                            selectedAddress] ==
-                                                        null
-                                                ? "This user has no address selected. To allow delivery, please add an address."
-                                                : addresses[selectedAddress!]
-                                                    ["address"],
-                                            maxLines: 3,
-                                            style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .outline,
-                                                fontFamily: 'Bahnschrift',
+                                                    .onSurface,
+                                                fontFamily: 'Plus Jakarta Sans',
                                                 fontVariations: const [
-                                                  FontVariation('wght', 400),
-                                                  FontVariation('wdth', 100),
+                                                  FontVariation('wght', 700),
                                                 ],
                                                 fontSize: 14,
-                                                height: 1,
                                                 letterSpacing: -0.3,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                        ]),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: Text(
+                                                selectedAddress == null ||
+                                                        addresses[
+                                                                selectedAddress] ==
+                                                            null
+                                                    ? "This user has no address selected. To allow delivery, please add an address."
+                                                    : addresses[
+                                                            selectedAddress!]
+                                                        ["address"],
+                                                maxLines: 3,
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface,
+                                                    fontFamily: 'Source Sans 3',
+                                                    fontVariations: const [
+                                                      FontVariation(
+                                                          'wght', 400),
+                                                    ],
+                                                    fontSize: 14,
+                                                    height: 1,
+                                                    letterSpacing: -0.3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
+                                            ),
+
+                                            // If there is an address, show the landmark.
+                                            if (addresses[selectedAddress] !=
+                                                null)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.pin_drop_outlined,
+                                                      size: 16,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                      addresses[selectedAddress]
+                                                              ["landmark"] ??
+                                                          'No Landmark',
+                                                      maxLines: 1,
+                                                      style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .outline,
+                                                          fontFamily:
+                                                              'Source Sans 3',
+                                                          fontVariations: const [
+                                                            FontVariation(
+                                                                'wght', 400),
+                                                          ],
+                                                          fontSize: 14,
+                                                          letterSpacing: -0.3,
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                          ]),
+                                    ],
                                   ),
                                 ),
                               ),
-                            )
-                          ])
-                        ]),
+                            ),
+                          )
+                        ])
+                      ]),
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  "Payment",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                    ],
+                    fontSize: 16,
+                    letterSpacing: -0.5,
                   ),
                 ),
+                const SizedBox(height: 5),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color:
+                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 0,
+                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(children: [
+                        Radio(
+                          value: 'Cash on Delivery',
+                          groupValue: paymentMethod,
+                          onChanged: (String? value) {
+                            setState(() {
+                              paymentMethod = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          "Cash on Delivery",
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        )
+                      ]),
+                    )),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color:
+                          MaterialColors.getSurfaceContainerHighest(darkMode),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 0,
+                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: 'Others',
+                          groupValue: paymentMethod,
+                          onChanged: (String? value) {
+                            setState(() {
+                              paymentMethod = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Others",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                  height: 1.3,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String key = widget.items.keys.elementAt(index);
+                      Map item = widget.items[key];
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${item['name']} (x${item['quantity']})",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                            Text(
+                              "${item['price'] * item['quantity']}",
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ]);
+                    }),
+                // If delivery fee is free or if order is for pickup, do not display delivery fee.
+                if (getDeliveryFee() > 0)
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Delivery fee",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        Text(
+                          "${getDeliveryFee()}",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ]),
+                Divider(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Order Total",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                      Text(
+                        "${getTotal()}",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 14,
+                            letterSpacing: -0.3,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                    ]),
+                const SizedBox(height: 30),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Delivery fee",
-                    maxLines: 2,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  Text(
-                    getDeliveryFee().toString(),
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 500),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                ]),
-          ),
           const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Subtotal",
-                    maxLines: 2,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  Text(
-                    widget.subtotal.toString(),
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 500),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                ]),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: List.generate(
-                  450 ~/ 10,
-                  (index) => Expanded(
-                        child: Container(
-                          color: index % 2 == 0
-                              ? Colors.transparent
-                              : Theme.of(context).colorScheme.outlineVariant,
-                          height: 2,
-                        ),
-                      )),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Total",
-                    maxLines: 2,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                  Text(
-                    getTotal().toString(),
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 500),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        height: 1,
-                        letterSpacing: -0.3,
-                        overflow: TextOverflow.ellipsis),
-                  ),
-                ]),
-          ),
-          const SizedBox(height: 30),
           Row(
             children: [
               Expanded(
                 child: Opacity(
-                  opacity: deliveryMethod == null ? 0.5 : 1,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: ElevatedButton(
-                      onPressed: deliveryMethod == null
+                  opacity: (deliveryMethod == null || paymentMethod == null)
+                      ? 0.5
+                      : 1,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      (deliveryMethod == null || paymentMethod == null)
                           ? null
                           : () {
-                              showPaymentMethodDialog(context);
-                            },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.onPrimary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "Proceed to payment",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 15,
-                          ),
+                              addOrder(deliveryMethod!, paymentMethod!);
+                            };
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide.none,
+                        ))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        "Place Order",
+                        style: TextStyle(
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontVariations: const [
+                            FontVariation('wght', 700),
+                          ],
+                          fontSize: 14,
                         ),
                       ),
                     ),

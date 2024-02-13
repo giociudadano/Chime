@@ -127,38 +127,39 @@ class _CartCardState extends State<CartCard> {
                 Row(
                   children: [
                     Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (context.mounted) {
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (context.mounted) {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => CheckoutPage(
-                                    placeID: widget.placeID, subtotal: total)));
+                                    placeID: widget.placeID,
+                                    items: widget.items)));
                           }
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      ChimeColors.getGreen200()),
-                                  shape: MaterialStatePropertyAll(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide.none,
-                                  ))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  "Checkout (₱$total)",
-                                  style: TextStyle(
-                                    color: ChimeColors.getGreen800(),
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontVariations: const [
-                                      FontVariation('wght', 700),
-                                    ],
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
+                        },
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide.none,
+                            ))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Checkout (₱$total)",
+                            style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 14,
                             ),
                           ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
