@@ -90,11 +90,13 @@ class _PlacesPageState extends State<PlacesPage> {
           lastVisible = place.id;
         }
       }
-      setState(() {
-        places = Map.fromEntries(places.entries.toList()
-          ..sort((a, b) => (a.value['placeName'].toLowerCase())
-              .compareTo(b.value['placeName'].toLowerCase())));
-      });
+      if (mounted) {
+        setState(() {
+          places = Map.fromEntries(places.entries.toList()
+            ..sort((a, b) => (a.value['placeName'].toLowerCase())
+                .compareTo(b.value['placeName'].toLowerCase())));
+        });
+      }
     });
   }
 

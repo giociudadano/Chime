@@ -345,8 +345,8 @@ class _AddressesPageState extends State<AddressesPage> {
                           style: TextStyle(
                               color: ChimeColors.getGreen800(),
                               fontFamily: 'Plus Jakarta Sans',
-                              fontVariations: [
-                                const FontVariation('wght', 700),
+                              fontVariations: const [
+                                FontVariation('wght', 700),
                               ],
                               fontSize: 20,
                               letterSpacing: -0.3),
@@ -371,8 +371,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),
@@ -403,12 +403,12 @@ class _AddressesPageState extends State<AddressesPage> {
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
-                        fontSize: 14),
+                        fontSize: 14,
+                        letterSpacing: -0.3,),
                     validator: (String? value) {
                       return _verifyNameField(value);
                     },
@@ -423,8 +423,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),
@@ -455,12 +455,12 @@ class _AddressesPageState extends State<AddressesPage> {
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
-                        fontSize: 14),
+                        fontSize: 14,
+                        letterSpacing: -0.3,),
                     minLines: 3,
                     maxLines: 3,
                     validator: (String? value) {
@@ -477,8 +477,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),
@@ -799,8 +799,8 @@ class _AddressesPageState extends State<AddressesPage> {
                           style: TextStyle(
                               color: ChimeColors.getGreen800(),
                               fontFamily: 'Plus Jakarta Sans',
-                              fontVariations: [
-                                const FontVariation('wght', 700),
+                              fontVariations: const [
+                                FontVariation('wght', 700),
                               ],
                               fontSize: 20,
                               letterSpacing: -0.3),
@@ -825,8 +825,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),
@@ -877,8 +877,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),
@@ -931,8 +931,8 @@ class _AddressesPageState extends State<AddressesPage> {
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          const FontVariation('wght', 400),
+                        fontVariations: const [
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                         letterSpacing: -0.3),

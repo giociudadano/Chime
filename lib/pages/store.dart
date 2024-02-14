@@ -195,73 +195,68 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     if (places.isEmpty) {
       return Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 150,
-                width: 150,
-                child: Image.network(
-                    "https://em-content.zobj.net/source/microsoft-teams/363/star-struck_1f929.png"),
-              ),
+              const SizedBox(height: 150, width: 150, child: Placeholder()),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Text.rich(
-                  const TextSpan(children: [
-                    TextSpan(
-                        text: 'You have no owned stores yet. ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: 'Setup your business and start selling!'),
-                  ]),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 400),
-                        FontVariation('wdth', 100),
-                      ],
-                      color: Theme.of(context).colorScheme.outline,
-                      fontSize: 15,
-                      height: 1.1,
-                      letterSpacing: -0.3),
-                ),
+              Text(
+                "Meow-hoo!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                    ],
+                    color: ChimeColors.getGreen800(),
+                    fontSize: 20,
+                    letterSpacing: -0.3),
               ),
-              const SizedBox(height: 20),
+              Text(
+                "Ready to sell your products? Set up your store in just a few steps.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Source Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    color: Theme.of(context).colorScheme.outline,
+                    fontSize: 14,
+                    letterSpacing: -0.3),
+              ),
+              const SizedBox(height: 30),
               Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (context.mounted) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => const StoreAddPage()),
-                            );
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.primary),
-                          foregroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.onPrimary),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            "Start selling",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 600),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 15,
-                            ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (context.mounted) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const StoreAddPage()),
+                          );
+                        }
+                      },
+                      style: ButtonStyle(
+                        elevation: const MaterialStatePropertyAll(0),
+                        backgroundColor:
+                            MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          "Create",
+                          style: TextStyle(
+                            color: ChimeColors.getGreen800(),
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontVariations: const [
+                              FontVariation('wght', 700),
+                            ],
+                            fontSize: 15,
                           ),
                         ),
                       ),
@@ -355,8 +350,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                         ),
                       ),
                       GestureDetector(
-                        onTapDown: (TapDownDetails details) {
-                        },
+                        onTapDown: (TapDownDetails details) {},
                         child: Icon(
                           Icons.more_vert,
                           size: 20,

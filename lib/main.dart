@@ -175,6 +175,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var isOnboardingVisited = false;
+  String appMode = 'Buy';
 
   @override
   void initState() {

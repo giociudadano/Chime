@@ -57,7 +57,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
       int.parse(value);
       return null;
     } on FormatException {
-      return 'Please enter a whole number';
+      return 'Please enter only digits';
     }
   }
 
@@ -68,9 +68,12 @@ class _StoreAddPageState extends State<StoreAddPage> {
     }
     try {
       int.parse(value);
+      if (value.length != 9) {
+        return 'Please enter a valid 11-digit number';
+      }
       return null;
     } on FormatException {
-      return 'Please enter a whole number';
+      return 'Please enter only digits';
     }
   }
 
@@ -79,7 +82,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -90,15 +93,14 @@ class _StoreAddPageState extends State<StoreAddPage> {
         ),
         title: Center(
           child: Padding(
-            padding: const EdgeInsets.only(right: 50),
+            padding: const EdgeInsets.only(right: 40),
             child: Text(
-              "Create a new store",
+              "New Store",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Bahnschrift',
+                  fontFamily: 'Plus Jakarta Sans',
                   fontVariations: const [
                     FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
                   ],
                   fontSize: 20,
                   letterSpacing: -0.3),
@@ -107,167 +109,45 @@ class _StoreAddPageState extends State<StoreAddPage> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Form(
           key: formAddStoreKey,
-          child: ListView(
+          child: Column(
             children: [
-              const SizedBox(height: 20),
-              const Text(
-                "Basic Information",
-                style: TextStyle(
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: [
-                      FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 18,
-                    letterSpacing: -0.3),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                'Name',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 450),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 14,
-                    letterSpacing: -0.3),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(height: 5),
-              TextFormField(
-                controller: inputAddStoreName,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 0.5,
+              Expanded(
+                child: ListView(
+                  children: [
+                    const SizedBox(height: 30),
+                    Text(
+                      "Required items are marked with an asterisk *",
+                      style: TextStyle(
+                          color: ChimeColors.getRed800(),
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: [
+                            const FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 0.5,
+                    const SizedBox(height: 10),
+                    Text.rich(
+                      TextSpan(text: "Store Name", children: [
+                        TextSpan(
+                            text: "*",
+                            style: TextStyle(color: ChimeColors.getRed800()))
+                      ]),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: [
+                            const FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  hintText: "Insert your store's name",
-                  hintStyle:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
-                  filled: true,
-                  fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                  isDense: true,
-                ),
-                style: const TextStyle(
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: [
-                      FontVariation('wght', 300),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 14),
-                validator: (String? value) {
-                  return _verifyNameField(value);
-                },
-              ),
-              const SizedBox(height: 15),
-              Text(
-                'Description',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 400),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 14,
-                    letterSpacing: -0.3),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(height: 5),
-              TextFormField(
-                controller: inputAddStoreDesc,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 0.5,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 0.5,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  hintText: "Insert your store's description",
-                  hintStyle:
-                      TextStyle(color: Theme.of(context).colorScheme.outline),
-                  filled: true,
-                  fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                  isDense: true,
-                ),
-                style: const TextStyle(
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: [
-                      FontVariation('wght', 300),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 14),
-                minLines: 3,
-                maxLines: 3,
-                validator: (String? value) {
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              Row(children: [
-                SizedBox(
-                  width: 100,
-                  child: Text(
-                    'Delivery Fee',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 400),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        letterSpacing: -0.3),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Text('Contact Number',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontFamily: 'Bahnschrift',
-                        fontVariations: const [
-                          FontVariation('wght', 400),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 14,
-                        letterSpacing: -0.3)),
-              ]),
-              const SizedBox(height: 5),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: inputAddStoreDeliveryFee,
+                    TextFormField(
+                      controller: inputAddStoreName,
                       decoration: InputDecoration(
-                        prefixIcon: const Padding(
-                            padding: EdgeInsets.all(12), child: Text('₱ ')),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.outline,
@@ -281,6 +161,121 @@ class _StoreAddPageState extends State<StoreAddPage> {
                             width: 0.5,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: "Name",
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                          letterSpacing: -0.3,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14),
+                      validator: (String? value) {
+                        return _verifyNameField(value);
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      "Description",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: [
+                            const FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                    TextFormField(
+                      controller: inputAddStoreDesc,
+                      maxLength: 150,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: "Description",
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
+                      minLines: 3,
+                      maxLines: 3,
+                      validator: (String? value) {
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      "Delivery Fee",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: inputAddStoreDeliveryFee,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 8, 0, 0),
+                          child: Text(
+                            "₱",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 16,
+                                letterSpacing: -0.3),
+                          ),
                         ),
                         hintText: "0",
                         hintStyle: TextStyle(
@@ -291,24 +286,35 @@ class _StoreAddPageState extends State<StoreAddPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 14),
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
                         return _verifyDeliveryFeeField(value);
                       },
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextFormField(
+                    const SizedBox(height: 15),
+                    Text(
+                      "Contact Number",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: [
+                            const FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                    TextFormField(
                       keyboardType: TextInputType.number,
                       controller: inputAddStorePhoneNumber,
+                      maxLength: 9,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -324,68 +330,87 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "0912 3456 789",
+                        hintText: "123 456 789",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
+                          child: Text(
+                            "+639",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3),
+                          ),
+                        ),
                         filled: true,
                         fillColor:
                             MaterialColors.getSurfaceContainerLowest(darkMode),
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 14),
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
                         return _verifyContactNumberField(value);
                       },
                     ),
-                  )
-                ],
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formAddStoreKey.currentState!.validate()) {
-                          addStore(
-                              inputAddStoreName.text,
-                              inputAddStoreDesc.text,
-                              inputAddStoreDeliveryFee.text,
-                              inputAddStorePhoneNumber.text);
-                        }
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.onPrimary),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "Submit",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontFamily: 'Bahnschrift',
-                            fontVariations: const [
-                              FontVariation('wght', 600),
-                              FontVariation('wdth', 100),
-                            ],
-                            fontSize: 15,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (formAddStoreKey.currentState!.validate()) {
+                            addStore(
+                                inputAddStoreName.text,
+                                inputAddStoreDesc.text,
+                                inputAddStoreDeliveryFee.text,
+                                "+63${inputAddStorePhoneNumber.text}");
+                          }
+                        },
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide.none,
+                            ))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
