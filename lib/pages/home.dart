@@ -59,6 +59,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
+  void updateNavigationBar(bool newState) {
+    setState(() {
+      ownedStores = newState;
+    });
+  }
+
   void loadAppMode() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -714,7 +720,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         SizedBox.shrink()
                       ],
                     )
-                  : const StorePage(),
+                  : StorePage(updateNavigationBarCallback: updateNavigationBar),
             ),
         ]),
       ),

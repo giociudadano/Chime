@@ -1,7 +1,9 @@
 part of '../main.dart';
 
 class StorePage extends StatefulWidget {
-  const StorePage({super.key});
+  const StorePage({super.key, this.updateNavigationBarCallback});
+
+  final Function(bool newState)? updateNavigationBarCallback;
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -38,6 +40,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
     placesListener =
         db.collection("users").doc(uid).snapshots().listen((event) async {
+      // Shows the navigation bar if a new place is added
       db.collection("users").doc(uid).get().then((document) {
         List placeIDs = document.data()!['places'];
         for (String placeID in placeIDs) {
@@ -46,6 +49,10 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
               setState(() {
                 places[placeID] = document.data()!;
               });
+              if (widget.updateNavigationBarCallback != null &&
+                  places.isNotEmpty) {
+                widget.updateNavigationBarCallback!(true);
+              }
             }
           }).then((res) {
             String key = places.keys.elementAt(0);

@@ -403,12 +403,13 @@ class _AddressesPageState extends State<AddressesPage> {
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          FontVariation('wght', 400),
-                        ],
-                        fontSize: 14,
-                        letterSpacing: -0.3,),
+                      fontFamily: 'Source Sans 3',
+                      fontVariations: [
+                        FontVariation('wght', 400),
+                      ],
+                      fontSize: 14,
+                      letterSpacing: -0.3,
+                    ),
                     validator: (String? value) {
                       return _verifyNameField(value);
                     },
@@ -455,12 +456,13 @@ class _AddressesPageState extends State<AddressesPage> {
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          FontVariation('wght', 400),
-                        ],
-                        fontSize: 14,
-                        letterSpacing: -0.3,),
+                      fontFamily: 'Source Sans 3',
+                      fontVariations: [
+                        FontVariation('wght', 400),
+                      ],
+                      fontSize: 14,
+                      letterSpacing: -0.3,
+                    ),
                     minLines: 3,
                     maxLines: 3,
                     validator: (String? value) {
@@ -554,7 +556,7 @@ class _AddressesPageState extends State<AddressesPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
