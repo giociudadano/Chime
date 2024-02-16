@@ -1,9 +1,10 @@
 part of '../main.dart';
 
 class StorePage extends StatefulWidget {
-  const StorePage({super.key, this.updateNavigationBarCallback});
+  StorePage(this.places, {super.key, this.updateNavigationBarCallback});
 
   final Function(bool newState)? updateNavigationBarCallback;
+  Map places = {};
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -12,26 +13,6 @@ class StorePage extends StatefulWidget {
 class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   StreamSubscription? placesListener;
   late TabController tabController;
-  Map places = {};
-
-  void editStore(String placeID, String? placeImageURL, Map data) async {
-    if (placeImageURL != null) {
-      await CachedNetworkImage.evictFromCache(placeImageURL);
-      if (placeImageURL == '') {
-        places[placeID]['placeImageURL'] = null;
-      } else {
-        places[placeID]['placeImageURL'] = placeImageURL;
-      }
-    }
-    if (mounted) {
-      setState(() {
-        places[placeID]['placeName'] = data['placeName'];
-        places[placeID]['placeTagline'] = data['placeTagline'];
-        places[placeID]['deliveryPrice'] = data['deliveryPrice'];
-        places[placeID]['phoneNumber'] = data['phoneNumber'];
-      });
-    }
-  }
 
   // Adds a place listener
   void addPlacesListener() async {
@@ -47,15 +28,15 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
           db.collection("places").doc(placeID).get().then((document) {
             if (mounted) {
               setState(() {
-                places[placeID] = document.data()!;
+                widget.places[placeID] = document.data()!;
               });
               if (widget.updateNavigationBarCallback != null &&
-                  places.isNotEmpty) {
+                  widget.places.isNotEmpty) {
                 widget.updateNavigationBarCallback!(true);
               }
             }
           }).then((res) {
-            String key = places.keys.elementAt(0);
+            String key = widget.places.keys.elementAt(0);
             getPlaceImageURL(key);
           });
         }
@@ -72,7 +53,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
       url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
       if (mounted) {
         setState(() {
-          places[key]["placeImageURL"] = url;
+          widget.places[key]["placeImageURL"] = url;
         });
       }
     } catch (e) {
@@ -82,97 +63,34 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   void setFeaturedProduct(String placeID, String productID, bool state) {
     if (state) {
-      (places[placeID]['categories']['Featured']).insert(0, productID);
+      (widget.places[placeID]['categories']['Featured']).insert(0, productID);
     } else {
-      (places[placeID]['categories']['Featured']).remove(productID);
+      (widget.places[placeID]['categories']['Featured']).remove(productID);
     }
   }
 
   void editProduct(String placeID, String productID, List addedCategories,
       List removedCategories) {
     for (String addedCategory in addedCategories) {
-      (places[placeID]['categories'][addedCategory]).add(productID);
+      (widget.places[placeID]['categories'][addedCategory]).add(productID);
     }
     for (String removedCategory in removedCategories) {
-      (places[placeID]['categories'][removedCategory]).remove(productID);
+      (widget.places[placeID]['categories'][removedCategory]).remove(productID);
     }
   }
 
   void addProduct(String placeID, String productID, List categories) {
-    places[placeID]['products'].add(productID);
+    widget.places[placeID]['products'].add(productID);
     for (String category in categories) {
-      places[placeID]['categories'][category].add(productID);
+      widget.places[placeID]['categories'][category].add(productID);
     }
   }
 
   void deleteProduct(String placeID, String productID, List categories) {
-    places[placeID]['products'].remove(productID);
+    widget.places[placeID]['products'].remove(productID);
     for (String category in categories) {
-      places[placeID]['categories'][category].remove(productID);
+      widget.places[placeID]['categories'][category].remove(productID);
     }
-  }
-
-  void _showQRCode() async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    String key = places.keys.elementAt(0);
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10.0),
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: QrImageView(
-                  data: key,
-                  version: QrVersions.auto,
-                  size: 200.0,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Here's your code",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
-                    ],
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
-                    letterSpacing: -0.3),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
-                maxLines: 3,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
-                    fontVariations: const [
-                      FontVariation('wght', 400),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 13,
-                    letterSpacing: -0.3,
-                    height: 1.1,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -199,7 +117,9 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    if (places.isEmpty) {
+
+    // If there is no existing store, display a prompt to add a new one.
+    if (widget.places.isEmpty) {
       return Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(50),
@@ -276,326 +196,102 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
         ),
       );
     }
-    String key = places.keys.elementAt(0);
+
+    String key = widget.places.keys.elementAt(0);
     return Scaffold(
+      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
         children: [
-          Container(
-            color: MaterialColors.getSurfaceContainerLow(darkMode),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 75,
-                        height: 75,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: FittedBox(
-                            clipBehavior: Clip.hardEdge,
-                            fit: BoxFit.cover,
-                            child: CachedNetworkImage(
-                              imageUrl: places[key]["placeImageURL"] ?? '',
-                              placeholder: (context, url) => const Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Icon(Icons.storefront_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant),
-                              ),
-                              fadeInCurve: Curves.easeIn,
-                              fadeOutCurve: Curves.easeOut,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 90,
+                      height: 90,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: FittedBox(
+                          clipBehavior: Clip.hardEdge,
+                          fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.places[key]["placeImageURL"] ?? '',
+                            placeholder: (context, url) => const Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: CircularProgressIndicator(),
                             ),
+                            errorWidget: (context, url, error) => Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Icon(Icons.storefront_outlined,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant),
+                            ),
+                            fadeInCurve: Curves.easeIn,
+                            fadeOutCurve: Curves.easeOut,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              places[key]["placeName"],
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 20,
-                                  letterSpacing: -0.3,
-                                  height: 1,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                            const SizedBox(height: 7),
-                            Text(
-                              places[key]["placeTagline"] ?? '',
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 13.5,
-                                  letterSpacing: -0.3,
-                                  height: 0.85,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTapDown: (TapDownDetails details) {},
-                        child: Icon(
-                          Icons.more_vert,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            if (context.mounted) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => StoreEditPage(
-                                        key, places[key],
-                                        editStoreCallback: editStore)),
-                              );
-                            }
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outlineVariant)))),
-                          icon: Icon(
-                            Icons.edit,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          label: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Edit Store",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 600),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 14,
-                                      letterSpacing: -0.5),
-                                ),
-                              ]),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            _showQRCode();
-                          },
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outlineVariant)))),
-                          icon: Icon(
-                            Icons.qr_code_scanner,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          label: Text(
-                            "QR Code",
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.places[key]["placeName"],
+                            maxLines: 2,
                             style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontFamily: 'Bahnschrift',
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
-                                letterSpacing: -0.5),
+                                fontSize: 20,
+                                letterSpacing: -0.3,
+                                height: 1,
+                                overflow: TextOverflow.ellipsis),
                           ),
-                        ),
-                      ]),
-                ],
-              ),
+                          const SizedBox(height: 5),
+                          Text(
+                            widget.places[key]["placeTagline"] ?? '',
+                            maxLines: 2,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 13,
+                                letterSpacing: -0.3,
+                                height: 0.75,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Expanded(
             child: Column(
               children: [
-                const SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: SizedBox(
-                    height: 30,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Opacity(
-                          opacity: tabController.index == 0 ? 1 : 0.5,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  tabController.index == 0
-                                      ? MaterialColors.getSurfaceContainerLow(
-                                          darkMode)
-                                      : MaterialColors
-                                          .getSurfaceContainerLowest(darkMode)),
-                            ),
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  "Products",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.3,
-                                      height: 0.85,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            onPressed: () {
-                              tabController.animateTo(0);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Opacity(
-                          opacity: tabController.index == 1 ? 1 : 0.5,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  tabController.index == 1
-                                      ? MaterialColors.getSurfaceContainerLow(
-                                          darkMode)
-                                      : MaterialColors
-                                          .getSurfaceContainerLowest(darkMode)),
-                            ),
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  "Categories",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.3,
-                                      height: 0.85,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            onPressed: () {
-                              tabController.animateTo(1);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Opacity(
-                          opacity: tabController.index == 2 ? 1 : 0.5,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                  tabController.index == 2
-                                      ? MaterialColors.getSurfaceContainerLow(
-                                          darkMode)
-                                      : MaterialColors
-                                          .getSurfaceContainerLowest(darkMode)),
-                            ),
-                            child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
-                                child: Text(
-                                  "Orders",
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Bahnschrift',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
-                                      ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.3,
-                                      height: 0.85,
-                                      overflow: TextOverflow.ellipsis),
-                                )),
-                            onPressed: () {
-                              tabController.animateTo(2);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
                 Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      StoreProductsPage(
-                          key,
-                          places[key]['categories'].keys.toList()..sort(),
-                          places[key]['products'],
-                          places[key]['noticeTitle'],
-                          places[key]['noticeDesc'],
-                          setFeaturedProductCallback: setFeaturedProduct,
-                          addProductCallback: addProduct,
-                          editProductCallback: editProduct,
-                          deleteProductCallback: deleteProduct),
-                      StoreCategoriesPage(key, places[key]['categories'],
-                          places[key]['products']),
-                      StoreOrdersPage(key),
-                    ],
-                  ),
+                  child: StoreProductsPage(
+                      key,
+                      widget.places[key]['categories'].keys.toList()..sort(),
+                      widget.places[key]['products'],
+                      widget.places[key]['noticeTitle'],
+                      widget.places[key]['noticeDesc'],
+                      setFeaturedProductCallback: setFeaturedProduct,
+                      addProductCallback: addProduct,
+                      editProductCallback: editProduct,
+                      deleteProductCallback: deleteProduct),
                 ),
               ],
             ),

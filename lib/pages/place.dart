@@ -285,6 +285,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
         : widget.place['categories'].keys.toList()
       ..sort();
     return Scaffold(
+      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       appBar: AppBar(
           backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
           leading: IconButton(
@@ -328,7 +329,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
               ]),
             ),
           ]),
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Column(
         children: [
           Padding(

@@ -330,6 +330,68 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
     }
   }
 
+  void _showQRCode() async {
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
+          elevation: 0,
+          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: QrImageView(
+                  data: widget.placeID,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Here's your code",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 700),
+                      FontVariation('wdth', 100),
+                    ],
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 20,
+                    letterSpacing: -0.3),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
+                maxLines: 3,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Bahnschrift',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                      FontVariation('wdth', 100),
+                    ],
+                    fontSize: 13,
+                    letterSpacing: -0.3,
+                    height: 1.1,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     initProducts();
@@ -353,20 +415,50 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               .compareTo(b.value['productName'].toLowerCase())));
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: Icon(
-          Icons.upload_file,
-          color: MaterialColors.getSurfaceContainerLowest(darkMode),
-        ),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => StoreProductsAddPage(
-                    widget.placeID, widget.categories,
-                    addProductCallback: addProduct)),
-          );
-        },
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            backgroundColor: ChimeColors.getGreen800(),
+            label: Text(
+              "Share QR",
+              style: TextStyle(
+                color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                fontFamily: 'Plus Jakarta Sans',
+                fontVariations: const [
+                  FontVariation('wght', 700),
+                ],
+                fontSize: 14,
+                letterSpacing: -0.3,
+              ),
+            ),
+            icon: Icon(
+              Icons.qr_code_scanner,
+              color: MaterialColors.getSurfaceContainerLowest(darkMode),
+            ),
+            onPressed: () {
+              _showQRCode();
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: FloatingActionButton(
+              backgroundColor: ChimeColors.getGreen800(),
+              child: Icon(
+                Icons.add,
+                color: MaterialColors.getSurfaceContainerLowest(darkMode),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => StoreProductsAddPage(
+                          widget.placeID, widget.categories,
+                          addProductCallback: addProduct)),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: (products.isEmpty && productsFeatured.isEmpty)
           ? const SizedBox.shrink()
@@ -374,112 +466,109 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ListView(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            const Icon(Icons.campaign,
-                                color: Colors.grey, size: 16),
-                            const SizedBox(width: 5),
-                            Text(
-                              "Announcements",
-                              style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 16,
-                                  letterSpacing: -0.5),
-                            ),
-                          ]),
-                        ]),
-                  ),
                   const SizedBox(height: 10),
-                  Stack(
-                    children: [
-                      Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            //<-- SEE HERE
-                            side: BorderSide(
-                              color: MaterialColors.getSurfaceContainerHighest(
-                                  darkMode),
+                  Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        //<-- SEE HERE
+                        side: BorderSide(
+                          color: MaterialColors.getSurfaceContainerHighest(
+                              darkMode),
+                        ),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.noticeTitle ??
+                                ((widget.noticeDesc == null)
+                                    ? 'Add a notice'
+                                    : 'Notice'),
+                            style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 15,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                          if (!(widget.noticeTitle != null &&
+                              widget.noticeDesc == null))
+                            const SizedBox(height: 10),
+                          if (!(widget.noticeTitle != null &&
+                              widget.noticeDesc == null))
+                            Text(
+                              widget.noticeDesc ??
+                                  'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 12,
+                                letterSpacing: -0.3,
+                                height: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 5,
+                            ),
+                          SizedBox(height: 10),
+                          Row(
                             children: [
-                              Text(
-                                widget.noticeTitle ??
-                                    ((widget.noticeDesc == null)
-                                        ? 'Add a notice'
-                                        : 'Notice'),
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 650),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 15,
-                                  letterSpacing: -0.3,
-                                  height: 1.1,
-                                  overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    showEditNoticeForm(context);
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          ChimeColors.getGreen200()),
+                                      shape: MaterialStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide.none,
+                                      ))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.edit_outlined,
+                                          size: 16,
+                                          color: ChimeColors.getGreen800(),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "Edit Notice",
+                                          style: TextStyle(
+                                            color: ChimeColors.getGreen800(),
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                            ],
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              if (!(widget.noticeTitle != null &&
-                                  widget.noticeDesc == null))
-                                const SizedBox(height: 10),
-                              if (!(widget.noticeTitle != null &&
-                                  widget.noticeDesc == null))
-                                Text(
-                                  widget.noticeDesc ??
-                                      'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Bahnschrift',
-                                    fontVariations: const [
-                                      FontVariation('wght', 400),
-                                      FontVariation('wdth', 100),
-                                    ],
-                                    fontSize: 13,
-                                    letterSpacing: -0.3,
-                                    height: 1.1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  maxLines: 5,
-                                ),
                             ],
                           ),
-                        ),
+                        ],
                       ),
-                      Positioned(
-                        right: 15,
-                        top: 15,
-                        child: IconButton(
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            icon: Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
-                            onPressed: () {
-                              showEditNoticeForm(context);
-                            }),
-                      ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 25),
                   if (productsFeatured.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,36 +578,17 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(children: [
-                                  const Icon(Icons.bookmark,
-                                      color: Colors.orangeAccent, size: 16),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    "Featured",
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
-                                        fontVariations: const [
-                                          FontVariation('wght', 700),
-                                          FontVariation('wdth', 100),
-                                        ],
-                                        fontSize: 16,
-                                        letterSpacing: -0.5),
-                                  ),
-                                ]),
                                 Text(
-                                  "Sorted A-Z   🡻",
+                                  "Featured",
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontFamily: 'Plus Jakarta Sans',
                                       fontVariations: const [
-                                        FontVariation('wght', 400),
-                                        FontVariation('wdth', 100),
+                                        FontVariation('wght', 700),
                                       ],
-                                      fontSize: 12.5,
+                                      fontSize: 15,
                                       letterSpacing: -0.5),
                                 ),
                               ]),
@@ -544,7 +614,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                       setFeaturedProduct,
                                   editProductCallback: editProduct,
                                   deleteProductCallback: deleteProduct);
-                            })
+                            }),
+                        const SizedBox(height: 25),
                       ],
                     ),
                   if (products.isNotEmpty)
@@ -557,37 +628,17 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(children: [
-                                    const Icon(Icons.view_agenda,
-                                        color: Colors.grey, size: 16),
-                                    const SizedBox(width: 5),
-                                    Text(
-                                      "All",
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
-                                          fontFamily: 'Bahnschrift',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
-                                            FontVariation('wdth', 100),
-                                          ],
-                                          fontSize: 16,
-                                          letterSpacing: -0.5),
-                                    ),
-                                  ]),
                                   Text(
-                                    "Sorted A-Z   🡻",
+                                    "All Posts",
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .outline,
-                                        fontFamily: 'Bahnschrift',
+                                            .onSurface,
+                                        fontFamily: 'Plus Jakarta Sans',
                                         fontVariations: const [
-                                          FontVariation('wght', 400),
-                                          FontVariation('wdth', 100),
+                                          FontVariation('wght', 700),
                                         ],
-                                        fontSize: 12.5,
+                                        fontSize: 15,
                                         letterSpacing: -0.5),
                                   ),
                                 ]),

@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  var appMode;
+  String? appMode;
 
   // Variables for listeners and controllers.
   StreamSubscription? cartListener;
@@ -28,6 +28,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // Variables for personal data.
   int cartItems = 0;
   bool ownedStores = false;
+  Map places = {};
+  String key = '';
 
   void logoutUser() async {
     try {
@@ -126,7 +128,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
     loadAppMode();
     getUserInfo();
-    getOwnedStores();
+    getPlaces();
     getProfilePictureURL();
     addCartListener();
     super.initState();
@@ -137,6 +139,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     tabController.dispose();
     cartListener!.cancel();
     super.dispose();
+  }
+
+  void editStore(String placeID, String? placeImageURL, Map data) async {
+    if (placeImageURL != null) {
+      await CachedNetworkImage.evictFromCache(placeImageURL);
+      if (placeImageURL == '') {
+        places[placeID]['placeImageURL'] = null;
+      } else {
+        places[placeID]['placeImageURL'] = placeImageURL;
+      }
+    }
+    if (mounted) {
+      setState(() {
+        places[placeID]['placeName'] = data['placeName'];
+        places[placeID]['placeTagline'] = data['placeTagline'];
+        places[placeID]['deliveryPrice'] = data['deliveryPrice'];
+        places[placeID]['phoneNumber'] = data['phoneNumber'];
+      });
+    }
   }
 
   void getUserInfo() async {
@@ -150,7 +171,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  void getOwnedStores() async {
+  void getPlaces() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -158,6 +179,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       List placeIDs = document.data()!['places'];
       if (placeIDs.isNotEmpty) {
         ownedStores = true;
+      }
+      for (String placeID in placeIDs) {
+        db.collection("places").doc(placeID).get().then((document) {
+          if (mounted) {
+            setState(() {
+              places[placeID] = document.data()!;
+            });
+          }
+        }).then((res) {
+          key = places.keys.elementAt(0);
+        });
       }
     });
   }
@@ -660,41 +692,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     onPressed: () {
                       scaffoldKey.currentState?.openDrawer();
                     }),
-                if (appMode == 'Buy')
-                  Stack(children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Theme.of(context).colorScheme.primary,
+                (appMode == 'Buy')
+                    ? Stack(children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const CartPage()));
+                          },
+                        ),
+                        if (cartItems != 0)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: CircleAvatar(
+                                radius: 10,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                child: Text(
+                                  cartItems.toString(),
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontFamily: 'Bahnschrift',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                        FontVariation('wdth', 100),
+                                      ],
+                                      fontSize: 14,
+                                      letterSpacing: -0.3),
+                                )),
+                          )
+                      ])
+                    : IconButton(
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 24,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        onPressed: () {
+                          if (context.mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => StoreEditPage(
+                                      key, places[key],
+                                      editStoreCallback: editStore)),
+                            );
+                          }
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const CartPage()));
-                      },
-                    ),
-                    if (cartItems != 0)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: CircleAvatar(
-                            radius: 10,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            child: Text(
-                              cartItems.toString(),
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Bahnschrift',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 14,
-                                  letterSpacing: -0.3),
-                            )),
-                      )
-                  ])
               ],
             ),
           ),
@@ -712,15 +762,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           if (appMode == 'Sell')
             Expanded(
               child: (ownedStores)
-                  ? TabBarView(
-                      controller: tabController,
-                      children: const [
-                        StorePage(),
-                        SizedBox.shrink(),
-                        SizedBox.shrink()
-                      ],
-                    )
-                  : StorePage(updateNavigationBarCallback: updateNavigationBar),
+                  ? TabBarView(controller: tabController, children: [
+                      StorePage(places),
+                      (places[key] == null)
+                          ? SizedBox.shrink()
+                          : StoreCategoriesPage(key, places[key]['categories'],
+                              places[key]['products'] ?? []),
+                      StoreOrdersPage(key),
+                    ])
+                  : StorePage(places,
+                      updateNavigationBarCallback: updateNavigationBar),
             ),
         ]),
       ),
