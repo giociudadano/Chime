@@ -110,7 +110,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         ? AppLocalizations.of(context)!.onBoardingContinue
                         : AppLocalizations.of(context)!.onBoardingNext,
                     style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
+                      fontFamily: 'Plus Jakarta Sans',
                       fontVariations: [
                         FontVariation('wght', 350),
                         FontVariation('wdth', 100),
@@ -166,7 +166,7 @@ class OnBoardingPageContent extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              fontFamily: 'Bahnschrift',
+              fontFamily: 'Plus Jakarta Sans',
               fontVariations: [
                 FontVariation('wght', 700),
                 FontVariation('wdth', 100),
@@ -179,7 +179,7 @@ class OnBoardingPageContent extends StatelessWidget {
           title: Text(
             description,
             style: const TextStyle(
-              fontFamily: 'Bahnschrift',
+              fontFamily: 'Source Sans 3',
               fontVariations: [
                 FontVariation('wght', 300),
                 FontVariation('wdth', 100),
