@@ -2,11 +2,13 @@ part of '../main.dart';
 
 // ignore: must_be_immutable
 class OrderCard extends StatefulWidget {
-  OrderCard(this.orderID, this.order, {super.key, this.adminControls = false});
+  OrderCard(this.orderID, this.order,
+      {super.key, this.adminControls = false, this.setOrderStatusCallback});
 
   String orderID;
   Map order;
   bool adminControls;
+  final Function(String orderID, String newStatus)? setOrderStatusCallback;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -150,8 +152,12 @@ class _OrderCardState extends State<OrderCard> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) =>
-                              OrderReceiptPage(widget.orderID, widget.order)),
+                          builder: (context) => OrderReceiptPage(
+                              widget.adminControls,
+                              widget.orderID,
+                              widget.order,
+                              setOrderStatusCallback:
+                                  widget.setOrderStatusCallback)),
                     );
                   },
                   style: ButtonStyle(
