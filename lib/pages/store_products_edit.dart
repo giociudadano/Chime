@@ -397,8 +397,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         style: TextStyle(
                             color: ChimeColors.getRed800(),
                             fontFamily: 'Source Sans 3',
-                            fontVariations: [
-                              const FontVariation('wght', 400),
+                            fontVariations: const [
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3),
@@ -413,8 +413,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
-                            fontVariations: [
-                              const FontVariation('wght', 400),
+                            fontVariations: const [
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3),
@@ -465,8 +465,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
-                            fontVariations: [
-                              const FontVariation('wght', 400),
+                            fontVariations: const [
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3),
@@ -532,8 +532,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
-                            fontVariations: [
-                              const FontVariation('wght', 400),
+                            fontVariations: const [
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3),
@@ -704,8 +704,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
-                            fontVariations: [
-                              const FontVariation('wght', 400),
+                            fontVariations: const [
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3),
@@ -814,7 +814,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {

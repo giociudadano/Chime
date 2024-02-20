@@ -309,8 +309,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       style: TextStyle(
                           color: ChimeColors.getRed800(),
                           fontFamily: 'Source Sans 3',
-                          fontVariations: [
-                            const FontVariation('wght', 400),
+                          fontVariations: const [
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14,
                           letterSpacing: -0.3),
@@ -325,8 +325,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontFamily: 'Source Sans 3',
-                          fontVariations: [
-                            const FontVariation('wght', 400),
+                          fontVariations: const [
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14,
                           letterSpacing: -0.3),
@@ -373,8 +373,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontFamily: 'Source Sans 3',
-                          fontVariations: [
-                            const FontVariation('wght', 400),
+                          fontVariations: const [
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14,
                           letterSpacing: -0.3),

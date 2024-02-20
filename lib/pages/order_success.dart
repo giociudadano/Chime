@@ -17,7 +17,7 @@ class _OrderSuccessPageState extends State<OrderSuccessPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 150,
               width: 150,
               child: Placeholder(),

@@ -449,7 +449,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 size: 16,
                                 color: ChimeColors.getGreen800(),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Text(
                                 "Logout",
                                 style: TextStyle(
@@ -496,7 +496,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   size: 24),
                               Text(
                                 (appMode == 'Buy') ? "Places" : "Store",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Plus Jakarta Sans',
                                   fontVariations: [
                                     FontVariation('wght', 700),
@@ -557,7 +557,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 size: 24),
                             Text(
                               (appMode == 'Buy') ? "Foods" : "Categories",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: [
                                   FontVariation('wght', 700),
@@ -765,7 +765,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ? TabBarView(controller: tabController, children: [
                       StorePage(places),
                       (places[key] == null)
-                          ? SizedBox.shrink()
+                          ? const SizedBox.shrink()
                           : StoreCategoriesPage(key, places[key]['categories'],
                               places[key]['products'] ?? []),
                       StoreOrdersPage(key),

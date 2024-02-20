@@ -307,7 +307,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -567,7 +567,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               ),
                               maxLines: 5,
                             ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Row(
                             children: [
                               Expanded(

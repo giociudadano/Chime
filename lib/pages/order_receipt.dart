@@ -38,6 +38,12 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
     db.collection("orders").doc(widget.orderID).update({"status": newStatus});
 
     // 2. Set product to new status in app
+    if (mounted) {
+      setState(() {
+        widget.order['status'] = newStatus;
+      });
+    }
+
     widget.setOrderStatusCallback!(widget.orderID, newStatus);
   }
 
@@ -634,7 +640,6 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                       absorbing: widget.order['status'] != "Unread",
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context);
                           setOrderStatus("Cancelled");
                         },
                         style: ButtonStyle(
@@ -670,6 +675,41 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                       ),
                     ),
                   ),
+                  if (widget.adminControls &&
+                      widget.order['status'] == 'Unread')
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setOrderStatus("Preparing");
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Prepare",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
