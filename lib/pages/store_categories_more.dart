@@ -50,25 +50,38 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             ),
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-            title: const Text(
-              "Edit products in category",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: [
-                    FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 20,
-                  letterSpacing: -0.3),
-            ),
             content: Form(
               key: formAddProductsKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Products in Category",
+                        style: TextStyle(
+                            color: ChimeColors.getGreen800(),
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontVariations: const [
+                              FontVariation('wght', 700),
+                            ],
+                            fontSize: 20,
+                            letterSpacing: -0.3),
+                      ),
+                      IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            size: 24,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
                   SizedBox(
-                    height: 150,
+                    height: 300,
                     width: double.maxFinite,
                     child: ListView(children: [
                       InlineChoice(
@@ -86,12 +99,11 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Bahnschrift',
+                                    fontFamily: 'Source Sans 3',
                                     fontVariations: const [
-                                      FontVariation('wght', 450),
-                                      FontVariation('wdth', 100),
+                                      FontVariation('wght', 400),
                                     ],
-                                    fontSize: 12.5,
+                                    fontSize: 14,
                                     letterSpacing: -0.3)),
                           );
                         },
@@ -106,32 +118,69 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                       ),
                     ]),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                MaterialColors.getSurfaceContainerLowest(
+                                    darkMode)),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color: ChimeColors.getGreen300(),
+                              ),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
                             editProductsInCategory(multipleSelected);
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
-                            foregroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.onPrimary),
-                          ),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  ChimeColors.getGreen200()),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide.none,
+                              ))),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Text(
-                              "Submit",
+                              "Save",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontFamily: 'Bahnschrift',
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -162,23 +211,51 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             ),
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-            title: const Text(
-              "Rename category",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Bahnschrift',
-                  fontVariations: [
-                    FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
-                  ],
-                  fontSize: 20,
-                  letterSpacing: -0.3),
-            ),
             content: Form(
               key: formRenameCategoryKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Rename Category",
+                        style: TextStyle(
+                            color: ChimeColors.getGreen800(),
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontVariations: const [
+                              FontVariation('wght', 700),
+                            ],
+                            fontSize: 20,
+                            letterSpacing: -0.3),
+                      ),
+                      IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            size: 24,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Category Name",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                  ),
                   TextFormField(
                     controller: inputRenameCategoryName,
                     decoration: InputDecoration(
@@ -196,28 +273,64 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      hintText: "Name",
+                      hintText: "Category Name",
                       hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.outline),
+                          color: Theme.of(context).colorScheme.outline,
+                          letterSpacing: -0.3),
                       filled: true,
                       fillColor:
                           MaterialColors.getSurfaceContainerLowest(darkMode),
                       isDense: true,
                     ),
                     style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14),
                     validator: (String? value) {
                       return _verifyNameField(value);
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                MaterialColors.getSurfaceContainerLowest(
+                                    darkMode)),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                color: ChimeColors.getGreen300(),
+                              ),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -227,23 +340,24 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             }
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
-                            foregroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.onPrimary),
-                          ),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  ChimeColors.getGreen200()),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide.none,
+                              ))),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Text(
-                              "Submit",
+                              "Save",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontFamily: 'Bahnschrift',
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
-                                  FontVariation('wght', 600),
-                                  FontVariation('wdth', 100),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -396,10 +510,9 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
           child: Text('Rename Category',
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontFamily: 'Bahnschrift',
+                  fontFamily: 'Source Sans 3',
                   fontVariations: const [
-                    FontVariation('wght', 450),
-                    FontVariation('wdth', 100),
+                    FontVariation('wght', 400),
                   ],
                   fontSize: 14,
                   letterSpacing: -0.3)),
@@ -408,11 +521,10 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
           value: 2,
           child: Text('Delete Category',
               style: TextStyle(
-                  color: Colors.red[darkMode ? 200 : 900],
-                  fontFamily: 'Bahnschrift',
+                  color: ChimeColors.getRed800(),
+                  fontFamily: 'Source Sans 3',
                   fontVariations: const [
-                    FontVariation('wght', 450),
-                    FontVariation('wdth', 100),
+                    FontVariation('wght', 400),
                   ],
                   fontSize: 14,
                   letterSpacing: -0.3)),
@@ -433,9 +545,9 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     return Scaffold(
         backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: ChimeColors.getGreen800(),
           child: Icon(
-            Icons.drive_folder_upload,
+            Icons.add,
             color: MaterialColors.getSurfaceContainerLowest(darkMode),
           ),
           onPressed: () {
@@ -457,10 +569,9 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                 widget.categoryName,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Plus Jakarta Sans',
                     fontVariations: const [
                       FontVariation('wght', 700),
-                      FontVariation('wdth', 100),
                     ],
                     fontSize: 20,
                     letterSpacing: -0.3),
@@ -484,33 +595,6 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ListView(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(
-                  "Products under '${widget.categoryName}'",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 700),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 16,
-                      letterSpacing: -0.5),
-                ),
-                Text(
-                  "Sorted A-Z   🡻",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.outline,
-                      fontFamily: 'Bahnschrift',
-                      fontVariations: const [
-                        FontVariation('wght', 400),
-                        FontVariation('wdth', 100),
-                      ],
-                      fontSize: 12.5,
-                      letterSpacing: -0.5),
-                ),
-              ]),
-              const SizedBox(height: 10),
               GridView.builder(
                 key: UniqueKey(),
                 physics: const NeverScrollableScrollPhysics(),

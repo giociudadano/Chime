@@ -149,10 +149,14 @@ class _StoreEditPageState extends State<StoreEditPage> {
   void initState() {
     inputEditStoreName.text = widget.place['placeName'];
     inputEditStoreDesc.text = widget.place['placeTagline'] ?? '';
+    // If there is no entry in the database for the delivery price, set delivery
+    // price to zero.
     inputEditStoreDeliveryFee.text = widget.place['deliveryPrice'] != null
         ? widget.place['deliveryPrice'].toString()
         : '0';
-    inputEditStorePhoneNumber.text = widget.place['phoneNumber'] ?? '';
+    inputEditStorePhoneNumber.text = widget.place['phoneNumber'] == null
+        ? ''
+        : widget.place['phoneNumber'].substring(4);
     super.initState();
   }
 
@@ -285,7 +289,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Change",
+                              "Upload",
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Plus Jakarta Sans',
@@ -344,7 +348,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "Insert your store's name",
+                        hintText: "Name",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
@@ -353,13 +357,12 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
+                          letterSpacing: -0.3,
+                          fontFamily: 'Source Sans 3',
                           fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
+                            FontVariation('wght', 400),
                           ],
-                          fontSize: 13.5,
-                          letterSpacing: -0.5),
+                          fontSize: 14),
                       validator: (String? value) {
                         return _verifyNameField(value);
                       },
@@ -378,6 +381,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     ),
                     TextFormField(
                       controller: inputEditStoreDesc,
+                      maxLength: 150,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -393,7 +397,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "Insert your store's description",
+                        hintText: "Description",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
@@ -402,13 +406,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 13.5,
-                          letterSpacing: -0.5),
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                       minLines: 3,
                       maxLines: 3,
                       validator: (String? value) {
@@ -431,8 +435,6 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       keyboardType: TextInputType.number,
                       controller: inputEditStoreDeliveryFee,
                       decoration: InputDecoration(
-                        prefixIcon: const Padding(
-                            padding: EdgeInsets.all(12), child: Text('₱ ')),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Theme.of(context).colorScheme.outline,
@@ -447,6 +449,20 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 8, 0, 0),
+                          child: Text(
+                            "₱",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 16,
+                                letterSpacing: -0.3),
+                          ),
+                        ),
                         hintText: "0",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
@@ -456,13 +472,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 13.5,
-                          letterSpacing: -0.5),
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
@@ -484,6 +500,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     TextFormField(
                       keyboardType: TextInputType.number,
                       controller: inputEditStorePhoneNumber,
+                      maxLength: 9,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -499,22 +516,36 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "0912 3456 789",
+                        hintText: "123 456 789",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
+                          child: Text(
+                            "+639",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.3),
+                          ),
+                        ),
                         filled: true,
                         fillColor:
                             MaterialColors.getSurfaceContainerLowest(darkMode),
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
-                          fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
-                          ],
-                          fontSize: 13.5,
-                          letterSpacing: -0.5),
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
                       minLines: 1,
                       maxLines: 1,
                       validator: (String? value) {
@@ -528,7 +559,43 @@ class _StoreEditPageState extends State<StoreEditPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          elevation: const MaterialStatePropertyAll(0),
+                          backgroundColor: MaterialStatePropertyAll(
+                              MaterialColors.getSurfaceContainerLowest(
+                                  darkMode)),
+                          shape:
+                              MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: ChimeColors.getGreen300(),
+                            ),
+                          )),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -540,10 +607,9 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                       .text.isNotEmpty
                                   ? int.parse(inputEditStoreDeliveryFee.text)
                                   : 0,
-                              "phoneNumber":
-                                  inputEditStorePhoneNumber.text.isNotEmpty
-                                      ? inputEditStorePhoneNumber.text
-                                      : null,
+                              "phoneNumber": inputEditStorePhoneNumber != ""
+                                  ? "+639${inputEditStorePhoneNumber.text}"
+                                  : null,
                             };
                             editStore(widget.placeID, data);
                           }

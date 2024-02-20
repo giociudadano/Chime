@@ -34,6 +34,14 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
+  void setOrderStatus(String orderID, String newStatus) {
+    if (mounted) {
+      setState(() {
+        orders[orderID]['status'] = newStatus;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -110,7 +118,9 @@ class _OrdersPageState extends State<OrdersPage> {
                 itemCount: orders.length,
                 itemBuilder: (BuildContext context, int index) {
                   String key = orders.keys.elementAt(index);
-                  return OrderCard(key, orders[key], adminControls: false);
+                  return OrderCard(key, orders[key],
+                      adminControls: false,
+                      setOrderStatusCallback: setOrderStatus);
                 })
           ],
         ),

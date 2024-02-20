@@ -140,23 +140,51 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
           ),
           elevation: 0,
           backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-          title: const Text(
-            "Edit Notice",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontFamily: 'Bahnschrift',
-                fontVariations: [
-                  FontVariation('wght', 700),
-                  FontVariation('wdth', 100),
-                ],
-                fontSize: 20,
-                letterSpacing: -0.3),
-          ),
           content: Form(
             key: formEditNoticeKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Edit Notice",
+                      style: TextStyle(
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontVariations: const [
+                            FontVariation('wght', 700),
+                          ],
+                          fontSize: 20,
+                          letterSpacing: -0.3),
+                    ),
+                    IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          size: 24,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Notice Title",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                ),
                 TextFormField(
                   controller: inputEditNoticeTitle,
                   decoration: InputDecoration(
@@ -183,15 +211,28 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
+                      fontFamily: 'Source Sans 3',
                       fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
+                        FontVariation('wght', 400),
                       ],
-                      fontSize: 13.5,
+                      fontSize: 14,
                       letterSpacing: -0.3),
                 ),
                 const SizedBox(height: 15),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Description",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                ),
                 TextFormField(
                   controller: inputEditNoticeDesc,
                   decoration: InputDecoration(
@@ -218,20 +259,55 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     isDense: true,
                   ),
                   style: const TextStyle(
-                      fontFamily: 'Bahnschrift',
+                      fontFamily: 'Source Sans 3',
                       fontVariations: [
-                        FontVariation('wght', 300),
-                        FontVariation('wdth', 100),
+                        FontVariation('wght', 400),
                       ],
-                      fontSize: 13.5,
+                      fontSize: 14,
                       height: 1.2,
                       letterSpacing: -0.3),
                   minLines: 5,
                   maxLines: 5,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          elevation: const MaterialStatePropertyAll(0),
+                          backgroundColor: MaterialStatePropertyAll(
+                              MaterialColors.getSurfaceContainerLowest(
+                                  darkMode)),
+                          shape:
+                              MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: ChimeColors.getGreen300(),
+                            ),
+                          )),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -245,56 +321,24 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.primary),
-                          foregroundColor: MaterialStatePropertyAll(
-                              Theme.of(context).colorScheme.onPrimary),
-                        ),
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide.none,
+                            ))),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            "Submit",
+                            "Save",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontFamily: 'Bahnschrift',
+                              color: ChimeColors.getGreen800(),
+                              fontFamily: 'Plus Jakarta Sans',
                               fontVariations: const [
-                                FontVariation('wght', 600),
-                                FontVariation('wdth', 100),
+                                FontVariation('wght', 700),
                               ],
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              MaterialColors.getSurfaceContainerLow(darkMode)),
-                          foregroundColor: MaterialStatePropertyAll(
-                              MaterialColors.getSurfaceContainerLow(darkMode)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            "Cancel",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Bahnschrift',
-                              fontVariations: const [
-                                FontVariation('wght', 600),
-                                FontVariation('wdth', 100),
-                              ],
-                              fontSize: 15,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -415,10 +459,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               .compareTo(b.value['productName'].toLowerCase())));
 
     return Scaffold(
+      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.extended(
+            heroTag: null,
             backgroundColor: ChimeColors.getGreen800(),
             label: Text(
               "Share QR",
@@ -435,6 +481,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
             icon: Icon(
               Icons.qr_code_scanner,
               color: MaterialColors.getSurfaceContainerLowest(darkMode),
+              size: 24,
             ),
             onPressed: () {
               _showQRCode();
@@ -443,10 +490,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: FloatingActionButton(
+              heroTag: null,
               backgroundColor: ChimeColors.getGreen800(),
               child: Icon(
                 Icons.add,
                 color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                size: 24,
               ),
               onPressed: () {
                 Navigator.of(context).push(

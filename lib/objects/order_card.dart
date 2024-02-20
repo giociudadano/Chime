@@ -2,11 +2,13 @@ part of '../main.dart';
 
 // ignore: must_be_immutable
 class OrderCard extends StatefulWidget {
-  OrderCard(this.orderID, this.order, {super.key, this.adminControls = false});
+  OrderCard(this.orderID, this.order,
+      {super.key, this.adminControls = false, this.setOrderStatusCallback});
 
   String orderID;
   Map order;
   bool adminControls;
+  final Function(String orderID, String newStatus)? setOrderStatusCallback;
 
   @override
   State<OrderCard> createState() => _OrderCardState();
@@ -61,7 +63,9 @@ class _OrderCardState extends State<OrderCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.order['storeName'],
+                    widget.adminControls
+                        ? widget.order['customerName']
+                        : widget.order['storeName'],
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontFamily: 'Plus Jakarta Sans',
@@ -107,19 +111,19 @@ class _OrderCardState extends State<OrderCard> {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                widget.order['address'] ?? 'Unknown address',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  fontFamily: 'Product Sans 3',
-                  fontVariations: const [
-                    FontVariation('wght', 400),
-                  ],
-                  fontSize: 14,
-                  letterSpacing: -0.3,
+                  widget.order['address'] ?? 'Unknown address',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
                 ),
-              ),
               )
             ]),
             const SizedBox(height: 5),
@@ -148,8 +152,12 @@ class _OrderCardState extends State<OrderCard> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) =>
-                              OrderReceiptPage(widget.orderID, widget.order)),
+                          builder: (context) => OrderReceiptPage(
+                              widget.adminControls,
+                              widget.orderID,
+                              widget.order,
+                              setOrderStatusCallback:
+                                  widget.setOrderStatusCallback)),
                     );
                   },
                   style: ButtonStyle(
