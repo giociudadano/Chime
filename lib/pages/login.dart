@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 AppLocalizations.of(context)!.loginTitle,
                 style: const TextStyle(
-                  fontFamily: 'Bahnschrift',
+                  fontFamily: 'Plus Jakarta Sans',
                   fontVariations: [
                     FontVariation('wght', 700),
                     FontVariation('wdth', 100),
@@ -232,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Bahnschrift',
+                                  fontFamily: 'Plus Jakarta Sans',
                                   fontVariations: const [
                                     FontVariation('wght', 500),
                                     FontVariation('wdth', 100),
