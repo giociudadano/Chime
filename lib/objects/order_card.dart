@@ -61,7 +61,9 @@ class _OrderCardState extends State<OrderCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.order['storeName'],
+                    widget.adminControls
+                        ? widget.order['customerName']
+                        : widget.order['storeName'],
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontFamily: 'Plus Jakarta Sans',
@@ -107,19 +109,19 @@ class _OrderCardState extends State<OrderCard> {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                widget.order['address'] ?? 'Unknown address',
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  fontFamily: 'Product Sans 3',
-                  fontVariations: const [
-                    FontVariation('wght', 400),
-                  ],
-                  fontSize: 14,
-                  letterSpacing: -0.3,
+                  widget.order['address'] ?? 'Unknown address',
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
                 ),
-              ),
               )
             ]),
             const SizedBox(height: 5),

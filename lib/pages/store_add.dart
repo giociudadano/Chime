@@ -382,7 +382,9 @@ class _StoreAddPageState extends State<StoreAddPage> {
                                 inputAddStoreName.text,
                                 inputAddStoreDesc.text,
                                 inputAddStoreDeliveryFee.text,
-                                "+63${inputAddStorePhoneNumber.text}");
+                                inputAddStorePhoneNumber != ""
+                                      ? "+639${inputAddStorePhoneNumber.text}"
+                                      : "");
                           }
                         },
                         style: ButtonStyle(
