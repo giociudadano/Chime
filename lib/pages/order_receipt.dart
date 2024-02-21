@@ -675,6 +675,8 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                       ),
                     ),
                   ),
+                  // For sellers: If the status is unread, add a new button that allows the
+                  // seller to prepare that order.
                   if (widget.adminControls &&
                       widget.order['status'] == 'Unread')
                     Expanded(
@@ -697,6 +699,126 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
                               "Prepare",
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // For sellers: If the status is preparing, add a new button that allows the
+                  // seller to ready that order for pickup or delivery.
+                  if (widget.adminControls &&
+                      widget.order['status'] == 'Preparing')
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (widget.order['deliveryMethod'] == 'Pickup') {
+                              setOrderStatus("Ready for Pickup");
+                            } else if (widget.order['deliveryMethod'] ==
+                                'Delivery') {
+                              setOrderStatus("On Delivery");
+                            }
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              widget.order['deliveryMethod'] == "Pickup"
+                                  ? "Ready for Pickup"
+                                  : "Ready for Delivery",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // For sellers: If the status is ready for pickup or on delivery, add a new button
+                  // that allows the seller to mark that item as received.
+                  if (widget.adminControls &&
+                      (widget.order['status'] == 'Ready for Pickup' ||
+                          widget.order['status'] == 'On Delivery'))
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setOrderStatus("Received");
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Mark as Received",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (!widget.adminControls &&
+                      (widget.order['status'] == 'Received'))
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setOrderStatus("Completed");
+                          },
+                          style: ButtonStyle(
+                            elevation: const MaterialStatePropertyAll(0),
+                            backgroundColor: MaterialStatePropertyAll(
+                                ChimeColors.getGreen200()),
+                            shape:
+                                MaterialStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              "Mark as Complete",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
                                 fontFamily: 'Plus Jakarta Sans',
