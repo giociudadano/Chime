@@ -5,7 +5,10 @@ class SelectCard {
   final IconData cardIcon;
   final String cardTitle;
   final String cardSubtitle;
-  SelectCard({this.cardIcon, this.cardTitle, this.cardSubtitle});
+  SelectCard(
+      {required this.cardIcon,
+      required this.cardTitle,
+      required this.cardSubtitle});
 }
 
 List<SelectCard> cardList = [
