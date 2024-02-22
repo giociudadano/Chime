@@ -185,9 +185,9 @@ class _OrderCardState extends State<OrderCard> {
                               ? ChimeColors.getRed200()
                               : MaterialColors.getSurfaceContainerLowest(
                                   darkMode)
-                      : widget.order['status'] == 'Received'
-                          ? MaterialColors.getSurfaceContainerLowest(darkMode)
-                          : ChimeColors.getGreen200()),
+                      : widget.order['status'] == 'Received' ? MaterialColors.getSurfaceContainerLowest(darkMode) : 
+                        widget.order['status'] == 'Cancelled' ? ChimeColors.getRed200() :
+                        ChimeColors.getGreen200()),
                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: widget.adminControls
@@ -198,11 +198,9 @@ class _OrderCardState extends State<OrderCard> {
                             : BorderSide(
                                 color: ChimeColors.getGreen300(),
                               )
-                        : widget.order['status'] == 'Received'
-                            ? BorderSide(
-                                color: ChimeColors.getGreen300(),
-                              )
-                            : BorderSide.none,
+                        : widget.order['status'] == 'Received' ? BorderSide(color: ChimeColors.getGreen200()) :
+                          widget.order['status'] == 'Cancelled' ? BorderSide(color: ChimeColors.getRed200()) :
+                          BorderSide.none,
                   )),
                 ),
                 child: Padding(
@@ -217,9 +215,9 @@ class _OrderCardState extends State<OrderCard> {
                               : widget.order['status'] == 'Cancelled'
                                   ? ChimeColors.getRed800()
                                   : Theme.of(context).colorScheme.outline
-                          : widget.order['status'] == 'Received'
-                              ? Theme.of(context).colorScheme.outline
-                              : ChimeColors.getGreen800(),
+                          : widget.order['status'] == 'Received' ? Theme.of(context).colorScheme.outline :
+                            widget.order['status'] == 'Cancelled' ? ChimeColors.getRed800() :
+                            ChimeColors.getGreen800(),
                       fontFamily: 'Plus Jakarta Sans',
                       fontVariations: const [
                         FontVariation('wght', 700),
@@ -274,11 +272,7 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (widget.order['deliveryMethod'] == 'Pickup') {
-                        setOrderStatus("Ready for Pickup");
-                      } else if (widget.order['deliveryMethod'] == 'Delivery') {
-                        setOrderStatus("On Delivery");
-                      }
+                      setOrderStatus('To Receive');
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
@@ -312,8 +306,7 @@ class _OrderCardState extends State<OrderCard> {
             // For sellers: If the current order is ready for pickup/delivery, add a button
             // that allows the seller to mark that order as received.
             if (widget.adminControls &&
-                (widget.order['status'] == 'Ready for Pickup' ||
-                    widget.order['status'] == 'On Delivery'))
+                (widget.order['status'] == 'To Receive'))
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
