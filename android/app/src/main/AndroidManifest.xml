@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.giociudadano.cmsc198.cmsc198">
    <application
-        android:label="cmsc198"
+        android:label="Chime"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAh2wbMonUlknnMBWB8W1XYif5DIUDwbug"/>
         <activity
