@@ -158,7 +158,7 @@ class OnBoardingPageContent extends StatelessWidget {
         Stack(alignment: const Alignment(0, 1), children: <Widget>[
           Image.asset(
             image,
-            height: 200,
+            height: 250,
           ),
         ]),
         Padding(
@@ -171,7 +171,7 @@ class OnBoardingPageContent extends StatelessWidget {
                 FontVariation('wght', 700),
                 FontVariation('wdth', 100),
               ],
-              fontSize: 40,
+              fontSize: 24,
             ),
           ),
         ),

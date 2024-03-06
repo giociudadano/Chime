@@ -1,8 +1,8 @@
 {
   "appName": "chime!",
-  "onBoardingImages": "lib/assets/images/logo.png:lib/assets/images/logo.png:lib/assets/images/logo.png",
-  "onBoardingTitles": "Title A:Title B:Title C",
-  "onBoardingDescriptions": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.:Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.:Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "onBoardingImages": "lib/assets/images/Buy.png:lib/assets/images/Sell.png:lib/assets/images/Chime.png",
+  "onBoardingTitles": "Order Food Online:Start a Food Business:Switch Easily",
+  "onBoardingDescriptions": "Ordering online is the new fad! Have your favorite food delivered at your doorstep in just a few clicks.:Rather start your own food business? Create and manage your store in just one app.:Please select your choice. You can change this later in your profile.",
   "onBoardingContinue": "Continue",
   "onBoardingNext": "Next",
   "loginTitle": "Welcome\nback",
