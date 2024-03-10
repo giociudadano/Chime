@@ -667,8 +667,51 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                           ),
                           const SizedBox(height: 10),
                         ]),
-                      const SizedBox(height: 10),
-                      const SizedBox(height: 30),
+
+                      // If order contains additional notes, display subsection.
+                      if (widget.order['additionalNotes'] != null ||
+                          widget.order['additionalNotes'] != '')
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 15),
+                              Divider(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
+                                height: 0.5,
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                "Additional Notes",
+                                style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                widget.order['additionalNotes'],
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  height: 1.15,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ]),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ],

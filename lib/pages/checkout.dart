@@ -33,6 +33,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Map user = {};
   Map addresses = {};
 
+  final inputAdditionalNotes = TextEditingController();
+
   void getUserInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -124,7 +126,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           .doc(widget.placeID)
           .delete();
       // 4. Add items as an order entry
-      db.collection("orders").add({
+      Map<String, dynamic> data = {
+        "additionalNotes": inputAdditionalNotes.text,
         "address": deliveryMethod == 'Pickup'
             ? "N/A (Pickup)"
             : addresses[selectedAddress!]["address"],
@@ -143,7 +146,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "status": "Unread",
         "storeName": 'Store Name', //TODO: Fetch store name programatically
         "userID": uid,
-      }).then((docRef) {
+      };
+      print(data);
+      db.collection("orders").add(data).then((docRef) {
         // 5. Add order to list of orders of user
         db.collection("users").doc(uid).update({
           "orders": FieldValue.arrayUnion([docRef.id])
@@ -257,64 +262,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color:
-                            MaterialColors.getSurfaceContainerHighest(darkMode),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(children: [
-                        Radio(
-                          value: 'Pickup',
-                          groupValue: deliveryMethod,
-                          onChanged: (String? value) {
-                            setState(() {
-                              deliveryMethod = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Pickup",
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontVariations: const [
-                                      FontVariation('wght', 700),
-                                    ],
-                                    fontSize: 14,
-                                    letterSpacing: -0.3,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                              Text(
-                                "₱0",
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Source Sans 3',
-                                    fontVariations: const [
-                                      FontVariation('wght', 400),
-                                    ],
-                                    fontSize: 14,
-                                    letterSpacing: -0.3,
-                                    height: 0.7,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ])
-                      ]),
-                    )),
                 Opacity(
                   opacity: selectedAddress == null ? 0.5 : 1,
                   child: AbsorbPointer(
@@ -421,8 +368,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   child: Stack(
                                     children: [
                                       Positioned(
-                                        top: 0,
-                                        right: 0,
+                                        top: -3,
+                                        right: -3,
                                         child: SizedBox(
                                           height: 25,
                                           width: 25,
@@ -474,6 +421,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                   FontVariation('wght', 700),
                                                 ],
                                                 fontSize: 14,
+                                                height: 1.4,
                                                 letterSpacing: -0.3,
                                               ),
                                             ),
@@ -557,6 +505,64 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ])
                       ]),
                 ),
+                Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color:
+                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 0,
+                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(children: [
+                        Radio(
+                          value: 'Pickup',
+                          groupValue: deliveryMethod,
+                          onChanged: (String? value) {
+                            setState(() {
+                              deliveryMethod = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Pickup",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontVariations: const [
+                                      FontVariation('wght', 700),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              Text(
+                                "₱0",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                    height: 0.7,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ])
+                      ]),
+                    )),
                 const SizedBox(height: 30),
                 Text(
                   "Payment",
@@ -656,6 +662,59 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ],
                     ),
                   ),
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  "Special Note (Optional)",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontFamily: 'Source Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                TextFormField(
+                  controller: inputAdditionalNotes,
+                  maxLength: 300,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    hintText: "Add additional notes here",
+                    hintStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.outline),
+                    filled: true,
+                    fillColor:
+                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                    isDense: true,
+                  ),
+                  style: const TextStyle(
+                    fontFamily: 'Source Sans 3',
+                    fontVariations: [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
+                  minLines: 3,
+                  maxLines: 3,
+                  validator: (String? value) {
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 30),
                 ListView.builder(
@@ -768,11 +827,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       : 1,
                   child: ElevatedButton(
                     onPressed: () {
-                      (deliveryMethod == null || paymentMethod == null)
-                          ? null
-                          : () {
-                              addOrder(deliveryMethod!, paymentMethod!);
-                            };
+                      if (deliveryMethod != null && paymentMethod != null) {
+                        addOrder(deliveryMethod!, paymentMethod!);
+                      }
                     },
                     style: ButtonStyle(
                         backgroundColor:
