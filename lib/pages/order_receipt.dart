@@ -93,44 +93,166 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
             Expanded(
               child: ListView(
                 children: [
+                  ListView.builder(
+                      key: UniqueKey(),
+                      shrinkWrap: true,
+                      itemCount: widget.order['items'].length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String key =
+                            widget.order['items'].keys.elementAt(index);
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Card(
+                            color: MaterialColors.getSurfaceContainerLowest(
+                                darkMode),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color:
+                                    MaterialColors.getSurfaceContainerHighest(
+                                        darkMode),
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            elevation: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 80,
+                                    height: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: FittedBox(
+                                        clipBehavior: Clip.hardEdge,
+                                        fit: BoxFit.cover,
+                                        child: CachedNetworkImage(
+                                          imageUrl: widget.order['items'][key]
+                                                  ['productImageURL'] ??
+                                              '',
+                                          placeholder: (context, url) =>
+                                              const Padding(
+                                            padding: EdgeInsets.all(20.0),
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Container(
+                                            color: MaterialColors
+                                                .getSurfaceContainerLow(
+                                                    darkMode),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(20.0),
+                                              child: Icon(
+                                                  Icons.local_mall_outlined,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .outlineVariant),
+                                            ),
+                                          ),
+                                          fadeInCurve: Curves.easeIn,
+                                          fadeOutCurve: Curves.easeOut,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 20),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.order['items'][key]['name'],
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                        ),
+                                      ),
+                                      Text(
+                                        "₱${widget.order['items'][key]['price']}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontVariations: const [
+                                            FontVariation('wght', 700),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .outline,
+                                            width: 0.5,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 5),
+                                          child: Text(
+                                            "x${widget.order['items'][key]['quantity']}",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline,
+                                              fontFamily: 'Bahnschrift',
+                                              fontVariations: const [
+                                                FontVariation('wght', 450),
+                                                FontVariation('wdth', 100),
+                                              ],
+                                              fontSize: 13,
+                                              letterSpacing: -0.3,
+                                              height: 0.85,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Status",
-                            style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                          Text(
-                            widget.order['status'],
-                            style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        "Details",
+                        style: TextStyle(
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Customer",
+                            "Total Cost",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -142,7 +264,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                             ),
                           ),
                           Text(
-                            widget.order['customerName'],
+                            "₱${widget.order['price']}",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -190,7 +312,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Total Cost",
+                            "Delivery Method",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -202,7 +324,116 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                             ),
                           ),
                           Text(
-                            "₱${widget.order['price']}",
+                            widget.order['deliveryMethod'],
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Delivery Fee",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          Text(
+                            "₱${widget.order['deliveryFee']}",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Mode of Payment",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          Text(
+                            widget.order['paymentMethod'],
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 15),
+                      Divider(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                        height: 0.5,
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Order Status",
+                        style: TextStyle(
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Status",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          Text(
+                            widget.order['status'],
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -277,12 +508,31 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 15),
+                      Divider(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                        height: 0.5,
+                      ),
+                      const SizedBox(height: 15),
+
+                      Text(
+                        "Customer Info",
+                        style: TextStyle(
+                          color: ChimeColors.getGreen800(),
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Delivery Method",
+                            "Name",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -294,7 +544,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                             ),
                           ),
                           Text(
-                            widget.order['deliveryMethod'],
+                            widget.order['customerName'],
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -312,7 +562,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Delivery Fee",
+                            "Phone Number",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -324,7 +574,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                             ),
                           ),
                           Text(
-                            "₱${widget.order['deliveryFee']}",
+                            widget.order['phoneNumber'] ?? 'N/A',
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontFamily: 'Source Sans 3',
@@ -339,7 +589,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                       ),
                       const SizedBox(height: 10),
 
-                      // If delivery method is pickup, do not display the user's address.
+                      // If delivery method is pickup, do not display the user's address and landmark fields.
                       if (widget.order['deliveryMethod'] != 'Pickup')
                         Column(children: [
                           Row(
@@ -360,7 +610,7 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 30),
+                                  padding: const EdgeInsets.only(left: 60),
                                   child: Text(
                                     widget.order['address'] ??
                                         'Unknown address',
@@ -417,213 +667,8 @@ class _OrderReceiptPageState extends State<OrderReceiptPage> {
                           ),
                           const SizedBox(height: 10),
                         ]),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Phone Number",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                          Text(
-                            widget.order['phoneNumber'] ?? 'N/A',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Mode of Payment",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                          Text(
-                            widget.order['paymentMethod'],
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Source Sans 3',
-                              fontVariations: const [
-                                FontVariation('wght', 400),
-                              ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 40),
-                      ListView.builder(
-                          key: UniqueKey(),
-                          shrinkWrap: true,
-                          itemCount: widget.order['items'].length,
-                          itemBuilder: (BuildContext context, int index) {
-                            String key =
-                                widget.order['items'].keys.elementAt(index);
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: Card(
-                                color: MaterialColors.getSurfaceContainerLowest(
-                                    darkMode),
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: MaterialColors
-                                        .getSurfaceContainerHighest(darkMode),
-                                  ),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                elevation: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 80,
-                                        height: 80,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: FittedBox(
-                                            clipBehavior: Clip.hardEdge,
-                                            fit: BoxFit.cover,
-                                            child: CachedNetworkImage(
-                                              imageUrl: widget.order['items']
-                                                          [key]
-                                                      ['productImageURL'] ??
-                                                  '',
-                                              placeholder: (context, url) =>
-                                                  const Padding(
-                                                padding: EdgeInsets.all(20.0),
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Container(
-                                                color: MaterialColors
-                                                    .getSurfaceContainerLow(
-                                                        darkMode),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      20.0),
-                                                  child: Icon(
-                                                      Icons.local_mall_outlined,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .outlineVariant),
-                                                ),
-                                              ),
-                                              fadeInCurve: Curves.easeIn,
-                                              fadeOutCurve: Curves.easeOut,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            widget.order['items'][key]['name'],
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant,
-                                              fontFamily: 'Plus Jakarta Sans',
-                                              fontVariations: const [
-                                                FontVariation('wght', 700),
-                                              ],
-                                              fontSize: 14,
-                                              letterSpacing: -0.3,
-                                            ),
-                                          ),
-                                          Text(
-                                            "₱${widget.order['items'][key]['price']}",
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontFamily: 'Plus Jakarta Sans',
-                                              fontVariations: const [
-                                                FontVariation('wght', 700),
-                                              ],
-                                              fontSize: 14,
-                                              letterSpacing: -0.3,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                                width: 0.5,
-                                              ),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15,
-                                                      vertical: 5),
-                                              child: Text(
-                                                "x${widget.order['items'][key]['quantity']}",
-                                                style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .outline,
-                                                  fontFamily: 'Bahnschrift',
-                                                  fontVariations: const [
-                                                    FontVariation('wght', 450),
-                                                    FontVariation('wdth', 100),
-                                                  ],
-                                                  fontSize: 13,
-                                                  letterSpacing: -0.3,
-                                                  height: 0.85,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ],
