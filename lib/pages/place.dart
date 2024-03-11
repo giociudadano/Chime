@@ -1,16 +1,4 @@
-/*
-  [Title]
-  PlacePage
-
-  [Description]
-  Displays the name of a place, its location on the map, and its products.
-  Visited when the user clicks on a place from PlacesPage.
-*/
-
 part of '../main.dart';
-
-// The 'place' page displays additional information about a place and its products.
-// This page is visited when the user clicks on a place from the 'places' page.
 
 // ignore: must_be_immutable
 class PlacePage extends StatefulWidget {
@@ -34,7 +22,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
   StreamSubscription? cartListener;
   late TabController tabController;
   Map products = {};
-  List productsFeatured = [], productsNotFeatured = [], productsFavorited = [];
+  List productsFeatured = [], productsFavorited = [];
 
   void setFavoritePlace(bool isFavorited) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -70,8 +58,6 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     if (state == true) {
       if (productsFeatured.contains(productID)) {
         productsFeatured.remove(productID);
-      } else {
-        productsNotFeatured.remove(productID);
       }
       productsFavorited.add(productID);
       productsFavorited.sort((a, b) => products[a]['productName']
@@ -91,14 +77,12 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     for (String productID in widget.place['products']) {
       db.collection("products").doc(productID).get().then((document) async {
         products[productID] = document.data()!;
-        if (!productsFavorited.contains(productID)) {
-          initProductState(productID);
-        }
+        initProductState(productID);
         setProductImageURL(productID);
-        if (mounted) {
-          setState(() {});
-        }
       });
+    }
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -109,20 +93,19 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
       productsFeatured.sort((a, b) => products[a]['productName']
           .toLowerCase()
           .compareTo(products[b]['productName'].toLowerCase()));
-    } else {
-      productsNotFeatured.add(productID);
-      productsNotFeatured.sort((a, b) => products[a]['productName']
-          .toLowerCase()
-          .compareTo(products[b]['productName'].toLowerCase()));
     }
   }
 
-  void initFavorites() async {
+  void initFavorites() {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore db = FirebaseFirestore.instance;
-    await db.collection("users").doc(uid).get().then((document) {
+    db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
         productsFavorited = document.data()!['favoriteProducts'] ?? [];
+        for (String productID in productsFavorited) {
+          print(products[productID]);
+          products[productID]['isFavorited'] = true;
+        }
       }
     });
   }
@@ -131,9 +114,11 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     String ref = "products/$productID.jpg";
     try {
       String url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
-      setState(() {
-        products[productID]['productImageURL'] = url;
-      });
+      if (mounted) {
+        setState(() {
+          products[productID]['productImageURL'] = url;
+        });
+      }
     } catch (e) {
       return;
     }
@@ -264,8 +249,8 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     tabController.addListener(() {
       setState(() {});
     });
-    initFavorites();
     initProducts();
+    initFavorites();
     addCartListener();
     super.initState();
   }
@@ -339,6 +324,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
+                      height: 75,
                       width: 75,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
@@ -765,7 +751,7 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "All Posts",
+                                  "All Products",
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -784,13 +770,11 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           key: UniqueKey(),
                           shrinkWrap: true,
-                          itemCount: productsNotFeatured.length,
+                          itemCount: products.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return ProductCard(
-                                productsNotFeatured[index],
-                                products[productsNotFeatured[index]],
-                                widget.placeID,
-                                widget.place,
+                            String key = products.keys.elementAt(index);
+                            return ProductCard(key, products[key],
+                                widget.placeID, widget.place,
                                 setFavoriteProductCallback: setFavoriteProduct);
                           },
                           gridDelegate:

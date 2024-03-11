@@ -87,6 +87,7 @@ class _PlaceCardState extends State<PlaceCard> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: SizedBox(
+                    height: 60,
                     width: 60,
                     child: FittedBox(
                       clipBehavior: Clip.hardEdge,

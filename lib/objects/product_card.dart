@@ -73,7 +73,6 @@ class _ProductCardState extends State<ProductCard> {
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
       shape: RoundedRectangleBorder(
-          //<-- SEE HERE
           side: BorderSide(
             color: MaterialColors.getSurfaceContainerHighest(darkMode),
           ),
