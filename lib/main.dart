@@ -54,15 +54,15 @@ part 'pages/orders.dart';
 part 'pages/order_receipt.dart';
 
 // Store Management
-part 'pages/store.dart';
-part 'pages/store_add.dart';
-part 'pages/store_edit.dart';
-part 'pages/store_products.dart';
-part 'pages/store_products_add.dart';
-part 'pages/store_products_edit.dart';
-part 'pages/store_categories.dart';
-part 'pages/store_categories_more.dart';
-part 'pages/store_orders.dart';
+part 'pages/sell/store.dart';
+part 'pages/sell/store_add.dart';
+part 'pages/sell/store_edit.dart';
+part 'pages/sell/products.dart';
+part 'pages/sell/products_add.dart';
+part 'pages/sell/products_edit.dart';
+part 'pages/sell/categories.dart';
+part 'pages/sell/categories_products.dart';
+part 'pages/sell/orders.dart';
 
 // Imports all services and objects.
 part 'services/auth_service.dart';

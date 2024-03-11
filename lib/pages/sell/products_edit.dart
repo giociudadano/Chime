@@ -1,4 +1,4 @@
-part of '../main.dart';
+part of '../../main.dart';
 
 // ignore: must_be_immutable
 class StoreProductsEditPage extends StatefulWidget {
@@ -578,13 +578,80 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 10),
+                      Card(
+                        elevation: 0,
+                        color:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: MaterialColors.getSurfaceContainerHighest(
+                                  darkMode),
+                            ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Variants",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                        ],
+                                        fontSize: 14,
+                                        height: 1,
+                                        letterSpacing: -0.3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      "(${widget.product['variants'] == null ? 0 : widget.product['variants'].length.toString()})",
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontFamily: 'Source Sans 3',
+                                        fontVariations: const [
+                                          FontVariation('wght', 400),
+                                        ],
+                                        fontSize: 14,
+                                        height: 1.2,
+                                        letterSpacing: -0.3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Icon(Icons.arrow_forward_ios,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    size: 15)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Stocks',
+                              'Has Limited Stocks',
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -671,7 +738,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'Pre-Orders',
+                              'Available for Pre-Orders',
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme

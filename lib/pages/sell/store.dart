@@ -1,4 +1,4 @@
-part of '../main.dart';
+part of '../../main.dart';
 
 class StorePage extends StatefulWidget {
   StorePage(this.places, {super.key, this.updateNavigationBarCallback});
