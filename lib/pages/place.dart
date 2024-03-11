@@ -101,10 +101,11 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.collection("users").doc(uid).get().then((document) {
       if (document.exists) {
-        productsFavorited = document.data()!['favoriteProducts'] ?? [];
-        for (String productID in productsFavorited) {
-          print(products[productID]);
-          products[productID]['isFavorited'] = true;
+        for (String productID in document.data()!['favoriteProducts'] ?? []) {
+          if (products[productID] != null) {
+            productsFavorited.add(productID);
+            products[productID]['isFavorited'] = true;
+          }
         }
       }
     });
