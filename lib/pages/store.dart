@@ -275,6 +275,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
+                SizedBox(height: 15),
               ],
             ),
           ),
