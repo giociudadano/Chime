@@ -1,7 +1,7 @@
-part of '../main.dart';
+part of '../../main.dart';
 
 // ignore: must_be_immutable
-class PlacePage extends StatefulWidget {
+class PlacesMorePage extends StatefulWidget {
   // Variables used for place information.
   String placeID;
   Map place;
@@ -10,15 +10,16 @@ class PlacePage extends StatefulWidget {
   late bool isFavorited = place['isFavorited'] ?? false;
   int cartItems = 0;
 
-  PlacePage(this.placeID, this.place,
+  PlacesMorePage(this.placeID, this.place,
       {super.key, this.setFavoritePlaceCallback});
 
   @override
-  State<PlacePage> createState() => _PlacePageState();
+  State<PlacesMorePage> createState() => _PlacesMorePageState();
   final Function(String placeID, bool state)? setFavoritePlaceCallback;
 }
 
-class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
+class _PlacesMorePageState extends State<PlacesMorePage>
+    with TickerProviderStateMixin {
   StreamSubscription? cartListener;
   late TabController tabController;
   Map products = {};
@@ -814,13 +815,14 @@ class _PlacePageState extends State<PlacePage> with TickerProviderStateMixin {
                               onTap: () {
                                 if (context.mounted) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => PlaceCategoryPage(
-                                          widget.placeID,
-                                          widget.place,
-                                          categoryKeys[index],
-                                          products,
-                                          widget.place['categories']
-                                              [categoryKeys[index]])));
+                                      builder: (context) =>
+                                          PlacesMoreCategoriesPage(
+                                              widget.placeID,
+                                              widget.place,
+                                              categoryKeys[index],
+                                              products,
+                                              widget.place['categories']
+                                                  [categoryKeys[index]])));
                                 }
                               },
                               child: Padding(

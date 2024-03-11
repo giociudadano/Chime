@@ -181,7 +181,7 @@ class _CartItemCardState extends State<CartItemCard> {
                         Map place = await getPlace(widget.placeID);
                         if (context.mounted) {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProductPage(
+                              builder: (context) => ProductsMorePage(
                                   widget.productID,
                                   product,
                                   widget.placeID,
@@ -382,5 +382,3 @@ class _CartItemCardState extends State<CartItemCard> {
     }
   }
 }
-                                                                                                        
-                                                  

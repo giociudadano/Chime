@@ -1,8 +1,8 @@
-part of '../main.dart';
+part of '../../main.dart';
 
-class AddressesPage extends StatefulWidget {
+class CheckoutAddressesPage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  AddressesPage(
+  CheckoutAddressesPage(
       {super.key,
       this.setSelectedAddressCallback,
       this.addAddressCallback,
@@ -13,10 +13,10 @@ class AddressesPage extends StatefulWidget {
   final Function(String addressID, Map data)? editAddressCallback;
 
   @override
-  State<AddressesPage> createState() => _AddressesPageState();
+  State<CheckoutAddressesPage> createState() => _CheckoutAddressesPageState();
 }
 
-class _AddressesPageState extends State<AddressesPage> {
+class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   // Variables for controllers.
   final GlobalKey<FormState> _formAddAddressKey = GlobalKey<FormState>();
   final _inputAddAddressName = TextEditingController();

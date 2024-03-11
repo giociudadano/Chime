@@ -9,7 +9,7 @@
   Visited as a tab in the HomePage.
 */
 
-part of '../main.dart';
+part of '../../main.dart';
 
 // The 'Places' page displays a list of places for the user to buy from.
 class PlacesPage extends StatefulWidget {
@@ -268,7 +268,7 @@ class _PlacesPageState extends State<PlacesPage> {
   void viewPlaceFromScan(String? data) {
     if (places[data] != null) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PlacePage(data!, places[data],
+          builder: (context) => PlacesMorePage(data!, places[data],
               setFavoritePlaceCallback: setFavoritePlace)));
     } else {
       showDialog(

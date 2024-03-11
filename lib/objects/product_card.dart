@@ -81,7 +81,7 @@ class _ProductCardState extends State<ProductCard> {
         onTap: () {
           if (context.mounted) {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProductPage(widget.productID,
+                builder: (context) => ProductsMorePage(widget.productID,
                     widget.product, widget.placeID, widget.place,
                     setFavoriteProductCallback: setFavoriteProduct)));
           }

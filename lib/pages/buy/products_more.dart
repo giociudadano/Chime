@@ -8,25 +8,25 @@
   Visited when clicking on a ProductCard from ProductsPage.
 */
 
-part of '../main.dart';
+part of '../../main.dart';
 
 // The 'Product' page displays additional information about a product.
 // This page is visited when the user clicks on a product from the 'Products' page.
 // ignore: must_be_immutable
-class ProductPage extends StatefulWidget {
+class ProductsMorePage extends StatefulWidget {
   // Variables for product information.
   String productID, placeID;
   Map product, place;
 
-  ProductPage(this.productID, this.product, this.placeID, this.place,
+  ProductsMorePage(this.productID, this.product, this.placeID, this.place,
       {super.key, this.setFavoriteProductCallback});
   final Function(bool state)? setFavoriteProductCallback;
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<ProductsMorePage> createState() => _ProductsMorePageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _ProductsMorePageState extends State<ProductsMorePage> {
   StreamSubscription? cartListener;
   int cartItems = 0;
   int itemQuantity = 1;

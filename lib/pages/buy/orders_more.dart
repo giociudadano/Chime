@@ -1,8 +1,8 @@
-part of '../main.dart';
+part of '../../main.dart';
 
 // ignore: must_be_immutable
-class OrderReceiptPage extends StatefulWidget {
-  OrderReceiptPage(this.adminControls, this.orderID, this.order,
+class OrdersMorePage extends StatefulWidget {
+  OrdersMorePage(this.adminControls, this.orderID, this.order,
       {super.key, this.setOrderStatusCallback});
 
   bool adminControls;
@@ -11,10 +11,10 @@ class OrderReceiptPage extends StatefulWidget {
   final Function(String orderID, String newStatus)? setOrderStatusCallback;
 
   @override
-  State<OrderReceiptPage> createState() => _OrderReceiptPageState();
+  State<OrdersMorePage> createState() => _OrdersMorePageState();
 }
 
-class _OrderReceiptPageState extends State<OrderReceiptPage> {
+class _OrdersMorePageState extends State<OrdersMorePage> {
   void initProducts() {
     for (var productID in widget.order['items'].keys) {
       setProductImageURL(productID);

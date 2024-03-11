@@ -169,7 +169,7 @@ class _OrderCardState extends State<OrderCard> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => OrderReceiptPage(
+                        builder: (context) => OrdersMorePage(
                             widget.adminControls, widget.orderID, widget.order,
                             setOrderStatusCallback:
                                 widget.setOrderStatusCallback)),
@@ -185,9 +185,11 @@ class _OrderCardState extends State<OrderCard> {
                               ? ChimeColors.getRed200()
                               : MaterialColors.getSurfaceContainerLowest(
                                   darkMode)
-                      : widget.order['status'] == 'Received' ? MaterialColors.getSurfaceContainerLowest(darkMode) : 
-                        widget.order['status'] == 'Cancelled' ? ChimeColors.getRed200() :
-                        ChimeColors.getGreen200()),
+                      : widget.order['status'] == 'Received'
+                          ? MaterialColors.getSurfaceContainerLowest(darkMode)
+                          : widget.order['status'] == 'Cancelled'
+                              ? ChimeColors.getRed200()
+                              : ChimeColors.getGreen200()),
                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: widget.adminControls
@@ -198,9 +200,11 @@ class _OrderCardState extends State<OrderCard> {
                             : BorderSide(
                                 color: ChimeColors.getGreen300(),
                               )
-                        : widget.order['status'] == 'Received' ? BorderSide(color: ChimeColors.getGreen200()) :
-                          widget.order['status'] == 'Cancelled' ? BorderSide(color: ChimeColors.getRed200()) :
-                          BorderSide.none,
+                        : widget.order['status'] == 'Received'
+                            ? BorderSide(color: ChimeColors.getGreen200())
+                            : widget.order['status'] == 'Cancelled'
+                                ? BorderSide(color: ChimeColors.getRed200())
+                                : BorderSide.none,
                   )),
                 ),
                 child: Padding(
@@ -215,9 +219,11 @@ class _OrderCardState extends State<OrderCard> {
                               : widget.order['status'] == 'Cancelled'
                                   ? ChimeColors.getRed800()
                                   : Theme.of(context).colorScheme.outline
-                          : widget.order['status'] == 'Received' ? Theme.of(context).colorScheme.outline :
-                            widget.order['status'] == 'Cancelled' ? ChimeColors.getRed800() :
-                            ChimeColors.getGreen800(),
+                          : widget.order['status'] == 'Received'
+                              ? Theme.of(context).colorScheme.outline
+                              : widget.order['status'] == 'Cancelled'
+                                  ? ChimeColors.getRed800()
+                                  : ChimeColors.getGreen800(),
                       fontFamily: 'Plus Jakarta Sans',
                       fontVariations: const [
                         FontVariation('wght', 700),

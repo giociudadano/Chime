@@ -1,19 +1,20 @@
-part of '../main.dart';
+part of '../../main.dart';
 
 // ignore: must_be_immutable
-class PlaceCategoryPage extends StatefulWidget {
-  PlaceCategoryPage(this.placeID, this.place, this.categoryName, this.products,
-      this.productIDsInCategory,
+class PlacesMoreCategoriesPage extends StatefulWidget {
+  PlacesMoreCategoriesPage(this.placeID, this.place, this.categoryName,
+      this.products, this.productIDsInCategory,
       {super.key});
 
   String placeID, categoryName;
   Map products, place;
   List productIDsInCategory;
   @override
-  State<PlaceCategoryPage> createState() => _PlaceCategoryPageState();
+  State<PlacesMoreCategoriesPage> createState() =>
+      _PlacesMoreCategoriesPageState();
 }
 
-class _PlaceCategoryPageState extends State<PlaceCategoryPage> {
+class _PlacesMoreCategoriesPageState extends State<PlacesMoreCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;

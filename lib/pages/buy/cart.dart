@@ -8,7 +8,7 @@
   Each OrderCard contains a list of OrderItemCards for each product the user is ordering from that place.
 */
 
-part of '../main.dart';
+part of '../../main.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});

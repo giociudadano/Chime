@@ -40,20 +40,21 @@ part 'pages/onboarding.dart';
 part 'pages/login.dart';
 part 'pages/signup.dart';
 part 'pages/home.dart';
-part 'pages/products.dart';
-part 'pages/product.dart';
-part 'pages/places.dart';
-part 'pages/place.dart';
-part 'pages/place_category.dart';
-part 'pages/profile.dart';
-part 'pages/cart.dart';
-part 'pages/checkout.dart';
-part 'pages/addresses.dart';
-part 'pages/order_success.dart';
-part 'pages/orders.dart';
-part 'pages/order_receipt.dart';
 
-// Store Management
+// Buying
+part 'pages/buy/products.dart';
+part 'pages/buy/products_more.dart';
+part 'pages/buy/places.dart';
+part 'pages/buy/places_more.dart';
+part 'pages/buy/places_more_categories.dart';
+part 'pages/buy/cart.dart';
+part 'pages/buy/checkout.dart';
+part 'pages/buy/checkout_addresses.dart';
+part 'pages/buy/checkout_success.dart';
+part 'pages/buy/orders.dart';
+part 'pages/buy/orders_more.dart';
+
+// Selling
 part 'pages/sell/store.dart';
 part 'pages/sell/store_add.dart';
 part 'pages/sell/store_edit.dart';

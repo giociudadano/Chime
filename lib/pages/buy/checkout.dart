@@ -8,7 +8,7 @@
     address through the AddressesPage.
 */
 
-part of '../main.dart';
+part of '../../main.dart';
 
 // ignore: must_be_immutable
 class CheckoutPage extends StatefulWidget {
@@ -159,7 +159,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         });
       });
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const OrderSuccessPage()),
+          MaterialPageRoute(builder: (context) => const CheckoutSuccessPage()),
           (Route<dynamic> route) => false);
     });
   }
@@ -352,11 +352,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               onTap: () {
                                 if (context.mounted) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => AddressesPage(
-                                          setSelectedAddressCallback:
-                                              setSelectedAddress,
-                                          addAddressCallback: editAddress,
-                                          editAddressCallback: editAddress)));
+                                      builder: (context) =>
+                                          CheckoutAddressesPage(
+                                              setSelectedAddressCallback:
+                                                  setSelectedAddress,
+                                              addAddressCallback: editAddress,
+                                              editAddressCallback:
+                                                  editAddress)));
                                 }
                               },
                               child: Card(
@@ -386,13 +388,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               if (context.mounted) {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
-                                                      builder: (context) => AddressesPage(
-                                                          setSelectedAddressCallback:
-                                                              setSelectedAddress,
-                                                          addAddressCallback:
-                                                              editAddress,
-                                                          editAddressCallback:
-                                                              editAddress)),
+                                                      builder: (context) =>
+                                                          CheckoutAddressesPage(
+                                                              setSelectedAddressCallback:
+                                                                  setSelectedAddress,
+                                                              addAddressCallback:
+                                                                  editAddress,
+                                                              editAddressCallback:
+                                                                  editAddress)),
                                                 );
                                               }
                                             },

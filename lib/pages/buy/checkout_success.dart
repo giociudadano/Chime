@@ -1,13 +1,13 @@
-part of '../main.dart';
+part of '../../main.dart';
 
-class OrderSuccessPage extends StatefulWidget {
-  const OrderSuccessPage({super.key});
+class CheckoutSuccessPage extends StatefulWidget {
+  const CheckoutSuccessPage({super.key});
 
   @override
-  State<OrderSuccessPage> createState() => _OrderSuccessPageState();
+  State<CheckoutSuccessPage> createState() => _CheckoutSuccessPageState();
 }
 
-class _OrderSuccessPageState extends State<OrderSuccessPage> {
+class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
   @override
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
