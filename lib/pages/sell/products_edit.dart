@@ -3,7 +3,10 @@ part of '../../main.dart';
 // ignore: must_be_immutable
 class StoreProductsEditPage extends StatefulWidget {
   StoreProductsEditPage(this.productID, this.categories, this.product,
-      {super.key, this.editProductCallback, this.deleteProductCallback});
+      {super.key,
+      this.editProductCallback,
+      this.deleteProductCallback,
+      this.editDefaultProductVariantCallback});
 
   String productID;
   Map product;
@@ -16,8 +19,13 @@ class StoreProductsEditPage extends StatefulWidget {
     List categories,
     List addedCategories,
     List removedCategories,
+    bool isLimited,
     String ordersRemaining,
   )? editProductCallback;
+
+  final Function(String price, bool isLimited, String ordersRemaining)?
+      editDefaultProductVariantCallback;
+
   final Function()? deleteProductCallback;
 
   @override
@@ -163,6 +171,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               categories,
               addedCategories.toList(),
               removedCategories.toList(),
+              isLimited,
               ordersRemaining);
         } catch (e) {
           // ...
@@ -175,6 +184,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
           categories,
           addedCategories.toList(),
           removedCategories.toList(),
+          isLimited,
           ordersRemaining,
         );
       }
@@ -237,6 +247,21 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     db.collection("products").doc(widget.productID).delete();
     Navigator.pop(context);
     widget.deleteProductCallback!();
+  }
+
+  void editDefaultProductVariant(
+      String price, bool isVariantLimited, String ordersRemaining) {
+    if (mounted) {
+      setState(() {
+        inputEditProductPrice.text = price;
+        isLimited = isVariantLimited;
+        inputEditProductOrdersRemaining.text = ordersRemaining;
+      });
+    }
+    if (widget.editDefaultProductVariantCallback != null) {
+      widget.editDefaultProductVariantCallback!(
+          price, isVariantLimited, ordersRemaining);
+    }
   }
 
   @override
@@ -590,7 +615,18 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             ),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            if (context.mounted) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        StoreProductsVariantsPage(
+                                            widget.productID, widget.product,
+                                            editDefaultProductVariantCallback:
+                                                editDefaultProductVariant)),
+                              );
+                            }
+                          },
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
                             child: Row(
@@ -645,7 +681,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 50),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,

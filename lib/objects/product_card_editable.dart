@@ -48,6 +48,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
       List categories,
       List addedCategories,
       List removedCategories,
+      bool isLimited,
       String ordersRemaining) async {
     widget.product['productName'] = name;
     widget.product['productPrice'] = int.parse(price);
@@ -60,7 +61,8 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
       }
     }
     widget.product['categories'] = categories;
-    widget.product['ordersRemaining'] = ordersRemaining;
+    widget.product['isLimited'] = isLimited;
+    widget.product['ordersRemaining'] = int.parse(ordersRemaining);
     if (widget.editProductCallback != null) {
       widget.editProductCallback!(
           widget.productID, categories, addedCategories, removedCategories);
@@ -73,6 +75,17 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
   void deleteProduct() {
     if (widget.deleteProductCallback != null) {
       widget.deleteProductCallback!(widget.productID, widget.categories);
+    }
+  }
+
+  void editDefaultProductVariant(
+      String price, bool isLimited, String ordersRemaining) {
+    if (mounted) {
+      setState(() {
+        widget.product['productPrice'] = int.parse(price);
+        widget.product['isLimited'] = isLimited;
+        widget.product['ordersRemaining'] = int.parse(ordersRemaining);
+      });
     }
   }
 
@@ -103,9 +116,14 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
             Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => StoreProductsEditPage(
-                      widget.productID, widget.categories, widget.product,
-                      editProductCallback: editProduct,
-                      deleteProductCallback: deleteProduct)),
+                        widget.productID,
+                        widget.categories,
+                        widget.product,
+                        editProductCallback: editProduct,
+                        deleteProductCallback: deleteProduct,
+                        editDefaultProductVariantCallback:
+                            editDefaultProductVariant,
+                      )),
             );
           }
         },

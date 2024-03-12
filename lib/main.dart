@@ -61,6 +61,7 @@ part 'pages/sell/store_edit.dart';
 part 'pages/sell/products.dart';
 part 'pages/sell/products_add.dart';
 part 'pages/sell/products_edit.dart';
+part 'pages/sell/products_variants.dart';
 part 'pages/sell/categories.dart';
 part 'pages/sell/categories_products.dart';
 part 'pages/sell/orders.dart';
