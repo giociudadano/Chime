@@ -264,6 +264,14 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     }
   }
 
+  void editProductVariant(List data) {
+    if (mounted) {
+      setState(() {
+        widget.product['variants'] = data;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -623,7 +631,9 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                         StoreProductsVariantsPage(
                                             widget.productID, widget.product,
                                             editDefaultProductVariantCallback:
-                                                editDefaultProductVariant)),
+                                                editDefaultProductVariant,
+                                            editProductVariantCallback:
+                                                editProductVariant)),
                               );
                             }
                           },

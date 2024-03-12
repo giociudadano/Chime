@@ -3,13 +3,17 @@ part of '../../main.dart';
 // ignore: must_be_immutable
 class StoreProductsVariantsPage extends StatefulWidget {
   StoreProductsVariantsPage(this.productID, this.product,
-      {super.key, this.editDefaultProductVariantCallback});
+      {super.key,
+      this.editDefaultProductVariantCallback,
+      this.editProductVariantCallback});
 
   String productID;
   Map product;
 
   final Function(String price, bool isLimited, String ordersRemaining)?
       editDefaultProductVariantCallback;
+
+  final Function(List data)? editProductVariantCallback;
 
   @override
   State<StoreProductsVariantsPage> createState() =>
@@ -22,6 +26,16 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
   final _inputEditDefaultVariantName = TextEditingController();
   final _inputEditDefaultVariantPrice = TextEditingController();
   final _inputEditDefaultVariantStocks = TextEditingController();
+
+  final GlobalKey<FormState> _formEditVariantKey = GlobalKey<FormState>();
+  final _inputEditVariantName = TextEditingController();
+  final _inputEditVariantPrice = TextEditingController();
+  final _inputEditVariantStocks = TextEditingController();
+
+  final GlobalKey<FormState> _formAddVariantKey = GlobalKey<FormState>();
+  final _inputAddVariantName = TextEditingController();
+  final _inputAddVariantPrice = TextEditingController();
+  final _inputAddVariantStocks = TextEditingController();
 
   Future showEditDefaultVariantForm(BuildContext context) async {
     _inputEditDefaultVariantName.text =
@@ -78,8 +92,12 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                               }),
                         ]),
                     const SizedBox(height: 15),
-                    Text(
-                      "Variant Name",
+                    Text.rich(
+                      TextSpan(text: "Variant Name", children: [
+                        TextSpan(
+                            text: "*",
+                            style: TextStyle(color: ChimeColors.getRed800()))
+                      ]),
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontFamily: 'Source Sans 3',
@@ -123,7 +141,11 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                         letterSpacing: -0.3,
                       ),
                       validator: (String? value) {
-                        return null;
+                        if (value == null || value.isEmpty) {
+                          return 'Name cannot be blank';
+                        } else {
+                          return null;
+                        }
                       },
                     ),
                     const SizedBox(height: 15),
@@ -183,7 +205,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                           letterSpacing: -0.3),
                                     ),
                                   ),
-                                  hintText: "Price",
+                                  hintText: "0",
                                   hintStyle: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -205,7 +227,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 minLines: 1,
                                 maxLines: 1,
                                 validator: (String? value) {
-                                  return _verifyProductPriceField(value);
+                                  return verifyInteger(value);
                                 },
                               ),
                             ),
@@ -263,7 +285,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
-                                    hintText: "Stocks",
+                                    hintText: "0",
                                     hintStyle: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -284,7 +306,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                   minLines: 1,
                                   maxLines: 1,
                                   validator: (String? value) {
-                                    return _verifyProductPriceField(value);
+                                    return verifyInteger(value);
                                   },
                                 ),
                               ),
@@ -409,7 +431,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
     }
   }
 
-  String? _verifyProductPriceField(String? value) {
+  String? verifyInteger(String? value) {
     if (value == null || value.isEmpty) {
       return null;
     }
@@ -421,6 +443,797 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
     }
   }
 
+  Future showEditVariantForm(BuildContext context, int index) async {
+    _inputEditVariantName.text = widget.product['variants'][index]['name'];
+    _inputEditVariantPrice.text =
+        widget.product['variants'][index]['price'].toString();
+    _inputEditVariantStocks.text =
+        widget.product['variants'][index]['ordersRemaining'].toString();
+    bool isLimited = widget.product['variants'][index]['isLimited'] ?? false;
+
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(20),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
+              elevation: 0,
+              backgroundColor:
+                  MaterialColors.getSurfaceContainerLowest(darkMode),
+              content: Form(
+                key: _formEditVariantKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Edit Variant",
+                            style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 20,
+                                letterSpacing: -0.3),
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                size: 24,
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                        ]),
+                    const SizedBox(height: 15),
+                    Text.rich(
+                      TextSpan(text: "Variant Name", children: [
+                        TextSpan(
+                            text: "*",
+                            style: TextStyle(color: ChimeColors.getRed800()))
+                      ]),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                    TextFormField(
+                      controller: _inputEditVariantName,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: "Variant Name",
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Name cannot be blank';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Price",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                controller: _inputEditVariantPrice,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  prefixIcon: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 8, 0, 0),
+                                    child: Text(
+                                      "₱",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontFamily: 'Source Sans 3',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                          ],
+                                          fontSize: 16,
+                                          letterSpacing: -0.3),
+                                    ),
+                                  ),
+                                  hintText: "0",
+                                  hintStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline),
+                                  filled: true,
+                                  fillColor:
+                                      MaterialColors.getSurfaceContainerLowest(
+                                          darkMode),
+                                  isDense: true,
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                ),
+                                minLines: 1,
+                                maxLines: 1,
+                                validator: (String? value) {
+                                  return verifyInteger(value);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "Has Limited Stocks",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3),
+                            ),
+                            Row(children: [
+                              Transform.scale(
+                                scale: 0.6,
+                                child: Switch(
+                                  value: isLimited,
+                                  onChanged: (bool value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        isLimited = value;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 80,
+                                child: TextFormField(
+                                  enabled: isLimited,
+                                  controller: _inputEditVariantStocks,
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        width: 0.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        width: 0.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    hintText: "0",
+                                    hintStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
+                                    filled: true,
+                                    fillColor: MaterialColors
+                                        .getSurfaceContainerLowest(darkMode),
+                                    isDense: true,
+                                  ),
+                                  style: const TextStyle(
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                  ),
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  validator: (String? value) {
+                                    return verifyInteger(value);
+                                  },
+                                ),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              deleteProductVariant(index);
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    ChimeColors.getRed200()),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide.none,
+                                ))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                "Delete",
+                                style: TextStyle(
+                                  color: ChimeColors.getRed800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formEditVariantKey.currentState!
+                                  .validate()) {
+                                {
+                                  updateProductVariant(
+                                      index,
+                                      _inputEditVariantName.text,
+                                      _inputEditVariantPrice.text,
+                                      isLimited,
+                                      _inputEditVariantStocks.text);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    ChimeColors.getGreen200()),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide.none,
+                                ))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  Future showAddVariantForm(BuildContext context) async {
+    bool isLimited = false;
+
+    bool darkMode = Theme.of(context).brightness == Brightness.dark;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(20),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+              ),
+              elevation: 0,
+              backgroundColor:
+                  MaterialColors.getSurfaceContainerLowest(darkMode),
+              content: Form(
+                key: _formAddVariantKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Add Variant",
+                            style: TextStyle(
+                                color: ChimeColors.getGreen800(),
+                                fontFamily: 'Plus Jakarta Sans',
+                                fontVariations: const [
+                                  FontVariation('wght', 700),
+                                ],
+                                fontSize: 20,
+                                letterSpacing: -0.3),
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                size: 24,
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                        ]),
+                    const SizedBox(height: 15),
+                    Text.rich(
+                      TextSpan(text: "Variant Name", children: [
+                        TextSpan(
+                            text: "*",
+                            style: TextStyle(color: ChimeColors.getRed800()))
+                      ]),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Source Sans 3',
+                          fontVariations: const [
+                            FontVariation('wght', 400),
+                          ],
+                          fontSize: 14,
+                          letterSpacing: -0.3),
+                    ),
+                    TextFormField(
+                      controller: _inputAddVariantName,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 0.5,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: "Variant Name",
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor:
+                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3,
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Name cannot be blank';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Price",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3),
+                            ),
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                controller: _inputAddVariantPrice,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  prefixIcon: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 8, 0, 0),
+                                    child: Text(
+                                      "₱",
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontFamily: 'Source Sans 3',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                          ],
+                                          fontSize: 16,
+                                          letterSpacing: -0.3),
+                                    ),
+                                  ),
+                                  hintText: "0",
+                                  hintStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outline),
+                                  filled: true,
+                                  fillColor:
+                                      MaterialColors.getSurfaceContainerLowest(
+                                          darkMode),
+                                  isDense: true,
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                ),
+                                minLines: 1,
+                                maxLines: 1,
+                                validator: (String? value) {
+                                  return verifyInteger(value);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "Has Limited Stocks",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3),
+                            ),
+                            Row(children: [
+                              Transform.scale(
+                                scale: 0.6,
+                                child: Switch(
+                                  value: isLimited,
+                                  onChanged: (bool value) {
+                                    if (mounted) {
+                                      setState(() {
+                                        isLimited = value;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 80,
+                                child: TextFormField(
+                                  enabled: isLimited,
+                                  controller: _inputAddVariantStocks,
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        width: 0.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        width: 0.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    hintText: "0",
+                                    hintStyle: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline),
+                                    filled: true,
+                                    fillColor: MaterialColors
+                                        .getSurfaceContainerLowest(darkMode),
+                                    isDense: true,
+                                  ),
+                                  style: const TextStyle(
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                  ),
+                                  minLines: 1,
+                                  maxLines: 1,
+                                  validator: (String? value) {
+                                    return verifyInteger(value);
+                                  },
+                                ),
+                              ),
+                            ]),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (mounted) {
+                                Navigator.pop(context);
+                              }
+                            },
+                            style: ButtonStyle(
+                              elevation: const MaterialStatePropertyAll(0),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  MaterialColors.getSurfaceContainerLowest(
+                                      darkMode)),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  color: ChimeColors.getGreen300(),
+                                ),
+                              )),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formAddVariantKey.currentState!.validate()) {
+                                {
+                                  addProductVariant(
+                                      _inputAddVariantName.text,
+                                      _inputAddVariantPrice.text,
+                                      isLimited,
+                                      _inputAddVariantStocks.text);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(
+                                    ChimeColors.getGreen200()),
+                                shape: MaterialStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide.none,
+                                ))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  void addProductVariant(
+      String name, String price, bool isLimited, String ordersRemaining) {
+    // 1. Write default variant to database
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    Map<String, dynamic> data = {
+      "name": name,
+      "price": price == '' ? 0 : int.parse(price),
+      "isLimited": isLimited,
+      "ordersRemaining": ordersRemaining == '' ? 0 : int.parse(ordersRemaining),
+    };
+    db.collection("products").doc(widget.productID).update({
+      'variants': FieldValue.arrayUnion([data])
+    });
+
+    // 2. Update variants screen
+    if (mounted) {
+      setState(() {
+        if (widget.product['variants'] == null ||
+            widget.product['variants'].isEmpty) {
+          widget.product['variants'] = [];
+        }
+        widget.product['variants'].add(data);
+      });
+      if (widget.editProductVariantCallback != null) {
+        widget.editProductVariantCallback!(widget.product['variants']);
+      }
+    }
+  }
+
+  void updateProductVariant(int index, String name, String price,
+      bool isLimited, String ordersRemaining) {
+    // 1. Write variants screen
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    Map<String, dynamic> data = {
+      "name": name,
+      "price": price == '' ? 0 : int.parse(price),
+      "isLimited": isLimited,
+      "ordersRemaining": ordersRemaining == '' ? 0 : int.parse(ordersRemaining),
+    };
+    if (mounted) {
+      setState(() {
+        widget.product['variants'][index] = data;
+      });
+      if (widget.editProductVariantCallback != null) {
+        widget.editProductVariantCallback!(widget.product['variants']);
+      }
+    }
+    // 2. Write to database
+    db
+        .collection("products")
+        .doc(widget.productID)
+        .update({'variants': widget.product['variants']});
+  }
+
+  void deleteProductVariant(int index) {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    if (mounted) {
+      setState(() {
+        widget.product['variants'].removeAt(index);
+      });
+    }
+    if (widget.editProductVariantCallback != null) {
+      widget.editProductVariantCallback!(widget.product['variants']);
+    }
+    db
+        .collection("products")
+        .doc(widget.productID)
+        .update({'variants': widget.product['variants']});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -430,6 +1243,16 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: ChimeColors.getGreen800(),
+        child: Icon(
+          Icons.add,
+          color: MaterialColors.getSurfaceContainerLowest(darkMode),
+        ),
+        onPressed: () {
+          showAddVariantForm(context);
+        },
+      ),
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -488,8 +1311,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.product['variantName'] ??
-                                        widget.product['productName'],
+                                    "${widget.product['variantName'] ?? widget.product['productName']} (Default)",
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: Theme.of(context)
@@ -545,6 +1367,103 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                     ),
                   ),
                 ),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.product['variants'] == null
+                    ? 0
+                    : widget.product['variants'].length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 0,
+                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        color:
+                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showEditVariantForm(context, index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        widget.product['variants'][index]
+                                            ['name'],
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                            ],
+                                            fontSize: 14,
+                                            letterSpacing: -0.3,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      Icon(
+                                        Icons.edit,
+                                        size: 18,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "₱${widget.product['variants'][index]['price'].toString()}",
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                        ],
+                                        fontSize: 14,
+                                        letterSpacing: -0.3,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  if (widget.product['variants'][index]
+                                      ['isLimited'])
+                                    Text(
+                                      "Orders: ${widget.product['variants'][index]['ordersRemaining'].toString()}",
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .outline,
+                                          fontFamily: 'Source Sans 3',
+                                          fontVariations: const [
+                                            FontVariation('wght', 400),
+                                          ],
+                                          fontSize: 14,
+                                          letterSpacing: -0.3,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           )),
