@@ -171,47 +171,52 @@ class _CartItemCardState extends State<CartItemCard> {
                 ),
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: InkWell(
-                      onTap: () async {
-                        Map product = await getProduct(widget.productID);
-                        Map place = await getPlace(widget.placeID);
-                        if (context.mounted) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProductsMorePage(
-                                  widget.productID,
-                                  product,
-                                  widget.placeID,
-                                  place)));
-                        }
-                      },
-                      child: SizedBox(
-                          width: 85,
-                          height: 85,
-                          child: FittedBox(
-                            clipBehavior: Clip.hardEdge,
-                            fit: BoxFit.cover,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.item['productImageURL'] ?? '',
-                              placeholder: (context, url) => const Padding(
-                                padding: EdgeInsets.all(40.0),
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (context, url, error) => Padding(
-                                padding: const EdgeInsets.all(40.0),
-                                child: Icon(Icons.local_mall_outlined,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant),
-                              ),
-                              fadeInCurve: Curves.easeIn,
-                              fadeOutCurve: Curves.easeOut,
-                            ),
-                          )),
-                    ),
+                  Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: InkWell(
+                          onTap: () async {
+                            Map product = await getProduct(widget.productID);
+                            Map place = await getPlace(widget.placeID);
+                            if (context.mounted) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ProductsMorePage(
+                                      widget.productID,
+                                      product,
+                                      widget.placeID,
+                                      place)));
+                            }
+                          },
+                          child: SizedBox(
+                              width: 85,
+                              height: 85,
+                              child: FittedBox(
+                                clipBehavior: Clip.hardEdge,
+                                fit: BoxFit.cover,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      widget.item['productImageURL'] ?? '',
+                                  placeholder: (context, url) => const Padding(
+                                    padding: EdgeInsets.all(40.0),
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                  errorWidget: (context, url, error) => Padding(
+                                    padding: const EdgeInsets.all(40.0),
+                                    child: Icon(Icons.local_mall_outlined,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outlineVariant),
+                                  ),
+                                  fadeInCurve: Curves.easeIn,
+                                  fadeOutCurve: Curves.easeOut,
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -244,7 +249,23 @@ class _CartItemCardState extends State<CartItemCard> {
                               height: 0.85,
                               letterSpacing: -0.3),
                         ),
-                        const SizedBox(height: 20),
+                        if (widget.item['variant'] != null)
+                          Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Text(
+                                "Variant: ${widget.item['variant']}",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  height: 0.85,
+                                  letterSpacing: -0.3,
+                                ),
+                              )),
+                        const SizedBox(height: 10),
                         Row(
                           children: [
                             Container(

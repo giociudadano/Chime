@@ -157,7 +157,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 20),
+                                  const SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -191,6 +191,26 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                           letterSpacing: -0.3,
                                         ),
                                       ),
+                                      if (widget.order['items'][key]
+                                              ['variant'] !=
+                                          null)
+                                        Padding(
+                                            padding: EdgeInsets.only(top: 10),
+                                            child: Text(
+                                              "Variant: ${widget.order['items'][key]['variant']}",
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                                fontFamily: 'Source Sans 3',
+                                                fontVariations: const [
+                                                  FontVariation('wght', 400),
+                                                ],
+                                                fontSize: 14,
+                                                height: 0.85,
+                                                letterSpacing: -0.3,
+                                              ),
+                                            )),
                                       const SizedBox(height: 10),
                                       Container(
                                         decoration: BoxDecoration(
@@ -203,7 +223,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 5),
+                                              horizontal: 15, vertical: 8),
                                           child: Text(
                                             "x${widget.order['items'][key]['quantity']}",
                                             style: TextStyle(

@@ -32,7 +32,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
   int itemQuantity = 1;
   bool isInCart = false;
 
-  String? variant = 'Regular';
+  List variants = [];
+  int selectedVariantIndex = 0;
 
   // Sets the product as a favorite/unfavorite.
   void setFavoriteProduct(bool isFavorited) {
@@ -63,10 +64,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
         widget.productID: {
           "name": widget.product['productName'],
           "quantity": itemQuantity,
-          "price": widget.product['productPrice'],
-          "isLimited": widget.product['isLimited'] ?? false,
-          if (widget.product['isLimited'] ?? false)
-            "ordersRemaining": widget.product['ordersRemaining']
+          "price": variants[selectedVariantIndex]['price'],
+          "isLimited": variants[selectedVariantIndex]['isLimited'] ?? false,
+          if (variants[selectedVariantIndex]['isLimited'] ?? false)
+            "ordersRemaining": variants[selectedVariantIndex]
+                ['ordersRemaining'],
+          if (selectedVariantIndex != 0)
+            "variant": variants[selectedVariantIndex]['name']
         }
       }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(
@@ -200,12 +204,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                       .outline), //<-- SEE HERE
                             ),
                           ),
-                          value: variant,
-                          items: [
-                            DropdownMenuItem(
-                              value: 'Regular',
+                          value: selectedVariantIndex,
+                          items: List.generate(
+                            variants.length,
+                            (index) => DropdownMenuItem(
+                              value: index,
                               child: Text(
-                                "Regular (₱${widget.product['productPrice'].toString()})",
+                                "${variants[index]['name']} (₱${variants[index]['price'].toString()})",
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -220,10 +225,11 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                 ),
                               ),
                               onTap: () {
-                                variant = "Regular";
+                                selectedVariantIndex = index;
+                                setState(() {});
                               },
                             ),
-                          ],
+                          ),
                           onChanged: (value) {
                             value = value;
                           },
@@ -316,13 +322,17 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                 ),
                                 onPressed: () {
                                   // If product is not limited or it is and the current > remaining
-                                  if (!widget.product['isLimited']) {
+                                  if (variants[selectedVariantIndex]
+                                          ['isLimited'] ==
+                                      false) {
                                     setState(() {
                                       itemQuantity += 1;
                                     });
                                   } else {
                                     if (itemQuantity <=
-                                        widget.product['ordersRemaining'] - 1) {
+                                        variants[selectedVariantIndex]
+                                                ['ordersRemaining'] -
+                                            1) {
                                       setState(() {
                                         itemQuantity += 1;
                                       });
@@ -334,7 +344,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             const SizedBox(width: 30),
 
                             // If the product is limited, show the number of stocks.
-                            if (widget.product['isLimited'] ?? false)
+                            if (variants[selectedVariantIndex]['isLimited'] ??
+                                false)
                               Row(children: [
                                 SizedBox(
                                   width: 60,
@@ -354,7 +365,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                   ),
                                 ),
                                 Text(
-                                  "${widget.product['ordersRemaining']}",
+                                  "${variants[selectedVariantIndex]['ordersRemaining']}",
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -462,6 +473,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
   @override
   void initState() {
     super.initState();
+    variants.add({
+      "name": widget.product['variantName'] ?? widget.product['productName'],
+      "price": widget.product['productPrice'],
+      "isLimited": widget.product['isLimited'],
+      "ordersRemaining": widget.product['ordersRemaining'],
+    });
+    variants.addAll(widget.product['variants'] ?? []);
     addCartListener();
   }
 
@@ -722,7 +740,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             ),
                           ])
                     ]),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
                 // If accepting pre-orders, display pre-orders available.
                 if (widget.product['isAcceptPreorders'] ?? false)
@@ -792,45 +810,102 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
 
                 // If there is a description, display the description.
                 if (widget.product['productDesc'] != null)
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Description",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Description",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              height: 1,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          widget.product['productDesc'],
-                          style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
+                          const SizedBox(height: 5),
+                          Text(
+                            widget.product['productDesc'],
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              height: 1,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                  ),
 
-                // Add a padding if any conditional column was added.
-                if ((widget.product['isAcceptPreorders'] ?? false) ||
-                    (widget.product['isLimited'] ?? false) ||
-                    (widget.product['productDesc'] != null))
-                  const SizedBox(height: 20),
+                if (widget.product['variants'] != null &&
+                    widget.product['variants'].isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Variants",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.outline,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              height: 1,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          InlineChoice<int>.single(
+                            clearable: false,
+                            value: selectedVariantIndex,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedVariantIndex = value ?? 0;
+                              });
+                            },
+                            itemCount: variants.length,
+                            itemBuilder: (selection, i) {
+                              return ChoiceChip(
+                                selected: selection.selected(i),
+                                onSelected: selection.onSelected(i),
+                                label: Text(
+                                  variants[i]['name'],
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                    fontFamily: 'Source Sans 3',
+                                    fontVariations: const [
+                                      FontVariation('wght', 400),
+                                    ],
+                                    fontSize: 14,
+                                    letterSpacing: -0.3,
+                                    height: 1,
+                                  ),
+                                ),
+                              );
+                            },
+                            listBuilder: ChoiceList.createScrollable(
+                              spacing: 10,
+                            ),
+                          )
+                        ]),
+                  ),
 
+                SizedBox(height: 10),
                 Card(
                   elevation: 0,
                   color: MaterialColors.getSurfaceContainerLowest(darkMode),
