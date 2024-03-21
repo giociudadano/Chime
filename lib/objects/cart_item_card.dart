@@ -338,8 +338,9 @@ class _CartItemCardState extends State<CartItemCard> {
                                 ),
                                 onPressed: () {
                                   if (widget.item['quantity'] <=
-                                      (widget.item['ordersRemaining'] - 1 ??
-                                          99)) {
+                                      (widget.item['ordersRemaining'] != null
+                                          ? widget.item['ordersRemaining'] - 1
+                                          : 99)) {
                                     setProductQuantityAtDatabase();
                                     widget.updateTotal!(widget.item['price']);
                                     setState(() {

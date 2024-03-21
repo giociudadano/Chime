@@ -24,7 +24,6 @@ class CartCard extends StatefulWidget {
 class _CartCardState extends State<CartCard> {
   String placeName = '';
   int total = 0;
-  final ValueNotifier<bool> valueNotifierTotal = ValueNotifier(false);
 
   // Retrieves and sets the place information given the place ID of the page.
   // Place ID is retrieved when obtaining product information.
@@ -62,8 +61,11 @@ class _CartCardState extends State<CartCard> {
   }
 
   void updateTotal(int delta) {
-    total += delta;
-    valueNotifierTotal.value = !valueNotifierTotal.value;
+    if (mounted) {
+      setState(() {
+        total += delta;
+      });
+    }
   }
 
   @override
