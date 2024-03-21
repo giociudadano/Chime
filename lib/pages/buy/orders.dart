@@ -8,8 +8,14 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
+  final _searchBox = TextEditingController();
+
   late TabController tabController;
   Map orders = {};
+
+  // Variables for search function.
+  FocusNode focus = FocusNode();
+  Timer? _debounce;
 
   void addOrders() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -43,6 +49,21 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
     }
   }
 
+  void addSearchListener() {
+    _searchBox.addListener(() {
+      if (focus.hasFocus) {
+        if (_debounce != null) {
+          _debounce!.cancel();
+        }
+        _debounce = Timer(const Duration(milliseconds: 800), () {
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     tabController = TabController(
@@ -55,6 +76,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
     });
     super.initState();
     addOrders();
+    addSearchListener();
   }
 
   int getOrderCount(String category) {
@@ -76,6 +98,46 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
+            TextField(
+              focusNode: focus,
+              controller: _searchBox,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                contentPadding: EdgeInsets.zero,
+                hintText: "Search",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  letterSpacing: -0.3,
+                ),
+                filled: true,
+                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+                isDense: true,
+                prefixIcon: const Icon(Icons.search_outlined, size: 16),
+              ),
+              style: const TextStyle(
+                fontFamily: 'Source Sans 3',
+                fontVariations: [
+                  FontVariation('wght', 400),
+                ],
+                height: 1.2,
+                letterSpacing: -0.3,
+                fontSize: 14,
+              ),
+            ),
+            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SizedBox(
@@ -260,7 +322,13 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Unread') {
+                                    if (orders[key]['status'] == 'Unread' &&
+                                        ((_searchBox.text == '')
+                                            ? true
+                                            : orders[key]['storeName']
+                                                .toLowerCase()
+                                                .contains(_searchBox.text
+                                                    .toLowerCase()))) {
                                       return OrderCard(key, orders[key],
                                           adminControls: false,
                                           setOrderStatusCallback:
@@ -305,8 +373,15 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Preparing' ||
-                                        orders[key]['status'] == 'To Receive') {
+                                    if ((orders[key]['status'] == 'Preparing' ||
+                                            orders[key]['status'] ==
+                                                'To Receive') &&
+                                        ((_searchBox.text == '')
+                                            ? true
+                                            : orders[key]['storeName']
+                                                .toLowerCase()
+                                                .contains(_searchBox.text
+                                                    .toLowerCase()))) {
                                       return OrderCard(key, orders[key],
                                           adminControls: false,
                                           setOrderStatusCallback:
@@ -349,7 +424,13 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Received') {
+                                    if (orders[key]['status'] == 'Received' &&
+                                        ((_searchBox.text == '')
+                                            ? true
+                                            : orders[key]['storeName']
+                                                .toLowerCase()
+                                                .contains(_searchBox.text
+                                                    .toLowerCase()))) {
                                       return OrderCard(key, orders[key],
                                           adminControls: false,
                                           setOrderStatusCallback:
@@ -392,7 +473,14 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Completed') {
+                                    // If status is completed and if non-empty search box matches name
+                                    if (orders[key]['status'] == 'Completed' &&
+                                        ((_searchBox.text == '')
+                                            ? true
+                                            : orders[key]['storeName']
+                                                .toLowerCase()
+                                                .contains(_searchBox.text
+                                                    .toLowerCase()))) {
                                       return OrderCard(key, orders[key],
                                           adminControls: false,
                                           setOrderStatusCallback:
@@ -435,7 +523,13 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Cancelled') {
+                                    if (orders[key]['status'] == 'Cancelled' &&
+                                        ((_searchBox.text == '')
+                                            ? true
+                                            : orders[key]['storeName']
+                                                .toLowerCase()
+                                                .contains(_searchBox.text
+                                                    .toLowerCase()))) {
                                       return OrderCard(key, orders[key],
                                           adminControls: false,
                                           setOrderStatusCallback:
