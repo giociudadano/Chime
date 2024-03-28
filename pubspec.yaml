@@ -36,13 +36,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_native_splash: ^2.2.19
   shared_preferences: ^2.2.1
-  onboarding: ^3.1.0
-  material_color_utilities: ^0.5.0
+  onboarding: ^4.0.2
+  material_color_utilities: 0.8.0
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
   flutter_localizations:
     sdk: flutter
-  intl: 0.18.1
+  intl: ^0.18.1
   google_sign_in: ^6.1.5
   google_sign_in_web: ^0.12.0+4
   foundation: ^0.0.5
@@ -56,16 +56,17 @@ dependencies:
   firebase_app_check: ^0.2.1+2
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
+  philippines_rpcmb: ^0.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: '^0.13.1'
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "lib/assets/images/AppIcon.png"
+  image_path: 'lib/assets/images/AppIcon.png'
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
