@@ -20,6 +20,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   // Variables for controllers.
   final GlobalKey<FormState> _formAddAddressKey = GlobalKey<FormState>();
   final _inputAddAddressName = TextEditingController();
+  final _inputAddAddressPhoneNumber = TextEditingController();
   final _inputAddAddressAddress = TextEditingController();
   String? landmark;
 
@@ -73,12 +74,14 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   }
 
   // Writes a new address to database.
-  void _addAddress(String name, String? landmark, String address) {
+  void _addAddress(
+      String name, String? phoneNumber, String? landmark, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
+        "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
         "landmark": landmark,
         "address": address,
       };
@@ -415,12 +418,73 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     },
                   ),
                   const SizedBox(height: 15),
-                  Text.rich(
-                    TextSpan(text: "Address", children: [
-                      TextSpan(
-                          text: "*",
-                          style: TextStyle(color: ChimeColors.getRed800()))
-                    ]),
+                  Text(
+                    "Phone Number",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  TextFormField(
+                    controller: _inputAddAddressPhoneNumber,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
+                        child: Text(
+                          "+63",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3),
+                        ),
+                      ),
+                      hintText: "Phone Number",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                      fontFamily: 'Source Sans 3',
+                      fontVariations: [
+                        FontVariation('wght', 400),
+                      ],
+                      fontSize: 14,
+                      letterSpacing: -0.3,
+                    ),
+                    minLines: 1,
+                    maxLines: 1,
+                    validator: (String? value) {
+                      return _verifyContactNumberField(value);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "Address Line 1",
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
@@ -447,7 +511,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      hintText: "Address",
+                      hintText:
+                          "House Number, Street Name, Subdivision Name, etc.",
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
@@ -463,10 +528,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       fontSize: 14,
                       letterSpacing: -0.3,
                     ),
-                    minLines: 3,
-                    maxLines: 3,
+                    minLines: 2,
+                    maxLines: 2,
                     validator: (String? value) {
-                      return _verifyAddressField(value);
+                      return null;
                     },
                   ),
                   const SizedBox(height: 15),
@@ -562,7 +627,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                           onPressed: () {
                             if (_formAddAddressKey.currentState!.validate()) {
                               {
-                                _addAddress(_inputAddAddressName.text, landmark,
+                                _addAddress(
+                                    _inputAddAddressName.text,
+                                    _inputAddAddressPhoneNumber.text,
+                                    landmark,
                                     _inputAddAddressAddress.text);
                               }
                             }
@@ -917,10 +985,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         ],
                         letterSpacing: -0.3,
                         fontSize: 14),
-                    minLines: 3,
-                    maxLines: 3,
+                    minLines: 2,
+                    maxLines: 2,
                     validator: (String? value) {
-                      return _verifyAddressField(value);
+                      return null;
                     },
                   ),
                   const SizedBox(height: 15),
@@ -1053,12 +1121,16 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
     return null;
   }
 
-  // Checks if the address field is empty and returns an error message if so.
-  String? _verifyAddressField(String? value) {
+  String? _verifyContactNumberField(String? value) {
     if (value == null || value.isEmpty) {
-      return "Please enter your address";
+      return null;
     }
-    return null;
+    try {
+      int.parse(value);
+      return null;
+    } on FormatException {
+      return 'Please enter a whole number';
+    }
   }
 
   @override
@@ -1193,6 +1265,26 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
                                         addresses[key]["address"],
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontFamily: 'Source Sans 3',
+                                            fontVariations: const [
+                                              FontVariation('wght', 400),
+                                            ],
+                                            fontSize: 14,
+                                            letterSpacing: -0.3,
+                                            height: 1,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        addresses[key]["phoneNumber"] ??
+                                            "No Phone Number",
                                         maxLines: 3,
                                         style: TextStyle(
                                             color: Theme.of(context)

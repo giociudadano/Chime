@@ -516,13 +516,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "123 456 789",
+                        hintText: "9123 456 789",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
                           child: Text(
-                            "+639",
+                            "+63",
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Source Sans 3',
@@ -608,7 +608,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                   ? int.parse(inputEditStoreDeliveryFee.text)
                                   : 0,
                               "phoneNumber": inputEditStorePhoneNumber != ""
-                                  ? "+639${inputEditStorePhoneNumber.text}"
+                                  ? "+63${inputEditStorePhoneNumber.text}"
                                   : null,
                             };
                             editStore(widget.placeID, data);

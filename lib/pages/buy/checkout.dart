@@ -141,7 +141,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ? "N/A (Pickup)"
             : addresses[selectedAddress]["landmark"],
         "paymentMethod": paymentMethod,
-        "phoneNumber": user['phoneNumber'],
+        "phoneNumber": addresses[selectedAddress]["phoneNumber"],
         "placeID": widget.placeID,
         "price": getTotal(),
         "status": "Unread",
@@ -458,7 +458,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                         TextOverflow.ellipsis),
                                               ),
                                             ),
-
+                                            // If there is an address, show phone number.
+                                            if (addresses[selectedAddress] !=
+                                                null)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Text(
+                                                  addresses[selectedAddress]
+                                                          ["phoneNumber"] ??
+                                                      'No Phone Number',
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                      fontFamily:
+                                                          'Source Sans 3',
+                                                      fontVariations: const [
+                                                        FontVariation(
+                                                            'wght', 400),
+                                                      ],
+                                                      fontSize: 14,
+                                                      letterSpacing: -0.3,
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
+                                              ),
                                             // If there is an address, show the landmark.
                                             if (addresses[selectedAddress] !=
                                                 null)
