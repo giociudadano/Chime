@@ -269,6 +269,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemCount: orders.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
+                                    // If search box is blank: Return orders that are active
+                                    // If search box is not blank: Return orders that are active with the specified keyword
                                     String key = orders.keys.elementAt(index);
                                     if ((orders[key]['status'] == 'Unread' ||
                                             orders[key]['status'] ==

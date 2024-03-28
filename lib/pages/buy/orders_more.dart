@@ -272,6 +272,36 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            "Order ID",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          Text(
+                            widget.orderID,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
                             "Total Cost",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
@@ -417,7 +447,38 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           ),
                         ],
                       ),
-
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Payment Status",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          Text(
+                            widget.order['isPaid'] ?? false == true
+                                ? 'Paid'
+                                : 'Unpaid',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 15),
                       Divider(
                         color: Theme.of(context).colorScheme.outlineVariant,

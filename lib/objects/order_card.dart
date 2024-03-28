@@ -18,6 +18,8 @@ class _OrderCardState extends State<OrderCard> {
   GlobalKey? dropdownButtonKey = GlobalKey();
   late int itemQuantity;
 
+  bool isPaid = false;
+
   void showDropdown() {
     GestureDetector? detector;
     void searchForGestureDetector(BuildContext? element) {
@@ -36,25 +38,32 @@ class _OrderCardState extends State<OrderCard> {
     detector?.onTap?.call();
   }
 
-  void setOrderStatus(String newStatus) {
+  void setStatusState(String newState) {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     // 1. Set product to new status in database
-    db.collection("orders").doc(widget.orderID).update({"status": newStatus});
+    db.collection("orders").doc(widget.orderID).update({"status": newState});
 
     // 2. Set product to new status in app
     if (mounted) {
       setState(() {
-        widget.order['status'] = newStatus;
+        widget.order['status'] = newState;
       });
     }
 
-    widget.setOrderStatusCallback!(widget.orderID, newStatus);
+    widget.setOrderStatusCallback!(widget.orderID, newState);
+  }
+
+  void setPaidState(bool newState) {
+    // 1. Set product to new status in database
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("orders").doc(widget.orderID).update({"isPaid": newState});
   }
 
   @override
   void initState() {
     itemQuantity = widget.order['items'].length;
+    isPaid = widget.order['isPaid'] ?? false;
     super.initState();
   }
 
@@ -120,13 +129,105 @@ class _OrderCardState extends State<OrderCard> {
             ),
           ]),
           const SizedBox(height: 10),
+          if (widget.adminControls)
+            Row(children: [
+              SizedBox(
+                height: 24,
+                width: 24,
+                child: Checkbox(
+                  checkColor: Colors.white,
+                  activeColor: ChimeColors.getGreen800(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                  side: MaterialStateBorderSide.resolveWith(
+                    (states) => BorderSide(
+                        width: 1.0,
+                        color: Theme.of(context).colorScheme.outline),
+                  ),
+                  value: isPaid,
+                  onChanged: (bool? value) {
+                    setPaidState(value ?? false);
+                    widget.order['isPaid'] = value ?? false;
+                    setState(() {
+                      isPaid = value!;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  "Mark as Paid",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ChimeColors.getGreen800(),
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              )
+            ]),
+          if (widget.adminControls) const SizedBox(height: 10),
+          if (!widget.adminControls)
+            Row(children: [
+              Icon(Icons.book_outlined,
+                  size: 20, color: Theme.of(context).colorScheme.outline),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  widget.order['status'] ?? 'Unknown Status',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              )
+            ]),
+          if (widget.adminControls)
+            Row(children: [
+              Icon(Icons.tag,
+                  size: 20, color: Theme.of(context).colorScheme.outline),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  widget.orderID,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              )
+            ]),
+          const SizedBox(height: 5),
           Row(children: [
             Icon(Icons.pin_drop_outlined,
                 size: 20, color: Theme.of(context).colorScheme.outline),
             const SizedBox(width: 5),
             Expanded(
               child: Text(
-                widget.order['address'] ?? 'Unknown address',
+                widget.order['deliveryMethod'] == "Pickup"
+                    ? "For Pickup"
+                    : "Deliver to " + widget.order['landmark'],
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -142,24 +243,43 @@ class _OrderCardState extends State<OrderCard> {
             )
           ]),
           const SizedBox(height: 5),
-          Row(children: [
-            Icon(Icons.schedule,
-                size: 20, color: Theme.of(context).colorScheme.outline),
-            const SizedBox(width: 5),
-            Text(
-              DateFormat('MMM dd, yyyy, h:mm a')
-                  .format(widget.order['createdAt'].toDate()),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.outline,
-                fontFamily: 'Product Sans 3',
-                fontVariations: const [
-                  FontVariation('wght', 400),
-                ],
-                fontSize: 14,
-                letterSpacing: -0.3,
+          if (widget.adminControls)
+            Row(children: [
+              Icon(Icons.schedule,
+                  size: 20, color: Theme.of(context).colorScheme.outline),
+              const SizedBox(width: 5),
+              Text(
+                DateFormat('MMM dd, yyyy, h:mm a')
+                    .format(widget.order['createdAt'].toDate()),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  fontFamily: 'Product Sans 3',
+                  fontVariations: const [
+                    FontVariation('wght', 400),
+                  ],
+                  fontSize: 14,
+                  letterSpacing: -0.3,
+                ),
               ),
-            ),
-          ]),
+            ]),
+          if (!widget.adminControls)
+            Row(children: [
+              Icon(Icons.account_balance_wallet_outlined,
+                  size: 20, color: ChimeColors.getGreen800()),
+              const SizedBox(width: 5),
+              Text(
+                widget.order['isPaid'] ?? false == true ? 'Paid' : 'Unpaid',
+                style: TextStyle(
+                  color: ChimeColors.getGreen800(),
+                  fontFamily: 'Product Sans 3',
+                  fontVariations: const [
+                    FontVariation('wght', 400),
+                  ],
+                  fontSize: 14,
+                  letterSpacing: -0.3,
+                ),
+              ),
+            ]),
           const SizedBox(height: 10),
           Row(children: [
             // For sellers: Review - White for all states, Green for 'Received' and 'Completed', Red for 'Cancelled'.
@@ -242,7 +362,7 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      setOrderStatus("Preparing");
+                      setStatusState("Preparing");
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
@@ -278,7 +398,7 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      setOrderStatus('To Receive');
+                      setStatusState('To Receive');
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
@@ -318,7 +438,7 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      setOrderStatus("Received");
+                      setStatusState("Received");
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
@@ -355,7 +475,7 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      setOrderStatus("Completed");
+                      setStatusState("Completed");
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),

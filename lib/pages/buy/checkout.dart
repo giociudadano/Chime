@@ -136,6 +136,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "deliveryFee": getDeliveryFee(),
         "deliveryMethod": deliveryMethod,
         "items": items,
+        "isPaid": false,
         "landmark": deliveryMethod == 'Pickup'
             ? "N/A (Pickup)"
             : addresses[selectedAddress]["landmark"],
