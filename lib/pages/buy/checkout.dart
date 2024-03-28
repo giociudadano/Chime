@@ -130,7 +130,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "additionalNotes": inputAdditionalNotes.text,
         "address": deliveryMethod == 'Pickup'
             ? "N/A (Pickup)"
-            : addresses[selectedAddress!]["address"],
+            : addresses[selectedAddress!]["addressLine"],
         "createdAt": FieldValue.serverTimestamp(),
         "customerName": user['displayName'],
         "deliveryFee": getDeliveryFee(),
@@ -440,7 +440,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                     ? "This user has no address selected. To allow delivery, please add an address."
                                                     : addresses[
                                                             selectedAddress!]
-                                                        ["address"],
+                                                        ["addressLine"],
                                                 maxLines: 3,
                                                 style: TextStyle(
                                                     color: Theme.of(context)

@@ -156,7 +156,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
         : '0';
     inputEditStorePhoneNumber.text = widget.place['phoneNumber'] == null
         ? ''
-        : widget.place['phoneNumber'].substring(4);
+        : widget.place['phoneNumber'].substring(3);
     super.initState();
   }
 
@@ -500,7 +500,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     TextFormField(
                       keyboardType: TextInputType.number,
                       controller: inputEditStorePhoneNumber,
-                      maxLength: 9,
+                      maxLength: 10,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(

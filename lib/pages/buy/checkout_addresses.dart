@@ -18,10 +18,10 @@ class CheckoutAddressesPage extends StatefulWidget {
 
 class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   // Variables for controllers.
-  final GlobalKey<FormState> _formAddAddressKey = GlobalKey<FormState>();
-  final _inputAddAddressName = TextEditingController();
-  final _inputAddAddressPhoneNumber = TextEditingController();
-  final _inputAddAddressAddress = TextEditingController();
+  final GlobalKey<FormState> formAddKey = GlobalKey<FormState>();
+  final inputAddLabel = TextEditingController();
+  final inputAddPhoneNumber = TextEditingController();
+  final inputAddAddressLine = TextEditingController();
   String? landmark;
 
   // Variables for user information.
@@ -75,7 +75,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
 
   // Writes a new address to database.
   void _addAddress(
-      String name, String? phoneNumber, String? landmark, String address) {
+      String name, String? phoneNumber, String? landmark, String addressLine) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
@@ -83,7 +83,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
         "name": name,
         "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
         "landmark": landmark,
-        "address": address,
+        "addressLine": addressLine,
       };
       db
           .collection("users")
@@ -105,14 +105,16 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   }
 
   // Overwrites an address in database.
-  void _editAddress(String id, String name, String? landmark, String address) {
+  void editAddress(String id, String name, String? phoneNumber,
+      String? landmark, String address) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
+        "phoneNumber": phoneNumber == null ? null : "+63${phoneNumber}",
         "landmark": landmark,
-        "address": address,
+        "addressLine": address,
       };
       db
           .collection("users")
@@ -335,7 +337,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
             content: Form(
-              key: _formAddAddressKey,
+              key: formAddKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -381,7 +383,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         letterSpacing: -0.3),
                   ),
                   TextFormField(
-                    controller: _inputAddAddressName,
+                    controller: inputAddLabel,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -430,7 +432,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         letterSpacing: -0.3),
                   ),
                   TextFormField(
-                    controller: _inputAddAddressPhoneNumber,
+                    controller: inputAddPhoneNumber,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -495,7 +497,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         letterSpacing: -0.3),
                   ),
                   TextFormField(
-                    controller: _inputAddAddressAddress,
+                    controller: inputAddAddressLine,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -625,13 +627,13 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_formAddAddressKey.currentState!.validate()) {
+                            if (formAddKey.currentState!.validate()) {
                               {
                                 _addAddress(
-                                    _inputAddAddressName.text,
-                                    _inputAddAddressPhoneNumber.text,
+                                    inputAddLabel.text,
+                                    inputAddPhoneNumber.text,
                                     landmark,
-                                    _inputAddAddressAddress.text);
+                                    inputAddAddressLine.text);
                               }
                             }
                           },
@@ -671,11 +673,13 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   // Shows a form that allows the user to edit an address.
   // Visible when clicking on the 'edit' button at an address card.
   Future showEditAddressForm(BuildContext context, String id, String name,
-      String? landmark, String address) async {
+      String? phoneNumber, String? landmark, String address) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
-    final GlobalKey<FormState> formEditAddressKey = GlobalKey<FormState>();
-    final inputEditAddressName = TextEditingController(text: name);
-    final inputEditAddressAddress = TextEditingController(text: address);
+    final GlobalKey<FormState> formEditKey = GlobalKey<FormState>();
+    final inputEditLabel = TextEditingController(text: name);
+    final inputEditPhoneNumber = TextEditingController(
+        text: phoneNumber == null ? '' : phoneNumber.substring(3));
+    final inputEditAddressLine = TextEditingController(text: address);
 
     // Variables for dropdown box.
     List<DropdownMenuItem> landmarks = [
@@ -856,7 +860,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
             elevation: 0,
             backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
             content: Form(
-              key: formEditAddressKey,
+              key: formEditKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -902,7 +906,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         letterSpacing: -0.3),
                   ),
                   TextFormField(
-                    controller: inputEditAddressName,
+                    controller: inputEditLabel,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -938,12 +942,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     },
                   ),
                   const SizedBox(height: 15),
-                  Text.rich(
-                    TextSpan(text: "Address", children: [
-                      TextSpan(
-                          text: "*",
-                          style: TextStyle(color: ChimeColors.getRed800()))
-                    ]),
+                  Text(
+                    "Phone Number",
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
@@ -954,7 +954,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         letterSpacing: -0.3),
                   ),
                   TextFormField(
-                    controller: inputEditAddressAddress,
+                    controller: inputEditPhoneNumber,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -970,7 +970,72 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      hintText: "Address",
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
+                        child: Text(
+                          "+63",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Source Sans 3',
+                              fontVariations: const [
+                                FontVariation('wght', 400),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3),
+                        ),
+                      ),
+                      hintText: "9123 456 789",
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor:
+                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      isDense: true,
+                    ),
+                    style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        letterSpacing: -0.3,
+                        fontSize: 14),
+                    minLines: 1,
+                    maxLines: 1,
+                    validator: (String? value) {
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "Address Line 1",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  TextFormField(
+                    controller: inputEditAddressLine,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 0.5,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      hintText:
+                          "House Number, Street Name, Subdivision Name, etc.",
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
@@ -1075,9 +1140,13 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (formEditAddressKey.currentState!.validate()) {
-                              _editAddress(id, inputEditAddressName.text,
-                                  landmark, inputEditAddressAddress.text);
+                            if (formEditKey.currentState!.validate()) {
+                              editAddress(
+                                  id,
+                                  inputEditLabel.text,
+                                  inputEditPhoneNumber.text,
+                                  landmark,
+                                  inputEditAddressLine.text);
                             }
                           },
                           style: ButtonStyle(
@@ -1234,8 +1303,9 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                                       context,
                                       key,
                                       addresses[key]["name"],
+                                      addresses[key]['phoneNumber'],
                                       addresses[key]["landmark"],
-                                      addresses[key]["address"]);
+                                      addresses[key]["addressLine"]);
                                 },
                               ),
                             ),
@@ -1264,7 +1334,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
-                                        addresses[key]["address"],
+                                        addresses[key]["addressLine"],
                                         maxLines: 3,
                                         style: TextStyle(
                                             color: Theme.of(context)
