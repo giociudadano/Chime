@@ -56,7 +56,6 @@ dependencies:
   firebase_app_check: ^0.2.1+2
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
-  philippines_rpcmb: ^0.0.3
 
 dev_dependencies:
   flutter_test:

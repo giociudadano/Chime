@@ -192,6 +192,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }
   }
 
+  String parseAddress(
+      String? addressLine, String? barangay, String? municipality) {
+    String address = '';
+    if (addressLine != null) {
+      address += addressLine;
+    }
+    if (addressLine != null && barangay != null) {
+      address += ", ";
+    }
+    if (barangay != null) {
+      address += barangay;
+    }
+    if ((addressLine != null || barangay != null) && municipality != null) {
+      address += ", ";
+    }
+    if (municipality != null) {
+      address += municipality;
+    }
+    return address;
+  }
+
   void editAddress(String? id, Map data) {
     if (mounted) {
       setState(() {
@@ -438,9 +459,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                                 selectedAddress] ==
                                                             null
                                                     ? "This user has no address selected. To allow delivery, please add an address."
-                                                    : addresses[
-                                                            selectedAddress!]
-                                                        ["addressLine"],
+                                                    : parseAddress(
+                                                        addresses[
+                                                                selectedAddress]
+                                                            ["addressLine"],
+                                                        addresses[
+                                                                selectedAddress]
+                                                            ["barangay"],
+                                                        addresses[
+                                                                selectedAddress]
+                                                            ["municipality"]),
                                                 maxLines: 3,
                                                 style: TextStyle(
                                                     color: Theme.of(context)

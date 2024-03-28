@@ -413,14 +413,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.5"
-  freezed_annotation:
-    dependency: transitive
-    description:
-      name: freezed_annotation
-      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.1"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -781,14 +773,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
-  philippines_rpcmb:
-    dependency: "direct main"
-    description:
-      name: philippines_rpcmb
-      sha256: "49d77a50c2b9cdeed01297000cfb61a38899d42269529e8131c3daf41e12d0bc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
   platform:
     dependency: transitive
     description:
