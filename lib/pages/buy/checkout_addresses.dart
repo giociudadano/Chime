@@ -23,6 +23,17 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   final inputAddPhoneNumber = TextEditingController();
   final inputAddAddressLine = TextEditingController();
   String? landmark;
+  List landmarks = [
+    "No Landmark",
+    "UPV CAS",
+    "UPV New Admin",
+    "UPV Old Admin",
+    "UPV CFOS",
+    "UPV Wet Lab",
+    "ISAT U",
+    "Miagao NHS",
+    "UPV Dorm Area"
+  ];
 
   // Variables for user information.
   Map addresses = {};
@@ -74,7 +85,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   }
 
   // Writes a new address to database.
-  void _addAddress(
+  void addAddress(
       String name, String? phoneNumber, String? landmark, String addressLine) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
@@ -82,7 +93,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
       Map<String, dynamic> data = {
         "name": name,
         "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
-        "landmark": landmark,
+        "landmark": landmark == "No Landmark" ? null : landmark,
         "addressLine": addressLine,
       };
       db
@@ -159,11 +170,12 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   Future showAddAddressForm(BuildContext context) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     // Variables for dropdown box.
-    List<DropdownMenuItem> landmarks = [
-      DropdownMenuItem(
-        value: null,
+    List<DropdownMenuItem> dropdownLandmarks = List.generate(
+      landmarks.length,
+      (index) => DropdownMenuItem(
+        value: landmarks[index],
         child: Text(
-          "No Landmark",
+          landmarks[index],
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontFamily: 'Source Sans 3',
@@ -175,154 +187,13 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
           ),
         ),
         onTap: () {
-          landmark = null;
+          landmark = landmarks[index];
         },
       ),
-      DropdownMenuItem(
-        value: "UPV CAS",
-        child: Text(
-          "UPV CAS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CAS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV New Admin",
-        child: Text(
-          "UPV New Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV New Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Old Admin",
-        child: Text(
-          "UPV Old Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Old Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV CFOS",
-        child: Text(
-          "UPV CFOS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CFOS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Wet Lab",
-        child: Text(
-          "UPV Wet Lab",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Wet Lab";
-        },
-      ),
-      DropdownMenuItem(
-        value: "ISAT U",
-        child: Text(
-          "ISAT U",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "ISAT U";
-        },
-      ),
-      DropdownMenuItem(
-        value: "Miagao NHS",
-        child: Text(
-          "Miagao NHS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "Miagao NHS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Dorm Area",
-        child: Text(
-          "UPV Dorm Area",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Dorm Area";
-        },
-      ),
-    ];
+    );
+    landmark = "No Landmark";
+
+    var region, province, municipality, barangay;
 
     return showDialog(
         context: context,
@@ -538,6 +409,22 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                   ),
                   const SizedBox(height: 15),
                   Text.rich(
+                    TextSpan(text: "Region", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  const SizedBox(height: 15),
+                  Text.rich(
                     TextSpan(text: "Landmark", children: [
                       TextSpan(
                           text: "*",
@@ -578,7 +465,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         ),
                       ),
                       value: landmark,
-                      items: landmarks,
+                      items: dropdownLandmarks,
                       onChanged: (value) {
                         value = value;
                       },
@@ -629,7 +516,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                           onPressed: () {
                             if (formAddKey.currentState!.validate()) {
                               {
-                                _addAddress(
+                                addAddress(
                                     inputAddLabel.text,
                                     inputAddPhoneNumber.text,
                                     landmark,
@@ -681,12 +568,12 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
         text: phoneNumber == null ? '' : phoneNumber.substring(3));
     final inputEditAddressLine = TextEditingController(text: address);
 
-    // Variables for dropdown box.
-    List<DropdownMenuItem> landmarks = [
-      DropdownMenuItem(
-        value: null,
+    List<DropdownMenuItem> dropdownLandmarks = List.generate(
+      landmarks.length,
+      (index) => DropdownMenuItem(
+        value: landmarks[index],
         child: Text(
-          "No Landmark",
+          landmarks[index],
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontFamily: 'Source Sans 3',
@@ -698,154 +585,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
           ),
         ),
         onTap: () {
-          landmark = null;
+          landmark = landmarks[index];
         },
       ),
-      DropdownMenuItem(
-        value: "UPV CAS",
-        child: Text(
-          "UPV CAS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CAS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV New Admin",
-        child: Text(
-          "UPV New Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV New Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Old Admin",
-        child: Text(
-          "UPV Old Admin",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Old Admin";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV CFOS",
-        child: Text(
-          "UPV CFOS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV CFOS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Wet Lab",
-        child: Text(
-          "UPV Wet Lab",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Wet Lab";
-        },
-      ),
-      DropdownMenuItem(
-        value: "ISAT U",
-        child: Text(
-          "ISAT U",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "ISAT U";
-        },
-      ),
-      DropdownMenuItem(
-        value: "Miagao NHS",
-        child: Text(
-          "Miagao NHS",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "Miagao NHS";
-        },
-      ),
-      DropdownMenuItem(
-        value: "UPV Dorm Area",
-        child: Text(
-          "UPV Dorm Area",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          landmark = "UPV Dorm Area";
-        },
-      ),
-    ];
+    );
 
     return showDialog(
         context: context,
@@ -1098,7 +841,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                         ),
                       ),
                       value: landmark,
-                      items: landmarks,
+                      items: dropdownLandmarks,
                       onChanged: (value) {
                         value = value;
                       },
