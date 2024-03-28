@@ -68,7 +68,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
   void initState() {
     tabController = TabController(
       initialIndex: 0,
-      length: 5,
+      length: 3,
       vsync: this,
     );
     tabController.addListener(() {
@@ -155,7 +155,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Unread",
+                            "Active",
                             style: TextStyle(
                                 color: tabController.index == 0
                                     ? ChimeColors.getGreen100()
@@ -183,7 +183,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Preparing",
+                            "Completed",
                             style: TextStyle(
                                 color: tabController.index == 1
                                     ? ChimeColors.getGreen100()
@@ -211,7 +211,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Receiving",
+                            "Cancelled",
                             style: TextStyle(
                                 color: tabController.index == 2
                                     ? ChimeColors.getGreen100()
@@ -228,62 +228,6 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         tabController.animateTo(2);
                       },
                     ),
-                    const SizedBox(width: 10),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            tabController.index == 3
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            "Completed",
-                            style: TextStyle(
-                                color: tabController.index == 3
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                ],
-                                fontSize: 13,
-                                letterSpacing: -0.3,
-                                overflow: TextOverflow.ellipsis),
-                          )),
-                      onPressed: () {
-                        tabController.animateTo(3);
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            tabController.index == 4
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            "Cancelled",
-                            style: TextStyle(
-                                color: tabController.index == 4
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
-                                fontVariations: const [
-                                  FontVariation('wght', 700),
-                                ],
-                                fontSize: 13,
-                                letterSpacing: -0.3,
-                                overflow: TextOverflow.ellipsis),
-                          )),
-                      onPressed: () {
-                        tabController.animateTo(4);
-                      },
-                    ),
                   ],
                 ),
               ),
@@ -296,60 +240,13 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (getOrderCount('Unread') == 0)
-                        Text(
-                          "No unread orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
-                        )
-                      else
-                        Expanded(
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  key: UniqueKey(),
-                                  shrinkWrap: true,
-                                  itemCount: orders.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Unread' &&
-                                        ((_searchBox.text == '')
-                                            ? true
-                                            : orders[key]['storeName']
-                                                .toLowerCase()
-                                                .contains(_searchBox.text
-                                                    .toLowerCase()))) {
-                                      return OrderCard(key, orders[key],
-                                          adminControls: false,
-                                          setOrderStatusCallback:
-                                              setOrderStatus);
-                                    } else {
-                                      return const SizedBox.shrink();
-                                    }
-                                  }),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (getOrderCount('Preparing') +
-                              getOrderCount('To Receive') ==
+                      if (getOrderCount('Unread') +
+                              getOrderCount('Preparing') +
+                              getOrderCount('To Receive') +
+                              getOrderCount('Received') ==
                           0)
                         Text(
-                          "No preparing orders or orders to receive",
+                          "No active orders",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.outline,
                             fontFamily: 'Source Sans 3',
@@ -373,58 +270,13 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     String key = orders.keys.elementAt(index);
-                                    if ((orders[key]['status'] == 'Preparing' ||
+                                    if ((orders[key]['status'] == 'Unread' ||
                                             orders[key]['status'] ==
-                                                'To Receive') &&
-                                        ((_searchBox.text == '')
-                                            ? true
-                                            : orders[key]['storeName']
-                                                .toLowerCase()
-                                                .contains(_searchBox.text
-                                                    .toLowerCase()))) {
-                                      return OrderCard(key, orders[key],
-                                          adminControls: false,
-                                          setOrderStatusCallback:
-                                              setOrderStatus);
-                                    } else {
-                                      return const SizedBox.shrink();
-                                    }
-                                  }),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (getOrderCount('Received') == 0)
-                        Text(
-                          "No received orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
-                        )
-                      else
-                        Expanded(
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  key: UniqueKey(),
-                                  shrinkWrap: true,
-                                  itemCount: orders.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    String key = orders.keys.elementAt(index);
-                                    if (orders[key]['status'] == 'Received' &&
+                                                'Preparing' ||
+                                            orders[key]['status'] ==
+                                                'To Receive' ||
+                                            orders[key]['status'] ==
+                                                'Received') &&
                                         ((_searchBox.text == '')
                                             ? true
                                             : orders[key]['storeName']
