@@ -689,8 +689,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                         ]),
 
                       // If order contains additional notes, display subsection.
-                      if (widget.order['additionalNotes'] != null ||
-                          widget.order['additionalNotes'] != '')
+                      if (widget.order['additionalNotes'] != null)
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -716,7 +715,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                widget.order['additionalNotes'],
+                                widget.order['additionalNotes'] ?? "",
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
