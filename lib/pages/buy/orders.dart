@@ -260,7 +260,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),

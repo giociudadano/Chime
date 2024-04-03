@@ -27,6 +27,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   // Variables for place information.
   int? deliveryPrice;
+  String? storeName;
 
   // Variables for user information.
   String? selectedAddress;
@@ -83,6 +84,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }
   }
 
+  // Retrieves and sets the place information given the place ID of the page.
+  // Place ID is retrieved when obtaining product information.
+  void getStoreName() {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    db.collection("places").doc(widget.placeID).get().then((document) async {
+      if (document.exists) {
+        storeName = document.data()!['placeName'] ?? '';
+      }
+    });
+  }
+
   // Gets the total price of the order.
   int getTotal() {
     int subtotal = 0;
@@ -98,6 +110,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void addOrder(String deliveryMethod, String paymentMethod) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore db = FirebaseFirestore.instance;
+    getStoreName();
 
     Map items = {};
     // 1. Fetch cart items from place to check out
@@ -145,7 +158,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "placeID": widget.placeID,
         "price": getTotal(),
         "status": "Unread",
-        "storeName": 'Store Name', //TODO: Fetch store name programatically
+        "storeName": storeName ?? 'Unknown Store',
         "userID": uid,
       };
       print(data);
