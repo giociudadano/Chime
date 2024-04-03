@@ -23,11 +23,12 @@ class CartCard extends StatefulWidget {
 
 class _CartCardState extends State<CartCard> {
   String placeName = '';
+  int deliveryFee = 0;
   int total = 0;
 
   // Retrieves and sets the place information given the place ID of the page.
   // Place ID is retrieved when obtaining product information.
-  void getPlaceName() async {
+  void getPlaceInfo() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
     await db
         .collection("places")
@@ -38,6 +39,7 @@ class _CartCardState extends State<CartCard> {
         if (mounted) {
           setState(() {
             placeName = document.data()!['placeName'] ?? '';
+            deliveryFee = document.data()!['deliveryPrice'] ?? 0;
           });
         }
       }
@@ -71,7 +73,7 @@ class _CartCardState extends State<CartCard> {
   @override
   void initState() {
     super.initState();
-    getPlaceName();
+    getPlaceInfo();
     getTotal();
   }
 
@@ -100,19 +102,54 @@ class _CartCardState extends State<CartCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  placeName,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontVariations: const [
-                      FontVariation('wght', 750),
-                      FontVariation('wdth', 100),
-                    ],
-                    fontSize: 16,
-                    letterSpacing: -0.3,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      placeName,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontVariations: const [
+                          FontVariation('wght', 750),
+                          FontVariation('wdth', 100),
+                        ],
+                        fontSize: 16,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                            color: ChimeColors.getGreen200(),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.motorcycle,
+                                  size: 22, color: ChimeColors.getGreen800()),
+                              SizedBox(height: 10),
+                              Text(
+                                "₱${deliveryFee}",
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: ChimeColors.getGreen800(),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 750),
+                                    FontVariation('wdth', 100),
+                                  ],
+                                  fontSize: 14,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                  ],
                 ),
                 const SizedBox(height: 10),
                 ListView.builder(
