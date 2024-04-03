@@ -269,16 +269,25 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   }
 
   // Overwrites an address in database.
-  void editAddress(String id, String name, String? phoneNumber,
-      String? landmark, String address) {
+  void editAddress(
+      String id,
+      String name,
+      String? phoneNumber,
+      String? municipality,
+      String? barangay,
+      String? landmark,
+      String addressLine) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     try {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
-        "phoneNumber": phoneNumber == '' ? null : "+63${phoneNumber}",
-        "landmark": landmark,
-        "addressLine": address,
+        "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
+        "municipality": "${municipality}".title(),
+        "barangay":
+            barangay == "" || barangay == null ? null : "${barangay}".title(),
+        "landmark": landmark == "No Landmark" ? null : landmark,
+        "addressLine": addressLine == "" ? null : addressLine,
       };
       db
           .collection("users")
@@ -833,14 +842,21 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
 
   // Shows a form that allows the user to edit an address.
   // Visible when clicking on the 'edit' button at an address card.
-  Future showEditAddressForm(BuildContext context, String id, String name,
-      String? phoneNumber, String? landmark, String address) async {
+  Future showEditAddressForm(
+      BuildContext context,
+      String id,
+      String name,
+      String? phoneNumber,
+      String? selectedMunicipality,
+      String? selectedBarangay,
+      String? landmark,
+      String? addressLine) async {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formEditKey = GlobalKey<FormState>();
     final inputEditLabel = TextEditingController(text: name);
     final inputEditPhoneNumber = TextEditingController(
         text: phoneNumber == null ? '' : phoneNumber.substring(3));
-    final inputEditAddressLine = TextEditingController(text: address);
+    final inputEditAddressLine = TextEditingController(text: addressLine ?? "");
 
     List<DropdownMenuItem> dropdownLandmarks = List.generate(
       landmarks.length,
@@ -863,6 +879,55 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
         },
       ),
     );
+
+    List<DropdownMenuItem> dropdownMunicipalities = List.generate(
+      municipalities.length,
+      (index) => DropdownMenuItem(
+        value: municipalities[index],
+        child: Text(
+          "${municipalities[index]}".title(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          municipality = municipalities[index];
+        },
+      ),
+    );
+    municipality = selectedMunicipality == null
+        ? "MIAGAO"
+        : "${selectedMunicipality}".toUpperCase();
+
+    List<DropdownMenuItem> dropdownBarangays = List.generate(
+      barangays.length,
+      (index) => DropdownMenuItem(
+        value: barangays[index],
+        child: Text(
+          "${barangays[index]}".title(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontFamily: 'Source Sans 3',
+            fontVariations: const [
+              FontVariation('wght', 400),
+            ],
+            fontSize: 14,
+            letterSpacing: -0.3,
+          ),
+        ),
+        onTap: () {
+          barangay = barangays[index];
+        },
+      ),
+    );
+    barangay =
+        selectedBarangay == null ? "" : "${selectedBarangay}".toUpperCase();
 
     return showDialog(
         context: context,
@@ -1075,6 +1140,98 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                   ),
                   const SizedBox(height: 15),
                   Text.rich(
+                    TextSpan(text: "Municipality", children: [
+                      TextSpan(
+                          text: "*",
+                          style: TextStyle(color: ChimeColors.getRed800()))
+                    ]),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: municipality,
+                      items: dropdownMunicipalities,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "Barangay",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                        letterSpacing: -0.3),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: barangay,
+                      items: dropdownBarangays,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Text.rich(
                     TextSpan(text: "Landmark", children: [
                       TextSpan(
                           text: "*",
@@ -1162,6 +1319,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                                   id,
                                   inputEditLabel.text,
                                   inputEditPhoneNumber.text,
+                                  municipality,
+                                  barangay,
                                   landmark,
                                   inputEditAddressLine.text);
                             }
@@ -1321,6 +1480,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                                       key,
                                       addresses[key]["name"],
                                       addresses[key]['phoneNumber'],
+                                      addresses[key]['municipality'],
+                                      addresses[key]['barangay'],
                                       addresses[key]["landmark"],
                                       addresses[key]["addressLine"]);
                                 },
