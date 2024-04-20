@@ -285,7 +285,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         children: [
                           Expanded(
                             child: Card(
-                                color: ChimeColors.getGreen100(),
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: ChimeColors.getGreen800(),
+                                      ),
+                                      borderRadius: BorderRadius.circular(12.0)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(15),
                                   child: Column(

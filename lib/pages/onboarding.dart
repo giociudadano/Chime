@@ -112,7 +112,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                     style: const TextStyle(
                       fontFamily: 'Plus Jakarta Sans',
                       fontVariations: [
-                        FontVariation('wght', 350),
+                        FontVariation('wght', 400),
                         FontVariation('wdth', 100),
                       ],
                       fontSize: 14,
@@ -181,7 +181,7 @@ class OnBoardingPageContent extends StatelessWidget {
             style: const TextStyle(
               fontFamily: 'Source Sans 3',
               fontVariations: [
-                FontVariation('wght', 300),
+                FontVariation('wght', 400),
                 FontVariation('wdth', 100),
               ],
               fontSize: 14,
