@@ -352,7 +352,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -371,7 +371,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                 height: 1,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           Text(
                             widget.place['placeTagline'] ?? '',
                             maxLines: 2,
@@ -381,9 +381,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
-                                height: 0.75,
+                                height: 1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ],
@@ -401,7 +401,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -592,7 +592,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                         if (!(widget.place['noticeTitle'] == null &&
                             widget.place['noticeDesc'] == null))
                           Column(children: [
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             Card(
                               elevation: 0,
                               color: MaterialColors.getSurfaceContainerLowest(
@@ -603,10 +603,10 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                     color: MaterialColors
                                         .getSurfaceContainerHighest(darkMode),
                                   ),
-                                  borderRadius: BorderRadius.circular(10.0)),
+                                  borderRadius: BorderRadius.circular(16.0)),
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                                    const EdgeInsets.fromLTRB(16, 16, 16, 16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -618,14 +618,14 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
-                                        fontSize: 15,
-                                        letterSpacing: -0.3,
+                                        fontSize: 16,
+                                        letterSpacing: 0,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     if (!(widget.place['noticeDesc'] == null &&
                                         widget.place['noticeTitle'] != null))
-                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 8),
                                     if (!(widget.place['noticeDesc'] == null &&
                                         widget.place['noticeTitle'] != null))
                                       Text(
@@ -638,9 +638,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                           fontVariations: const [
                                             FontVariation('wght', 400),
                                           ],
-                                          fontSize: 12,
-                                          letterSpacing: -0.3,
-                                          height: 1,
+                                          fontSize: 14,
+                                          letterSpacing: 0,
+                                          height: 1.2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         maxLines: 5,
@@ -649,7 +649,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 24),
                           ]),
                         if (productsFavorited.isNotEmpty)
                           Column(children: [
@@ -670,12 +670,12 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                           fontVariations: const [
                                             FontVariation('wght', 700),
                                           ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.5),
+                                          fontSize: 16,
+                                          letterSpacing: 0),
                                     ),
                                   ]),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             GridView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               key: UniqueKey(),
@@ -697,7 +697,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 0),
                             ),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 24),
                           ]),
                         if (productsFeatured.isNotEmpty)
                           Column(children: [
@@ -718,12 +718,12 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                           fontVariations: const [
                                             FontVariation('wght', 700),
                                           ],
-                                          fontSize: 15,
-                                          letterSpacing: -0.5),
+                                          fontSize: 16,
+                                          letterSpacing: 0),
                                     ),
                                   ]),
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                             GridView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               key: UniqueKey(),
@@ -745,7 +745,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 0),
                             ),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 24),
                           ]),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -762,12 +762,12 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       fontVariations: const [
                                         FontVariation('wght', 700),
                                       ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.5),
+                                      fontSize: 16,
+                                      letterSpacing: 0),
                                 ),
                               ]),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           key: UniqueKey(),

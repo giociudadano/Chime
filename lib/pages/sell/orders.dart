@@ -349,6 +349,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                                  const SizedBox(height: 40),
                             ],
                           ),
                         ),
@@ -401,6 +402,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                     } else {
                                       return const SizedBox.shrink();
                                     }
+                                    
                                   }),
                             ],
                           ),

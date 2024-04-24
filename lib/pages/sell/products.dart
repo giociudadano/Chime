@@ -185,6 +185,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         letterSpacing: -0.3),
                   ),
                 ),
+                const SizedBox(height: 4),
                 TextFormField(
                   controller: inputEditNoticeTitle,
                   decoration: InputDecoration(
@@ -218,7 +219,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                       fontSize: 14,
                       letterSpacing: -0.3),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -233,6 +234,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         letterSpacing: -0.3),
                   ),
                 ),
+                const SizedBox(height: 4),
                 TextFormField(
                   controller: inputEditNoticeDesc,
                   decoration: InputDecoration(
@@ -301,13 +303,13 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 15,
+                              fontSize: 16,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -338,7 +340,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 14,
+                              fontSize: 16,
                             ),
                           ),
                         ),
@@ -524,9 +526,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           color: MaterialColors.getSurfaceContainerHighest(
                               darkMode),
                         ),
-                        borderRadius: BorderRadius.circular(10.0)),
+                        borderRadius: BorderRadius.circular(16.0)),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -541,14 +543,14 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 15,
-                              letterSpacing: -0.3,
+                              fontSize: 16, //15
+                              letterSpacing: 0,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           if (!(widget.noticeTitle != null &&
                               widget.noticeDesc == null))
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 8),
                           if (!(widget.noticeTitle != null &&
                               widget.noticeDesc == null))
                             Text(
@@ -560,14 +562,14 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 12,
-                                letterSpacing: -0.3,
-                                height: 1,
+                                fontSize: 14, //12
+                                letterSpacing: 0, //-0.3
+                                height: 1.2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               maxLines: 5,
                             ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
                               Expanded(
@@ -580,21 +582,21 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                           ChimeColors.getGreen200()),
                                       shape: MaterialStatePropertyAll(
                                           RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(8),
                                         side: BorderSide.none,
                                       ))),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(8),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.edit_outlined,
-                                          size: 16,
+                                          size: 20,
                                           color: ChimeColors.getGreen800(),
                                         ),
-                                        const SizedBox(width: 10),
+                                        const SizedBox(width: 8),
                                         Text(
                                           "Edit Notice",
                                           style: TextStyle(
@@ -603,7 +605,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                             fontVariations: const [
                                               FontVariation('wght', 700),
                                             ],
-                                            fontSize: 14,
+                                            fontSize: 16, //14
                                           ),
                                         ),
                                       ],
@@ -637,8 +639,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                       fontVariations: const [
                                         FontVariation('wght', 700),
                                       ],
-                                      fontSize: 15,
-                                      letterSpacing: -0.5),
+                                      fontSize: 16,
+                                      letterSpacing: 0),
                                 ),
                               ]),
                         ),
@@ -687,8 +689,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
-                                        fontSize: 15,
-                                        letterSpacing: -0.5),
+                                        fontSize: 16,
+                                        letterSpacing: 0),
                                   ),
                                 ]),
                           ),

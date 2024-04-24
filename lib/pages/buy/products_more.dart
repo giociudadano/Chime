@@ -75,19 +75,21 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
       }, SetOptions(merge: true));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
+          content: Center(
+            child: Text(
               isInCart
                   ? "${widget.product['productName']} updated in cart!"
                   : "${widget.product['productName']} added to cart!",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 14,
+                fontSize: 16,
                 fontFamily: 'Source Sans 3',
                 fontVariations: const [
                   FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainerLowest(
+          ),
+          backgroundColor: MaterialColors.getSurfaceContainerHighest(
               Theme.of(context).brightness == Brightness.dark),
         ),
       );
@@ -432,6 +434,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 addToCart();
+                                Navigator.pop(context);
                               },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStatePropertyAll(

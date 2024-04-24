@@ -426,8 +426,8 @@ class _PlacesPageState extends State<PlacesPage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 15,
-                                  letterSpacing: -0.3),
+                                  fontSize: 16,
+                                  letterSpacing: 0),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -475,8 +475,8 @@ class _PlacesPageState extends State<PlacesPage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 15,
-                                  letterSpacing: -0.3,
+                                  fontSize: 16,
+                                  letterSpacing: 0,
                                   height: 1.2,
                                   overflow: TextOverflow.ellipsis),
                             ),

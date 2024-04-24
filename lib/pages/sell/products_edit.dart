@@ -879,7 +879,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 14,
+                              fontSize: 16,
                             ),
                           ),
                         ),
@@ -905,7 +905,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                     darkMode)),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
                                 color: ChimeColors.getGreen300(),
                               ),
@@ -921,13 +921,13 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -946,7 +946,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                   ChimeColors.getGreen200()),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(8),
                                 side: BorderSide.none,
                               ))),
                           child: Padding(
@@ -959,7 +959,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                               ),
                             ),
                           ),

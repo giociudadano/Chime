@@ -183,7 +183,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
-                            fontSize: 15,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -236,7 +236,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +255,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                                 height: 1,
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           Text(
                             widget.places[key]["placeTagline"] ?? '',
                             maxLines: 2,
@@ -265,9 +265,9 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 13,
-                                letterSpacing: -0.3,
-                                height: 0.75,
+                                fontSize: 14,
+                                letterSpacing: -0.3, //-0.3
+                                height: 1.2, //0.75
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ],
@@ -275,7 +275,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 12),
               ],
             ),
           ),

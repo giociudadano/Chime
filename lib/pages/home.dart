@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         backgroundColor: Theme.of(context).colorScheme.surface,
                         foregroundImage: NetworkImage(widget.profilePictureURL),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       if (user['displayName'] != null)
                         Text(
                           user['displayName'],
@@ -277,22 +277,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 FontVariation('wght', 400),
                               ],
                               fontSize: 14,
-                              height: 0.85,
+                              height: 1,
                               letterSpacing: -0.3),
                         ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 28),
                       Row(
                         children: [
                           Expanded(
                             child: Card(
-                                color: Colors.white,
+                                color: MaterialColors.getSurfaceContainerLowest(darkMode),
                                 shape: RoundedRectangleBorder(
                                       side: BorderSide(
                                         color: ChimeColors.getGreen800(),
                                       ),
-                                      borderRadius: BorderRadius.circular(12.0)),
+                                      borderRadius: BorderRadius.circular(16.0)),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.all(16),
                                   child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               fontSize: 16,
                                               letterSpacing: -0.3),
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 8),
                                         Text(
                                           appMode == "Buy"
                                               ? "You can also sell food with Chime and start an online business. It only takes a few steps to get started."
@@ -327,7 +327,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               height: 1.1,
                                               letterSpacing: -0.3),
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 12),
                                         Row(
                                           children: [
                                             Expanded(
@@ -370,12 +370,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              10),
+                                                              8),
                                                       side: BorderSide.none,
                                                     ))),
                                                 child: Padding(
                                                   padding:
-                                                      const EdgeInsets.all(10),
+                                                      const EdgeInsets.all(8),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -385,11 +385,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         appMode == "Buy"
                                                             ? Icons.sell
                                                             : Icons.local_mall,
-                                                        size: 16,
+                                                        size: 20,
                                                         color: ChimeColors
                                                             .getGreen800(),
                                                       ),
-                                                      const SizedBox(width: 10),
+                                                      const SizedBox(width: 8),
                                                       Text(
                                                         appMode == "Buy"
                                                             ? "Start Selling"
@@ -403,7 +403,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                             FontVariation(
                                                                 'wght', 700),
                                                           ],
-                                                          fontSize: 14,
+                                                          fontSize: 16,
                                                         ),
                                                       ),
                                                     ],
@@ -438,23 +438,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   darkMode)),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
                               color: ChimeColors.getGreen300(),
                             ),
                           )),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.logout,
-                                size: 16,
+                                size: 20,
                                 color: ChimeColors.getGreen800(),
                               ),
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 8),
                               Text(
                                 "Logout",
                                 style: TextStyle(
@@ -463,7 +463,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 14,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],

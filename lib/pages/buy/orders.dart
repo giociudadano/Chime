@@ -125,7 +125,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                 filled: true,
                 fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
                 isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined, size: 16),
+                prefixIcon: const Icon(Icons.search_outlined, size: 20), //size: 16
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
@@ -134,14 +134,14 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                 ],
                 height: 1.2,
                 letterSpacing: -0.3,
-                fontSize: 14,
+                fontSize: 16, //14
               ),
             ),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SizedBox(
-                height: 30,
+                height: 32,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -153,7 +153,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
                             "Active",
                             style: TextStyle(
@@ -164,7 +164,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -181,7 +181,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
                             "Completed",
                             style: TextStyle(
@@ -192,7 +192,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -209,7 +209,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
                             "Cancelled",
                             style: TextStyle(
@@ -220,7 +220,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),

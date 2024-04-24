@@ -128,7 +128,7 @@ class _PlaceCardState extends State<PlaceCard> {
                                 fontVariations: const [
                                   FontVariation('wght', 800),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16, //14
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           ),
@@ -145,10 +145,10 @@ class _PlaceCardState extends State<PlaceCard> {
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 12,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis,
-                                height: 0.85,
+                                height: 1, //0.85
                               ),
                             ),
                           ),
