@@ -224,10 +224,9 @@ class _ProductsPageState extends State<ProductsPage> {
                 ),
               ),
               style: const TextStyle(
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Plus Jakarta Sans',
                 fontVariations: [
-                  FontVariation('wght', 300),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 700),
                 ],
                 fontSize: 13,
               ),
@@ -253,10 +252,9 @@ class _ProductsPageState extends State<ProductsPage> {
                                   style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Bahnschrift',
+                                      fontFamily: 'Plus Jakarta Sans',
                                       fontVariations: const [
                                         FontVariation('wght', 700),
-                                        FontVariation('wdth', 100),
                                       ],
                                       fontSize: 16,
                                       letterSpacing: -0.5),
