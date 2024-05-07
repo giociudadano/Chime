@@ -95,46 +95,43 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
             TextField(
               focusNode: focus,
               controller: _searchBox,
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
                 contentPadding: EdgeInsets.zero,
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  letterSpacing: -0.3,
-                ),
                 filled: true,
-                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined, size: 20), //size: 16
+                fillColor: Theme.of(context).colorScheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                        width: 2, 
+                        color: Theme.of(context).colorScheme.secondary,
+                    ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                      width: 2, 
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      // style: BorderStyle.none,
+                  ),
+                ),
+                hintText: "Search for orders",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
                 fontVariations: [
                   FontVariation('wght', 400),
                 ],
-                height: 1.2,
-                letterSpacing: -0.3,
-                fontSize: 16, //14
+                fontSize: 16,
               ),
             ),
             SizedBox(height: 20),
@@ -149,8 +146,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -158,8 +155,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             "Active",
                             style: TextStyle(
                                 color: tabController.index == 0
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -177,8 +174,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -186,8 +183,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             "Completed",
                             style: TextStyle(
                                 color: tabController.index == 1
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -205,8 +202,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.onErrorContainer
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -214,8 +211,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             "Cancelled",
                             style: TextStyle(
                                 color: tabController.index == 2
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    ? Theme.of(context).colorScheme.errorContainer
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -248,7 +245,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         Text(
                           "No active orders",
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
                               FontVariation('wght', 400),
@@ -343,6 +340,9 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                height: 64,
+                                child: Center(child: Text("This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -392,6 +392,9 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                height: 64,
+                                child: Center(child: Text("This is the end of the list!"))),
                             ],
                           ),
                         ),

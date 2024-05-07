@@ -807,9 +807,36 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                     child: AbsorbPointer(
                       absorbing: widget.order['status'] != "Unread",
                       child: ElevatedButton(
-                        onPressed: () {
-                          setOrderStatus("Cancelled");
-                        },
+                        onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Cancel this order'),
+                                  content: const Text('After cancelling, the order will no longer be processed. Please contact the seller to request applicable refunds.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                  
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setOrderStatus("Cancelled");
+                                        Navigator.pop(context, 'OK');
+                                        final snackBar = SnackBar(
+                                          content: const Text('Order has been cancelled.'),
+                                        );
+
+                                        // Find the ScaffoldMessenger in the widget tree
+                                        // and use it to show a SnackBar.
+                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      } ,
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ),
                         style: ButtonStyle(
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
@@ -836,7 +863,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 15,
+                              fontSize: 14,
                             ),
                           ),
                         ),

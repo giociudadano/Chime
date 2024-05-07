@@ -137,14 +137,12 @@ class _CartItemCardState extends State<CartItemCard> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     if (widget.isVisible) {
       return Card(
-        color: MaterialColors.getSurfaceContainerLowest(darkMode),
+        color:  Theme.of(context).colorScheme.surfaceVariant,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: MaterialColors.getSurfaceContainerHighest(darkMode),
-          ),
-          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide.none,
+          borderRadius: BorderRadius.circular(12.0),
         ),
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
         child: Padding(
@@ -164,9 +162,36 @@ class _CartItemCardState extends State<CartItemCard> {
                       size: 18,
                       color: Theme.of(context).colorScheme.outline,
                     ),
-                    onPressed: () {
-                      removeProductFromCart();
-                    },
+                    onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Remove this item'),
+                                  content: const Text('You can add it again later if you change your mind.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                  
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        removeProductFromCart();
+                                        Navigator.pop(context, 'OK');
+                                        final snackBar = SnackBar(
+                                          content: const Text('Item has been removed from cart.'),
+                                        );
+
+                                        // Find the ScaffoldMessenger in the widget tree
+                                        // and use it to show a SnackBar.
+                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        } ,
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ),
                   ),
                 ),
               ),
@@ -208,7 +233,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                     child: Icon(Icons.local_mall_outlined,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .outlineVariant),
+                                            .onSurfaceVariant),
                                   ),
                                   fadeInCurve: Curves.easeIn,
                                   fadeOutCurve: Curves.easeOut,
@@ -229,24 +254,23 @@ class _CartItemCardState extends State<CartItemCard> {
                           maxLines: 2,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Plus Jakarta Sans',
+                            fontFamily: 'Manrope',
                             fontVariations: const [
-                              FontVariation('wght', 700),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
+                            fontSize: 16,
                             letterSpacing: -0.3,
                           ),
                         ),
                         Text(
                           '₱${widget.item['price']}',
                           style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color:  Theme.of(context).colorScheme.primary,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 14,
-                              height: 0.85,
+                              fontSize: 16,
                               letterSpacing: -0.3),
                         ),
                         if (widget.item['variant'] != null)
@@ -255,7 +279,7 @@ class _CartItemCardState extends State<CartItemCard> {
                               child: Text(
                                 "Variant: ${widget.item['variant']}",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                   fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
@@ -363,7 +387,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .outline,
-                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontFamily: 'Manrope',
                                           fontVariations: const [
                                             FontVariation('wght', 700),
                                           ],

@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                         AppLocalizations.of(context)!.email,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
                               FontVariation('wght', 350),
                               FontVariation('wdth', 100),
@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
+                          fontFamily: 'Source Sans 3',
                           fontVariations: [
                             FontVariation('wght', 300),
                             FontVariation('wdth', 100),
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                         AppLocalizations.of(context)!.password,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
                               FontVariation('wght', 350),
                               FontVariation('wdth', 100),
@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
+                          fontFamily: 'Source Sans 3',
                           fontVariations: [
                             FontVariation('wght', 300),
                             FontVariation('wdth', 100),
@@ -313,10 +313,9 @@ class _LoginPageState extends State<LoginPage> {
                             decoration: TextDecoration.underline,
                             decorationColor:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
                               FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
                             ],
                             fontSize: 14),
                       ),

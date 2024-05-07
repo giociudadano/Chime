@@ -200,21 +200,21 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Plus Jakarta Sans',
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
                             fontSize: 12,
                             letterSpacing: -0.3,
-                            height: 0.85,
+                            height: 1,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
                     Text(
                       '₱${widget.product['productPrice']}',
                       style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.primary,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],

@@ -139,7 +139,7 @@ class _CartPageState extends State<CartPage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -155,7 +155,7 @@ class _CartPageState extends State<CartPage> {
               "My Cart",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
@@ -187,25 +187,30 @@ class _CartPageState extends State<CartPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Theme.of(context).colorScheme.outline,
-                    size: 40,
-                  ),
-                  const SizedBox(height: 10),
+                  // Icon(
+                  //   Icons.shopping_cart_outlined,
+                  //   color: Theme.of(context).colorScheme.outline,
+                  //   size: 40,
+                  // ),
+                  const SizedBox(
+                            height: 240,
+                            width: 240,
+                            child: Image(image: AssetImage('lib/assets/images/Empty.png')),
+                          ),
+                          const SizedBox(height: 20),
                   Text(
-                    "You have an empty cart. \n Why not try adding a product?",
+                    "You have an empty cart. \n Check out the stores and order some food!",
                     maxLines: 2,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 400),
                         ],
-                        fontSize: 14,
-                        letterSpacing: -0.3,
-                        height: 0.85,
+                        fontSize: 16,
+                        letterSpacing: -0.1,
+                        height: 1.1,
                         overflow: TextOverflow.ellipsis),
                   ),
                 ],

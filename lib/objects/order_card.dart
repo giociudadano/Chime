@@ -92,7 +92,7 @@ class _OrderCardState extends State<OrderCard> {
                       : widget.order['storeName'],
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
@@ -119,7 +119,7 @@ class _OrderCardState extends State<OrderCard> {
               textAlign: TextAlign.right,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
-                fontFamily: 'Plus Jakarta Sans',
+                fontFamily: 'Manrope',
                 fontVariations: const [
                   FontVariation('wght', 700),
                 ],
@@ -136,7 +136,7 @@ class _OrderCardState extends State<OrderCard> {
                 width: 24,
                 child: Checkbox(
                   checkColor: Colors.white,
-                  activeColor: ChimeColors.getGreen800(),
+                  activeColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(2.0),
                   ),
@@ -162,13 +162,13 @@ class _OrderCardState extends State<OrderCard> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: ChimeColors.getGreen800(),
+                    color: Theme.of(context).colorScheme.primary,
                     fontFamily: 'Product Sans 3',
                     fontVariations: const [
                       FontVariation('wght', 400),
                     ],
                     fontSize: 14,
-                    letterSpacing: -0.3,
+
                   ),
                 ),
               )
@@ -176,7 +176,7 @@ class _OrderCardState extends State<OrderCard> {
           if (widget.adminControls) const SizedBox(height: 10),
           if (!widget.adminControls)
             Row(children: [
-              Icon(Icons.book_outlined,
+              Icon(Icons.update,
                   size: 20, color: Theme.of(context).colorScheme.outline),
               const SizedBox(width: 5),
               Expanded(
@@ -191,34 +191,33 @@ class _OrderCardState extends State<OrderCard> {
                       FontVariation('wght', 400),
                     ],
                     fontSize: 14,
-                    letterSpacing: -0.3,
                   ),
                 ),
               )
             ]),
           if (widget.adminControls)
-            Row(children: [
-              Icon(Icons.tag,
-                  size: 20, color: Theme.of(context).colorScheme.outline),
-              const SizedBox(width: 5),
-              Expanded(
-                child: Text(
-                  widget.orderID,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Product Sans 3',
-                    fontVariations: const [
-                      FontVariation('wght', 400),
-                    ],
-                    fontSize: 14,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-              )
-            ]),
-          const SizedBox(height: 5),
+          //   Row(children: [
+          //     Icon(Icons.tag,
+          //         size: 20, color: Theme.of(context).colorScheme.outline),
+          //     const SizedBox(width: 5),
+          //     Expanded(
+          //       child: Text(
+          //         widget.orderID,
+          //         maxLines: 1,
+          //         overflow: TextOverflow.ellipsis,
+          //         style: TextStyle(
+          //           color: Theme.of(context).colorScheme.outline,
+          //           fontFamily: 'Product Sans 3',
+          //           fontVariations: const [
+          //             FontVariation('wght', 400),
+          //           ],
+          //           fontSize: 16,
+          //           letterSpacing: -0.3,
+          //         ),
+          //       ),
+          //     )
+          //   ]),
+          // const SizedBox(height: 5),
           Row(children: [
             Icon(Icons.pin_drop_outlined,
                 size: 20, color: Theme.of(context).colorScheme.outline),
@@ -258,25 +257,24 @@ class _OrderCardState extends State<OrderCard> {
                     FontVariation('wght', 400),
                   ],
                   fontSize: 14,
-                  letterSpacing: -0.3,
                 ),
               ),
             ]),
           if (!widget.adminControls)
             Row(children: [
               Icon(Icons.account_balance_wallet_outlined,
-                  size: 20, color: ChimeColors.getGreen800()),
+                  size: 20, color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 5),
               Text(
-                widget.order['isPaid'] ?? false == true ? 'Paid' : 'Unpaid',
+                widget.order['isPaid'] ?? false == true ? 'Paid' : 'To be Paid',
                 style: TextStyle(
-                  color: ChimeColors.getGreen800(),
+                  color: Theme.of(context).colorScheme.primary,
                   fontFamily: 'Product Sans 3',
                   fontVariations: const [
                     FontVariation('wght', 400),
                   ],
                   fontSize: 14,
-                  letterSpacing: -0.3,
+      
                 ),
               ),
             ]),
@@ -300,16 +298,15 @@ class _OrderCardState extends State<OrderCard> {
                   backgroundColor: MaterialStatePropertyAll(widget.adminControls
                       ? (widget.order['status'] == 'Received' ||
                               widget.order['status'] == 'Completed')
-                          ? ChimeColors.getGreen200()
+                          ? Theme.of(context).colorScheme.secondaryContainer
                           : widget.order['status'] == 'Cancelled'
-                              ? ChimeColors.getRed200()
-                              : MaterialColors.getSurfaceContainerLowest(
-                                  darkMode)
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.secondaryContainer
                       : widget.order['status'] == 'Received'
-                          ? MaterialColors.getSurfaceContainerLowest(darkMode)
+                          ? Theme.of(context).colorScheme.secondaryContainer
                           : widget.order['status'] == 'Cancelled'
-                              ? ChimeColors.getRed200()
-                              : ChimeColors.getGreen200()),
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.secondaryContainer),
                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: widget.adminControls
@@ -318,12 +315,12 @@ class _OrderCardState extends State<OrderCard> {
                                 widget.order['status'] == 'Cancelled')
                             ? BorderSide.none
                             : BorderSide(
-                                color: ChimeColors.getGreen300(),
+                                color: Theme.of(context).colorScheme.secondaryContainer,
                               )
                         : widget.order['status'] == 'Received'
-                            ? BorderSide(color: ChimeColors.getGreen200())
+                            ? BorderSide(color: Theme.of(context).colorScheme.secondaryContainer)
                             : widget.order['status'] == 'Cancelled'
-                                ? BorderSide(color: ChimeColors.getRed200())
+                                ? BorderSide(color: Theme.of(context).colorScheme.secondaryContainer)
                                 : BorderSide.none,
                   )),
                 ),
@@ -335,16 +332,16 @@ class _OrderCardState extends State<OrderCard> {
                       color: widget.adminControls
                           ? (widget.order['status'] == 'Received' ||
                                   widget.order['status'] == 'Completed')
-                              ? ChimeColors.getGreen800()
+                              ? Theme.of(context).colorScheme.onSecondaryContainer
                               : widget.order['status'] == 'Cancelled'
-                                  ? ChimeColors.getRed800()
-                                  : Theme.of(context).colorScheme.outline
+                                  ? Theme.of(context).colorScheme.onSecondaryContainer
+                                  : Theme.of(context).colorScheme.onSecondaryContainer
                           : widget.order['status'] == 'Received'
                               ? Theme.of(context).colorScheme.outline
                               : widget.order['status'] == 'Cancelled'
-                                  ? ChimeColors.getRed800()
-                                  : ChimeColors.getGreen800(),
-                      fontFamily: 'Plus Jakarta Sans',
+                                  ? Theme.of(context).colorScheme.onSecondaryContainer
+                                  : Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontFamily: 'Manrope',
                       fontVariations: const [
                         FontVariation('wght', 700),
                       ],
@@ -367,7 +364,7 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
@@ -378,8 +375,8 @@ class _OrderCardState extends State<OrderCard> {
                       child: Text(
                         "Prepare",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
@@ -403,7 +400,7 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
@@ -417,8 +414,8 @@ class _OrderCardState extends State<OrderCard> {
                             : "Ready for Delivery",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
@@ -443,7 +440,7 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
@@ -455,8 +452,8 @@ class _OrderCardState extends State<OrderCard> {
                         "Mark as Received",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
@@ -480,7 +477,7 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
@@ -492,8 +489,8 @@ class _OrderCardState extends State<OrderCard> {
                         "Mark as Complete",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],

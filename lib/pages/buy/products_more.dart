@@ -148,8 +148,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             Text(
                               "Options",
                               style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -171,17 +171,17 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                         "Variant",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.outline,
-                          fontFamily: 'Plus Jakarta Sans',
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
-                          fontSize: 14,
+                          fontSize: 16,
                           letterSpacing: -0.3,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 8),
                       SizedBox(
-                        height: 45,
+                        height: 48,
                         child: DropdownButtonFormField(
                           iconSize: 0,
                           isExpanded: true,
@@ -191,7 +191,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               borderSide: BorderSide(
-                                  width: 0.5,
+                                  width: 1,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .outline), //<-- SEE HERE
@@ -200,7 +200,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(10)),
                               borderSide: BorderSide(
-                                  width: 0.5,
+                                  width: 1,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .outline), //<-- SEE HERE
@@ -214,15 +214,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               child: Text(
                                 "${variants[index]['name']} (₱${variants[index]['price'].toString()})",
                                 style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
                                   ],
-                                  fontSize: 14,
-                                  height: 0.85,
+                                  fontSize: 16,
+                                  height: 1,
                                   letterSpacing: -0.3,
                                 ),
                               ),
@@ -246,11 +244,11 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               "Quantity",
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.outline,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                                 letterSpacing: -0.3,
                               ),
                             ),
@@ -356,11 +354,11 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontFamily: 'Manrope',
                                       fontVariations: const [
                                         FontVariation('wght', 700),
                                       ],
-                                      fontSize: 14,
+                                      fontSize: 16,
                                       height: 1,
                                       letterSpacing: -0.3,
                                     ),
@@ -376,9 +374,9 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.3,
-                                    height: 1.3,
+                                    height: 1,
                                   ),
                                 ),
                               ]),
@@ -419,7 +417,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                       "Pre-order",
                                       style: TextStyle(
                                         color: ChimeColors.getGreen800(),
-                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontFamily: 'Manrope',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
@@ -438,10 +436,10 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStatePropertyAll(
-                                      ChimeColors.getGreen200()),
+                                      Theme.of(context).colorScheme.primary),
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                     side: BorderSide.none,
                                   ))),
                               child: Padding(
@@ -449,8 +447,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                 child: Text(
                                   "Add to Cart",
                                   style: TextStyle(
-                                    color: ChimeColors.getGreen800(),
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
@@ -498,17 +496,17 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
             child: Ink(
               decoration: ShapeDecoration(
-                color: Colors.black.withOpacity(0.3),
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.outline),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -520,13 +518,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Ink(
                 decoration: ShapeDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
                   shape: const CircleBorder(),
                 ),
                 child: Stack(children: [
                   IconButton(
-                    icon: const Icon(Icons.shopping_cart_outlined,
-                        color: Colors.white),
+                    icon: Icon(Icons.shopping_cart_outlined,
+                        color: Theme.of(context).colorScheme.primary),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const CartPage()));
@@ -544,10 +542,9 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             cartItems.toString(),
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onPrimary,
-                                fontFamily: 'Bahnschrift',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
-                                  FontVariation('wdth', 100),
                                 ],
                                 fontSize: 14,
                                 letterSpacing: -0.3),
@@ -557,7 +554,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
               ),
             ),
           ]),
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: SizedBox(
         height: 50,
         child: FittedBox(
@@ -576,14 +573,14 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                       : AppLocalizations.of(context)!.addToCart,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
                     fontSize: 16,
                     letterSpacing: -0.3,
                   )),
-              backgroundColor: ChimeColors.getGreen800()),
+              backgroundColor: Theme.of(context).colorScheme.primary),
         ),
       ),
       body: ListView(
@@ -631,7 +628,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -646,14 +643,14 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               maxLines: 1,
                               style: TextStyle(
                                   color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                      Theme.of(context).colorScheme.primary,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 20,
                                   letterSpacing: -0.3,
-                                  height: 0.85,
+                                  height: 1,
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ],
@@ -664,7 +661,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Column(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   IconButton(
@@ -677,7 +674,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                       size: 24,
                                       color:
                                           widget.product['isFavorited'] ?? false
-                                              ? Colors.redAccent
+                                              ? Theme.of(context).colorScheme.error
                                               : Theme.of(context)
                                                   .colorScheme
                                                   .onSurfaceVariant,
@@ -688,7 +685,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                               false);
                                     },
                                   ),
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 16),
                                   Text(
                                     "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
                                     style: TextStyle(
@@ -701,78 +698,78 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                       ],
                                       fontSize: 16,
                                       letterSpacing: -0.3,
-                                      height: 0.7,
+                                      height: 1,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: IconButton(
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  Icons.ios_share,
-                                  size: 24,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
-                                onPressed: () {
-                                  //TODO: Add functionality to share product.
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: IconButton(
-                                constraints: const BoxConstraints(),
-                                padding: EdgeInsets.zero,
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  size: 24,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                ),
-                                onPressed: () {
-                                  //TODO: Add functionality to do additional options to the product.
-                                },
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 15),
+                            //   child: IconButton(
+                            //     constraints: const BoxConstraints(),
+                            //     padding: EdgeInsets.zero,
+                            //     icon: Icon(
+                            //       Icons.ios_share,
+                            //       size: 24,
+                            //       color: Theme.of(context)
+                            //           .colorScheme
+                            //           .onSurfaceVariant,
+                            //     ),
+                            //     onPressed: () {
+                            //       //TODO: Add functionality to share product.
+                            //     },
+                            //   ),
+                            // ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(left: 15),
+                            //   child: IconButton(
+                            //     constraints: const BoxConstraints(),
+                            //     padding: EdgeInsets.zero,
+                            //     icon: Icon(
+                            //       Icons.more_vert,
+                            //       size: 24,
+                            //       color: Theme.of(context)
+                            //           .colorScheme
+                            //           .onSurfaceVariant,
+                            //     ),
+                            //     onPressed: () {
+                            //       //TODO: Add functionality to do additional options to the product.
+                            //     },
+                            //   ),
+                            // ),
                           ])
                     ]),
                 const SizedBox(height: 20),
 
-                // If accepting pre-orders, display pre-orders available.
-                if (widget.product['isAcceptPreorders'] ?? false)
-                  Column(children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.schedule,
-                          size: 16,
-                          color: ChimeColors.getGreen800(),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          "Pre-Orders Available",
-                          style: TextStyle(
-                            color: ChimeColors.getGreen800(),
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ]),
+                // // If accepting pre-orders, display pre-orders available.
+                // if (widget.product['isAcceptPreorders'] ?? false)
+                //   Column(children: [
+                //     Row(
+                //       children: [
+                //         Icon(
+                //           Icons.schedule,
+                //           size: 16,
+                //           color: ChimeColors.getGreen800(),
+                //         ),
+                //         const SizedBox(width: 10),
+                //         Text(
+                //           "Pre-Orders Available",
+                //           style: TextStyle(
+                //             color: ChimeColors.getGreen800(),
+                //             fontFamily: 'Source Sans 3',
+                //             fontVariations: const [
+                //               FontVariation('wght', 400),
+                //             ],
+                //             fontSize: 14,
+                //             letterSpacing: -0.3,
+                //             height: 1,
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //     const SizedBox(height: 10),
+                //   ]),
 
                 // If the product is limited, displays the number of stocks remaining.
                 if (widget.product['isLimited'] ?? false)
@@ -822,29 +819,29 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             "Description",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Source Sans 3',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
-                                FontVariation('wght', 400),
+                                FontVariation('wght', 700),
                               ],
-                              fontSize: 14,
+                              fontSize: 16,
                               letterSpacing: -0.3,
                               height: 1,
                             ),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           Text(
                             widget.product['productDesc'],
                             style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
-                                  .onSurfaceVariant,
+                                  .onSurface,
                               fontFamily: 'Source Sans 3',
                               fontVariations: const [
                                 FontVariation('wght', 400),
                               ],
-                              fontSize: 14,
-                              letterSpacing: -0.3,
-                              height: 1,
+                              fontSize: 16,
+                              letterSpacing: -0.1,
+                              height: 1.2,
                             ),
                           ),
                         ]),
@@ -853,7 +850,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                 if (widget.product['variants'] != null &&
                     widget.product['variants'].isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -861,16 +858,16 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             "Variants",
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.outline,
-                              fontFamily: 'Source Sans 3',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
-                                FontVariation('wght', 400),
+                                FontVariation('wght', 700),
                               ],
-                              fontSize: 14,
+                              fontSize: 16,
                               letterSpacing: -0.3,
                               height: 1,
                             ),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           InlineChoice<int>.single(
                             clearable: false,
                             value: selectedVariantIndex,
@@ -894,7 +891,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.3,
                                     height: 1,
                                   ),
@@ -911,15 +908,12 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                 SizedBox(height: 10),
                 Card(
                   elevation: 0,
-                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color:
-                            MaterialColors.getSurfaceContainerHighest(darkMode),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0)),
+                      side: BorderSide.none,
+                      borderRadius: BorderRadius.circular(12.0)),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -939,9 +933,10 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                 errorWidget: (context, url, error) => Padding(
                                   padding: const EdgeInsets.all(20.0),
                                   child: Icon(Icons.storefront_outlined,
+                                      size: 24,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .outlineVariant),
+                                          .onSurfaceVariant),
                                 ),
                                 fadeInCurve: Curves.easeIn,
                                 fadeOutCurve: Curves.easeOut,
@@ -949,7 +944,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -964,7 +959,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                       FontVariation('wght', 400),
                                     ],
                                     fontSize: 14,
-                                    letterSpacing: -0.3,
+                                    letterSpacing: -0.1,
                                     height: 1,
                                     overflow: TextOverflow.ellipsis),
                               ),
@@ -972,8 +967,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                 widget.place['placeName'],
                                 maxLines: 1,
                                 style: TextStyle(
-                                    color: ChimeColors.getGreen800(),
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],

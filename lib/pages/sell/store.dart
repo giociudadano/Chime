@@ -126,7 +126,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 150, width: 150, child: Placeholder()),
+                const SizedBox(
+                  height: 240,
+                  width: 240,
+                  child: Image(image: AssetImage('lib/assets/images/Chime.png')),
+                ),
               const SizedBox(height: 20),
               Text(
                 "Meow-hoo!",

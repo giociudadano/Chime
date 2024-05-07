@@ -18,9 +18,9 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 150,
-              width: 150,
-              child: Placeholder(),
+              height: 240,
+              width: 240,
+              child: Image(image: AssetImage('lib/assets/images/Chime.png')),
             ),
             const SizedBox(height: 20),
             Text(
@@ -31,8 +31,8 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
-                  color: ChimeColors.getGreen800(),
-                  fontSize: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 24,
                   letterSpacing: -0.3),
             ),
             Text(
@@ -43,8 +43,8 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                   fontVariations: const [
                     FontVariation('wght', 400),
                   ],
-                  color: Theme.of(context).colorScheme.outline,
-                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
                   letterSpacing: -0.3),
             ),
             const SizedBox(height: 30),
@@ -60,25 +60,24 @@ class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor: MaterialStatePropertyAll(
-                          MaterialColors.getSurfaceContainerLowest(darkMode)),
+                          Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        side: BorderSide(
-                          color: ChimeColors.getGreen300(),
-                        ),
+                        side: BorderSide.none,
                       )),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        "Home",
+                        "Back to Home",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
-                          fontSize: 15,
+                          fontSize: 14,
+                          letterSpacing: -0.3,
                         ),
                       ),
                     ),

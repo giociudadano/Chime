@@ -46,15 +46,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           content: Text(
               "There was an error logging out your account. Please try again later.",
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
       );
       return;
@@ -202,7 +201,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(0))),
@@ -237,7 +236,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
@@ -251,7 +250,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       const SizedBox(height: 30),
                       CircleAvatar(
                         radius: 30,
-                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                         foregroundImage: NetworkImage(widget.profilePictureURL),
                       ),
                       const SizedBox(height: 8),
@@ -260,7 +259,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           user['displayName'],
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Plus Jakarta Sans',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -278,17 +277,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               ],
                               fontSize: 14,
                               height: 1,
-                              letterSpacing: -0.3),
+                              letterSpacing: -0.1),
                         ),
                       const SizedBox(height: 28),
                       Row(
                         children: [
                           Expanded(
                             child: Card(
-                                color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                                color: Theme.of(context).colorScheme.surface,
                                 shape: RoundedRectangleBorder(
                                       side: BorderSide(
-                                        color: ChimeColors.getGreen800(),
+                                        color: Theme.of(context).colorScheme.outlineVariant,
                                       ),
                                       borderRadius: BorderRadius.circular(16.0)),
                                 child: Padding(
@@ -302,8 +301,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               ? "Want to earn?"
                                               : "Want to order food?",
                                           style: TextStyle(
-                                              color: ChimeColors.getGreen800(),
-                                              fontFamily: 'Plus Jakarta Sans',
+                                              color: Theme.of(context).colorScheme.primary,
+                                              fontFamily: 'Manrope',
                                               fontVariations: const [
                                                 FontVariation('wght', 700)
                                               ],
@@ -364,8 +363,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                 style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
-                                                            ChimeColors
-                                                                .getGreen200()),
+                                                            Theme.of(context).colorScheme.primary),
                                                     shape: MaterialStatePropertyAll(
                                                         RoundedRectangleBorder(
                                                       borderRadius:
@@ -386,8 +384,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                             ? Icons.sell
                                                             : Icons.local_mall,
                                                         size: 20,
-                                                        color: ChimeColors
-                                                            .getGreen800(),
+                                                        color: Theme.of(context).colorScheme.onPrimary,
                                                       ),
                                                       const SizedBox(width: 8),
                                                       Text(
@@ -395,10 +392,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                             ? "Start Selling"
                                                             : "Start Buying",
                                                         style: TextStyle(
-                                                          color: ChimeColors
-                                                              .getGreen800(),
+                                                          color: Theme.of(context).colorScheme.onPrimary,
                                                           fontFamily:
-                                                              'Plus Jakarta Sans',
+                                                              'Manrope',
                                                           fontVariations: const [
                                                             FontVariation(
                                                                 'wght', 700),
@@ -434,13 +430,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         style: ButtonStyle(
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
-                              MaterialColors.getSurfaceContainerLowest(
-                                  darkMode)),
+                              Theme.of(context).colorScheme.surface),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
-                              color: ChimeColors.getGreen300(),
+                              color: Theme.of(context).colorScheme.secondary,
+                              width: 2,
                             ),
                           )),
                         ),
@@ -451,15 +447,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             children: [
                               Icon(
                                 Icons.logout,
-                                size: 20,
-                                color: ChimeColors.getGreen800(),
+                                size: 24,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 "Logout",
                                 style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context).colorScheme.secondary,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -489,10 +485,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       child: Card(
                         elevation: 0,
                         color:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 8),
+                              horizontal: 24, vertical: 8),
                           child: Column(
                             children: [
                               Icon(Icons.local_mall,
@@ -502,7 +498,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               Text(
                                 (appMode == 'Buy') ? "Places" : "Store",
                                 style: const TextStyle(
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
@@ -519,19 +515,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: const EdgeInsets.only(left: 20),
                       child: Card(
                         elevation: 0,
-                        color: ChimeColors.getGreen200(),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 8),
+                              horizontal: 24, vertical: 8),
                           child: Column(
                             children: [
                               Icon(Icons.local_mall,
-                                  size: 24, color: ChimeColors.getGreen800()),
+                                  size: 24, color: Theme.of(context).colorScheme.onSecondaryContainer),
                               Text(
                                 (appMode == 'Buy') ? "Places" : "Store",
                                 style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -548,10 +544,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 BottomNavigationBarItem(
                     icon: Card(
                       elevation: 0,
-                      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                      color: Theme.of(context).colorScheme.surface,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 8),
+                            horizontal: 20, vertical: 8),
                         child: Column(
                           children: [
                             Icon(
@@ -563,7 +559,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             Text(
                               (appMode == 'Buy') ? "Foods" : "Categories",
                               style: const TextStyle(
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: [
                                   FontVariation('wght', 700),
                                 ],
@@ -577,10 +573,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     ),
                     activeIcon: Card(
                       elevation: 0,
-                      color: ChimeColors.getGreen200(),
+                      color: Theme.of(context).colorScheme.secondaryContainer,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 8),
+                            horizontal: 24, vertical: 8),
                         child: Column(
                           children: [
                             Icon(
@@ -588,12 +584,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     ? Icons.fastfood
                                     : Icons.category,
                                 size: 24,
-                                color: ChimeColors.getGreen800()),
+                                color: Theme.of(context).colorScheme.onSecondaryContainer),
                             Text(
                               (appMode == 'Buy') ? "Foods" : "Categories",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -612,10 +608,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       child: Card(
                         elevation: 0,
                         color:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 8),
+                              horizontal: 24, vertical: 8),
                           child: Column(
                             children: [
                               Icon(Icons.receipt,
@@ -625,7 +621,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               const Text(
                                 "Orders",
                                 style: TextStyle(
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
@@ -642,19 +638,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       padding: const EdgeInsets.only(right: 20),
                       child: Card(
                         elevation: 0,
-                        color: ChimeColors.getGreen200(),
+                        color: Theme.of(context).colorScheme.secondaryContainer,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 25, vertical: 8),
+                              horizontal: 20, vertical: 8),
                           child: Column(
                             children: [
                               Icon(Icons.receipt,
-                                  size: 24, color: ChimeColors.getGreen800()),
+                                  size: 24, color: Theme.of(context).colorScheme.onSecondaryContainer),
                               Text(
                                 "Orders",
                                 style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -691,7 +687,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 IconButton(
                     icon: CircleAvatar(
                       radius: 20,
-                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                       foregroundImage: NetworkImage(widget.profilePictureURL),
                     ),
                     onPressed: () {

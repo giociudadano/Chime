@@ -60,14 +60,14 @@ class _PlaceCardState extends State<PlaceCard> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+      color: Theme.of(context).colorScheme.surfaceVariant,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: MaterialColors.getSurfaceContainerHighest(darkMode),
-        ),
-        borderRadius: BorderRadius.circular(10.0),
+        // side: BorderSide(
+        //   color: Theme.of(context).colorScheme.outline,
+        // ),
+        borderRadius: BorderRadius.circular(12.0),
       ),
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
       child: InkWell(
@@ -103,7 +103,7 @@ class _PlaceCardState extends State<PlaceCard> {
                           padding: const EdgeInsets.all(20.0),
                           child: Icon(Icons.storefront_outlined,
                               color:
-                                  Theme.of(context).colorScheme.outlineVariant),
+                                  Theme.of(context).colorScheme.outline),
                         ),
                         fadeInCurve: Curves.easeIn,
                         fadeOutCurve: Curves.easeOut,
@@ -123,13 +123,13 @@ class _PlaceCardState extends State<PlaceCard> {
                             widget.place['placeName'],
                             maxLines: 1,
                             style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context).colorScheme.primary,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
-                                  FontVariation('wght', 800),
+                                  FontVariation('wght', 700),
                                 ],
-                                fontSize: 16, //14
-                                letterSpacing: -0.3,
+                                fontSize: 16,
+                                letterSpacing: -0.3,//14,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ),
@@ -140,13 +140,13 @@ class _PlaceCardState extends State<PlaceCard> {
                               widget.place['placeTagline'],
                               maxLines: 2,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
                                 fontSize: 14,
-                                letterSpacing: -0.3,
+                                letterSpacing: -0.1,
                                 overflow: TextOverflow.ellipsis,
                                 height: 1, //0.85
                               ),
@@ -164,9 +164,9 @@ class _PlaceCardState extends State<PlaceCard> {
                       widget.place['isFavorited'] ?? false
                           ? Icons.favorite_outlined
                           : Icons.favorite_outline,
-                      size: 20,
+                      size: 24,
                       color: widget.place['isFavorited'] ?? false
-                          ? Colors.redAccent
+                          ? Theme.of(context).colorScheme.error
                           : Theme.of(context).colorScheme.outline,
                     ),
                     onPressed: () {

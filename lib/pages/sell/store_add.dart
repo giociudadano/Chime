@@ -95,7 +95,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
           child: Padding(
             padding: const EdgeInsets.only(right: 40),
             child: Text(
-              "New Store",
+              "Create a Store",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontFamily: 'Plus Jakarta Sans',

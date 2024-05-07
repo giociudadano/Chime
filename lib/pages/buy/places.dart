@@ -232,9 +232,9 @@ class _PlacesPageState extends State<PlacesPage> {
           child: Text(
             "Scan a Place",
             style: TextStyle(
-                fontFamily: 'Plus Jakarta Sans',
+                fontFamily: 'Manrope',
                 fontVariations: [
-                  FontVariation('wght', 800),
+                  FontVariation('wght', 700),
                 ],
                 fontSize: 20,
                 letterSpacing: -0.3),
@@ -287,38 +287,35 @@ class _PlacesPageState extends State<PlacesPage> {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: 150,
-                    width: 150,
-                    child: Image.network(
-                        "https://em-content.zobj.net/source/microsoft-teams/363/rabbit-face_1f430.png"),
+                  const SizedBox(
+                    height: 240,
+                    width: 240,
+                    child: Image(image: AssetImage('lib/assets/images/Chime.png')),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   Text(
                     "This place does not exist",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Plus Jakarta Sans',
                         fontVariations: const [
-                          FontVariation('wght', 800),
+                          FontVariation('wght', 700),
                         ],
                         color: Theme.of(context).colorScheme.primary,
-                        fontSize: 20,
-                        letterSpacing: -0.3),
+                        fontSize: 20,),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     "Sorry, we couldn't find the place you were looking for. Please try scanning the code again.",
                     maxLines: 3,
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 400),
                         ],
-                        fontSize: 13,
-                        letterSpacing: -0.3,
-                        height: 1.1,
+                        fontSize: 16,
+                        height: 1,
                         overflow: TextOverflow.ellipsis),
                   ),
                 ],
@@ -334,7 +331,7 @@ class _PlacesPageState extends State<PlacesPage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       floatingActionButton: SizedBox(
-        height: 50,
+        height: 56,
         child: FittedBox(
           child: FloatingActionButton(
               onPressed: () async {
@@ -347,58 +344,55 @@ class _PlacesPageState extends State<PlacesPage> {
                 }
               },
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              backgroundColor: ChimeColors.getGreen800(),
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: Icon(
                 Icons.qr_code_scanner,
                 color: Theme.of(context).colorScheme.onPrimary,
-                size: 24,
+                size: 28,
               )),
         ),
       ),
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: TextField(
               focusNode: focus,
               controller: _searchBox,
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
                 contentPadding: EdgeInsets.zero,
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  letterSpacing: -0.3,
-                ),
                 filled: true,
-                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined, size: 16),
+                fillColor: Theme.of(context).colorScheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                        width: 2, 
+                        color: Theme.of(context).colorScheme.secondary,
+                    ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                      width: 2, 
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      // style: BorderStyle.none,
+                  ),
+                ),
+                hintText: "Search for a place",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
                 fontVariations: [
                   FontVariation('wght', 400),
                 ],
-                height: 1.2,
-                letterSpacing: -0.3,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
           ),
@@ -418,16 +412,16 @@ class _PlacesPageState extends State<PlacesPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: Text(
-                              "Your favorites",
+                              "Followed Stores",
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
-                                  letterSpacing: 0),
+                                  letterSpacing: -0.5),
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -450,7 +444,7 @@ class _PlacesPageState extends State<PlacesPage> {
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 0),
                           ),
-                          const SizedBox(height: 20),
+
                         ]),
 
                   // If there are no places being searched, display the list of popular places.
@@ -465,19 +459,19 @@ class _PlacesPageState extends State<PlacesPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: Text(
                               _searchBox.text.isEmpty
-                                  ? "Popular places"
+                                  ? "What's Popular"
                                   : 'Popular places named "${_searchBox.text.toLowerCase()}"',
                               maxLines: 2,
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
-                                  letterSpacing: 0,
-                                  height: 1.2,
+                                  letterSpacing: -0.5,
+                                  height: 1,
                                   overflow: TextOverflow.ellipsis),
                             ),
                           ),
@@ -489,11 +483,10 @@ class _PlacesPageState extends State<PlacesPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 40),
-                          SizedBox(
-                            height: 150,
-                            width: 150,
-                            child: Image.network(
-                                "https://em-content.zobj.net/source/microsoft-teams/363/rabbit-face_1f430.png"),
+                          const SizedBox(
+                            height: 240,
+                            width: 240,
+                            child: Image(image: AssetImage('lib/assets/images/Empty.png')),
                           ),
                           const SizedBox(height: 20),
                           Padding(
@@ -501,7 +494,7 @@ class _PlacesPageState extends State<PlacesPage> {
                             child: Text.rich(
                               const TextSpan(children: [
                                 TextSpan(
-                                    text: 'Search for place(s) not found. ',
+                                    text: 'Nothing found. ',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(
@@ -516,9 +509,8 @@ class _PlacesPageState extends State<PlacesPage> {
                                   ],
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
-                                  fontSize: 15,
-                                  height: 1.1,
-                                  letterSpacing: -0.3),
+                                  fontSize: 16,
+                                  height: 1),
                             ),
                           )
                         ]),

@@ -21,6 +21,7 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  bool showAddressCard = false;
   // Form variables.
   String? deliveryMethod;
   String? paymentMethod;
@@ -253,7 +254,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -268,7 +269,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Text(
               AppLocalizations.of(context)!.checkout,
               style: const TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: [
                     FontVariation('wght', 700),
                   ],
@@ -288,7 +289,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   "Delivery",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
@@ -304,13 +305,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     child: Card(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: MaterialColors.getSurfaceContainerHighest(
-                              darkMode),
+                          color: Theme.of(context).colorScheme.outlineVariant,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       elevation: 0,
-                      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                      color: Theme.of(context).colorScheme.surface,
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Row(
@@ -321,6 +321,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               onChanged: (String? value) {
                                 setState(() {
                                   deliveryMethod = value;
+                                  showAddressCard = true;
                                 });
                               },
                             ),
@@ -332,10 +333,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   "Deliver to my address",
                                   maxLines: 1,
                                   style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                      fontFamily: 'Plus Jakarta Sans',
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                      fontFamily: 'Manrope',
                                       fontVariations: const [
                                         FontVariation('wght', 700),
                                       ],
@@ -346,12 +345,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Text(
                                   deliveryPrice == null
-                                      ? "Unknown amount"
+                                      ? "FREE"
                                       : "₱$deliveryPrice",
                                   maxLines: 1,
                                   style: TextStyle(
                                       color:
-                                          Theme.of(context).colorScheme.outline,
+                                          Theme.of(context).colorScheme.primary,
                                       fontFamily: 'Source Sans 3',
                                       fontVariations: const [
                                         FontVariation('wght', 400),
@@ -368,190 +367,154 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color:
-                          MaterialColors.getSurfaceContainerHighest(darkMode),
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 0,
-                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                if (context.mounted) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          CheckoutAddressesPage(
-                                              setSelectedAddressCallback:
-                                                  setSelectedAddress,
-                                              addAddressCallback: editAddress,
-                                              editAddressCallback:
-                                                  editAddress)));
-                                }
-                              },
-                              child: Card(
-                                elevation: 0,
-                                color: MaterialColors.getSurfaceContainerLowest(
-                                    darkMode),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        top: -3,
-                                        right: -3,
-                                        child: SizedBox(
-                                          height: 25,
-                                          width: 25,
-                                          child: IconButton(
-                                            padding: const EdgeInsets.all(0),
-                                            icon: Icon(
-                                              Icons.arrow_forward,
-                                              size: 18,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                            ),
-                                            onPressed: () {
-                                              if (context.mounted) {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CheckoutAddressesPage(
-                                                              setSelectedAddressCallback:
-                                                                  setSelectedAddress,
-                                                              addAddressCallback:
-                                                                  editAddress,
-                                                              editAddressCallback:
-                                                                  editAddress)),
-                                                );
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              selectedAddress == null ||
-                                                      addresses[
-                                                              selectedAddress] ==
-                                                          null
-                                                  ? "No address"
-                                                  : addresses[selectedAddress]
-                                                      ["name"],
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                                fontFamily: 'Plus Jakarta Sans',
-                                                fontVariations: const [
-                                                  FontVariation('wght', 700),
-                                                ],
-                                                fontSize: 14,
-                                                height: 1.4,
-                                                letterSpacing: -0.3,
+                Visibility(
+                  visible: showAddressCard,
+                  child: 
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color:
+                              Theme.of(context).colorScheme.outlineVariant,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      elevation: 0,
+                      color: Theme.of(context).colorScheme.surface,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    if (context.mounted) {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              CheckoutAddressesPage(
+                                                  setSelectedAddressCallback:
+                                                      setSelectedAddress,
+                                                  addAddressCallback: editAddress,
+                                                  editAddressCallback:
+                                                      editAddress)));
+                                    }
+                                  },
+                                  child: Card(
+                                    elevation: 0,
+                                    color: Theme.of(context).colorScheme.surface,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            top: -3,
+                                            right: -3,
+                                            child: SizedBox(
+                                              height: 25,
+                                              width: 25,
+                                              child: IconButton(
+                                                padding: const EdgeInsets.all(0),
+                                                icon: Icon(
+                                                  Icons.arrow_forward,
+                                                  size: 18,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                onPressed: () {
+                                                  if (context.mounted) {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CheckoutAddressesPage(
+                                                                  setSelectedAddressCallback:
+                                                                      setSelectedAddress,
+                                                                  addAddressCallback:
+                                                                      editAddress,
+                                                                  editAddressCallback:
+                                                                      editAddress)),
+                                                    );
+                                                  }
+                                                },
                                               ),
                                             ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: Text(
-                                                selectedAddress == null ||
-                                                        addresses[
-                                                                selectedAddress] ==
-                                                            null
-                                                    ? "This user has no address selected. To allow delivery, please add an address."
-                                                    : parseAddress(
-                                                        addresses[
-                                                                selectedAddress]
-                                                            ["addressLine"],
-                                                        addresses[
-                                                                selectedAddress]
-                                                            ["barangay"],
-                                                        addresses[
-                                                                selectedAddress]
-                                                            ["municipality"]),
-                                                maxLines: 3,
-                                                style: TextStyle(
+                                          ),
+                                          Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  selectedAddress == null ||
+                                                          addresses[
+                                                                  selectedAddress] ==
+                                                              null
+                                                      ? "No address"
+                                                      : addresses[selectedAddress]
+                                                          ["name"],
+                                                  maxLines: 1,
+                                                  style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
                                                         .onSurface,
-                                                    fontFamily: 'Source Sans 3',
+                                                    fontFamily: 'Manrope',
                                                     fontVariations: const [
-                                                      FontVariation(
-                                                          'wght', 400),
+                                                      FontVariation('wght', 700),
                                                     ],
                                                     fontSize: 14,
-                                                    height: 1,
+                                                    height: 1.4,
                                                     letterSpacing: -0.3,
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                            ),
-                                            // If there is an address, show phone number.
-                                            if (addresses[selectedAddress] !=
-                                                null)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child: Text(
-                                                  addresses[selectedAddress]
-                                                          ["phoneNumber"] ??
-                                                      'No Phone Number',
-                                                  maxLines: 1,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                      fontFamily:
-                                                          'Source Sans 3',
-                                                      fontVariations: const [
-                                                        FontVariation(
-                                                            'wght', 400),
-                                                      ],
-                                                      fontSize: 14,
-                                                      letterSpacing: -0.3,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
+                                                  ),
                                                 ),
-                                              ),
-                                            // If there is an address, show the landmark.
-                                            if (addresses[selectedAddress] !=
-                                                null)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.pin_drop_outlined,
-                                                      size: 16,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .outline,
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    Text(
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(top: 5),
+                                                  child: Text(
+                                                    selectedAddress == null ||
+                                                            addresses[
+                                                                    selectedAddress] ==
+                                                                null
+                                                        ? "This user has no address selected. To allow delivery, please add an address."
+                                                        : parseAddress(
+                                                            addresses[
+                                                                    selectedAddress]
+                                                                ["addressLine"],
+                                                            addresses[
+                                                                    selectedAddress]
+                                                                ["barangay"],
+                                                            addresses[
+                                                                    selectedAddress]
+                                                                ["municipality"]),
+                                                    maxLines: 3,
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                        fontFamily: 'Source Sans 3',
+                                                        fontVariations: const [
+                                                          FontVariation(
+                                                              'wght', 400),
+                                                        ],
+                                                        fontSize: 14,
+                                                        height: 1,
+                                                        letterSpacing: -0.3,
+                                                        overflow:
+                                                            TextOverflow.ellipsis),
+                                                  ),
+                                                ),
+                                                // If there is an address, show phone number.
+                                                if (addresses[selectedAddress] !=
+                                                    null)
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        top: 5),
+                                                    child: Text(
                                                       addresses[selectedAddress]
-                                                              ["landmark"] ??
-                                                          'No Landmark',
+                                                              ["phoneNumber"] ??
+                                                          'No Phone Number',
                                                       maxLines: 1,
                                                       style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .outline,
+                                                          color: Theme.of(context)
+                                                              .colorScheme
+                                                              .onSurface,
                                                           fontFamily:
                                                               'Source Sans 3',
                                                           fontVariations: const [
@@ -563,29 +526,69 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                           overflow: TextOverflow
                                                               .ellipsis),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                          ]),
-                                    ],
+                                                  ),
+                                                // If there is an address, show the landmark.
+                                                if (addresses[selectedAddress] !=
+                                                    null)
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        top: 5),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.pin_drop_outlined,
+                                                          size: 16,
+                                                          color: Theme.of(context)
+                                                              .colorScheme
+                                                              .outline,
+                                                        ),
+                                                        const SizedBox(width: 10),
+                                                        Text(
+                                                          addresses[selectedAddress]
+                                                                  ["landmark"] ??
+                                                              'No Landmark',
+                                                          maxLines: 1,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Theme.of(context)
+                                                                      .colorScheme
+                                                                      .outline,
+                                                              fontFamily:
+                                                                  'Source Sans 3',
+                                                              fontVariations: const [
+                                                                FontVariation(
+                                                                    'wght', 400),
+                                                              ],
+                                                              fontSize: 14,
+                                                              letterSpacing: -0.3,
+                                                              overflow: TextOverflow
+                                                                  .ellipsis),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                              ]),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          )
-                        ])
-                      ]),
+                              )
+                            ])
+                          ]),
+                    ),
+                  
                 ),
                 Card(
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color:
-                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                            Theme.of(context).colorScheme.outlineVariant,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    color: Theme.of(context).colorScheme.surface,
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
@@ -595,6 +598,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           onChanged: (String? value) {
                             setState(() {
                               deliveryMethod = value;
+                              showAddressCard = false;
                             });
                           },
                         ),
@@ -608,7 +612,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
@@ -617,11 +621,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     overflow: TextOverflow.ellipsis),
                               ),
                               Text(
-                                "₱0",
+                                "FREE",
                                 maxLines: 1,
                                 style: TextStyle(
                                     color:
-                                        Theme.of(context).colorScheme.outline,
+                                        Theme.of(context).colorScheme.primary,
                                     fontFamily: 'Source Sans 3',
                                     fontVariations: const [
                                       FontVariation('wght', 400),
@@ -639,12 +643,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   "Payment",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
                     fontSize: 16,
-                    letterSpacing: -0.5,
+                    letterSpacing: -0.3,
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -652,12 +656,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color:
-                            MaterialColors.getSurfaceContainerHighest(darkMode),
+                            Theme.of(context).colorScheme.outlineVariant,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    color: Theme.of(context).colorScheme.surface,
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
@@ -676,7 +680,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           maxLines: 1,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
-                              fontFamily: 'Plus Jakarta Sans',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -686,54 +690,54 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         )
                       ]),
                     )),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color:
-                          MaterialColors.getSurfaceContainerHighest(darkMode),
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 0,
-                  color: MaterialColors.getSurfaceContainerLowest(darkMode),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Radio(
-                          value: 'Others',
-                          groupValue: paymentMethod,
-                          onChanged: (String? value) {
-                            setState(() {
-                              paymentMethod = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Others",
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  fontVariations: const [
-                                    FontVariation('wght', 700),
-                                  ],
-                                  fontSize: 14,
-                                  letterSpacing: -0.3,
-                                  height: 1.3,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                // Card(
+                //   shape: RoundedRectangleBorder(
+                //     side: BorderSide(
+                //       color:
+                //           MaterialColors.getSurfaceContainerHighest(darkMode),
+                //     ),
+                //     borderRadius: BorderRadius.circular(10.0),
+                //   ),
+                //   elevation: 0,
+                //   color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(10),
+                //     child: Row(
+                //       children: [
+                //         Radio(
+                //           value: 'Others',
+                //           groupValue: paymentMethod,
+                //           onChanged: (String? value) {
+                //             setState(() {
+                //               paymentMethod = value;
+                //             });
+                //           },
+                //         ),
+                //         const SizedBox(width: 10),
+                //         Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             Text(
+                //               "Others",
+                //               style: TextStyle(
+                //                   color: Theme.of(context)
+                //                       .colorScheme
+                //                       .onSurfaceVariant,
+                //                   fontFamily: 'Manrope',
+                //                   fontVariations: const [
+                //                     FontVariation('wght', 700),
+                //                   ],
+                //                   fontSize: 14,
+                //                   letterSpacing: -0.3,
+                //                   height: 1.3,
+                //                   overflow: TextOverflow.ellipsis),
+                //             ),
+                //           ],
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 30),
                 Text(
                   "Special Note (Optional)",
@@ -743,8 +747,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     fontVariations: const [
                       FontVariation('wght', 400),
                     ],
-                    fontSize: 14,
-                    letterSpacing: -0.3,
+                    fontSize: 16,
+                    letterSpacing: -0.1,
                   ),
                 ),
                 TextFormField(
@@ -753,14 +757,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.secondary,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -770,7 +774,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         TextStyle(color: Theme.of(context).colorScheme.outline),
                     filled: true,
                     fillColor:
-                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                        Theme.of(context).colorScheme.surface,
                     isDense: true,
                   ),
                   style: const TextStyle(
@@ -779,7 +783,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       FontVariation('wght', 400),
                     ],
                     fontSize: 14,
-                    letterSpacing: -0.3,
+                    letterSpacing: -0.1,
                   ),
                   minLines: 3,
                   maxLines: 3,
@@ -865,9 +869,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 400),
+                              FontVariation('wght', 700),
                             ],
-                            fontSize: 14,
+                            fontSize: 16,
                             letterSpacing: -0.3,
                             overflow: TextOverflow.ellipsis),
                       ),
@@ -877,9 +881,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 400),
+                              FontVariation('wght', 700),
                             ],
-                            fontSize: 14,
+                            fontSize: 16,
                             letterSpacing: -0.3,
                             overflow: TextOverflow.ellipsis),
                       ),
@@ -904,7 +908,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     },
                     style: ButtonStyle(
                         backgroundColor:
-                            MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                            MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide.none,
@@ -914,8 +918,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       child: Text(
                         "Place Order",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],

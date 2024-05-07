@@ -87,18 +87,18 @@ class _CartCardState extends State<CartCard> {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     if (widget.isVisible) {
       return Card(
-          color: MaterialColors.getSurfaceContainerLowest(darkMode),
+          color:  Theme.of(context).colorScheme.surface,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 0,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: MaterialColors.getSurfaceContainerHighest(darkMode),
-            ),
-            borderRadius: BorderRadius.circular(10.0),
+            color:  Theme.of(context).colorScheme.outline,
+          ),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -110,39 +110,37 @@ class _CartCardState extends State<CartCard> {
                       maxLines: 1,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
-                        fontFamily: 'Plus Jakarta Sans',
+                        fontFamily: 'Manrope',
                         fontVariations: const [
-                          FontVariation('wght', 750),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 700),
                         ],
-                        fontSize: 16,
+                        fontSize: 20,
                         letterSpacing: -0.3,
                       ),
                     ),
                     Container(
                         decoration: BoxDecoration(
-                            color: ChimeColors.getGreen200(),
+                            color: Theme.of(context).colorScheme.surfaceVariant,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                                BorderRadius.all(Radius.circular(8))),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 10),
+                              vertical: 4, horizontal: 8),
                           child: Row(
                             children: [
                               Icon(Icons.motorcycle,
-                                  size: 22, color: ChimeColors.getGreen800()),
-                              SizedBox(height: 10),
+                                  size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                              SizedBox(height: 12),
                               Text(
                                 "₱${deliveryFee}",
                                 maxLines: 1,
                                 style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
-                                    FontVariation('wght', 750),
-                                    FontVariation('wdth', 100),
+                                    FontVariation('wght', 700),
                                   ],
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   letterSpacing: -0.3,
                                 ),
                               ),
@@ -151,7 +149,7 @@ class _CartCardState extends State<CartCard> {
                         ))
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   key: UniqueKey(),
@@ -177,19 +175,19 @@ class _CartCardState extends State<CartCard> {
                         },
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context).colorScheme.primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide.none,
                             ))),
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(12),
                           child: Text(
                             "Checkout (₱$total)",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],

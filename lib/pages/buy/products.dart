@@ -183,52 +183,47 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: TextField(
               focusNode: focus,
               controller: _searchBox,
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
                 contentPadding: EdgeInsets.zero,
-                hintText: AppLocalizations.of(context)!.productsSearchBoxHint,
-                hintStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.outline),
                 filled: true,
-                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.mic_outlined),
-                  onPressed: () {
-                    //TODO: Add method that converts speech to text.
-                  },
+                fillColor: Theme.of(context).colorScheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                        width: 2, 
+                        color: Theme.of(context).colorScheme.secondary,
+                    ),
                 ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                      width: 2, 
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      // style: BorderStyle.none,
+                  ),
+                ),
+                hintText: "Search for food",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
-                fontFamily: 'Plus Jakarta Sans',
+                fontFamily: 'Source Sans 3',
                 fontVariations: [
-                  FontVariation('wght', 700),
+                  FontVariation('wght', 400),
                 ],
-                fontSize: 13,
+                fontSize: 16,
               ),
             ),
           ),
@@ -301,7 +296,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             .productsSearch(_searchBox.text.toLowerCase()),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 700),
                           FontVariation('wdth', 100),

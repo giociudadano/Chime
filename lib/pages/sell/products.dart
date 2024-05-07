@@ -421,7 +421,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                 maxLines: 3,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.outline,
-                    fontFamily: 'Bahnschrift',
+                    fontFamily: 'Source Sans 3',
                     fontVariations: const [
                       FontVariation('wght', 400),
                       FontVariation('wdth', 100),
@@ -462,36 +462,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
     return Scaffold(
       backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton.extended(
-            heroTag: null,
-            backgroundColor: ChimeColors.getGreen800(),
-            label: Text(
-              "Share QR",
-              style: TextStyle(
-                color: MaterialColors.getSurfaceContainerLowest(darkMode),
-                fontFamily: 'Plus Jakarta Sans',
-                fontVariations: const [
-                  FontVariation('wght', 700),
-                ],
-                fontSize: 14,
-                letterSpacing: -0.3,
-              ),
-            ),
-            icon: Icon(
-              Icons.qr_code_scanner,
-              color: MaterialColors.getSurfaceContainerLowest(darkMode),
-              size: 24,
-            ),
-            onPressed: () {
-              _showQRCode();
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
               heroTag: null,
               backgroundColor: ChimeColors.getGreen800(),
               child: Icon(
@@ -508,9 +479,6 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                 );
               },
             ),
-          ),
-        ],
-      ),
       body: (products.isEmpty && productsFeatured.isEmpty)
           ? const SizedBox.shrink()
           : Padding(
@@ -635,9 +603,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
-                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontFamily: 'Source Sans 3',
                                       fontVariations: const [
-                                        FontVariation('wght', 700),
+                                        FontVariation('wght', 400),
                                       ],
                                       fontSize: 16,
                                       letterSpacing: 0),
@@ -680,14 +648,14 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "All Posts",
+                                    "All Products",
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
-                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontFamily: 'Source Sans 3',
                                         fontVariations: const [
-                                          FontVariation('wght', 700),
+                                          FontVariation('wght', 400),
                                         ],
                                         fontSize: 16,
                                         letterSpacing: 0),
@@ -716,6 +684,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                   deleteProductCallback: deleteProduct);
                             },
                           ),
+                          const SizedBox(
+                            height: 64,
+                            child: Center(child: Text("This is the end of the list!"))),
                         ])
                 ],
               ),

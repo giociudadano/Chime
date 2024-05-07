@@ -118,6 +118,12 @@ flutter:
     - family: Bahnschrift
       fonts:
         - asset: lib/assets/fonts/bahnschrift/bahnschrift.TTF
+    - family: Bricolage Grotesque
+      fonts:
+        - asset: lib/assets/fonts/bricolage_grotesque/bricolage.TTF
+    - family: Manrope
+      fonts:
+        - asset: lib/assets/fonts/manrope/manrope.TTF
     - family: Source Sans 3
       fonts:
         - asset: lib/assets/fonts/source_sans/source_sans.TTF

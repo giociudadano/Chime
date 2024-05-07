@@ -68,15 +68,16 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+      color: Theme.of(context).colorScheme.surfaceVariant,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: MaterialColors.getSurfaceContainerHighest(darkMode),
+            color: Theme.of(context).colorScheme.outlineVariant,
+            width: 1,
           ),
-          borderRadius: BorderRadius.circular(10.0)),
+          borderRadius: BorderRadius.circular(12.0)),
       child: InkWell(
         onTap: () {
           if (context.mounted) {
@@ -108,7 +109,7 @@ class _ProductCardState extends State<ProductCard> {
                         padding: const EdgeInsets.all(40.0),
                         child: Icon(Icons.local_mall_outlined,
                             color:
-                                Theme.of(context).colorScheme.outlineVariant),
+                                Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                       fadeInCurve: Curves.easeIn,
                       fadeOutCurve: Curves.easeOut,
@@ -117,41 +118,41 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 if (widget.product['isFeatured'] ?? false)
                   Positioned(
-                    left: 7,
+                    left: 8,
                     top: 0,
                     child: Icon(Icons.bookmark,
-                        size: 30, color: Colors.orange[700]),
+                        size: 32, color:Theme.of(context).colorScheme.tertiary),
                   ),
-                if (widget.product['isFeatured'] ?? false)
-                  const Positioned(
-                    left: 7,
-                    top: -5,
-                    child: Icon(Icons.bookmark,
-                        size: 30, color: Colors.orangeAccent),
-                  ),
+                // if (widget.product['isFeatured'] ?? false)
+                //   Positioned(
+                //     left: 8,
+                //     top: -4,
+                //     child: Icon(Icons.bookmark,
+                //         size: 30, color: Theme.of(context).colorScheme.tertiary),
+                //   ),
                 Positioned(
                   right: 8,
                   top: 8,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: Container(
-                      height: 30,
-                      width: 30,
+                      height: 32,
+                      width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : const Color.fromARGB(120, 0, 0, 0),
+                          : Theme.of(context).colorScheme.surfaceVariant,
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           widget.product['isFavorited'] ?? false
                               ? Icons.favorite_outlined
                               : Icons.favorite_outline,
-                          size: 22,
+                          size: 24,
                           color: widget.product['isFavorited'] ?? false
-                              ? Colors.redAccent
+                              ? Theme.of(context).colorScheme.error
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
-                                  : Colors.white,
+                                  : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         onPressed: () {
                           setFavoriteProduct(
@@ -176,11 +177,11 @@ class _ProductCardState extends State<ProductCard> {
                         style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Plus Jakarta Sans',
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
-                            fontSize: 12,
+                            fontSize: 14,
                             letterSpacing: -0.3,
                             height: 0.85,
                             overflow: TextOverflow.ellipsis),
@@ -189,8 +190,8 @@ class _ProductCardState extends State<ProductCard> {
                     Text(
                       '₱${widget.product['productPrice']}',
                       style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.primary,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
