@@ -263,7 +263,6 @@ class _PlacesMorePageState extends State<PlacesMorePage>
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     List categoryKeys = widget.place['categories'] == null
         ? []
         : widget.place['categories'].keys.toList()
@@ -379,8 +378,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                   FontVariation('wght', 400),
                                 ],
                                 fontSize: 14,
-                                letterSpacing: -0.3,
-                                height: 1,
+                                letterSpacing: -0.1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ],
@@ -694,14 +692,14 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Featured",
+                                      "Menu of the Day",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurface,
-                                          fontFamily: 'Source Sans 3',
+                                          fontFamily: 'Manrope',
                                           fontVariations: const [
-                                            FontVariation('wght', 400),
+                                            FontVariation('wght', 700),
                                           ],
                                           fontSize: 16,
                                           letterSpacing: 0),
@@ -790,13 +788,11 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
                             elevation: 0,
-                            color: MaterialColors.getSurfaceContainerLowest(
-                                darkMode),
+                            color: Theme.of(context).colorScheme.surface,
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                   color:
-                                      MaterialColors.getSurfaceContainerHighest(
-                                          darkMode),
+                                      Theme.of(context).colorScheme.outlineVariant,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0)),
                             child: InkWell(
@@ -830,13 +826,12 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onSurfaceVariant,
+                                                .onSurface,
                                             fontFamily: 'Manrope',
                                             fontVariations: const [
                                               FontVariation('wght', 700),
                                             ],
                                             fontSize: 14,
-                                            height: 1,
                                             letterSpacing: -0.3,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -847,13 +842,12 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .outline,
+                                                .outlineVariant,
                                             fontFamily: 'Source Sans 3',
                                             fontVariations: const [
                                               FontVariation('wght', 400),
                                             ],
                                             fontSize: 14,
-                                            height: 1.2,
                                             letterSpacing: -0.3,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -863,7 +857,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                     Icon(Icons.arrow_forward_ios,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurfaceVariant,
+                                            .onSurface,
                                         size: 15)
                                   ],
                                 ),

@@ -49,7 +49,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
               ),
             ),
             elevation: 0,
-            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             content: Form(
               key: formAddProductsKey,
               child: Column(
@@ -61,8 +61,8 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                       Text(
                         "Products in Category",
                         style: TextStyle(
-                            color: ChimeColors.getGreen800(),
-                            fontFamily: 'Plus Jakarta Sans',
+                            color: Theme.of(context).colorScheme.primary,
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
@@ -146,7 +146,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                               "Cancel",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -176,7 +176,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                               "Save",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -223,7 +223,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                         "Rename Category",
                         style: TextStyle(
                             color: ChimeColors.getGreen800(),
-                            fontFamily: 'Plus Jakarta Sans',
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
@@ -320,7 +320,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                               "Cancel",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -353,7 +353,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                               "Save",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -569,7 +569,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                 widget.categoryName,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],

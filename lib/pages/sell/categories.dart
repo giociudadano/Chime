@@ -68,7 +68,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                         "Add New Category",
                         style: TextStyle(
                             color: ChimeColors.getGreen800(),
-                            fontFamily: 'Plus Jakarta Sans',
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
@@ -165,7 +165,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                               "Cancel",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -197,7 +197,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                               "Save",
                               style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -320,14 +320,13 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     List categoryKeys = widget.categories.keys.toList()..sort();
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: ChimeColors.getGreen800(),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: Icon(
             Icons.add,
-            color: MaterialColors.getSurfaceContainerLowest(darkMode),
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
           onPressed: () {
             showAddCategoryForm(context);
@@ -344,11 +343,10 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    color: Theme.of(context).colorScheme.surface,
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                          color: MaterialColors.getSurfaceContainerHighest(
-                              darkMode),
+                          color: Theme.of(context).colorScheme.outlineVariant,
                         ),
                         borderRadius: BorderRadius.circular(10.0)),
                     child: InkWell(
@@ -387,13 +385,12 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .onSurfaceVariant,
-                                    fontFamily: 'Plus Jakarta Sans',
+                                        .onSurface,
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
                                     fontSize: 14,
-                                    height: 1,
                                     letterSpacing: -0.3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -403,13 +400,12 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                   "(${widget.categories[categoryKeys[index]].length.toString()})",
                                   style: TextStyle(
                                     color:
-                                        Theme.of(context).colorScheme.outline,
+                                        Theme.of(context).colorScheme.outlineVariant,
                                     fontFamily: 'Source Sans 3',
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
                                     fontSize: 14,
-                                    height: 1.2,
                                     letterSpacing: -0.3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -419,7 +415,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                             Icon(Icons.arrow_forward_ios,
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .onSurfaceVariant,
+                                    .onSurface,
                                 size: 15)
                           ],
                         ),

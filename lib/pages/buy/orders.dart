@@ -91,7 +91,6 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
@@ -158,7 +157,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 color: tabController.index == 0
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -187,7 +186,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 color: tabController.index == 1
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -216,7 +215,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 color: tabController.index == 2
                                     ? Theme.of(context).colorScheme.errorContainer
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -244,18 +243,30 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                               getOrderCount('To Receive') +
                               getOrderCount('Received') ==
                           0)
-                        Text(
-                          "No active orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no active orders.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
@@ -300,18 +311,30 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   ListView(
                     children: [
                       if (getOrderCount('Completed') == 0)
-                        Text(
-                          "No completed orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have completed orders yet.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
@@ -352,18 +375,30 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   ListView(
                     children: [
                       if (getOrderCount('Cancelled') == 0)
-                        Text(
-                          "No cancelled orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no cancelled orders.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(

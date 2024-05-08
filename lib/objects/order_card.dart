@@ -69,7 +69,6 @@ class _OrderCardState extends State<OrderCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(
@@ -271,7 +270,7 @@ class _OrderCardState extends State<OrderCard> {
                 widget.order['isPaid'] ?? false == true ? 'Paid' : 'To be Paid',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
-                  fontFamily: 'Product Sans 3',
+                  fontFamily: 'Source Sans 3',
                   fontVariations: const [
                     FontVariation('wght', 400),
                   ],
@@ -297,6 +296,7 @@ class _OrderCardState extends State<OrderCard> {
                 },
                 style: ButtonStyle(
                   elevation: const MaterialStatePropertyAll(0),
+                  shadowColor: MaterialStatePropertyAll(Colors.transparent),
                   backgroundColor: MaterialStatePropertyAll(widget.adminControls
                       ? (widget.order['status'] == 'Received' ||
                               widget.order['status'] == 'Completed')
@@ -310,7 +310,7 @@ class _OrderCardState extends State<OrderCard> {
                               ? Theme.of(context).colorScheme.surfaceVariant
                               : Theme.of(context).colorScheme.surfaceVariant),
                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                     side: widget.adminControls
                         ? (widget.order['status'] == 'Received' ||
                                 widget.order['status'] == 'Completed' ||
@@ -327,7 +327,7 @@ class _OrderCardState extends State<OrderCard> {
                   )),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   child: Text(
                     "Review",
                     style: TextStyle(
@@ -358,7 +358,7 @@ class _OrderCardState extends State<OrderCard> {
             if (widget.adminControls && widget.order['status'] == "Unread")
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () {
                       setStatusState("Preparing");
@@ -366,18 +366,18 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
                       )),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Prepare",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
@@ -394,22 +394,23 @@ class _OrderCardState extends State<OrderCard> {
             if (widget.adminControls && widget.order['status'] == 'Preparing')
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () {
                       setStatusState('To Receive');
                     },
                     style: ButtonStyle(
+                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
                           MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                         side: BorderSide.none,
                       )),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         widget.order['deliveryMethod'] == "Pickup"
                             ? "For Pickup"
@@ -434,7 +435,7 @@ class _OrderCardState extends State<OrderCard> {
                 (widget.order['status'] == 'To Receive'))
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () => showDialog<String>(
                                 context: context,
@@ -469,19 +470,19 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                         side: BorderSide.none,
                       )),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Delivered",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
@@ -499,7 +500,7 @@ class _OrderCardState extends State<OrderCard> {
             if (!widget.adminControls && (widget.order['status'] == 'Received'))
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () => showDialog<String>(
                                 context: context,
@@ -534,19 +535,19 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
+                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
                       )),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Completed",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(context).colorScheme.onPrimary,
                           fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),

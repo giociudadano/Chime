@@ -433,10 +433,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.secondary,
-                              width: 2,
-                            ),
+                            side: BorderSide.none,
                           )),
                         ),
                         child: Padding(

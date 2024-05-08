@@ -55,7 +55,6 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -105,13 +104,13 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 color:
-                                    Theme.of(context).colorScheme.outline,
+                                    Theme.of(context).colorScheme.outlineVariant,
                               ),
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             elevation: 0,
                             child: Padding(
-                              padding: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -149,7 +148,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 8),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -197,11 +196,10 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                                   FontVariation('wght', 400),
                                                 ],
                                                 fontSize: 14,
-                                                height: 0.85,
                                                 letterSpacing: -0.3,
                                               ),
                                             )),
-                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 4),
                                       Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
@@ -210,7 +208,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 8),
+                                              horizontal: 16, vertical: 8),
                                           child: Text(
                                             "x${widget.order['items'][key]['quantity']}",
                                             style: TextStyle(
@@ -219,11 +217,10 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                                   .outline,
                                               fontFamily: 'Source Sans 3',
                                               fontVariations: const [
-                                                FontVariation('wght', 450),
+                                                FontVariation('wght', 400),
                                               ],
                                               fontSize: 13,
-                                              letterSpacing: -0.3,
-                                              height: 1,
+                                              letterSpacing: -0.1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
