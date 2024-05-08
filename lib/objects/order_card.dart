@@ -264,7 +264,7 @@ class _OrderCardState extends State<OrderCard> {
                 ),
               ),
             ]),
-          if (!widget.adminControls)
+          if (!widget.adminControls && widget.order['status'] != 'Cancelled')
             Row(children: [
               Icon(Icons.account_balance_wallet_outlined,
                   size: 20, color: ChimeColors.getGreen800()),
