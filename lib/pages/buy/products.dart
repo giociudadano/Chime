@@ -246,7 +246,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                   style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Plus Jakarta Sans',
+                                      fontFamily: 'Manrope',
                                       fontVariations: const [
                                         FontVariation('wght', 700),
                                       ],

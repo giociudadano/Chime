@@ -217,37 +217,41 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (newImage != null)
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  newImage = null;
-                                });
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Theme.of(context).colorScheme.surface),
-                                  shape: MaterialStatePropertyAll(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    side: BorderSide.none,
-                                  ))),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: Text(
-                                  "Remove",
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.outline,
-                                    fontFamily: 'Manrope',
-                                    fontVariations: const [
-                                      FontVariation('wght', 700),
-                                    ],
-                                    fontSize: 16,
+                            Column(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      newImage = null;
+                                    });
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          Theme.of(context).colorScheme.surface),
+                                      shape: MaterialStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide.none,
+                                      ))),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 10),
+                                    child: Text(
+                                      "Remove",
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.outline,
+                                        fontFamily: 'Manrope',
+                                        fontVariations: const [
+                                          FontVariation('wght', 700),
+                                        ],
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              const SizedBox(width: 10),
+                              ],
                             ),
-                          const SizedBox(width: 10),
                           ElevatedButton(
                             onPressed: () {
                               setProductImage(ImageSource.gallery,
@@ -256,7 +260,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                             style: ButtonStyle(
                                 shadowColor: MaterialStatePropertyAll(Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
-                                    Theme.of(context).colorScheme.surface),
+                                    Theme.of(context).colorScheme.primaryContainer),
                                 shape: MaterialStatePropertyAll(
                                     RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -268,7 +272,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                 "Upload",
                                 style: TextStyle(
                                   color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                      Theme.of(context).colorScheme.onPrimaryContainer,
                                   fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
@@ -464,7 +468,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 16),
                       Column(
                         children: [
                           Row(
@@ -492,7 +496,6 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                           onChanged: (bool value) {
                                             setState(() {
                                               isLimited = value;
-                                              showStockField = value;
                                             });
                                           },
                                         ),
@@ -500,7 +503,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                 ),
                               ]),
                                   Visibility(
-                                    visible: showStockField,
+                                    visible: isLimited,
                                     child: TextFormField(
                                           enabled: isLimited,
                                           keyboardType: TextInputType.number,
@@ -646,7 +649,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                 Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -662,7 +665,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -687,7 +690,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                   Theme.of(context).colorScheme.primary),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(8),
                                 side: BorderSide.none,
                               ))),
                           child: Padding(

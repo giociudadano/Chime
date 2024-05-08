@@ -106,24 +106,25 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                 fillColor: Theme.of(context).colorScheme.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(
-                        width: 2, 
-                        color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide(
-                      width: 2, 
-                      color: Theme.of(context).colorScheme.surfaceVariant,
-                      // style: BorderStyle.none,
+                    width: 2,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    // style: BorderStyle.none,
                   ),
                 ),
                 hintText: "Search for orders",
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
+                prefixIcon: Icon(Icons.search_outlined,
+                    color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
@@ -143,7 +144,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
-                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                        shadowColor:
+                            MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
                                 ? Theme.of(context).colorScheme.primary
@@ -172,7 +174,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
-                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                        shadowColor:
+                            MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
                                 ? Theme.of(context).colorScheme.primary
@@ -201,7 +204,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
-                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                        shadowColor:
+                            MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
                                 ? Theme.of(context).colorScheme.onErrorContainer
@@ -213,7 +217,9 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             "Cancelled",
                             style: TextStyle(
                                 color: tabController.index == 2
-                                    ? Theme.of(context).colorScheme.errorContainer
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer
                                     : Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
@@ -366,7 +372,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   }),
                               const SizedBox(
                                 height: 64,
-                                child: Center(child: Text("This is the end of the list!"))),
+                              ),
                             ],
                           ),
                         ),
@@ -429,7 +435,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                   }),
                               const SizedBox(
                                 height: 64,
-                                child: Center(child: Text("This is the end of the list!"))),
+                              ),
                             ],
                           ),
                         ),

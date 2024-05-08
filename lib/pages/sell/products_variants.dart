@@ -74,7 +74,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                             "Edit Default Variant",
                             style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -344,7 +344,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Cancel",
                                 style: TextStyle(
                                   color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -384,7 +384,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Save",
                                 style: TextStyle(
                                   color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -479,7 +479,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                             "Edit Variant",
                             style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -743,7 +743,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Delete",
                                 style: TextStyle(
                                   color: ChimeColors.getRed800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -784,7 +784,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Save",
                                 style: TextStyle(
                                   color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -835,7 +835,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                             "Add Variant",
                             style: TextStyle(
                                 color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -1105,7 +1105,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Cancel",
                                 style: TextStyle(
                                   color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -1144,7 +1144,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 "Save",
                                 style: TextStyle(
                                   color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -1271,7 +1271,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
               "Variants",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
@@ -1317,7 +1317,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
-                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontFamily: 'Manrope',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
@@ -1339,7 +1339,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 style: TextStyle(
                                     color:
                                         Theme.of(context).colorScheme.onSurface,
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
@@ -1408,7 +1408,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface,
-                                            fontFamily: 'Plus Jakarta Sans',
+                                            fontFamily: 'Manrope',
                                             fontVariations: const [
                                               FontVariation('wght', 700),
                                             ],
@@ -1432,7 +1432,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
-                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontFamily: 'Manrope',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],

@@ -168,7 +168,6 @@ class _OrderCardState extends State<OrderCard> {
                       FontVariation('wght', 400),
                     ],
                     fontSize: 14,
-
                   ),
                 ),
               )
@@ -197,51 +196,51 @@ class _OrderCardState extends State<OrderCard> {
               )
             ]),
           if (widget.adminControls)
-          //   Row(children: [
-          //     Icon(Icons.tag,
-          //         size: 20, color: Theme.of(context).colorScheme.outline),
-          //     const SizedBox(width: 5),
-          //     Expanded(
-          //       child: Text(
-          //         widget.orderID,
-          //         maxLines: 1,
-          //         overflow: TextOverflow.ellipsis,
-          //         style: TextStyle(
-          //           color: Theme.of(context).colorScheme.outline,
-          //           fontFamily: 'Product Sans 3',
-          //           fontVariations: const [
-          //             FontVariation('wght', 400),
-          //           ],
-          //           fontSize: 16,
-          //           letterSpacing: -0.3,
-          //         ),
-          //       ),
-          //     )
-          //   ]),
-          // const SizedBox(height: 5),
-          Row(children: [
-            Icon(Icons.pin_drop_outlined,
-                size: 20, color: Theme.of(context).colorScheme.outline),
-            const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                widget.order['deliveryMethod'] == "Pickup"
-                    ? "For Pickup"
-                    : "Deliver to " + widget.order['landmark'],
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  fontFamily: 'Product Sans 3',
-                  fontVariations: const [
-                    FontVariation('wght', 400),
-                  ],
-                  fontSize: 14,
-                  letterSpacing: -0.3,
+            //   Row(children: [
+            //     Icon(Icons.tag,
+            //         size: 20, color: Theme.of(context).colorScheme.outline),
+            //     const SizedBox(width: 5),
+            //     Expanded(
+            //       child: Text(
+            //         widget.orderID,
+            //         maxLines: 1,
+            //         overflow: TextOverflow.ellipsis,
+            //         style: TextStyle(
+            //           color: Theme.of(context).colorScheme.outline,
+            //           fontFamily: 'Product Sans 3',
+            //           fontVariations: const [
+            //             FontVariation('wght', 400),
+            //           ],
+            //           fontSize: 16,
+            //           letterSpacing: -0.3,
+            //         ),
+            //       ),
+            //     )
+            //   ]),
+            // const SizedBox(height: 5),
+            Row(children: [
+              Icon(Icons.pin_drop_outlined,
+                  size: 20, color: Theme.of(context).colorScheme.outline),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  widget.order['deliveryMethod'] == "Pickup"
+                      ? "For Pickup"
+                      : "Deliver to " + widget.order['landmark'],
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    fontFamily: 'Product Sans 3',
+                    fontVariations: const [
+                      FontVariation('wght', 400),
+                    ],
+                    fontSize: 14,
+                    letterSpacing: -0.3,
+                  ),
                 ),
-              ),
-            )
-          ]),
+              )
+            ]),
           const SizedBox(height: 5),
           if (widget.adminControls)
             Row(children: [
@@ -275,7 +274,6 @@ class _OrderCardState extends State<OrderCard> {
                     FontVariation('wght', 400),
                   ],
                   fontSize: 14,
-      
                 ),
               ),
             ]),
@@ -320,9 +318,15 @@ class _OrderCardState extends State<OrderCard> {
                                 color: Theme.of(context).colorScheme.surface,
                               )
                         : widget.order['status'] == 'Received'
-                            ? BorderSide(color: Theme.of(context).colorScheme.surfaceVariant)
+                            ? BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceVariant)
                             : widget.order['status'] == 'Cancelled'
-                                ? BorderSide(color: Theme.of(context).colorScheme.surfaceVariant)
+                                ? BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceVariant)
                                 : BorderSide.none,
                   )),
                 ),
@@ -334,15 +338,25 @@ class _OrderCardState extends State<OrderCard> {
                       color: widget.adminControls
                           ? (widget.order['status'] == 'Received' ||
                                   widget.order['status'] == 'Completed')
-                              ? Theme.of(context).colorScheme.onSecondaryContainer
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
                               : widget.order['status'] == 'Cancelled'
-                                  ? Theme.of(context).colorScheme.onSecondaryContainer
-                                  : Theme.of(context).colorScheme.onSecondaryContainer
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
                           : widget.order['status'] == 'Received'
                               ? Theme.of(context).colorScheme.outline
                               : widget.order['status'] == 'Cancelled'
-                                  ? Theme.of(context).colorScheme.onSecondaryContainer
-                                  : Theme.of(context).colorScheme.onSecondaryContainer,
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
                       fontFamily: 'Manrope',
                       fontVariations: const [
                         FontVariation('wght', 700),
@@ -365,8 +379,8 @@ class _OrderCardState extends State<OrderCard> {
                     },
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
-                      backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,
@@ -402,8 +416,8 @@ class _OrderCardState extends State<OrderCard> {
                     style: ButtonStyle(
                       shadowColor: MaterialStatePropertyAll(Colors.transparent),
                       elevation: const MaterialStatePropertyAll(0),
-                      backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.secondaryContainer),
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.secondaryContainer),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide.none,
@@ -417,7 +431,9 @@ class _OrderCardState extends State<OrderCard> {
                             : "For Delivery",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
                           fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
@@ -438,39 +454,65 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Mark Order as Delivered'),
-                                  content: const Text('Please make sure everything is in check.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                  
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setStatusState("Received");
-                                        Navigator.pop(context, 'OK');
-                                        final snackBar = SnackBar(
-                                          content: const Text('Order is marked as delivered.'),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                        } ,
-                                      child: const Text('OK'),
-                                    ),
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Mark Order as Delivered',
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.3,
+                            )),
+                        content: const Text(
+                            'Please make sure everything is in check.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Cancel');
+                            },
+                            child: const Text('Cancel',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
                                   ],
-                                ),
-                              ),
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setStatusState("Received");
+                              Navigator.pop(context, 'OK');
+                              final snackBar = SnackBar(
+                                content:
+                                    const Text('Order is marked as delivered.'),
+                              );
+
+                              // Find the ScaffoldMessenger in the widget tree
+                              // and use it to show a SnackBar.
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: const Text('OK',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
-                      backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide.none,
@@ -503,39 +545,65 @@ class _OrderCardState extends State<OrderCard> {
                   padding: const EdgeInsets.only(left: 8),
                   child: ElevatedButton(
                     onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Mark Order as Complete'),
-                                  content: const Text('Please make sure everything is in check.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                  
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setStatusState("Completed");
-                                        Navigator.pop(context, 'OK');
-                                        final snackBar = SnackBar(
-                                          content: const Text('Order is marked as completed.'),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                        } ,
-                                      child: const Text('OK'),
-                                    ),
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Mark Order as Complete',
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.3,
+                            )),
+                        content: const Text(
+                            'Please make sure everything is in check.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Cancel');
+                            },
+                            child: const Text('Cancel',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
                                   ],
-                                ),
-                              ),
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              setStatusState("Completed");
+                              Navigator.pop(context, 'OK');
+                              final snackBar = SnackBar(
+                                content:
+                                    const Text('Order is marked as completed.'),
+                              );
+
+                              // Find the ScaffoldMessenger in the widget tree
+                              // and use it to show a SnackBar.
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: const Text('OK',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
-                      backgroundColor:
-                          MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide.none,

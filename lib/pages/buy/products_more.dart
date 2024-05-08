@@ -181,7 +181,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
-                        height: 48,
+                        height: 52,
                         child: DropdownButtonFormField(
                           iconSize: 0,
                           isExpanded: true,
@@ -221,7 +221,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                   ],
                                   fontSize: 16,
                                   height: 1,
-                                  letterSpacing: -0.3,
+                                  letterSpacing: -0.1,
                                 ),
                               ),
                               onTap: () {
@@ -284,11 +284,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(0),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant)),
+                                  border: Border.symmetric(
+                                            horizontal: BorderSide(
+                                              width: 1,
+                                              color: Theme.of(context).colorScheme.outlineVariant
+                                            ),
+                                            vertical: BorderSide.none,
+                                          ),),
                               width: 40,
                               height: 28,
                               child: Center(
@@ -495,7 +497,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
@@ -631,9 +633,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   letterSpacing: -0.3,
-                                  height: 0.85,
                                   overflow: TextOverflow.ellipsis),
                             ),
                             const SizedBox(height: 5),
@@ -684,7 +685,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                               false);
                                     },
                                   ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(width: 8),
                                   Text(
                                     "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
                                     style: TextStyle(
@@ -957,7 +958,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.1,
                                     height: 1,
                                     overflow: TextOverflow.ellipsis),

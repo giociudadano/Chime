@@ -290,13 +290,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                 color: tabController.index == 4
                                     ? Theme.of(context)
                                         .colorScheme
-                                        .onErrorContainer
+                                        .errorContainer
                                     : Theme.of(context).colorScheme.onSurface,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),

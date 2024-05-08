@@ -103,8 +103,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             color: Theme.of(context).colorScheme.surface,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color:
-                                    Theme.of(context).colorScheme.outlineVariant,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
                               ),
                               borderRadius: BorderRadius.circular(16.0),
                             ),
@@ -133,13 +134,17 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Container(
-                                            color: Theme.of(context).colorScheme.surfaceVariant,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surfaceVariant,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(20.0),
                                               child: Icon(
                                                   Icons.local_mall_outlined,
-                                                  color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurfaceVariant),
                                             ),
                                           ),
                                           fadeInCurve: Curves.easeIn,
@@ -171,7 +176,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       Text(
                                         "₱${widget.order['items'][key]['price']}",
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           fontFamily: 'Manrope',
                                           fontVariations: const [
                                             FontVariation('wght', 700),
@@ -203,8 +210,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            style: BorderStyle.none
-                                          ),
+                                              style: BorderStyle.none),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -774,7 +780,6 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           ),
                           const SizedBox(height: 40),
                         ]),
-
                     ],
                   ),
                 ],
@@ -791,41 +796,69 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                       absorbing: widget.order['status'] != "Unread",
                       child: ElevatedButton(
                         onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Cancel this order'),
-                                  content: const Text('After cancelling, the order will no longer be processed. Please contact the seller to request applicable refunds.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                  
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setOrderStatus("Cancelled");
-                                        Navigator.pop(context, 'OK');
-                                        const  snackBar = SnackBar(
-                                          content: Text('Order has been cancelled.'),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      } ,
-                                      child: const Text('OK'),
-                                    ),
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Cancel this order',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
                                   ],
-                                ),
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                            content: const Text(
+                                'After cancelling, the order will no longer be processed. Please contact the seller to request applicable refunds.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Cancel');
+                                },
+                                child: const Text('Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
                               ),
+                              TextButton(
+                                onPressed: () {
+                                  setOrderStatus("Cancelled");
+                                  Navigator.pop(context, 'OK');
+                                  final snackBar = SnackBar(
+                                    content:
+                                        const Text('Order has been cancelled.'),
+                                  );
+
+                                  // Find the ScaffoldMessenger in the widget tree
+                                  // and use it to show a SnackBar.
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                child: const Text('OK',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: const [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
                         style: ButtonStyle(
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
                               widget.order['status'] == "Unread"
                                   ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context).colorScheme.surfaceVariant),
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .surfaceVariant),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -838,7 +871,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             style: TextStyle(
                               color: widget.order['status'] == "Unread"
                                   ? Theme.of(context).colorScheme.onError
-                                  : Theme.of(context).colorScheme.surfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .surfaceVariant,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
@@ -864,7 +899,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.secondaryContainer),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -875,12 +912,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             child: Text(
                               "Prepare",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -901,7 +940,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.secondaryContainer),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -913,12 +954,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               "To Receive",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -939,7 +982,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.secondaryContainer),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -951,12 +996,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               "Received",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -975,7 +1022,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.secondaryContainer),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -987,12 +1036,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               "Completed",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),

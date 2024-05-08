@@ -41,7 +41,6 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
   }
 
   Future<dynamic> showAddCategoryForm(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formAddCategoryKey = GlobalKey<FormState>();
     final inputAddCategoryName = TextEditingController();
 
@@ -55,7 +54,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
               ),
             ),
             elevation: 0,
-            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             content: Form(
               key: formAddCategoryKey,
               child: Column(
@@ -67,7 +66,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                       Text(
                         "Add New Category",
                         style: TextStyle(
-                            color: ChimeColors.getGreen800(),
+                            color: Theme.of(context).colorScheme.primary,
                             fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
@@ -79,14 +78,14 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           icon: Icon(
                             Icons.close,
                             size: 24,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           onPressed: () {
                             Navigator.pop(context);
                           }),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -97,8 +96,8 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                   ),
                   TextFormField(
@@ -106,25 +105,25 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                          width: 0.5,
+                          color: Theme.of(context).colorScheme.outlineVariant,
+                          width: 1,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
+                          color: Theme.of(context).colorScheme.outlineVariant,
                           width: 0.5,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      hintText: "Category Name",
+                      hintText: "Meal Set or Group",
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline,
                           letterSpacing: -0.3),
                       filled: true,
                       fillColor:
-                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                          Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -137,7 +136,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                       return _verifyNameField(value);
                     },
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 48),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -149,13 +148,12 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLowest(
-                                    darkMode)),
+                                Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
-                                color: ChimeColors.getGreen300(),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             )),
                           ),
@@ -164,18 +162,18 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                             child: Text(
                               "Cancel",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -185,10 +183,10 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
-                                  ChimeColors.getGreen200()),
+                                  Theme.of(context).colorScheme.primary),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(8),
                                 side: BorderSide.none,
                               ))),
                           child: Padding(
@@ -196,12 +194,12 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                             child: Text(
                               "Save",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -348,7 +346,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                         side: BorderSide(
                           color: Theme.of(context).colorScheme.outlineVariant,
                         ),
-                        borderRadius: BorderRadius.circular(10.0)),
+                        borderRadius: BorderRadius.circular(12.0)),
                     child: InkWell(
                       onTap: () {
                         if (context.mounted) {
@@ -372,7 +370,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
+                        padding: const EdgeInsets.all(20),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,7 +388,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -405,7 +403,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -416,7 +414,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface,
-                                size: 15)
+                                size: 16)
                           ],
                         ),
                       ),

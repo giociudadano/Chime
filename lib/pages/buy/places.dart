@@ -297,7 +297,7 @@ class _PlacesPageState extends State<PlacesPage> {
                     "This place does not exist",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontFamily: 'Plus Jakarta Sans',
+                        fontFamily: 'Manrope',
                         fontVariations: const [
                           FontVariation('wght', 700),
                         ],

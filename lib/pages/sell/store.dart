@@ -2,7 +2,7 @@ part of '../../main.dart';
 
 class StorePage extends StatefulWidget {
   StorePage(this.places, {super.key, this.updateNavigationBarCallback});
-
+  
   final Function(bool newState)? updateNavigationBarCallback;
   Map places = {};
 
@@ -91,6 +91,39 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
     for (String category in categories) {
       widget.places[placeID]['categories'][category].remove(productID);
     }
+  }
+  
+  void _showAdditionalDetails(Offset offset) async {
+    await showMenu(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      elevation: 0,
+      context: context,
+      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+      items: [
+        // TO REMOVE?
+        PopupMenuItem(
+          onTap: () {
+            // _showQRCode();
+          },
+          child: Row(children: [
+            Icon(Icons.qr_code_scanner,
+                color: Theme.of(context).colorScheme.onPrimaryContainer),
+            const SizedBox(width: 5),
+            Text(
+              "Share QR Code",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontFamily: 'Manrope',
+                  fontVariations: const [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 13,
+                  letterSpacing: -0.3),
+            )
+          ]),
+        ),
+      ],
+    );
   }
 
   @override
@@ -267,11 +300,22 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                                 letterSpacing: -0.1,
+                                height: 1.1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ],
+                      ),
+                    ),
+                                        GestureDetector(
+                      onTapDown: (TapDownDetails details) {
+                        _showAdditionalDetails(details.globalPosition);
+                      },
+                      child: Icon(
+                        Icons.more_vert,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                   ],
