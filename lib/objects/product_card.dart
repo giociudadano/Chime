@@ -108,7 +108,7 @@ class _ProductCardState extends State<ProductCard> {
                         padding: const EdgeInsets.all(40.0),
                         child: Icon(Icons.local_mall_outlined,
                             color:
-                                Theme.of(context).colorScheme.onSurfaceVariant),
+                                Theme.of(context).colorScheme.outline),
                       ),
                       fadeInCurve: Curves.easeIn,
                       fadeOutCurve: Curves.easeOut,
@@ -117,18 +117,38 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 if (widget.product['isFeatured'] ?? false)
                   Positioned(
-                    left: 8,
-                    top: 0,
-                    child: Icon(Icons.bookmark,
-                        size: 32, color:Theme.of(context).colorScheme.tertiary),
-                  ),
-                // if (widget.product['isFeatured'] ?? false)
-                //   Positioned(
-                //     left: 8,
-                //     top: -4,
-                //     child: Icon(Icons.bookmark,
-                //         size: 30, color: Theme.of(context).colorScheme.tertiary),
-                //   ),
+                      left: 8,
+                      top: 8,
+                      child: Container(
+                          child: Card(
+                            elevation: 0,
+                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: 
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          child: 
+                            Center(
+                              child: Text(
+                                "Featured",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                      
+                        ),
+                      ))
+                      ),
                 Positioned(
                   right: 8,
                   top: 8,
@@ -151,7 +171,9 @@ class _ProductCardState extends State<ProductCard> {
                               ? Theme.of(context).colorScheme.error
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                         ),
                         onPressed: () {
                           setFavoriteProduct(
@@ -182,7 +204,6 @@ class _ProductCardState extends State<ProductCard> {
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3,
-                            height: 0.85,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
@@ -195,7 +216,6 @@ class _ProductCardState extends State<ProductCard> {
                             FontVariation('wght', 700),
                           ],
                           fontSize: 16,
-                          height: 0.85,
                           letterSpacing: -0.3),
                     ),
                   ],

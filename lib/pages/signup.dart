@@ -66,7 +66,6 @@ class _SignupPageState extends State<SignupPage> {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => HomePage()),
               (Route<dynamic> route) => false);
-          bool darkMode = Theme.of(context).brightness == Brightness.dark;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content:
@@ -80,7 +79,7 @@ class _SignupPageState extends State<SignupPage> {
                           FontVariation('wdth', 100),
                         ],
                       )),
-              backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+              backgroundColor: Theme.of(context).colorScheme.surface,
             ),
           );
         }
@@ -117,20 +116,19 @@ class _SignupPageState extends State<SignupPage> {
           errorMessage =
               AppLocalizations.of(context)!.signupSnackbarGenericError;
       }
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.surface,
         ),
       );
       return;
@@ -139,9 +137,8 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurface(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -151,10 +148,9 @@ class _SignupPageState extends State<SignupPage> {
               Text(
                 AppLocalizations.of(context)!.signupTitle,
                 style: const TextStyle(
-                  fontFamily: 'Bahnschrift',
+                  fontFamily: 'Manrope',
                   fontVariations: [
                     FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
                   ],
                   fontSize: 50,
                   height: 0.8,
@@ -173,12 +169,11 @@ class _SignupPageState extends State<SignupPage> {
                         AppLocalizations.of(context)!.email,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14),
+                            fontSize: 16),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -195,14 +190,13 @@ class _SignupPageState extends State<SignupPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                       ),
@@ -217,12 +211,11 @@ class _SignupPageState extends State<SignupPage> {
                         AppLocalizations.of(context)!.username,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14),
+                            fontSize: 16),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -239,14 +232,13 @@ class _SignupPageState extends State<SignupPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: [
-                          FontVariation('wght', 300),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
                         fontSize: 14,
                       ),
@@ -261,12 +253,11 @@ class _SignupPageState extends State<SignupPage> {
                         AppLocalizations.of(context)!.password,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14),
+                            fontSize: 16),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -283,14 +274,13 @@ class _SignupPageState extends State<SignupPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          fontFamily: 'Bahnschrift',
+                          fontFamily: 'Source Sans 3',
                           fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14),
                       obscureText: true,
@@ -324,10 +314,9 @@ class _SignupPageState extends State<SignupPage> {
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Bahnschrift',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
-                                    FontVariation('wght', 500),
-                                    FontVariation('wdth', 100),
+                                    FontVariation('wght', 700),
                                   ],
                                   fontSize: 14,
                                 ),
@@ -352,10 +341,9 @@ class _SignupPageState extends State<SignupPage> {
                             decoration: TextDecoration.underline,
                             decorationColor:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Bahnschrift',
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14),
                       ),

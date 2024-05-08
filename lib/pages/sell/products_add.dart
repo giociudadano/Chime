@@ -39,7 +39,6 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
     bool isMedia = false,
   }) async {
     if (kIsWeb) {
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
         // TODO: Add functionality to edit images on web devices.
         SnackBar(
@@ -152,7 +151,6 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
@@ -208,7 +206,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                   : Padding(
                                       padding: const EdgeInsets.all(40.0),
                                       child: Icon(Icons.local_mall_outlined,
-                                          color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                          color: Theme.of(context).colorScheme.outline),
                                     ),
                             ),
                           ),
@@ -329,7 +327,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                           ),
                           hintText: "Strawberry Cake",
                           hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.outlineVariant),
+                              color: Theme.of(context).colorScheme.outline),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
@@ -385,7 +383,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                               "₱",
                               style: TextStyle(
                                   color:
-                                      Theme.of(context).colorScheme.outlineVariant,
+                                      Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
@@ -396,7 +394,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                           ),
                           hintText: "0",
                           hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.outlineVariant),
+                              color: Theme.of(context).colorScheme.outline),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
@@ -447,7 +445,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                           ),
                           hintText: "Ingredients, allergens, or other information...",
                           hintStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.outlineVariant),
+                              color: Theme.of(context).colorScheme.outline),
                           filled: true,
                           fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
@@ -528,7 +526,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                             hintStyle: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .outlineVariant),
+                                                    .outline),
                                             filled: true,
                                             fillColor: Theme.of(context).colorScheme.surface,
                                             isDense: true,

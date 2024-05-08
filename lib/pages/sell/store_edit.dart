@@ -164,9 +164,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -182,7 +181,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
               "Edit Store",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
@@ -259,10 +258,10 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(
-                                "Delete",
+                                "Remove",
                                 style: TextStyle(
                                   color: ChimeColors.getRed800(),
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -292,7 +291,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                               "Upload",
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -585,7 +584,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             "Cancel",
                             style: TextStyle(
                               color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -628,7 +627,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             "Save",
                             style: TextStyle(
                               color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
