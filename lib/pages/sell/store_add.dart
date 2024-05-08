@@ -98,7 +98,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
               "Create a Store",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
@@ -401,7 +401,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                             "Save",
                             style: TextStyle(
                               color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],

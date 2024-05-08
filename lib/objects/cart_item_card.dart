@@ -136,11 +136,11 @@ class _CartItemCardState extends State<CartItemCard> {
   Widget build(BuildContext context) {
     if (widget.isVisible) {
       return Card(
-        color:  Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surface,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          side: BorderSide.none,
+          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
           borderRadius: BorderRadius.circular(12.0),
         ),
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -162,35 +162,61 @@ class _CartItemCardState extends State<CartItemCard> {
                       color: Theme.of(context).colorScheme.outline,
                     ),
                     onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Remove this item'),
-                                  content: const Text('You can add it again later if you change your mind.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                  
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        removeProductFromCart();
-                                        Navigator.pop(context, 'OK');
-                                        const  snackBar = SnackBar(
-                                          content: Text('Item has been removed from cart.'),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                        } ,
-                                      child: const Text('OK'),
-                                    ),
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Remove this item',
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.3,
+                            )),
+                        content: const Text(
+                            'You can add it again later if you change your mind.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Cancel');
+                            },
+                            child: const Text('Cancel',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
                                   ],
-                                ),
-                              ),
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              removeProductFromCart();
+                              Navigator.pop(context, 'OK');
+                              final snackBar = SnackBar(
+                                content: const Text(
+                                    'Item has been removed from cart.'),
+                              );
+
+                              // Find the ScaffoldMessenger in the widget tree
+                              // and use it to show a SnackBar.
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: const Text('OK',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -230,7 +256,9 @@ class _CartItemCardState extends State<CartItemCard> {
                                   errorWidget: (context, url, error) => Padding(
                                     padding: const EdgeInsets.all(40.0),
                                     child: Icon(Icons.local_mall_outlined,
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant),
                                   ),
                                   fadeInCurve: Curves.easeIn,
                                   fadeOutCurve: Curves.easeOut,
@@ -250,19 +278,20 @@ class _CartItemCardState extends State<CartItemCard> {
                           widget.item['name'],
                           maxLines: 2,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontFamily: 'Manrope',
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 700),
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 16,
-                            letterSpacing: -0.3,
+                            letterSpacing: -0.1,
                           ),
                         ),
                         Text(
                           '₱${widget.item['price']}',
                           style: TextStyle(
-                              color:  Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).colorScheme.primary,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
@@ -276,14 +305,16 @@ class _CartItemCardState extends State<CartItemCard> {
                               child: Text(
                                 "Variant: ${widget.item['variant']}",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                                   fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
                                   ],
                                   fontSize: 14,
                                   height: 0.85,
-                                  letterSpacing: -0.3,
+                                  letterSpacing: -0.1,
                                 ),
                               )),
                         const SizedBox(height: 10),
@@ -294,15 +325,16 @@ class _CartItemCardState extends State<CartItemCard> {
                                   borderRadius: BorderRadius.circular(0),
                                   border: Border.all(
                                       width: 1,
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
                               width: 28,
                               height: 28,
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 icon: Icon(
                                   Icons.remove,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.outline,
                                   size: 16,
                                 ),
                                 onPressed: () {
@@ -318,15 +350,16 @@ class _CartItemCardState extends State<CartItemCard> {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(0),
-                                  border: Border.symmetric(
-                                            horizontal: BorderSide(
-                                              width: 1,
-                                              color: Theme.of(context).colorScheme.onSurfaceVariant
-                                            ),
-                                            vertical: BorderSide.none,
-                                          ),
-                                  ),
+                                borderRadius: BorderRadius.circular(0),
+                                border: Border.symmetric(
+                                  horizontal: BorderSide(
+                                      width: 1,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant),
+                                  vertical: BorderSide.none,
+                                ),
+                              ),
                               width: 40,
                               height: 28,
                               child: Center(
@@ -346,14 +379,16 @@ class _CartItemCardState extends State<CartItemCard> {
                                   borderRadius: BorderRadius.circular(0),
                                   border: Border.all(
                                       width: 1,
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant)),
                               width: 28,
                               height: 28,
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 icon: Icon(
                                   Icons.add,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.outline,
                                   size: 16,
                                 ),
                                 onPressed: () {
@@ -376,31 +411,35 @@ class _CartItemCardState extends State<CartItemCard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(
-                                      width: 50,
+                                      width: 40,
                                       child: Text(
                                         "Stock",
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                          fontFamily: 'Manrope',
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                          fontFamily: 'Source Sans 3',
                                           fontVariations: const [
-                                            FontVariation('wght', 700),
+                                            FontVariation('wght', 400),
                                           ],
                                           fontSize: 14,
-                                          letterSpacing: -0.3,
+                                          letterSpacing: -0.1,
                                         ),
                                       ),
                                     ),
                                     Text(
                                       "${widget.item['ordersRemaining']}",
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurfaceVariant,
                                         fontFamily: 'Source Sans 3',
                                         fontVariations: const [
                                           FontVariation('wght', 400),
                                         ],
                                         fontSize: 14,
-                                        height: 1.7,
-                                        letterSpacing: -0.3,
+                                        // height: 1.7,
+                                        letterSpacing: -0.1,
                                       ),
                                     ),
                                   ]),

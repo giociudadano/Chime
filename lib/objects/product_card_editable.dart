@@ -98,7 +98,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
   Widget build(BuildContext context) {
     isFeatured = widget.product['categories'].contains('Featured');
     return Card(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
@@ -165,14 +165,14 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant,
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.35),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           isFeatured ? Icons.bookmark : Icons.bookmark_outline,
-                          size: 22,
+                          size: 24,
                           color: isFeatured
-                              ? Theme.of(context).colorScheme.primary
+                              ? Theme.of(context).colorScheme.inversePrimary
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
                                   : Theme.of(context).colorScheme.onSurfaceVariant,

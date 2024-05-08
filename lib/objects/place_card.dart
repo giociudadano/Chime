@@ -59,13 +59,13 @@ class _PlaceCardState extends State<PlaceCard> {
   Widget build(BuildContext context) {
 
     return Card(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        // side: BorderSide(
-        //   color: Theme.of(context).colorScheme.outline,
-        // ),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+        ),
         borderRadius: BorderRadius.circular(12.0),
       ),
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),

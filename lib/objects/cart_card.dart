@@ -108,18 +108,18 @@ class _CartCardState extends State<CartCard> {
                       placeName,
                       maxLines: 1,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.primary,
                         fontFamily: 'Manrope',
                         fontVariations: const [
                           FontVariation('wght', 700),
                         ],
-                        fontSize: 20,
+                        fontSize: 16,
                         letterSpacing: -0.3,
                       ),
                     ),
                     Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8))),
                         child: Padding(
@@ -134,7 +134,7 @@ class _CartCardState extends State<CartCard> {
                                 "₱${deliveryFee}",
                                 maxLines: 1,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
@@ -175,7 +175,7 @@ class _CartCardState extends State<CartCard> {
                         style: ButtonStyle(
                           shadowColor: MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
+                                Theme.of(context).colorScheme.primaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -186,7 +186,7 @@ class _CartCardState extends State<CartCard> {
                           child: Text(
                             "Checkout (₱$total)",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),

@@ -36,7 +36,6 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   }
 
   Future<dynamic> showAddProductsForm(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formAddProductsKey = GlobalKey<FormState>();
 
     return showDialog(
@@ -73,13 +72,14 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           icon: Icon(
                             Icons.close,
                             size: 24,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           onPressed: () {
                             Navigator.pop(context);
                           }),
                     ],
                   ),
+                  const SizedBox(height: 16),
                   SizedBox(
                     height: 300,
                     width: double.maxFinite,
@@ -103,16 +103,16 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
-                                    letterSpacing: -0.3)),
+                                    fontSize: 16,
+                                    letterSpacing: -0.1)),
                           );
                         },
                         listBuilder: ChoiceList.createWrapped(
                           spacing: 10,
                           runSpacing: 10,
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 25,
+                            horizontal: 0,
+                            vertical: 0,
                           ),
                         ),
                       ),
@@ -130,13 +130,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLowest(
-                                    darkMode)),
+                                Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                               side: BorderSide(
-                                color: ChimeColors.getGreen300(),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             )),
                           ),
@@ -145,12 +144,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             child: Text(
                               "Cancel",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -164,7 +163,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
-                                  ChimeColors.getGreen200()),
+                                  Theme.of(context).colorScheme.primary),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -175,12 +174,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             child: Text(
                               "Save",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -196,7 +195,6 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   }
 
   Future<dynamic> showRenameCategoryForm(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final GlobalKey<FormState> formRenameCategoryKey = GlobalKey<FormState>();
     final inputRenameCategoryName = TextEditingController();
 
@@ -210,7 +208,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
               ),
             ),
             elevation: 0,
-            backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+            backgroundColor: Theme.of(context).colorScheme.surface,
             content: Form(
               key: formRenameCategoryKey,
               child: Column(
@@ -222,7 +220,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                       Text(
                         "Rename Category",
                         style: TextStyle(
-                            color: ChimeColors.getGreen800(),
+                            color: Theme.of(context).colorScheme.primary,
                             fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
@@ -234,14 +232,14 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           icon: Icon(
                             Icons.close,
                             size: 24,
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                           onPressed: () {
                             Navigator.pop(context);
                           }),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -252,8 +250,8 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                   ),
                   TextFormField(
@@ -262,24 +260,23 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Theme.of(context).colorScheme.outline,
-                          width: 0.5,
+                          width: 1,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                          width: 0.5,
+                          color: Theme.of(context).colorScheme.outlineVariant,
+                          width: 1,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      hintText: "Category Name",
+                      hintText: "Meal Set or Group",
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline,
-                          letterSpacing: -0.3),
+                          letterSpacing: -0.1),
                       filled: true,
-                      fillColor:
-                          MaterialColors.getSurfaceContainerLowest(darkMode),
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -292,7 +289,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                       return _verifyNameField(value);
                     },
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 48),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -304,13 +301,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLowest(
-                                    darkMode)),
+                                Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                               side: BorderSide(
-                                color: ChimeColors.getGreen300(),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             )),
                           ),
@@ -319,12 +315,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             child: Text(
                               "Cancel",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.secondary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -341,7 +337,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
-                                  ChimeColors.getGreen200()),
+                                  Theme.of(context).colorScheme.primary),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -352,12 +348,12 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                             child: Text(
                               "Save",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
+                                color: Theme.of(context).colorScheme.onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 14,
+                                fontSize: 16,
                               ),
                             ),
                           ),
@@ -395,8 +391,67 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
   }
 
   void deleteCategory() {
-    widget.deleteCategoryCallback!(widget.categoryName);
-    Navigator.pop(context);
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Delete Category',
+            style: TextStyle(
+              fontFamily: 'Manrope',
+              fontVariations: const [
+                FontVariation('wght', 700),
+              ],
+              fontSize: 16,
+              letterSpacing: -0.3,
+            )),
+        content:
+            const Text('No worries, all your products will remain intact.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, 'Cancel');
+            },
+            child: const Text('Cancel',
+                style: TextStyle(
+                  fontFamily: 'Manrope',
+                  fontVariations: const [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 16,
+                  letterSpacing: -0.3,
+                )),
+          ),
+          TextButton(
+            onPressed: () {
+              widget.deleteCategoryCallback!(widget.categoryName);
+              Navigator.pop(context, 'OK');
+              final snackBar = SnackBar(
+                content: const Text('Category has been deleted.',
+                    style: TextStyle(
+                      fontFamily: 'Manrope',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                      ],
+                      fontSize: 16,
+                      letterSpacing: -0.3,
+                    )),
+              );
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            child: const Text('OK',
+                style: TextStyle(
+                  fontFamily: 'Manrope',
+                  fontVariations: const [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 16,
+                  letterSpacing: -0.3,
+                )),
+          ),
+        ],
+      ),
+    );
   }
 
   void showDropdown() {
@@ -501,7 +556,6 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final dropdown = DropdownButton<int>(
       key: dropdownButtonKey,
       items: [
@@ -509,25 +563,25 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
           value: 1,
           child: Text('Rename Category',
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontFamily: 'Source Sans 3',
                   fontVariations: const [
                     FontVariation('wght', 400),
                   ],
-                  fontSize: 14,
-                  letterSpacing: -0.3)),
+                  fontSize: 16,
+                  letterSpacing: -0.1)),
         ),
         DropdownMenuItem(
           value: 2,
           child: Text('Delete Category',
               style: TextStyle(
-                  color: ChimeColors.getRed800(),
+                  color: Theme.of(context).colorScheme.error,
                   fontFamily: 'Source Sans 3',
                   fontVariations: const [
                     FontVariation('wght', 400),
                   ],
-                  fontSize: 14,
-                  letterSpacing: -0.3)),
+                  fontSize: 16,
+                  letterSpacing: -0.1)),
         ),
       ],
       onChanged: (int? value) {
@@ -543,19 +597,18 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
     );
 
     return Scaffold(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: ChimeColors.getGreen800(),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: Icon(
             Icons.add,
-            color: MaterialColors.getSurfaceContainerLowest(darkMode),
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
           onPressed: () {
             showAddProductsForm(context);
           },
         ),
         appBar: AppBar(
-            backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back,
@@ -579,7 +632,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             ),
             actions: [
               Offstage(child: dropdown),
-              widget.categoryName == 'Featured'
+              widget.categoryName == 'Menu of the Day'
                   ? const SizedBox(width: 60)
                   : Padding(
                       padding: const EdgeInsets.only(right: 10),

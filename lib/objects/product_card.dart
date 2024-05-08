@@ -67,7 +67,7 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
@@ -122,7 +122,7 @@ class _ProductCardState extends State<ProductCard> {
                       child: Container(
                           child: Card(
                             elevation: 0,
-                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.35),
                         shape: RoundedRectangleBorder(
                           side: BorderSide(
                             color: Theme.of(context).colorScheme.primary
@@ -159,7 +159,7 @@ class _ProductCardState extends State<ProductCard> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant,
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.35),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
