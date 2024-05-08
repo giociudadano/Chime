@@ -125,7 +125,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                 filled: true,
                 fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
                 isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined, size: 20), //size: 16
+                prefixIcon:
+                    const Icon(Icons.search_outlined, size: 20), //size: 16
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
@@ -237,8 +238,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Unread') +
                               getOrderCount('Preparing') +
@@ -298,8 +298,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Completed') == 0)
                         Text(
@@ -348,8 +347,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Cancelled') == 0)
                         Text(
