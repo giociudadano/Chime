@@ -129,7 +129,8 @@ class _OrderCardState extends State<OrderCard> {
             ),
           ]),
           const SizedBox(height: 10),
-          if (widget.adminControls)
+          // Checkbox
+          if (widget.adminControls && widget.order['status'] != 'Cancelled')
             Row(children: [
               SizedBox(
                 height: 24,
@@ -173,7 +174,8 @@ class _OrderCardState extends State<OrderCard> {
                 ),
               )
             ]),
-          if (widget.adminControls) const SizedBox(height: 10),
+          if (widget.adminControls && widget.order['status'] != 'Cancelled')
+            const SizedBox(height: 10),
           if (!widget.adminControls)
             Row(children: [
               Icon(Icons.book_outlined,

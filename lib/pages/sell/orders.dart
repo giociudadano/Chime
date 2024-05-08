@@ -305,8 +305,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Unread') == 0)
                         Text(
@@ -349,14 +348,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
-                                  const SizedBox(height: 40),
+                              const SizedBox(height: 40),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Preparing') +
                               getOrderCount('To Receive') ==
@@ -402,15 +400,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                     } else {
                                       return const SizedBox.shrink();
                                     }
-                                    
                                   }),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Received') == 0)
                         Text(
@@ -458,8 +454,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Completed') == 0)
                         Text(
@@ -507,8 +502,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Cancelled') == 0)
                         Text(
