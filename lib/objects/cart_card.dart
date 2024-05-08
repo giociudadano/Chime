@@ -91,7 +91,7 @@ class _CartCardState extends State<CartCard> {
           elevation: 0,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-            color:  Theme.of(context).colorScheme.outline,
+            color:  Theme.of(context).colorScheme.outlineVariant,
           ),
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -127,7 +127,7 @@ class _CartCardState extends State<CartCard> {
                               vertical: 4, horizontal: 8),
                           child: Row(
                             children: [
-                              Icon(Icons.motorcycle,
+                              Icon(Icons.local_shipping_outlined,
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
                               const SizedBox(height: 12),
                               Text(
@@ -173,6 +173,7 @@ class _CartCardState extends State<CartCard> {
                           }
                         },
                         style: ButtonStyle(
+                          shadowColor: MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.primary),
                             shape:

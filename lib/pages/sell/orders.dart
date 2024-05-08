@@ -159,9 +159,10 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
-                                ? ChimeColors.getGreen800()
+                                ? Theme.of(context).colorScheme.primary
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
@@ -171,7 +172,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             style: TextStyle(
                                 color: tabController.index == 0
                                     ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    : Theme.of(context).colorScheme.primary,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -187,9 +188,10 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
-                                ? ChimeColors.getGreen800()
+                                ? Theme.of(context).colorScheme.primary
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
@@ -199,7 +201,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             style: TextStyle(
                                 color: tabController.index == 1
                                     ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    : Theme.of(context).colorScheme.primary,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -215,19 +217,20 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
-                                ? ChimeColors.getGreen800()
+                                ? Theme.of(context).colorScheme.primary
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Receiving",
+                            "Delivered",
                             style: TextStyle(
                                 color: tabController.index == 2
                                     ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    : Theme.of(context).colorScheme.primary,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -243,9 +246,10 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 3
-                                ? ChimeColors.getGreen800()
+                                ? Theme.of(context).colorScheme.primary
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
@@ -255,7 +259,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             style: TextStyle(
                                 color: tabController.index == 3
                                     ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    : Theme.of(context).colorScheme.primary,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -271,9 +275,10 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 4
-                                ? ChimeColors.getGreen800()
+                                ? Theme.of(context).colorScheme.primary
                                 : ChimeColors.getGreen100()),
                       ),
                       child: Padding(
@@ -283,7 +288,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             style: TextStyle(
                                 color: tabController.index == 4
                                     ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
+                                    : Theme.of(context).colorScheme.primary,
                                 fontFamily: 'Plus Jakarta Sans',
                                 fontVariations: const [
                                   FontVariation('wght', 700),

@@ -230,9 +230,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                   errorWidget: (context, url, error) => Padding(
                                     padding: const EdgeInsets.all(40.0),
                                     child: Icon(Icons.local_mall_outlined,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant),
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                                   ),
                                   fadeInCurve: Curves.easeIn,
                                   fadeOutCurve: Curves.easeOut,
@@ -252,10 +250,10 @@ class _CartItemCardState extends State<CartItemCard> {
                           widget.item['name'],
                           maxLines: 2,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                             fontFamily: 'Manrope',
                             fontVariations: const [
-                              FontVariation('wght', 400),
+                              FontVariation('wght', 700),
                             ],
                             fontSize: 16,
                             letterSpacing: -0.3,
@@ -278,7 +276,7 @@ class _CartItemCardState extends State<CartItemCard> {
                               child: Text(
                                 "Variant: ${widget.item['variant']}",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
@@ -296,9 +294,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                   borderRadius: BorderRadius.circular(0),
                                   border: Border.all(
                                       width: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant)),
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant)),
                               width: 28,
                               height: 28,
                               child: IconButton(
@@ -306,7 +302,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                 icon: Icon(
                                   Icons.remove,
                                   color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                      Theme.of(context).colorScheme.onSurfaceVariant,
                                   size: 16,
                                 ),
                                 onPressed: () {
@@ -323,11 +319,14 @@ class _CartItemCardState extends State<CartItemCard> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(0),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant)),
+                                  border: Border.symmetric(
+                                            horizontal: BorderSide(
+                                              width: 1,
+                                              color: Theme.of(context).colorScheme.onSurfaceVariant
+                                            ),
+                                            vertical: BorderSide.none,
+                                          ),
+                                  ),
                               width: 40,
                               height: 28,
                               child: Center(
@@ -347,16 +346,14 @@ class _CartItemCardState extends State<CartItemCard> {
                                   borderRadius: BorderRadius.circular(0),
                                   border: Border.all(
                                       width: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant)),
+                                      color: Theme.of(context).colorScheme.onSurfaceVariant)),
                               width: 28,
                               height: 28,
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 icon: Icon(
                                   Icons.add,
-                                  color: Theme.of(context).colorScheme.outline,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                                   size: 16,
                                 ),
                                 onPressed: () {
@@ -383,9 +380,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                       child: Text(
                                         "Stock",
                                         style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                                           fontFamily: 'Manrope',
                                           fontVariations: const [
                                             FontVariation('wght', 700),
@@ -398,9 +393,7 @@ class _CartItemCardState extends State<CartItemCard> {
                                     Text(
                                       "${widget.item['ordersRemaining']}",
                                       style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                                         fontFamily: 'Source Sans 3',
                                         fontVariations: const [
                                           FontVariation('wght', 400),
