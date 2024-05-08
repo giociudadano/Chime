@@ -93,7 +93,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -144,6 +144,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
                                 ? Theme.of(context).colorScheme.primary
@@ -172,6 +173,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
                                 ? Theme.of(context).colorScheme.primary
@@ -200,6 +202,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor: MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
                                 ? Theme.of(context).colorScheme.onErrorContainer

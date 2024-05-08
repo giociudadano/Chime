@@ -281,9 +281,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
@@ -379,7 +378,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
                                 child: Text(
-                                  "Delete",
+                                  "Remove",
                                   style: TextStyle(
                                     color: ChimeColors.getRed800(),
                                     fontFamily: 'Plus Jakarta Sans',
@@ -862,8 +861,9 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           deleteProduct();
                         },
                         style: ButtonStyle(
+                          shadowColor: MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getRed200()),
+                                Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -874,7 +874,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           child: Text(
                             "Delete Product",
                             style: TextStyle(
-                              color: ChimeColors.getRed800(),
+                              color: Theme.of(context).colorScheme.error,
                               fontFamily: 'Plus Jakarta Sans',
                               fontVariations: const [
                                 FontVariation('wght', 700),

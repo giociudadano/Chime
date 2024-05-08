@@ -359,6 +359,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   }
                                                 },
                                                 style: ButtonStyle(
+                                                  shadowColor: MaterialStatePropertyAll(Colors.transparent),
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
                                                             Theme.of(context).colorScheme.primary),

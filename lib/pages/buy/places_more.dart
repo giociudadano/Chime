@@ -511,6 +511,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
+                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
                       backgroundColor: MaterialStatePropertyAll(
                           tabController.index == 0
                               ? Theme.of(context).colorScheme.primary
@@ -539,6 +540,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                   const SizedBox(width: 10),
                   ElevatedButton(
                     style: ButtonStyle(
+                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
                       backgroundColor: MaterialStatePropertyAll(
                           tabController.index == 1
                               ? Theme.of(context).colorScheme.primary

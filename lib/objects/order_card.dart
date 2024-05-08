@@ -71,10 +71,10 @@ class _OrderCardState extends State<OrderCard> {
   Widget build(BuildContext context) {
     bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
-      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+      color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: MaterialColors.getSurfaceContainerHighest(darkMode),
+          color: Theme.of(context).colorScheme.outlineVariant,
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -300,15 +300,15 @@ class _OrderCardState extends State<OrderCard> {
                   backgroundColor: MaterialStatePropertyAll(widget.adminControls
                       ? (widget.order['status'] == 'Received' ||
                               widget.order['status'] == 'Completed')
-                          ? Theme.of(context).colorScheme.secondaryContainer
+                          ? Theme.of(context).colorScheme.surfaceVariant
                           : widget.order['status'] == 'Cancelled'
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : Theme.of(context).colorScheme.secondaryContainer
+                              ? Theme.of(context).colorScheme.surfaceVariant
+                              : Theme.of(context).colorScheme.surfaceVariant
                       : widget.order['status'] == 'Received'
-                          ? Theme.of(context).colorScheme.secondaryContainer
+                          ? Theme.of(context).colorScheme.surfaceVariant
                           : widget.order['status'] == 'Cancelled'
-                              ? Theme.of(context).colorScheme.secondaryContainer
-                              : Theme.of(context).colorScheme.secondaryContainer),
+                              ? Theme.of(context).colorScheme.surfaceVariant
+                              : Theme.of(context).colorScheme.surfaceVariant),
                   shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: widget.adminControls
@@ -317,12 +317,12 @@ class _OrderCardState extends State<OrderCard> {
                                 widget.order['status'] == 'Cancelled')
                             ? BorderSide.none
                             : BorderSide(
-                                color: Theme.of(context).colorScheme.secondaryContainer,
+                                color: Theme.of(context).colorScheme.surface,
                               )
                         : widget.order['status'] == 'Received'
-                            ? BorderSide(color: Theme.of(context).colorScheme.secondaryContainer)
+                            ? BorderSide(color: Theme.of(context).colorScheme.surfaceVariant)
                             : widget.order['status'] == 'Cancelled'
-                                ? BorderSide(color: Theme.of(context).colorScheme.secondaryContainer)
+                                ? BorderSide(color: Theme.of(context).colorScheme.surfaceVariant)
                                 : BorderSide.none,
                   )),
                 ),
@@ -412,8 +412,8 @@ class _OrderCardState extends State<OrderCard> {
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         widget.order['deliveryMethod'] == "Pickup"
-                            ? "Ready for Pickup"
-                            : "Ready for Delivery",
+                            ? "For Pickup"
+                            : "For Delivery",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -436,9 +436,36 @@ class _OrderCardState extends State<OrderCard> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      setStatusState("Received");
-                    },
+                    onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Mark Order as Delivered'),
+                                  content: const Text('Please make sure everything is in check.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                  
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setStatusState("Received");
+                                        Navigator.pop(context, 'OK');
+                                        final snackBar = SnackBar(
+                                          content: const Text('Order is marked as delivered.'),
+                                        );
+
+                                        // Find the ScaffoldMessenger in the widget tree
+                                        // and use it to show a SnackBar.
+                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        } ,
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ),
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
@@ -451,7 +478,7 @@ class _OrderCardState extends State<OrderCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "Mark as Received",
+                        "Delivered",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -460,6 +487,7 @@ class _OrderCardState extends State<OrderCard> {
                             FontVariation('wght', 700),
                           ],
                           fontSize: 14,
+                          letterSpacing: -0.3,
                         ),
                       ),
                     ),
@@ -473,9 +501,36 @@ class _OrderCardState extends State<OrderCard> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      setStatusState("Completed");
-                    },
+                    onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Mark Order as Complete'),
+                                  content: const Text('Please make sure everything is in check.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Cancel');
+                                      },
+                  
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setStatusState("Completed");
+                                        Navigator.pop(context, 'OK');
+                                        final snackBar = SnackBar(
+                                          content: const Text('Order is marked as completed.'),
+                                        );
+
+                                        // Find the ScaffoldMessenger in the widget tree
+                                        // and use it to show a SnackBar.
+                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        } ,
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ),
                     style: ButtonStyle(
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor:
@@ -488,7 +543,7 @@ class _OrderCardState extends State<OrderCard> {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "Mark as Complete",
+                        "Completed",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
@@ -497,6 +552,7 @@ class _OrderCardState extends State<OrderCard> {
                             FontVariation('wght', 700),
                           ],
                           fontSize: 14,
+                          letterSpacing: -0.3,
                         ),
                       ),
                     ),
