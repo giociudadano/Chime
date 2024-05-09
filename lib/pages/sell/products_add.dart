@@ -230,7 +230,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                           Theme.of(context).colorScheme.surface),
                                       shape: MaterialStatePropertyAll(
                                           RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(8),
                                         side: BorderSide.none,
                                       ))),
                                   child: Padding(
@@ -244,7 +244,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
-                                        fontSize: 16,
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ),
@@ -263,7 +263,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                     Theme.of(context).colorScheme.primaryContainer),
                                 shape: MaterialStatePropertyAll(
                                     RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(8),
                                   side: BorderSide.none,
                                 ))),
                             child: Padding(
@@ -277,7 +277,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),

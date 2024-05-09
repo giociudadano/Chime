@@ -162,7 +162,6 @@ class _StoreEditPageState extends State<StoreEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -203,7 +202,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     const SizedBox(height: 20),
                     Center(
                       child: Card(
-                        color: MaterialColors.getSurfaceContainerLow(darkMode),
+                        color: Theme.of(context).colorScheme.surfaceVariant,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         elevation: 0,
                         child: SizedBox(
@@ -248,11 +247,13 @@ class _StoreEditPageState extends State<StoreEditPage> {
                               deletePlaceImage();
                             },
                             style: ButtonStyle(
+                                shadowColor: MaterialStatePropertyAll(
+                                    Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
-                                    ChimeColors.getRed200()),
+                                    Theme.of(context).colorScheme.surface),
                                 shape: MaterialStatePropertyAll(
                                     RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(8),
                                   side: BorderSide.none,
                                 ))),
                             child: Padding(
@@ -260,7 +261,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                               child: Text(
                                 "Remove",
                                 style: TextStyle(
-                                  color: ChimeColors.getRed800(),
+                                  color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
@@ -277,12 +278,15 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                 context: context);
                           },
                           style: ButtonStyle(
+                              shadowColor:
+                                  MaterialStatePropertyAll(Colors.transparent),
                               backgroundColor: MaterialStatePropertyAll(
-                                  MaterialColors.getSurfaceContainerLow(
-                                      darkMode)),
+                                  Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(8),
                                 side: BorderSide.none,
                               ))),
                           child: Padding(
@@ -290,7 +294,9 @@ class _StoreEditPageState extends State<StoreEditPage> {
                             child: Text(
                               "Upload",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -306,20 +312,21 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     Text(
                       "Required items are marked with an asterisk *",
                       style: TextStyle(
-                          color: ChimeColors.getRed800(),
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Source Sans 3',
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     const SizedBox(height: 10),
                     Text.rich(
                       TextSpan(text: "Store Name", children: [
                         TextSpan(
                             text: "*",
-                            style: TextStyle(color: ChimeColors.getRed800()))
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary))
                       ]),
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
@@ -327,23 +334,23 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       controller: inputEditStoreName,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -351,12 +358,11 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.1,
                           fontFamily: 'Source Sans 3',
                           fontVariations: [
                             FontVariation('wght', 400),
@@ -375,8 +381,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       controller: inputEditStoreDesc,
@@ -384,15 +390,15 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -400,8 +406,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -410,7 +415,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 3,
                       maxLines: 3,
@@ -427,8 +432,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -436,15 +441,15 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -453,7 +458,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           child: Text(
                             "₱",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.outline,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
@@ -466,8 +471,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -476,7 +480,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 1,
                       maxLines: 1,
@@ -493,8 +497,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -503,14 +507,14 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.outlineVariant,
                             width: 0.5,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.outlineVariant,
                             width: 0.5,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
@@ -523,18 +527,17 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           child: Text(
                             "+63",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.outline,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
                                 fontSize: 14,
-                                letterSpacing: -0.3),
+                                letterSpacing: -0.1),
                           ),
                         ),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -543,7 +546,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 1,
                       maxLines: 1,
@@ -568,13 +571,12 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         style: ButtonStyle(
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
-                              MaterialColors.getSurfaceContainerLowest(
-                                  darkMode)),
+                              Theme.of(context).colorScheme.surface),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8),
                             side: BorderSide(
-                              color: ChimeColors.getGreen300(),
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           )),
                         ),
@@ -583,12 +585,12 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
+                              color: Theme.of(context).colorScheme.secondary,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 15,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -615,10 +617,10 @@ class _StoreEditPageState extends State<StoreEditPage> {
                         },
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context).colorScheme.primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide.none,
                             ))),
                         child: Padding(
@@ -626,7 +628,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           child: Text(
                             "Save",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
+                              color: Theme.of(context).colorScheme.onPrimary,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),

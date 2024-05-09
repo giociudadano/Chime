@@ -280,7 +280,6 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
@@ -374,7 +373,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                       Theme.of(context).colorScheme.surface),
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                     side: BorderSide.none,
                                   ))),
                               child: Padding(
@@ -389,7 +388,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
@@ -424,7 +423,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -778,7 +777,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 ),
                                 Icon(Icons.arrow_forward_ios,
                                     color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                        Theme.of(context).colorScheme.outline,
                                     size: 16)
                               ],
                             ),
