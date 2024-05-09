@@ -695,7 +695,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Menu of the Day",
+                                      "Featured",
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
