@@ -165,7 +165,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.35),
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.70),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(

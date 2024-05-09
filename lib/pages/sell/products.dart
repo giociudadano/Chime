@@ -603,7 +603,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Menu of the Day",
+                                  "Featured",
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme

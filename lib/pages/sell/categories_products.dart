@@ -632,7 +632,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             ),
             actions: [
               Offstage(child: dropdown),
-              widget.categoryName == 'Menu of the Day'
+              widget.categoryName == 'Featured'
                   ? const SizedBox(width: 60)
                   : Padding(
                       padding: const EdgeInsets.only(right: 10),

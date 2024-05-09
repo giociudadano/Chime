@@ -367,7 +367,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Visibility(
-                  visible: showAddressCard,
+                  visible: true,
                   child: 
                     Card(
                       shape: RoundedRectangleBorder(

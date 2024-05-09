@@ -117,16 +117,14 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 if (widget.product['isFeatured'] ?? false)
                   Positioned(
-                      left: 8,
-                      top: 8,
+                      left: 4,
+                      top: 4,
                       child: Container(
                           child: Card(
                             elevation: 0,
-                        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.35),
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.70),
                         shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary
-                          ),
+                          side: BorderSide.none,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: 
@@ -140,7 +138,7 @@ class _ProductCardState extends State<ProductCard> {
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .primary,
+                                      .onPrimaryContainer,
                                   fontSize: 12,
                                 ),
                               ),
@@ -159,7 +157,7 @@ class _ProductCardState extends State<ProductCard> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.35),
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.70),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(

@@ -330,7 +330,6 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
   // Shows a form that allows the user to add an address.
   // Visible when clicking on the 'plus' button at the upper right of the page.
   Future showAddAddressForm(BuildContext context) async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     // Variables for dropdown box.
     List<DropdownMenuItem> dropdownLandmarks = List.generate(
       landmarks.length,
@@ -1441,13 +1440,12 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                   String key = addresses.keys.elementAt(index);
                   return Card(
                     elevation: 0,
-                    color: MaterialColors.getSurfaceContainerLowest(darkMode),
+                    color: Theme.of(context).colorScheme.surface,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         color: selectedAddress == key
                             ? Theme.of(context).colorScheme.primary
-                            : MaterialColors.getSurfaceContainerHighest(
-                                darkMode),
+                            : Theme.of(context).colorScheme.outlineVariant,
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -1467,7 +1465,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                               child: IconButton(
                                 padding: const EdgeInsets.all(0),
                                 icon: Icon(
-                                  Icons.arrow_forward,
+                                  Icons.pin_drop_outlined,
                                   size: 18,
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
