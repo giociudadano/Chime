@@ -234,8 +234,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Unread') +
                               getOrderCount('Preparing') +
@@ -295,8 +294,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Completed') == 0)
                         Text(
@@ -348,8 +346,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  ListView(
                     children: [
                       if (getOrderCount('Cancelled') == 0)
                         Text(
