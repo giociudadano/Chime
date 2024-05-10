@@ -367,7 +367,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Visibility(
-                  visible: true,
+                  visible: selectedAddress == null ? true : showAddressCard,
                   child: 
                     Card(
                       shape: RoundedRectangleBorder(
@@ -471,7 +471,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                                             addresses[
                                                                     selectedAddress] ==
                                                                 null
-                                                        ? "This user has no address selected. To allow delivery, please add an address."
+                                                        ? "Select this card to add a new address and enable deliveries."
                                                         : parseAddress(
                                                             addresses[
                                                                     selectedAddress]

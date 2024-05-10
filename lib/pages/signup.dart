@@ -71,15 +71,14 @@ class _SignupPageState extends State<SignupPage> {
               content:
                   Text(AppLocalizations.of(context)!.accountCreationSuccessful,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 14,
-                        fontFamily: 'Bahnschrift',
+                        fontFamily: 'Source Sans 3',
                         fontVariations: const [
-                          FontVariation('wght', 350),
-                          FontVariation('wdth', 100),
+                          FontVariation('wght', 400),
                         ],
                       )),
-              backgroundColor: Theme.of(context).colorScheme.surface,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             ),
           );
         }
@@ -121,14 +120,14 @@ class _SignupPageState extends State<SignupPage> {
         SnackBar(
           content: Text(errorMessage,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onErrorContainer,
                 fontSize: 14,
                 fontFamily: 'Source Sans 3',
                 fontVariations: const [
                   FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Theme.of(context).colorScheme.errorContainer,
         ),
       );
       return;
@@ -166,48 +165,6 @@ class _SignupPageState extends State<SignupPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        AppLocalizations.of(context)!.email,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 16),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                      controller: _inputEmail,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        hintText: AppLocalizations.of(context)!.emailHint,
-                        hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.outline),
-                        filled: true,
-                        fillColor:
-                            Theme.of(context).colorScheme.surfaceVariant,
-                        isDense: true,
-                      ),
-                      style: const TextStyle(
-                        fontFamily: 'Source Sans 3',
-                        fontVariations: [
-                          FontVariation('wght', 400),
-                        ],
-                        fontSize: 14,
-                      ),
-                      validator: (String? value) {
-                        return _verifyEmailField(value);
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
                         AppLocalizations.of(context)!.username,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
@@ -231,8 +188,7 @@ class _SignupPageState extends State<SignupPage> {
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            Theme.of(context).colorScheme.surfaceVariant,
+                        fillColor: Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -244,6 +200,47 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       validator: (String? value) {
                         return _verifyUsernameField(value);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalizations.of(context)!.email,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontFamily: 'Source Sans 3',
+                            fontVariations: const [
+                              FontVariation('wght', 400),
+                            ],
+                            fontSize: 16),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _inputEmail,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        hintText: AppLocalizations.of(context)!.emailHint,
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.outline),
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.surfaceVariant,
+                        isDense: true,
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 14,
+                      ),
+                      validator: (String? value) {
+                        return _verifyEmailField(value);
                       },
                     ),
                     const SizedBox(height: 10),
@@ -273,8 +270,7 @@ class _SignupPageState extends State<SignupPage> {
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            Theme.of(context).colorScheme.surfaceVariant,
+                        fillColor: Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
