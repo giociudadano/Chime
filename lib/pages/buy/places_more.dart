@@ -181,7 +181,6 @@ class _PlacesMorePageState extends State<PlacesMorePage>
   }
 
   void _showQRCode() async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return showDialog(
       context: context,
       builder: (BuildContext context) {

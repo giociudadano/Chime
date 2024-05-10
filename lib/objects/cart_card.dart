@@ -84,7 +84,6 @@ class _CartCardState extends State<CartCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     if (widget.isVisible) {
       return Card(
           color:  Theme.of(context).colorScheme.surface,

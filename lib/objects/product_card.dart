@@ -66,7 +66,6 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       color: Theme.of(context).colorScheme.surfaceVariant,
       clipBehavior: Clip.antiAliasWithSaveLayer,

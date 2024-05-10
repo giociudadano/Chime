@@ -10,7 +10,6 @@ class CheckoutSuccessPage extends StatefulWidget {
 class _CheckoutSuccessPageState extends State<CheckoutSuccessPage> {
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(50),

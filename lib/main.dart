@@ -1,7 +1,6 @@
 library main;
 
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -35,7 +34,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'models/material_colors_model.dart';
 import 'models/chime_colors_model.dart';
 import 'models/string_extension.dart';
-import 'models/theme.dart';
 part 'models/product_model.dart';
 
 // Defines all page components.

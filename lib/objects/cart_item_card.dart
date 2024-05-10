@@ -134,7 +134,6 @@ class _CartItemCardState extends State<CartItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     if (widget.isVisible) {
       return Card(
         color:  Theme.of(context).colorScheme.surfaceVariant,

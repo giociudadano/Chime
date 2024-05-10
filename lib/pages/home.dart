@@ -40,7 +40,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             (Route<dynamic> route) => false);
       }
     } catch (e) {
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -195,7 +194,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     final scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
