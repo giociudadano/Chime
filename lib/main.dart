@@ -141,14 +141,14 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF466800),
+          seedColor: const Color(0xFF466800),
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF466800),
+          seedColor: const Color(0xFF466800),
           brightness: Brightness.dark,
         ),
       ),

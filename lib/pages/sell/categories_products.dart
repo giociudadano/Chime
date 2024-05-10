@@ -156,7 +156,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -330,7 +330,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {

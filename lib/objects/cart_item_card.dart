@@ -178,8 +178,8 @@ class _CartItemCardState extends State<CartItemCard> {
                                       onPressed: () {
                                         removeProductFromCart();
                                         Navigator.pop(context, 'OK');
-                                        final snackBar = SnackBar(
-                                          content: const Text('Item has been removed from cart.'),
+                                        const  snackBar = SnackBar(
+                                          content: Text('Item has been removed from cart.'),
                                         );
 
                                         // Find the ScaffoldMessenger in the widget tree
@@ -274,7 +274,7 @@ class _CartItemCardState extends State<CartItemCard> {
                         ),
                         if (widget.item['variant'] != null)
                           Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Text(
                                 "Variant: ${widget.item['variant']}",
                                 style: TextStyle(

@@ -904,7 +904,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                         ]),
                   ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Card(
                   elevation: 0,
                   color: Theme.of(context).colorScheme.surfaceVariant,

@@ -149,7 +149,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                 fontSize: 14,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: SizedBox(

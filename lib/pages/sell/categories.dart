@@ -175,7 +175,7 @@ class _StoreCategoriesPageState extends State<StoreCategoriesPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {

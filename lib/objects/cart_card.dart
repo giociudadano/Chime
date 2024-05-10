@@ -121,7 +121,7 @@ class _CartCardState extends State<CartCard> {
                         decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.surfaceVariant,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
+                                const BorderRadius.all(Radius.circular(8))),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 4, horizontal: 8),
@@ -129,7 +129,7 @@ class _CartCardState extends State<CartCard> {
                             children: [
                               Icon(Icons.motorcycle,
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                              SizedBox(height: 12),
+                              const SizedBox(height: 12),
                               Text(
                                 "₱${deliveryFee}",
                                 maxLines: 1,

@@ -195,7 +195,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                               ['variant'] !=
                                           null)
                                         Padding(
-                                            padding: EdgeInsets.only(top: 10),
+                                            padding: const EdgeInsets.only(top: 10),
                                             child: Text(
                                               "Variant: ${widget.order['items'][key]['variant']}",
                                               style: TextStyle(
@@ -824,8 +824,8 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       onPressed: () {
                                         setOrderStatus("Cancelled");
                                         Navigator.pop(context, 'OK');
-                                        final snackBar = SnackBar(
-                                          content: const Text('Order has been cancelled.'),
+                                        const  snackBar = SnackBar(
+                                          content: Text('Order has been cancelled.'),
                                         );
 
                                         // Find the ScaffoldMessenger in the widget tree
