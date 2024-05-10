@@ -1388,7 +1388,6 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
