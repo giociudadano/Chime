@@ -313,7 +313,8 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Unread') == 0)
                         Column(
@@ -343,7 +344,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -374,7 +375,8 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Preparing') +
                               getOrderCount('To Receive') ==
@@ -406,7 +408,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -443,7 +445,8 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Received') == 0)
                         Column(
@@ -473,7 +476,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -508,7 +511,8 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Completed') == 0)
                         Column(
@@ -538,7 +542,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),

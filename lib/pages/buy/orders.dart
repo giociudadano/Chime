@@ -242,7 +242,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Unread') +
                               getOrderCount('Preparing') +
@@ -276,7 +277,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -319,7 +320,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Completed') == 0)
                         Column(
@@ -349,7 +351,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -385,7 +387,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Cancelled') == 0)
                         Column(
@@ -415,7 +418,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),

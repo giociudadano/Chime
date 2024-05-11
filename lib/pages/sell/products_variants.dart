@@ -872,8 +872,6 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
 
   Future showAddVariantForm(BuildContext context) async {
     bool isLimited = false;
-
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -887,7 +885,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
               ),
               elevation: 0,
               backgroundColor:
-                  MaterialColors.getSurfaceContainerLowest(darkMode),
+                  Theme.of(context).colorScheme.surface,
               content: Form(
                 key: _formAddVariantKey,
                 child: Column(
