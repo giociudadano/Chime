@@ -913,7 +913,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                       side: BorderSide.none,
                       borderRadius: BorderRadius.circular(12.0)),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                    padding: const EdgeInsets.all(16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

@@ -87,7 +87,7 @@ class _ProductCardState extends State<ProductCard> {
           }
         },
         child: SizedBox(
-          height: 195,
+          height: 196,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -182,13 +182,13 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ]),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 15,
+                      height: 20,
                       child: Text(
                         widget.product['productName'],
                         maxLines: 1,
