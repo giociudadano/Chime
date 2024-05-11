@@ -122,7 +122,7 @@ class _ProductCardState extends State<ProductCard> {
                       child: Container(
                           child: Card(
                             elevation: 0,
-                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.70),
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.85),
                         shape: RoundedRectangleBorder(
                           side: BorderSide.none,
                           borderRadius: BorderRadius.circular(4),
@@ -157,7 +157,7 @@ class _ProductCardState extends State<ProductCard> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.70),
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.85),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
