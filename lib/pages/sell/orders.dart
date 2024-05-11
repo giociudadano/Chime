@@ -433,6 +433,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -493,6 +498,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -553,6 +563,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -601,6 +616,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
