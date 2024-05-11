@@ -377,27 +377,27 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
     );
     municipality = "MIAGAO";
 
-    List<DropdownMenuItem> dropdownBarangays = List.generate(
-      barangays.length,
-      (index) => DropdownMenuItem(
-        value: barangays[index],
-        child: Text(
-          "${barangays[index]}".title(),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          barangay = barangays[index];
-        },
-      ),
-    );
+    // List<DropdownMenuItem> dropdownBarangays = List.generate(
+    //   barangays.length,
+    //   (index) => DropdownMenuItem(
+    //     value: barangays[index],
+    //     child: Text(
+    //       "${barangays[index]}".title(),
+    //       style: TextStyle(
+    //         color: Theme.of(context).colorScheme.onSurface,
+    //         fontFamily: 'Source Sans 3',
+    //         fontVariations: const [
+    //           FontVariation('wght', 400),
+    //         ],
+    //         fontSize: 14,
+    //         letterSpacing: -0.3,
+    //       ),
+    //     ),
+    //     onTap: () {
+    //       barangay = barangays[index];
+    //     },
+    //   ),
+    // );
 
     return showDialog(
         context: context,
