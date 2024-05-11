@@ -82,7 +82,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 .split(':')
                                 .length -
                             1) {
-                      saveIsOnboardingVisited(true);
+                      // saveIsOnboardingVisited(true);
+                      saveIsOnboardingVisited(false);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const LoginPage()),
