@@ -186,13 +186,13 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                 ),
               ]),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 15,
+                      height: 20,
                       child: Text(
                         widget.product['productName'],
                         maxLines: 2,
