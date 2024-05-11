@@ -1,17 +1,5 @@
-/*
-  [Title]
-  ProductsPage
-
-  [Description]
-  Displays information about products in the database and currently favorited products.
-  Contains options to search for a product.
-  Creates a list of ProductCards for each product in the database.
-  Visited as a tab in the HomePage.
-*/
-
 part of '../../main.dart';
 
-// The 'Products' page displays a list of recommended products for the user to buy.
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
 
@@ -24,11 +12,11 @@ class _ProductsPageState extends State<ProductsPage> {
   final _searchBox = TextEditingController();
   final _scrollController = ScrollController();
   StreamSubscription? favoritesListener;
-  StreamSubscription? cartListener;
 
   // Variables for pagination.
-  List<ProductModel> products = [];
-  List<ProductModel> productsSearched = [];
+  Map products = {};
+  Map productsFavorited = {};
+  Map productsSearched = {};
   int productsPerPage = 10;
   int productsDisplayed = 0;
   String? lastVisible;
@@ -37,15 +25,9 @@ class _ProductsPageState extends State<ProductsPage> {
   FocusNode focus = FocusNode();
   Timer? _debounce;
 
-  // Variables for user information.
-  List<ProductModel> productsFavorited = [];
-  int cartItems = 0;
-  final ValueNotifier<bool> valueNotifierCartItems = ValueNotifier(false);
-  final ValueNotifier<bool> valueNotifierFavorites = ValueNotifier(false);
-
   // Initializes a listener that checks if the user scrolls to the bottom of the GridView. If true,
   // adds a list of products to the bottom of the list.
-  void initScrollListener() {
+  void addScrollListener() {
     _scrollController.addListener(() {
       if (_scrollController.position.atEdge &&
           _scrollController.position.pixels != 0) {
@@ -54,11 +36,18 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
-  // Queries a list of products sorted by distance from the device. Called on page initialization
-  // and on reaching the bottom of the ListView.
   void initProducts() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    List favoriteProducts = [];
+    await db.collection("users").doc(uid).get().then((document) {
+      if (document.exists) {
+        favoriteProducts = document.data()!['favoriteProducts'] ?? [];
+      }
+    });
+
     Query getQuery() {
-      FirebaseFirestore db = FirebaseFirestore.instance;
       if (lastVisible == null) {
         return db
             .collection("products")
@@ -72,108 +61,133 @@ class _ProductsPageState extends State<ProductsPage> {
       }
     }
 
-    getQuery().get().then((querySnapshot) async {
-      await Future.forEach(querySnapshot.docs, (docSnapshot) async {
-        ProductModel product = ProductModel(docSnapshot.id, docSnapshot.data());
+    getQuery().get().then((querySnapshot) {
+      for (var product in querySnapshot.docs) {
         if (mounted) {
-          setState(() {
-            products.add(product);
-            productsDisplayed += productsPerPage;
-            lastVisible = docSnapshot.id;
+          products[product.id] = product.data();
+          setProductImageURL(product.id).then((res) {
+            setFavoriteState(favoriteProducts, product.id);
           });
+          productsDisplayed += productsPerPage;
+          lastVisible = product.id;
         }
-      });
-    });
-  }
-
-  // Initializes a listener that tracks if the current product favorites have changed from other screens.
-  void initFavoritesListener() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    favoritesListener =
-        db.collection("users").doc(uid).snapshots().listen((event) async {
-      productsFavorited = [];
-      var favorites = event.data()!['favoriteProducts'] ?? [];
-      for (String favorite in favorites) {
-        await db
-            .collection("products")
-            .doc(favorite)
-            .get()
-            .then((document2) async {
-          if (document2.exists) {
-            ProductModel product = ProductModel(document2.id, document2.data());
-            productsFavorited.add(product);
-          }
+      }
+      if (mounted) {
+        setState(() {
+          products = Map.fromEntries(products.entries.toList()
+            ..sort((a, b) => (a.value['productName'].toLowerCase())
+                .compareTo(b.value['productName'].toLowerCase())));
         });
       }
-      valueNotifierFavorites.value = !valueNotifierFavorites.value;
     });
   }
 
-  // Adds a text field listener that detects if the user searches for an item. Adds all matching
-  // items to a list and displays that list in the GridView.
-  void initSearchListener() {
+  void setFavoriteState(List favoriteProducts, String productID) {
+    if (favoriteProducts.contains(productID)) {
+      productsFavorited[productID] = products.remove(productID);
+      productsFavorited[productID]['isFavorited'] = true;
+      productsFavorited = Map.fromEntries(productsFavorited.entries.toList()
+        ..sort((a, b) => (a.value['productName'].toLowerCase())
+            .compareTo(b.value['productName'].toLowerCase())));
+    }
+  }
+
+  Future setProductImageURL(String productID) async {
+    String url = '';
+    String ref = "products/$productID.jpg";
+    try {
+      url = await FirebaseStorage.instance.ref(ref).getDownloadURL();
+    } catch (e) {
+      //
+    } finally {
+      if (mounted) {
+        setState(() {
+          products[productID]['productImageURL'] = url;
+        });
+      }
+    }
+  }
+
+  void addSearchListener() {
     _searchBox.addListener(() {
       if (focus.hasFocus) {
         if (_debounce != null) {
           _debounce!.cancel();
         }
         _debounce = Timer(const Duration(milliseconds: 800), () {
+          productsSearched.clear();
+          products.forEach((productID, product) {
+            if (product['productName']
+                .toLowerCase()
+                .contains(_searchBox.value.text.toString().toLowerCase())) {
+              productsSearched[productID] = product;
+              productsSearched = Map.fromEntries(
+                  productsSearched.entries.toList()
+                    ..sort((a, b) => (a.value['productName'].toLowerCase())
+                        .compareTo(b.value['productName'].toLowerCase())));
+            }
+          });
+          productsFavorited.forEach((productID, product) {
+            if (product['productName']
+                .toLowerCase()
+                .contains(_searchBox.value.text.toString().toLowerCase())) {
+              productsSearched[productID] = product;
+              productsSearched = Map.fromEntries(
+                  productsSearched.entries.toList()
+                    ..sort((a, b) => (a.value['productName'].toLowerCase())
+                        .compareTo(b.value['productName'].toLowerCase())));
+            }
+          });
           if (mounted) {
-            setState(() {
-              productsSearched = [];
-              for (ProductModel product in products) {
-                if (product.productName
-                    .toLowerCase()
-                    .contains(_searchBox.value.text.toString().toLowerCase())) {
-                  productsSearched.add(product);
-                }
-              }
-            });
+            setState(() {});
           }
         });
       }
     });
   }
 
-  // Adds a listener that detects if an item is added to cart.
-  // Used in displaying the number of current items in cart.
-  void initCartListener() async {
+  getPlace(String placeID) {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    cartListener = db
-        .collection("users")
-        .doc(uid)
-        .collection("cart")
-        .snapshots()
-        .listen((event) async {
-      db.collection("users").doc(uid).collection("cart").get().then((snapshot) {
-        int cartItems = 0;
-        for (var place in snapshot.docs) {
-          cartItems += place.data().length;
-        }
-        this.cartItems = cartItems;
-        valueNotifierCartItems.value = !valueNotifierCartItems.value;
-      });
+    db.collection("places").doc(placeID).get().then((document) {
+      if (document.exists) {
+        return document.data();
+      }
     });
+    return {};
+  }
+
+  void setFavoriteProduct(String productID, bool state) {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    if (state) {
+      productsFavorited[productID] = products.remove(productID);
+      productsFavorited[productID]['isFavorited'] = true;
+      productsFavorited[productID]['usersFavorited'].add(uid);
+      productsFavorited = Map.fromEntries(productsFavorited.entries.toList()
+        ..sort((a, b) => (a.value['productName'].toLowerCase())
+            .compareTo(b.value['productName'].toLowerCase())));
+    } else {
+      products[productID] = productsFavorited.remove(productID);
+      products[productID]['isFavorited'] = false;
+      products[productID]['usersFavorited'].remove(uid);
+      products = Map.fromEntries(products.entries.toList()
+        ..sort((a, b) => (a.value['productName'].toLowerCase())
+            .compareTo(b.value['productName'].toLowerCase())));
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    initScrollListener();
-    initFavoritesListener();
+    addScrollListener();
     initProducts();
-    initSearchListener();
-    initCartListener();
+    addSearchListener();
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
-    favoritesListener!.cancel();
-    cartListener!.cancel();
     _searchBox.dispose();
     _debounce?.cancel();
     super.dispose();
@@ -184,7 +198,6 @@ class _ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
@@ -198,24 +211,25 @@ class _ProductsPageState extends State<ProductsPage> {
                 fillColor: Theme.of(context).colorScheme.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(
-                        width: 2, 
-                        color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide(
-                      width: 2, 
-                      color: Theme.of(context).colorScheme.surfaceVariant,
-                      // style: BorderStyle.none,
+                    width: 2,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    // style: BorderStyle.none,
                   ),
                 ),
                 hintText: "Search for food",
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
+                prefixIcon: Icon(Icons.search_outlined,
+                    color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
@@ -232,115 +246,151 @@ class _ProductsPageState extends State<ProductsPage> {
               child: ListView(
                 controller: _scrollController,
                 children: [
-                  ValueListenableBuilder<bool>(
-                      valueListenable: valueNotifierFavorites,
-                      builder: (context, val, child) {
-                        if (productsFavorited.isNotEmpty &&
-                            _searchBox.text == '') {
-                          return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
-                                      .productsFavorited,
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.outline,
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontVariations: const [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.5),
-                                ),
-                                const SizedBox(height: 10),
-                                /*
-                                SizedBox(
-                                  height: 220,
-                                  child: GridView.builder(
-                                    key: UniqueKey(),
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: productsFavorited.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return ProductCard(
-                                          productID: productsFavorited[index]
-                                              .productID,
-                                          productName: productsFavorited[index]
-                                              .productName,
-                                          productPrice: productsFavorited[index]
-                                              .productPrice,
-                                          placeID:
-                                              productsFavorited[index].placeID);
-                                    },
-                                    gridDelegate:
-                                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                                            mainAxisExtent: 165,
-                                            maxCrossAxisExtent: 220,
-                                            crossAxisSpacing: 0,
-                                            mainAxisSpacing: 10),
-                                  ),
-                                )
-                                */
-                              ]);
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      }),
-                  Text(
-                    _searchBox.text.isEmpty
-                        ? AppLocalizations.of(context)!.productsNear
-                        : AppLocalizations.of(context)!
-                            .productsSearch(_searchBox.text.toLowerCase()),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.outline,
-                        fontFamily: 'Source Sans 3',
-                        fontVariations: const [
-                          FontVariation('wght', 700),
-                          FontVariation('wdth', 100),
-                        ],
-                        fontSize: 16,
-                        letterSpacing: -0.5),
-                  ),
                   const SizedBox(height: 10),
-                  /*
-                  ValueListenableBuilder<bool>(
-                      valueListenable: valueNotifierFavorites,
-                      builder: (context, val, child) {
-                        return GridView.builder(
+                  if (productsFavorited.isNotEmpty && _searchBox.text == '')
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              "Your favorites",
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: 0),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          GridView.builder(
                             key: UniqueKey(),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
+                            itemCount: productsFavorited.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String key =
+                                  productsFavorited.keys.elementAt(index);
+                              return ProductCard(
+                                  key,
+                                  productsFavorited[key],
+                                  productsFavorited[key]['placeID'],
+                                  getPlace(productsFavorited[key]['placeID']),
+                                  setFavoriteProductCallback:
+                                      setFavoriteProduct);
+                            },
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    mainAxisExtent: 220,
+                                    mainAxisExtent: 205,
                                     maxCrossAxisExtent: 200,
+                                    childAspectRatio: 2,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 0),
-                            itemCount: (_searchBox.text.isEmpty)
-                                ? products.length
-                                : productsSearched.length,
-                            itemBuilder: (context, index) {
-                              if (_searchBox.text.isEmpty) {
-                                return ProductCard(
-                                    productID: products[index].productID,
-                                    productName: products[index].productName,
-                                    productPrice: products[index].productPrice,
-                                    placeID: products[index].placeID);
-                              } else {
-                                return ProductCard(
-                                    productID:
-                                        productsSearched[index].productID,
-                                    productName:
-                                        productsSearched[index].productName,
-                                    productPrice:
-                                        productsSearched[index].productPrice,
-                                    placeID: productsSearched[index].placeID);
-                              }
-                            });
+                          ),
+                          const SizedBox(height: 20),
+                        ]),
+                  if (_searchBox.text.isEmpty ||
+                      (_searchBox.text.isNotEmpty &&
+                          productsSearched.isNotEmpty))
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Text(
+                              _searchBox.text.isEmpty
+                                  ? "Popular products"
+                                  : 'Popular products named "${_searchBox.text.toLowerCase()}"',
+                              maxLines: 2,
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontVariations: const [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: 0,
+                                  height: 1.2,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                          ),
+                        ]),
+                  if (productsSearched.isEmpty && _searchBox.text.isNotEmpty)
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: Image.network(
+                                "https://em-content.zobj.net/source/microsoft-teams/363/rabbit-face_1f430.png"),
+                          ),
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Text.rich(
+                              const TextSpan(children: [
+                                TextSpan(
+                                    text: 'Search for product(s) not found. ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                    text:
+                                        'Please check for spelling errors or try a different name.'),
+                              ]),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 15,
+                                  height: 1.1,
+                                  letterSpacing: -0.3),
+                            ),
+                          )
+                        ]),
+                  const SizedBox(height: 10),
+                  GridView.builder(
+                      key: UniqueKey(),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              mainAxisExtent: 205,
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 0),
+                      itemCount: (_searchBox.text.isEmpty)
+                          ? products.length
+                          : productsSearched.length,
+                      itemBuilder: (context, index) {
+                        String key = _searchBox.text.isEmpty
+                            ? products.keys.elementAt(index)
+                            : productsSearched.keys.elementAt(index);
+                        return ProductCard(
+                            key,
+                            _searchBox.text.isEmpty
+                                ? products[key]
+                                : productsSearched[key],
+                            _searchBox.text.isEmpty
+                                ? products[key]['placeID']
+                                : productsSearched[key]['placeID'],
+                            getPlace(_searchBox.text.isEmpty
+                                ? products[key]['placeID']
+                                : productsSearched[key]['placeID']),
+                            setFavoriteProductCallback: setFavoriteProduct);
                       }),
-                      */
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

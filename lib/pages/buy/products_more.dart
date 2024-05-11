@@ -77,17 +77,17 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
         SnackBar(
           content: Center(
             child: Text(
-              isInCart
-                  ? "${widget.product['productName']} updated in cart!"
-                  : "${widget.product['productName']} added to cart!",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 16,
-                fontFamily: 'Source Sans 3',
-                fontVariations: const [
-                  FontVariation('wght', 400),
-                ],
-              )),
+                isInCart
+                    ? "${widget.product['productName']} updated in cart!"
+                    : "${widget.product['productName']} added to cart!",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 16,
+                  fontFamily: 'Source Sans 3',
+                  fontVariations: const [
+                    FontVariation('wght', 400),
+                  ],
+                )),
           ),
           backgroundColor: MaterialColors.getSurfaceContainerHighest(
               Theme.of(context).brightness == Brightness.dark),
