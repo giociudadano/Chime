@@ -72,7 +72,6 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     bool isMedia = false,
   }) async {
     if (kIsWeb) {
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
         // TODO: Add functionality to edit images on web devices.
         SnackBar(
@@ -81,13 +80,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.surface,
         ),
       );
       return;

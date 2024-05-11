@@ -81,7 +81,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                     ? "${widget.product['productName']} updated in cart!"
                     : "${widget.product['productName']} added to cart!",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontSize: 16,
                   fontFamily: 'Source Sans 3',
                   fontVariations: const [
@@ -89,8 +89,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                   ],
                 )),
           ),
-          backgroundColor: MaterialColors.getSurfaceContainerHighest(
-              Theme.of(context).brightness == Brightness.dark),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
     } catch (e) {
@@ -503,7 +502,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
             padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
             child: Ink(
               decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
@@ -519,7 +518,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Ink(
                 decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
                   shape: const CircleBorder(),
                 ),
                 child: Stack(children: [

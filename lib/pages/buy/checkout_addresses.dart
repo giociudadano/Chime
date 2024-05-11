@@ -1432,164 +1432,166 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
             )),
         body: Padding(
           padding: const EdgeInsets.all(15),
-          child: ListView(
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: addresses.length,
-                itemBuilder: (context, index) {
-                  String key = addresses.keys.elementAt(index);
-                  return Card(
-                    elevation: 0,
-                    color: Theme.of(context).colorScheme.surface,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: selectedAddress == key
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outlineVariant,
+          child: Expanded(
+            child: ListView(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: addresses.length,
+                  itemBuilder: (context, index) {
+                    String key = addresses.keys.elementAt(index);
+                    return Card(
+                      elevation: 0,
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: selectedAddress == key
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.outlineVariant,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        setSelectedAddress(key);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Stack(children: [
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: IconButton(
-                                padding: const EdgeInsets.all(0),
-                                icon: Icon(
-                                  Icons.pin_drop_outlined,
-                                  size: 18,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                      child: InkWell(
+                        onTap: () {
+                          setSelectedAddress(key);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Stack(children: [
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  icon: Icon(
+                                    Icons.pin_drop_outlined,
+                                    size: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  onPressed: () {
+                                    showEditAddressForm(
+                                        context,
+                                        key,
+                                        addresses[key]["name"],
+                                        addresses[key]['phoneNumber'],
+                                        addresses[key]['municipality'],
+                                        addresses[key]['barangay'],
+                                        addresses[key]["landmark"],
+                                        addresses[key]["addressLine"]);
+                                  },
                                 ),
-                                onPressed: () {
-                                  showEditAddressForm(
-                                      context,
-                                      key,
-                                      addresses[key]["name"],
-                                      addresses[key]['phoneNumber'],
-                                      addresses[key]['municipality'],
-                                      addresses[key]['barangay'],
-                                      addresses[key]["landmark"],
-                                      addresses[key]["addressLine"]);
-                                },
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      addresses[key]["name"],
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                          fontFamily: 'Manrope',
-                                          fontVariations: const [
-                                            FontVariation('wght', 700),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        addresses[key]["name"],
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface,
+                                            fontFamily: 'Manrope',
+                                            fontVariations: const [
+                                              FontVariation('wght', 700),
+                                            ],
+                                            fontSize: 14,
+                                            letterSpacing: -0.3,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          parseAddress(
+                                              addresses[key]["addressLine"],
+                                              addresses[key]["barangay"],
+                                              addresses[key]["municipality"]),
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                              fontFamily: 'Source Sans 3',
+                                              fontVariations: const [
+                                                FontVariation('wght', 400),
+                                              ],
+                                              fontSize: 14,
+                                              letterSpacing: -0.3,
+                                              height: 1,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Text(
+                                          addresses[key]["phoneNumber"] ??
+                                              "No Phone Number",
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface,
+                                              fontFamily: 'Source Sans 3',
+                                              fontVariations: const [
+                                                FontVariation('wght', 400),
+                                              ],
+                                              fontSize: 14,
+                                              letterSpacing: -0.3,
+                                              height: 1,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.pin_drop_outlined,
+                                              size: 16,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .outline,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              addresses[key]["landmark"] ??
+                                                  'No Landmark',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .outline,
+                                                  fontFamily: 'Source Sans 3',
+                                                  fontVariations: const [
+                                                    FontVariation('wght', 400),
+                                                  ],
+                                                  fontSize: 14,
+                                                  letterSpacing: -0.3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            ),
                                           ],
-                                          fontSize: 14,
-                                          letterSpacing: -0.3,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        parseAddress(
-                                            addresses[key]["addressLine"],
-                                            addresses[key]["barangay"],
-                                            addresses[key]["municipality"]),
-                                        maxLines: 3,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            fontFamily: 'Source Sans 3',
-                                            fontVariations: const [
-                                              FontVariation('wght', 400),
-                                            ],
-                                            fontSize: 14,
-                                            letterSpacing: -0.3,
-                                            height: 1,
-                                            overflow: TextOverflow.ellipsis),
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        addresses[key]["phoneNumber"] ??
-                                            "No Phone Number",
-                                        maxLines: 3,
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            fontFamily: 'Source Sans 3',
-                                            fontVariations: const [
-                                              FontVariation('wght', 400),
-                                            ],
-                                            fontSize: 14,
-                                            letterSpacing: -0.3,
-                                            height: 1,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.pin_drop_outlined,
-                                            size: 16,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Text(
-                                            addresses[key]["landmark"] ??
-                                                'No Landmark',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                                fontFamily: 'Source Sans 3',
-                                                fontVariations: const [
-                                                  FontVariation('wght', 400),
-                                                ],
-                                                fontSize: 14,
-                                                letterSpacing: -0.3,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]),
+                                    ]),
+                              ),
                             ),
-                          ),
-                        ]),
+                          ]),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ));
   }
