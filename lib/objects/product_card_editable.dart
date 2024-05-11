@@ -165,14 +165,14 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.70),
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.85),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           isFeatured ? Icons.bookmark : Icons.bookmark_outline,
                           size: 24,
                           color: isFeatured
-                              ? Theme.of(context).colorScheme.inversePrimary
+                              ? Theme.of(context).colorScheme.primary
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
                                   : Theme.of(context).colorScheme.onSurfaceVariant,
