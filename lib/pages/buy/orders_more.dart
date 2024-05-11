@@ -873,7 +873,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                   ? Theme.of(context).colorScheme.onError
                                   : Theme.of(context)
                                       .colorScheme
-                                      .surfaceVariant,
+                                      .outline,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),

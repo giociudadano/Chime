@@ -276,7 +276,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                         )
                       else
                         Expanded(
-                          child: ListView(
+                          child: Column(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -309,6 +309,11 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -328,7 +333,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             ),
                             const SizedBox(height: 20),
                             Text(
-                              "You have completed orders yet.",
+                              "You have no completed orders yet.",
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.outline,
                                 fontFamily: 'Source Sans 3',
@@ -371,8 +376,10 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                     }
                                   }),
                               const SizedBox(
-                                height: 64,
-                              ),
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -434,8 +441,10 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                     }
                                   }),
                               const SizedBox(
-                                height: 64,
-                              ),
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
