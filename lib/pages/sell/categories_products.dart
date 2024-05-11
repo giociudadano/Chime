@@ -397,7 +397,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
         title: const Text('Delete Category',
             style: TextStyle(
               fontFamily: 'Manrope',
-              fontVariations: const [
+              fontVariations: [
                 FontVariation('wght', 700),
               ],
               fontSize: 16,
@@ -413,7 +413,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             child: const Text('Cancel',
                 style: TextStyle(
                   fontFamily: 'Manrope',
-                  fontVariations: const [
+                  fontVariations: [
                     FontVariation('wght', 700),
                   ],
                   fontSize: 16,
@@ -424,11 +424,11 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             onPressed: () {
               widget.deleteCategoryCallback!(widget.categoryName);
               Navigator.pop(context, 'OK');
-              final snackBar = SnackBar(
-                content: const Text('Category has been deleted.',
+              const snackBar = SnackBar(
+                content: Text('Category has been deleted.',
                     style: TextStyle(
                       fontFamily: 'Manrope',
-                      fontVariations: const [
+                      fontVariations: [
                         FontVariation('wght', 700),
                       ],
                       fontSize: 16,
@@ -442,7 +442,7 @@ class _StoreCategoriesMoreState extends State<StoreCategoriesMorePage> {
             child: const Text('OK',
                 style: TextStyle(
                   fontFamily: 'Manrope',
-                  fontVariations: const [
+                  fontVariations: [
                     FontVariation('wght', 700),
                   ],
                   fontSize: 16,

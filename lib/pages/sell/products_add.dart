@@ -258,7 +258,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                                   context: context);
                             },
                             style: ButtonStyle(
-                                shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                                shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
                                     Theme.of(context).colorScheme.primaryContainer),
                                 shape: MaterialStatePropertyAll(
@@ -643,7 +643,7 @@ class _StoreProductsAddPageState extends State<StoreProductsAddPage> {
                             Navigator.pop(context);
                           },
                           style: ButtonStyle(
-                            shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                            shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.surface),

@@ -145,7 +145,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     ElevatedButton(
                       style: ButtonStyle(
                         shadowColor:
-                            MaterialStatePropertyAll(Colors.transparent),
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
                                 ? Theme.of(context).colorScheme.primary
@@ -175,7 +175,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     ElevatedButton(
                       style: ButtonStyle(
                         shadowColor:
-                            MaterialStatePropertyAll(Colors.transparent),
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
                                 ? Theme.of(context).colorScheme.primary
@@ -205,7 +205,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     ElevatedButton(
                       style: ButtonStyle(
                         shadowColor:
-                            MaterialStatePropertyAll(Colors.transparent),
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
                                 ? Theme.of(context).colorScheme.onErrorContainer

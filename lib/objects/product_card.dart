@@ -119,8 +119,7 @@ class _ProductCardState extends State<ProductCard> {
                   Positioned(
                       left: 4,
                       top: 4,
-                      child: Container(
-                          child: Card(
+                      child: Card(
                             elevation: 0,
                         color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.85),
                         shape: RoundedRectangleBorder(
@@ -129,7 +128,7 @@ class _ProductCardState extends State<ProductCard> {
                         ),
                         child: 
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                           child: 
                             Center(
                               child: Text(
@@ -145,7 +144,7 @@ class _ProductCardState extends State<ProductCard> {
                             ),
                       
                         ),
-                      ))
+                      )
                       ),
                 Positioned(
                   right: 8,

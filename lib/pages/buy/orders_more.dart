@@ -801,7 +801,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             title: const Text('Cancel this order',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -817,7 +817,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                 child: const Text('Cancel',
                                     style: TextStyle(
                                       fontFamily: 'Manrope',
-                                      fontVariations: const [
+                                      fontVariations: [
                                         FontVariation('wght', 700),
                                       ],
                                       fontSize: 16,
@@ -828,9 +828,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                 onPressed: () {
                                   setOrderStatus("Cancelled");
                                   Navigator.pop(context, 'OK');
-                                  final snackBar = SnackBar(
+                                  const snackBar = SnackBar(
                                     content:
-                                        const Text('Order has been cancelled.'),
+                                       Text('Order has been cancelled.'),
                                   );
 
                                   // Find the ScaffoldMessenger in the widget tree
@@ -841,7 +841,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                 child: const Text('OK',
                                     style: TextStyle(
                                       fontFamily: 'Manrope',
-                                      fontVariations: const [
+                                      fontVariations: [
                                         FontVariation('wght', 700),
                                       ],
                                       fontSize: 16,
