@@ -367,7 +367,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 deleteProductImage();
                               },
                               style: ButtonStyle(
-                                  shadowColor: MaterialStatePropertyAll(
+                                  shadowColor: const MaterialStatePropertyAll(
                                       Colors.transparent),
                                   backgroundColor: MaterialStatePropertyAll(
                                       Theme.of(context).colorScheme.surface),
@@ -400,7 +400,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                   context: context);
                             },
                             style: ButtonStyle(
-                                shadowColor: MaterialStatePropertyAll(
+                                shadowColor: const MaterialStatePropertyAll(
                                     Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
                                     Theme.of(context)
@@ -870,7 +870,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             title: const Text('Delete this Product',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -886,7 +886,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 child: const Text('Cancel',
                                     style: TextStyle(
                                       fontFamily: 'Manrope',
-                                      fontVariations: const [
+                                      fontVariations: [
                                         FontVariation('wght', 700),
                                       ],
                                       fontSize: 16,
@@ -897,9 +897,9 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 onPressed: () {
                                   deleteProduct();
                                   Navigator.pop(context, 'OK');
-                                  final snackBar = SnackBar(
+                                  const snackBar = SnackBar(
                                     content:
-                                        const Text('Product has been deleted.'),
+                                        Text('Product has been deleted.'),
                                   );
 
                                   // Find the ScaffoldMessenger in the widget tree
@@ -910,7 +910,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 child: const Text('OK',
                                     style: TextStyle(
                                       fontFamily: 'Manrope',
-                                      fontVariations: const [
+                                      fontVariations: [
                                         FontVariation('wght', 700),
                                       ],
                                       fontSize: 16,
@@ -922,7 +922,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         ),
                         style: ButtonStyle(
                             shadowColor:
-                                MaterialStatePropertyAll(Colors.transparent),
+                                const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.errorContainer),
                             shape:

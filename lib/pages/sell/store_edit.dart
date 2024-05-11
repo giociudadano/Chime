@@ -247,7 +247,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                               deletePlaceImage();
                             },
                             style: ButtonStyle(
-                                shadowColor: MaterialStatePropertyAll(
+                                shadowColor: const MaterialStatePropertyAll(
                                     Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
                                     Theme.of(context).colorScheme.surface),
@@ -279,7 +279,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                           },
                           style: ButtonStyle(
                               shadowColor:
-                                  MaterialStatePropertyAll(Colors.transparent),
+                                  const MaterialStatePropertyAll(Colors.transparent),
                               backgroundColor: MaterialStatePropertyAll(
                                   Theme.of(context)
                                       .colorScheme

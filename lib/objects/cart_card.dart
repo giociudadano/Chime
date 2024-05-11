@@ -129,7 +129,7 @@ class _CartCardState extends State<CartCard> {
                             children: [
                               Icon(Icons.local_shipping_outlined,
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                              const SizedBox(height: 12),
+                              const SizedBox(width: 4),
                               Text(
                                 "₱${deliveryFee}",
                                 maxLines: 1,
@@ -173,7 +173,7 @@ class _CartCardState extends State<CartCard> {
                           }
                         },
                         style: ButtonStyle(
-                          shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                          shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.primaryContainer),
                             shape:

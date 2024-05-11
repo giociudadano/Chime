@@ -192,7 +192,7 @@ class _PlacesMorePageState extends State<PlacesMorePage>
             ),
           ),
           elevation: 0,
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: const Color.fromARGB(255, 223, 223, 223),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -204,29 +204,31 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                   data: widget.placeID,
                   version: QrVersions.auto,
                   size: 200.0,
+                  padding: const EdgeInsets.all(24),
+      
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
+              const Text(
                 "Here's your code",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Manrope',
-                    fontVariations: const [
+                    fontVariations: [
                       FontVariation('wght', 700),
                     ],
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Color.fromARGB(255, 19, 19, 19),
                     fontSize: 20,
                     letterSpacing: -0.3),
               ),
               const SizedBox(height: 10),
-              Text(
+              const Text(
                 "Scanning this QR Code will redirect a friend to this place. Share it or save it for later!",
                 maxLines: 3,
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Color.fromARGB(255, 65, 65, 65),
                     fontFamily: 'Source Sans 3',
-                    fontVariations: const [
+                    fontVariations: [
                       FontVariation('wght', 400),
                     ],
                     fontSize: 16,
@@ -438,7 +440,8 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                               Text(
                                 widget.isFavorited ? "Following" : "Follow",
                                 style: TextStyle(
-                                    color: Theme.of(context).colorScheme.outline,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
                                     fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
@@ -512,7 +515,8 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                      shadowColor:
+                          const MaterialStatePropertyAll(Colors.transparent),
                       backgroundColor: MaterialStatePropertyAll(
                           tabController.index == 0
                               ? Theme.of(context).colorScheme.primary
@@ -525,7 +529,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                           style: TextStyle(
                               color: tabController.index == 0
                                   ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
@@ -541,7 +547,8 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                   const SizedBox(width: 16),
                   ElevatedButton(
                     style: ButtonStyle(
-                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                      shadowColor:
+                          const MaterialStatePropertyAll(Colors.transparent),
                       backgroundColor: MaterialStatePropertyAll(
                           tabController.index == 1
                               ? Theme.of(context).colorScheme.primary
@@ -554,7 +561,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                           style: TextStyle(
                               color: tabController.index == 1
                                   ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
@@ -587,7 +596,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                             const SizedBox(height: 8),
                             Card(
                               elevation: 0,
-                              color: Theme.of(context).colorScheme.tertiaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiaryContainer,
                               shape: RoundedRectangleBorder(
                                   //<-- SEE HERE
                                   side: BorderSide.none,
@@ -601,7 +612,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                     Text(
                                       widget.place['noticeTitle'] ?? 'Notice',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.onTertiaryContainer,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onTertiaryContainer,
                                         fontFamily: 'Manrope',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
@@ -619,7 +632,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                                       Text(
                                         widget.place['noticeDesc'],
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onTertiaryContainer,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onTertiaryContainer,
                                           fontFamily: 'Source Sans 3',
                                           fontVariations: const [
                                             FontVariation('wght', 400),
@@ -774,7 +789,8 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                         ),
                         const SizedBox(
                             height: 64,
-                            child: Center(child: Text("This is the end of the list!"))),
+                            child: Center(
+                                child: Text("This is the end of the list!"))),
                       ]),
                 ),
                 Padding(
@@ -794,8 +810,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                             color: Theme.of(context).colorScheme.surface,
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
-                                  color:
-                                      Theme.of(context).colorScheme.outlineVariant,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
                                 ),
                                 borderRadius: BorderRadius.circular(12.0)),
                             child: InkWell(
@@ -814,9 +831,9 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                               },
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.all(20),
+                                    const EdgeInsets.symmetric(horizontal: 24),
                                 child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [

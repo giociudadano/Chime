@@ -167,7 +167,7 @@ class _CartItemCardState extends State<CartItemCard> {
                         title: const Text('Remove this item',
                             style: TextStyle(
                               fontFamily: 'Manrope',
-                              fontVariations: const [
+                              fontVariations: [
                                 FontVariation('wght', 700),
                               ],
                               fontSize: 16,
@@ -183,7 +183,7 @@ class _CartItemCardState extends State<CartItemCard> {
                             child: const Text('Cancel',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -194,8 +194,8 @@ class _CartItemCardState extends State<CartItemCard> {
                             onPressed: () {
                               removeProductFromCart();
                               Navigator.pop(context, 'OK');
-                              final snackBar = SnackBar(
-                                content: const Text(
+                              const snackBar = SnackBar(
+                                content: Text(
                                     'Item has been removed from cart.'),
                               );
 
@@ -207,7 +207,7 @@ class _CartItemCardState extends State<CartItemCard> {
                             child: const Text('OK',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,

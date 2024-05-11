@@ -279,7 +279,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         },
                         style: ButtonStyle(
                           shadowColor:
-                              MaterialStatePropertyAll(Colors.transparent),
+                              const MaterialStatePropertyAll(Colors.transparent),
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
                               Theme.of(context).colorScheme.surface),
@@ -320,7 +320,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         },
                         style: ButtonStyle(
                             shadowColor:
-                                MaterialStatePropertyAll(Colors.transparent),
+                                const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context).colorScheme.primary),
                             shape:

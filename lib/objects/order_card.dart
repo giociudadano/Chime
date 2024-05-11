@@ -294,7 +294,7 @@ class _OrderCardState extends State<OrderCard> {
                 },
                 style: ButtonStyle(
                   elevation: const MaterialStatePropertyAll(0),
-                  shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                  shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                   backgroundColor: MaterialStatePropertyAll(widget.adminControls
                       ? (widget.order['status'] == 'Received' ||
                               widget.order['status'] == 'Completed')
@@ -414,7 +414,7 @@ class _OrderCardState extends State<OrderCard> {
                       setStatusState('To Receive');
                     },
                     style: ButtonStyle(
-                      shadowColor: MaterialStatePropertyAll(Colors.transparent),
+                      shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor: MaterialStatePropertyAll(
                           Theme.of(context).colorScheme.secondaryContainer),
@@ -459,7 +459,7 @@ class _OrderCardState extends State<OrderCard> {
                         title: const Text('Mark Order as Delivered',
                             style: TextStyle(
                               fontFamily: 'Manrope',
-                              fontVariations: const [
+                              fontVariations: [
                                 FontVariation('wght', 700),
                               ],
                               fontSize: 16,
@@ -475,7 +475,7 @@ class _OrderCardState extends State<OrderCard> {
                             child: const Text('Cancel',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -486,9 +486,9 @@ class _OrderCardState extends State<OrderCard> {
                             onPressed: () {
                               setStatusState("Received");
                               Navigator.pop(context, 'OK');
-                              final snackBar = SnackBar(
+                              const snackBar = SnackBar(
                                 content:
-                                    const Text('Order is marked as delivered.'),
+                                   Text('Order is marked as delivered.'),
                               );
 
                               // Find the ScaffoldMessenger in the widget tree
@@ -499,7 +499,7 @@ class _OrderCardState extends State<OrderCard> {
                             child: const Text('OK',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -550,7 +550,7 @@ class _OrderCardState extends State<OrderCard> {
                         title: const Text('Mark Order as Complete',
                             style: TextStyle(
                               fontFamily: 'Manrope',
-                              fontVariations: const [
+                              fontVariations: [
                                 FontVariation('wght', 700),
                               ],
                               fontSize: 16,
@@ -566,7 +566,7 @@ class _OrderCardState extends State<OrderCard> {
                             child: const Text('Cancel',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
@@ -577,9 +577,9 @@ class _OrderCardState extends State<OrderCard> {
                             onPressed: () {
                               setStatusState("Completed");
                               Navigator.pop(context, 'OK');
-                              final snackBar = SnackBar(
+                              const snackBar = SnackBar(
                                 content:
-                                    const Text('Order is marked as completed.'),
+                                   Text('Order is marked as completed.'),
                               );
 
                               // Find the ScaffoldMessenger in the widget tree
@@ -590,7 +590,7 @@ class _OrderCardState extends State<OrderCard> {
                             child: const Text('OK',
                                 style: TextStyle(
                                   fontFamily: 'Manrope',
-                                  fontVariations: const [
+                                  fontVariations: [
                                     FontVariation('wght', 700),
                                   ],
                                   fontSize: 16,
