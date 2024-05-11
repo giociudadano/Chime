@@ -377,27 +377,27 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
     );
     municipality = "MIAGAO";
 
-    List<DropdownMenuItem> dropdownBarangays = List.generate(
-      barangays.length,
-      (index) => DropdownMenuItem(
-        value: barangays[index],
-        child: Text(
-          "${barangays[index]}".title(),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontFamily: 'Source Sans 3',
-            fontVariations: const [
-              FontVariation('wght', 400),
-            ],
-            fontSize: 14,
-            letterSpacing: -0.3,
-          ),
-        ),
-        onTap: () {
-          barangay = barangays[index];
-        },
-      ),
-    );
+    // List<DropdownMenuItem> dropdownBarangays = List.generate(
+    //   barangays.length,
+    //   (index) => DropdownMenuItem(
+    //     value: barangays[index],
+    //     child: Text(
+    //       "${barangays[index]}".title(),
+    //       style: TextStyle(
+    //         color: Theme.of(context).colorScheme.onSurface,
+    //         fontFamily: 'Source Sans 3',
+    //         fontVariations: const [
+    //           FontVariation('wght', 400),
+    //         ],
+    //         fontSize: 14,
+    //         letterSpacing: -0.3,
+    //       ),
+    //     ),
+    //     onTap: () {
+    //       barangay = barangays[index];
+    //     },
+    //   ),
+    // );
 
     return showDialog(
         context: context,
@@ -446,7 +446,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Label", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -616,7 +617,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Municipality", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -659,50 +661,50 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  Text(
-                    "Barangay",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontFamily: 'Source Sans 3',
-                        fontVariations: const [
-                          FontVariation('wght', 400),
-                        ],
-                        fontSize: 16,
-                        letterSpacing: -0.1),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: DropdownButtonFormField(
-                      isExpanded: true,
-                      elevation: 1,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant), //<-- SEE HERE
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                              width: 1,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant), //<-- SEE HERE
-                        ),
-                      ),
-                      value: barangay,
-                      items: dropdownBarangays,
-                      onChanged: (value) {
-                        value = value;
-                      },
-                    ),
-                  ),
+                  // const SizedBox(height: 15),
+                  // Text(
+                  //   "Barangay",
+                  //   style: TextStyle(
+                  //       color: Theme.of(context).colorScheme.onSurface,
+                  //       fontFamily: 'Source Sans 3',
+                  //       fontVariations: const [
+                  //         FontVariation('wght', 400),
+                  //       ],
+                  //       fontSize: 16,
+                  //       letterSpacing: -0.1),
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  //   child: DropdownButtonFormField(
+                  //     isExpanded: true,
+                  //     elevation: 1,
+                  //     decoration: InputDecoration(
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderRadius:
+                  //             const BorderRadius.all(Radius.circular(10)),
+                  //         borderSide: BorderSide(
+                  //             width: 1,
+                  //             color: Theme.of(context)
+                  //                 .colorScheme
+                  //                 .outlineVariant), //<-- SEE HERE
+                  //       ),
+                  //       border: OutlineInputBorder(
+                  //         borderRadius:
+                  //             const BorderRadius.all(Radius.circular(10)),
+                  //         borderSide: BorderSide(
+                  //             width: 1,
+                  //             color: Theme.of(context)
+                  //                 .colorScheme
+                  //                 .outlineVariant), //<-- SEE HERE
+                  //       ),
+                  //     ),
+                  //     value: barangay,
+                  //     items: dropdownBarangays,
+                  //     onChanged: (value) {
+                  //       value = value;
+                  //     },
+                  //   ),
+                  // ),
                   const SizedBox(height: 15),
                   Text.rich(
                     TextSpan(text: "Landmark", children: [
@@ -1067,8 +1069,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -1109,7 +1110,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Theme.of(context).colorScheme.outlineVariant,
-                          width:1,
+                          width: 1,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -1118,8 +1119,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -1140,7 +1140,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Municipality", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -1289,7 +1290,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(color: Theme.of(context).colorScheme.error),
+                                side: BorderSide(
+                                    color: Theme.of(context).colorScheme.error),
                               ))),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
