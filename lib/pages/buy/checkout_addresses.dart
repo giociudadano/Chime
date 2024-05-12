@@ -661,50 +661,50 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       },
                     ),
                   ),
-                  // const SizedBox(height: 15),
-                  // Text(
-                  //   "Barangay",
-                  //   style: TextStyle(
-                  //       color: Theme.of(context).colorScheme.onSurface,
-                  //       fontFamily: 'Source Sans 3',
-                  //       fontVariations: const [
-                  //         FontVariation('wght', 400),
-                  //       ],
-                  //       fontSize: 16,
-                  //       letterSpacing: -0.1),
-                  // ),
-                  // SizedBox(
-                  //   height: 50,
-                  //   child: DropdownButtonFormField(
-                  //     isExpanded: true,
-                  //     elevation: 1,
-                  //     decoration: InputDecoration(
-                  //       enabledBorder: OutlineInputBorder(
-                  //         borderRadius:
-                  //             const BorderRadius.all(Radius.circular(10)),
-                  //         borderSide: BorderSide(
-                  //             width: 1,
-                  //             color: Theme.of(context)
-                  //                 .colorScheme
-                  //                 .outlineVariant), //<-- SEE HERE
-                  //       ),
-                  //       border: OutlineInputBorder(
-                  //         borderRadius:
-                  //             const BorderRadius.all(Radius.circular(10)),
-                  //         borderSide: BorderSide(
-                  //             width: 1,
-                  //             color: Theme.of(context)
-                  //                 .colorScheme
-                  //                 .outlineVariant), //<-- SEE HERE
-                  //       ),
-                  //     ),
-                  //     value: barangay,
-                  //     items: dropdownBarangays,
-                  //     onChanged: (value) {
-                  //       value = value;
-                  //     },
-                  //   ),
-                  // ),
+                  const SizedBox(height: 15),
+                  Text(
+                    "Barangay",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontFamily: 'Source Sans 3',
+                        fontVariations: const [
+                          FontVariation('wght', 400),
+                        ],
+                        fontSize: 16,
+                        letterSpacing: -0.1),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      elevation: 1,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant), //<-- SEE HERE
+                        ),
+                      ),
+                      value: barangay,
+                      items: dropdownBarangays,
+                      onChanged: (value) {
+                        value = value;
+                      },
+                    ),
+                  ),
                   const SizedBox(height: 15),
                   Text.rich(
                     TextSpan(text: "Landmark", children: [

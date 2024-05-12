@@ -665,7 +665,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
                         Radio(
-                          value: 'Cash on Delivery',
+                          value: 'Cash (COD)',
                           groupValue: paymentMethod,
                           onChanged: (String? value) {
                             setState(() {
@@ -675,7 +675,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Cash on Delivery",
+                          "Cash (COD)",
                           maxLines: 1,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,

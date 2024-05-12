@@ -553,7 +553,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 color: Theme.of(context).colorScheme.onSurface,
                                 size: 24),
                             Text(
-                              (appMode == 'Buy') ? "Foods" : "Categories",
+                              (appMode == 'Buy') ? "Food" : "Categories",
                               style: const TextStyle(
                                 fontFamily: 'Manrope',
                                 fontVariations: [
