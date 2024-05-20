@@ -120,15 +120,9 @@ class _ProductCardState extends State<ProductCard> {
                     left: 8,
                     top: 0,
                     child: Icon(Icons.bookmark,
-                        size: 32, color:Theme.of(context).colorScheme.tertiary),
+                        size: 32,
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
-                // if (widget.product['isFeatured'] ?? false)
-                //   Positioned(
-                //     left: 8,
-                //     top: -4,
-                //     child: Icon(Icons.bookmark,
-                //         size: 30, color: Theme.of(context).colorScheme.tertiary),
-                //   ),
                 Positioned(
                   right: 8,
                   top: 8,
@@ -151,7 +145,9 @@ class _ProductCardState extends State<ProductCard> {
                               ? Theme.of(context).colorScheme.error
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                         ),
                         onPressed: () {
                           setFavoriteProduct(
@@ -171,7 +167,7 @@ class _ProductCardState extends State<ProductCard> {
                     SizedBox(
                       height: 15,
                       child: Text(
-                        widget.product['productName'],
+                        widget.product['productName'] ?? "",
                         maxLines: 1,
                         style: TextStyle(
                             color:
@@ -187,7 +183,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                     ),
                     Text(
-                      '₱${widget.product['productPrice']}',
+                      '₱${widget.product['productPrice'] ?? 0}',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Manrope',

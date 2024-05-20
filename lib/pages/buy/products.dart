@@ -280,7 +280,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                   key,
                                   productsFavorited[key],
                                   productsFavorited[key]['placeID'],
-                                  places[productsFavorited[key]['placeID']],
+                                  places[productsFavorited[key]['placeID']] ??
+                                      {},
                                   setFavoriteProductCallback:
                                       setFavoriteProduct);
                             },
@@ -387,8 +388,9 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ? products[key]['placeID']
                                 : productsSearched[key]['placeID'],
                             places[_searchBox.text.isEmpty
-                                ? products[key]['placeID']
-                                : productsSearched[key]['placeID']],
+                                    ? products[key]['placeID']
+                                    : productsSearched[key]['placeID']] ??
+                                {},
                             setFavoriteProductCallback: setFavoriteProduct);
                       }),
                   const SizedBox(height: 40),
