@@ -46,6 +46,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
       TextEditingController(text: widget.product['productPrice'].toString());
 
   late List selectedValue = widget.product['categories'];
+  bool showStockField = false;
 
   // Variables for image picker.
   final ImagePicker _picker = ImagePicker();
@@ -71,7 +72,6 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     bool isMedia = false,
   }) async {
     if (kIsWeb) {
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
         // TODO: Add functionality to edit images on web devices.
         SnackBar(
@@ -80,13 +80,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.surface,
         ),
       );
       return;
@@ -279,11 +278,9 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-        backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
@@ -299,7 +296,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                 "Edit Product",
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
@@ -322,7 +319,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                       Center(
                         child: Card(
                           color:
-                              MaterialColors.getSurfaceContainerLow(darkMode),
+                              Theme.of(context).colorScheme.surfaceVariant,
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           elevation: 0,
                           child: SizedBox(
@@ -349,7 +346,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                         child: Icon(Icons.local_mall_outlined,
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .outlineVariant),
+                                                .outline),
                                       ),
                                       fadeInCurve: Curves.easeIn,
                                       fadeOutCurve: Curves.easeOut,
@@ -368,21 +365,24 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                 deleteProductImage();
                               },
                               style: ButtonStyle(
+                                  shadowColor: const MaterialStatePropertyAll(
+                                      Colors.transparent),
                                   backgroundColor: MaterialStatePropertyAll(
-                                      ChimeColors.getRed200()),
+                                      Theme.of(context).colorScheme.surface),
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                     side: BorderSide.none,
                                   ))),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
                                 child: Text(
-                                  "Delete",
+                                  "Remove",
                                   style: TextStyle(
-                                    color: ChimeColors.getRed800(),
-                                    fontFamily: 'Plus Jakarta Sans',
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
                                     ],
@@ -398,9 +398,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                   context: context);
                             },
                             style: ButtonStyle(
+                                shadowColor: const MaterialStatePropertyAll(
+                                    Colors.transparent),
                                 backgroundColor: MaterialStatePropertyAll(
-                                    MaterialColors.getSurfaceContainerLow(
-                                        darkMode)),
+                                    Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer),
                                 shape: MaterialStatePropertyAll(
                                     RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -411,9 +414,10 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                               child: Text(
                                 "Upload",
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
@@ -428,20 +432,21 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                       Text(
                         "Required items are marked with an asterisk *",
                         style: TextStyle(
-                            color: ChimeColors.getRed800(),
+                            color: Theme.of(context).colorScheme.primary,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
                               FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3),
+                            fontSize: 16,
+                            letterSpacing: -0.1),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
                       Text.rich(
                         TextSpan(text: "Product Name", children: [
                           TextSpan(
                               text: "*",
-                              style: TextStyle(color: ChimeColors.getRed800()))
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary))
                         ]),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
@@ -449,23 +454,25 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             fontVariations: const [
                               FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3),
+                            fontSize: 16,
+                            letterSpacing: -0.1),
                       ),
                       TextFormField(
                         controller: inputEditProductName,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
@@ -473,12 +480,11 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           hintStyle: TextStyle(
                               color: Theme.of(context).colorScheme.outline),
                           filled: true,
-                          fillColor: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
+                          fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
                         ),
                         style: const TextStyle(
-                            letterSpacing: -0.3,
+                            letterSpacing: -0.1,
                             fontFamily: 'Source Sans 3',
                             fontVariations: [
                               FontVariation('wght', 400),
@@ -493,7 +499,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         TextSpan(text: "Price", children: [
                           TextSpan(
                               text: "*",
-                              style: TextStyle(color: ChimeColors.getRed800()))
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary))
                         ]),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
@@ -501,8 +508,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             fontVariations: const [
                               FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3),
+                            fontSize: 16,
+                            letterSpacing: -0.1),
                       ),
                       TextFormField(
                         keyboardType: TextInputType.number,
@@ -510,15 +517,17 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
@@ -527,8 +536,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             child: Text(
                               "₱",
                               style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Source Sans 3',
                                   fontVariations: const [
                                     FontVariation('wght', 400),
@@ -541,8 +549,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           hintStyle: TextStyle(
                               color: Theme.of(context).colorScheme.outline),
                           filled: true,
-                          fillColor: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
+                          fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
                         ),
                         style: const TextStyle(
@@ -551,7 +558,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             FontVariation('wght', 400),
                           ],
                           fontSize: 14,
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.1,
                         ),
                         minLines: 1,
                         maxLines: 1,
@@ -568,8 +575,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             fontVariations: const [
                               FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3),
+                            fontSize: 16,
+                            letterSpacing: -0.1),
                       ),
                       TextFormField(
                         controller: inputEditProductDesc,
@@ -577,24 +584,26 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context).colorScheme.outline,
-                              width: 0.5,
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                              width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          hintText: "Description",
+                          hintText:
+                              "Ingredients, allergens, or other information...",
                           hintStyle: TextStyle(
                               color: Theme.of(context).colorScheme.outline),
                           filled: true,
-                          fillColor: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
+                          fillColor: Theme.of(context).colorScheme.surface,
                           isDense: true,
                         ),
                         style: const TextStyle(
@@ -603,7 +612,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             FontVariation('wght', 400),
                           ],
                           fontSize: 14,
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.1,
                         ),
                         minLines: 3,
                         maxLines: 3,
@@ -611,15 +620,100 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 16),
+                      Column(
+                        children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Limit Orders',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontFamily: 'Source Sans 3',
+                                      fontVariations: const [
+                                        FontVariation('wght', 400),
+                                      ],
+                                      fontSize: 16,
+                                      height: 1,
+                                      letterSpacing: -0.1),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Transform.scale(
+                                  scale: 0.75,
+                                  child: Switch(
+                                    value: isLimited,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isLimited = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ]),
+                          Visibility(
+                            visible: isLimited,
+                            child: TextFormField(
+                              enabled: isLimited,
+                              keyboardType: TextInputType.number,
+                              controller: inputEditProductOrdersRemaining,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                errorMaxLines: 3,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                hintText: "0",
+                                hintStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                                filled: true,
+                                fillColor:
+                                    Theme.of(context).colorScheme.surface,
+                                isDense: true,
+                              ),
+                              style: const TextStyle(
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                              ),
+                              minLines: 1,
+                              maxLines: 1,
+                              validator: (String? value) {
+                                return _verifyProductPriceField(value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
                       Card(
                         elevation: 0,
-                        color:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        color: Theme.of(context).colorScheme.surface,
                         shape: RoundedRectangleBorder(
                             side: BorderSide(
-                              color: MaterialColors.getSurfaceContainerHighest(
-                                  darkMode),
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
                             ),
                             borderRadius: BorderRadius.circular(10.0)),
                         child: InkWell(
@@ -638,7 +732,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             }
                           },
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 15),
+                            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -651,13 +745,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                       style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .onSurfaceVariant,
-                                        fontFamily: 'Plus Jakarta Sans',
+                                            .onSurface,
+                                        fontFamily: 'Manrope',
                                         fontVariations: const [
                                           FontVariation('wght', 700),
                                         ],
-                                        fontSize: 14,
-                                        height: 1,
+                                        fontSize: 16,
                                         letterSpacing: -0.3,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -673,144 +766,55 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                         fontVariations: const [
                                           FontVariation('wght', 400),
                                         ],
-                                        fontSize: 14,
-                                        height: 1.2,
-                                        letterSpacing: -0.3,
+                                        fontSize: 16,
+                                        letterSpacing: -0.1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],
                                 ),
                                 Icon(Icons.arrow_forward_ios,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                    size: 15)
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                    size: 16)
                               ],
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 50),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Has Limited Stocks',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontFamily: 'Source Sans 3',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 14,
-                                  height: 1,
-                                  letterSpacing: -0.3),
-                              textAlign: TextAlign.left,
-                            ),
-                            Row(children: [
-                              SizedBox(
-                                width: 60,
-                                child: TextFormField(
-                                  enabled: isLimited,
-                                  keyboardType: TextInputType.number,
-                                  controller: inputEditProductOrdersRemaining,
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        width: 0.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    errorMaxLines: 3,
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline,
-                                        width: 0.5,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    hintText: "0",
-                                    hintStyle: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline),
-                                    filled: true,
-                                    fillColor: MaterialColors
-                                        .getSurfaceContainerLowest(darkMode),
-                                    isDense: true,
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'Source Sans 3',
-                                    fontVariations: [
-                                      FontVariation('wght', 400),
-                                    ],
-                                    fontSize: 13.5,
-                                    letterSpacing: -0.5,
-                                  ),
-                                  minLines: 1,
-                                  maxLines: 1,
-                                  validator: (String? value) {
-                                    return _verifyProductPriceField(value);
-                                  },
-                                ),
-                              ),
-                              Transform.scale(
-                                scale: 0.6,
-                                child: Switch(
-                                  value: isLimited,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      isLimited = value;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ])
-                          ]),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Available for Pre-Orders',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontFamily: 'Source Sans 3',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                    FontVariation('wdth', 100),
-                                  ],
-                                  fontSize: 14,
-                                  height: 1,
-                                  letterSpacing: -0.3),
-                              textAlign: TextAlign.left,
-                            ),
-                            Transform.scale(
-                              scale: 0.6,
-                              child: Switch(
-                                value: isAcceptPreorders,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    isAcceptPreorders = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ]),
+
+                      // Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       Text(
+                      //         'Available for Pre-Orders',
+                      //         style: TextStyle(
+                      //             color: Theme.of(context)
+                      //                 .colorScheme
+                      //                 .onSurfaceVariant,
+                      //             fontFamily: 'Source Sans 3',
+                      //             fontVariations: const [
+                      //               FontVariation('wght', 400),
+                      //               FontVariation('wdth', 100),
+                      //             ],
+                      //             fontSize: 14,
+                      //             height: 1,
+                      //             letterSpacing: -0.3),
+                      //         textAlign: TextAlign.left,
+                      //       ),
+                      //       Transform.scale(
+                      //         scale: 0.6,
+                      //         child: Switch(
+                      //           value: isAcceptPreorders,
+                      //           onChanged: (bool value) {
+                      //             setState(() {
+                      //               isAcceptPreorders = value;
+                      //             });
+                      //           },
+                      //         ),
+                      //       ),
+                      //     ]),
                       const SizedBox(height: 30),
                       Text(
                         "Categories",
@@ -820,8 +824,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             fontVariations: const [
                               FontVariation('wght', 400),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3),
+                            fontSize: 16,
+                            letterSpacing: -0.1),
                       ),
                       const SizedBox(height: 10),
                       InlineChoice<dynamic>(
@@ -843,8 +847,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
-                                    letterSpacing: -0.3)),
+                                    fontSize: 16,
+                                    letterSpacing: -0.1)),
                           );
                         },
                         listBuilder: ChoiceList.createWrapped(
@@ -856,17 +860,72 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
-                          deleteProduct();
-                        },
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Delete this Product',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                            content: const Text(
+                                'This cannot be undone. Although you can always create a new product.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Cancel');
+                                },
+                                child: const Text('Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  deleteProduct();
+                                  Navigator.pop(context, 'OK');
+                                  const snackBar = SnackBar(
+                                    content:
+                                        Text('Product has been deleted.'),
+                                  );
+
+                                  // Find the ScaffoldMessenger in the widget tree
+                                  // and use it to show a SnackBar.
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                child: const Text('OK',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
                         style: ButtonStyle(
+                            shadowColor:
+                                const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getRed200()),
+                                Theme.of(context).colorScheme.errorContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide.none,
                             ))),
                         child: Padding(
@@ -874,8 +933,10 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           child: Text(
                             "Delete Product",
                             style: TextStyle(
-                              color: ChimeColors.getRed800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onErrorContainer,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -884,7 +945,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 48),
                     ],
                   ),
                 ),
@@ -901,13 +962,12 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                MaterialColors.getSurfaceContainerLowest(
-                                    darkMode)),
+                                Theme.of(context).colorScheme.surface),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                               side: BorderSide(
-                                color: ChimeColors.getGreen300(),
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             )),
                           ),
@@ -916,8 +976,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             child: Text(
                               "Cancel",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -943,7 +1003,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
-                                  ChimeColors.getGreen200()),
+                                  Theme.of(context).colorScheme.primary),
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -954,8 +1014,8 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                             child: Text(
                               "Save",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],

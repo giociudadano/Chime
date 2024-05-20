@@ -91,9 +91,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -107,24 +106,25 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                 fillColor: Theme.of(context).colorScheme.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(
-                        width: 2, 
-                        color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   borderSide: BorderSide(
-                      width: 2, 
-                      color: Theme.of(context).colorScheme.surfaceVariant,
-                      // style: BorderStyle.none,
+                    width: 2,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    // style: BorderStyle.none,
                   ),
                 ),
                 hintText: "Search for orders",
                 hintStyle: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                prefixIcon: Icon(Icons.search_outlined, color: Theme.of(context).colorScheme.secondary, size: 20),
+                prefixIcon: Icon(Icons.search_outlined,
+                    color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
@@ -144,6 +144,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
                                 ? Theme.of(context).colorScheme.primary
@@ -157,7 +159,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 color: tabController.index == 0
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -172,6 +174,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
                                 ? Theme.of(context).colorScheme.primary
@@ -185,7 +189,7 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                 color: tabController.index == 1
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -200,6 +204,8 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
                                 ? Theme.of(context).colorScheme.onErrorContainer
@@ -211,9 +217,11 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                             "Cancelled",
                             style: TextStyle(
                                 color: tabController.index == 2
-                                    ? Theme.of(context).colorScheme.errorContainer
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer
                                     : Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -234,25 +242,38 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Unread') +
                               getOrderCount('Preparing') +
                               getOrderCount('To Receive') +
                               getOrderCount('Received') ==
                           0)
-                        Text(
-                          "No active orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no active orders.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
@@ -289,30 +310,48 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Completed') == 0)
-                        Text(
-                          "No completed orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no completed orders yet.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -339,32 +378,47 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                     }
                                   }),
                               const SizedBox(
-                                height: 64,
-                                child: Center(child: Text("This is the end of the list!"))),
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Cancelled') == 0)
-                        Text(
-                          "No cancelled orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no cancelled orders.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -390,8 +444,10 @@ class _OrdersPageState extends State<OrdersPage> with TickerProviderStateMixin {
                                     }
                                   }),
                               const SizedBox(
-                                height: 64,
-                                child: Center(child: Text("This is the end of the list!"))),
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),

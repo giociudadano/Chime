@@ -359,6 +359,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   }
                                                 },
                                                 style: ButtonStyle(
+                                                  shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                                                     backgroundColor:
                                                         MaterialStatePropertyAll(
                                                             Theme.of(context).colorScheme.primary),
@@ -432,10 +433,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.secondary,
-                              width: 2,
-                            ),
+                            side: BorderSide.none,
                           )),
                         ),
                         child: Padding(
@@ -555,7 +553,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 color: Theme.of(context).colorScheme.onSurface,
                                 size: 24),
                             Text(
-                              (appMode == 'Buy') ? "Foods" : "Categories",
+                              (appMode == 'Buy') ? "Food" : "Categories",
                               style: const TextStyle(
                                 fontFamily: 'Manrope',
                                 fontVariations: [

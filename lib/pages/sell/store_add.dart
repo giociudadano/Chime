@@ -98,7 +98,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
               "Create a Store",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
                   ],
@@ -121,20 +121,20 @@ class _StoreAddPageState extends State<StoreAddPage> {
                     Text(
                       "Required items are marked with an asterisk *",
                       style: TextStyle(
-                          color: ChimeColors.getRed800(),
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Source Sans 3',
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     const SizedBox(height: 10),
                     Text.rich(
                       TextSpan(text: "Store Name", children: [
                         TextSpan(
                             text: "*",
-                            style: TextStyle(color: ChimeColors.getRed800()))
+                            style: TextStyle(color: Theme.of(context).colorScheme.primary))
                       ]),
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
@@ -142,23 +142,23 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       controller: inputAddStoreName,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -167,11 +167,11 @@ class _StoreAddPageState extends State<StoreAddPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.1,
                           fontFamily: 'Source Sans 3',
                           fontVariations: [
                             FontVariation('wght', 400),
@@ -190,8 +190,8 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       controller: inputAddStoreDesc,
@@ -199,15 +199,15 @@ class _StoreAddPageState extends State<StoreAddPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -216,7 +216,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -225,7 +225,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 3,
                       maxLines: 3,
@@ -242,8 +242,8 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -251,15 +251,15 @@ class _StoreAddPageState extends State<StoreAddPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -268,13 +268,13 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           child: Text(
                             "₱",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.outline,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
                                 fontSize: 16,
-                                letterSpacing: -0.3),
+                                letterSpacing: -0.1),
                           ),
                         ),
                         hintText: "0",
@@ -282,7 +282,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                             color: Theme.of(context).colorScheme.outline),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -291,7 +291,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 1,
                       maxLines: 1,
@@ -308,8 +308,8 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           fontVariations: const [
                             FontVariation('wght', 400),
                           ],
-                          fontSize: 14,
-                          letterSpacing: -0.3),
+                          fontSize: 16,
+                          letterSpacing: -0.1),
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -318,38 +318,38 @@ class _StoreAddPageState extends State<StoreAddPage> {
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                            width: 0.5,
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
                           ),
                           borderRadius: BorderRadius.circular(8.0),
                         ),
-                        hintText: "123 456 789",
+                        hintText: "9123 456 789",
                         hintStyle: TextStyle(
                             color: Theme.of(context).colorScheme.outline),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 10, 8, 0),
                           child: Text(
-                            "+639",
+                            "+63",
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                                color: Theme.of(context).colorScheme.outline,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
                                 fontSize: 14,
-                                letterSpacing: -0.3),
+                                letterSpacing: -0.1),
                           ),
                         ),
                         filled: true,
                         fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                            Theme.of(context).colorScheme.surface,
                         isDense: true,
                       ),
                       style: const TextStyle(
@@ -358,7 +358,7 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           FontVariation('wght', 400),
                         ],
                         fontSize: 14,
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.1,
                       ),
                       minLines: 1,
                       maxLines: 1,
@@ -389,10 +389,10 @@ class _StoreAddPageState extends State<StoreAddPage> {
                         },
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context).colorScheme.primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(8),
                               side: BorderSide.none,
                             ))),
                         child: Padding(
@@ -400,8 +400,8 @@ class _StoreAddPageState extends State<StoreAddPage> {
                           child: Text(
                             "Save",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],

@@ -102,51 +102,47 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
             TextField(
               focusNode: focus,
               controller: _searchBox,
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
                 contentPadding: EdgeInsets.zero,
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  color: Theme.of(context).colorScheme.outline,
-                  letterSpacing: -0.3,
-                ),
                 filled: true,
-                fillColor: MaterialColors.getSurfaceContainerLowest(darkMode),
-                isDense: true,
-                prefixIcon: const Icon(Icons.search_outlined, size: 16),
+                fillColor: Theme.of(context).colorScheme.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    // style: BorderStyle.none,
+                  ),
+                ),
+                hintText: "Search for an order",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                prefixIcon: Icon(Icons.search_outlined,
+                    color: Theme.of(context).colorScheme.secondary, size: 20),
               ),
               style: const TextStyle(
                 fontFamily: 'Source Sans 3',
                 fontVariations: [
                   FontVariation('wght', 400),
                 ],
-                height: 1.2,
-                letterSpacing: -0.3,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
             const SizedBox(height: 20),
@@ -159,10 +155,12 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 0
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -170,13 +168,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             "Unread",
                             style: TextStyle(
                                 color: tabController.index == 0
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -187,10 +185,12 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 1
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -198,13 +198,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             "Preparing",
                             style: TextStyle(
                                 color: tabController.index == 1
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -215,24 +215,26 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 2
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Receiving",
+                            "Delivered",
                             style: TextStyle(
                                 color: tabController.index == 2
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -243,10 +245,12 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 3
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.primary
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -254,13 +258,13 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             "Completed",
                             style: TextStyle(
                                 color: tabController.index == 3
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -271,10 +275,12 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                     const SizedBox(width: 10),
                     ElevatedButton(
                       style: ButtonStyle(
+                        shadowColor:
+                            const MaterialStatePropertyAll(Colors.transparent),
                         backgroundColor: MaterialStatePropertyAll(
                             tabController.index == 4
-                                ? ChimeColors.getGreen800()
-                                : ChimeColors.getGreen100()),
+                                ? Theme.of(context).colorScheme.onErrorContainer
+                                : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -282,13 +288,15 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                             "Cancelled",
                             style: TextStyle(
                                 color: tabController.index == 4
-                                    ? ChimeColors.getGreen100()
-                                    : ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                    ? Theme.of(context)
+                                        .colorScheme
+                                        .errorContainer
+                                    : Theme.of(context).colorScheme.onSurface,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 13,
+                                fontSize: 14,
                                 letterSpacing: -0.3,
                                 overflow: TextOverflow.ellipsis),
                           )),
@@ -305,25 +313,38 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Unread') == 0)
-                        Text(
-                          "No unread orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no new orders. Come back later.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -354,27 +375,40 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Preparing') +
                               getOrderCount('To Receive') ==
                           0)
-                        Text(
-                          "No preparing orders or orders to receive",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "There are no orders that are being prepared or delivered.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -401,30 +435,48 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Received') == 0)
-                        Text(
-                          "No received orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have no delivered orders right now.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -449,30 +501,48 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
                     ],
                   ),
-                  ListView(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (getOrderCount('Completed') == 0)
-                        Text(
-                          "No completed orders",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.outline,
-                            fontFamily: 'Source Sans 3',
-                            fontVariations: const [
-                              FontVariation('wght', 400),
-                            ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            height: 1,
-                          ),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 240,
+                              width: 240,
+                              child: Image(
+                                  image: AssetImage(
+                                      'lib/assets/images/Empty.png')),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "You have not completed any orders yet.",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontFamily: 'Source Sans 3',
+                                fontVariations: const [
+                                  FontVariation('wght', 400),
+                                ],
+                                fontSize: 14,
+                                letterSpacing: -0.1,
+                                height: 1,
+                              ),
+                            ),
+                          ],
                         )
                       else
                         Expanded(
-                          child: Column(
+                          child: ListView(
                             children: [
                               ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
@@ -497,6 +567,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),
@@ -514,7 +589,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                               FontVariation('wght', 400),
                             ],
                             fontSize: 14,
-                            letterSpacing: -0.3,
+                            letterSpacing: -0.1,
                             height: 1,
                           ),
                         )
@@ -545,6 +620,11 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                       return const SizedBox.shrink();
                                     }
                                   }),
+                              const SizedBox(
+                                  height: 64,
+                                  child: Center(
+                                      child: Text(
+                                          "This is the end of the list!"))),
                             ],
                           ),
                         ),

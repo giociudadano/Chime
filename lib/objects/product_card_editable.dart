@@ -96,19 +96,18 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     isFeatured = widget.product['categories'].contains('Featured');
     return Card(
-      color: MaterialColors.getSurfaceContainerLowest(darkMode),
+      color: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
       shape: RoundedRectangleBorder(
         side: BorderSide(
           width: 0.5,
-          color: MaterialColors.getSurfaceContainerHighest(darkMode),
+          color: Theme.of(context).colorScheme.outlineVariant,
         ),
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(12.0),
       ),
       child: InkWell(
         onTap: () {
@@ -149,7 +148,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                         padding: const EdgeInsets.all(40.0),
                         child: Icon(Icons.local_mall_outlined,
                             color:
-                                Theme.of(context).colorScheme.outlineVariant),
+                                Theme.of(context).colorScheme.outline),
                       ),
                       fadeInCurve: Curves.easeIn,
                       fadeOutCurve: Curves.easeOut,
@@ -160,23 +159,23 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                   right: 8,
                   top: 8,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: Container(
-                      height: 30,
-                      width: 30,
+                      height: 32,
+                      width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : const Color.fromARGB(120, 0, 0, 0),
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.85),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           isFeatured ? Icons.bookmark : Icons.bookmark_outline,
-                          size: 22,
+                          size: 24,
                           color: isFeatured
-                              ? Colors.orangeAccent
+                              ? Theme.of(context).colorScheme.primary
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
-                                  : Colors.white,
+                                  : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                         onPressed: () {
                           setFeaturedProduct(widget.productID);
@@ -187,13 +186,13 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                 ),
               ]),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 15,
+                      height: 20,
                       child: Text(
                         widget.product['productName'],
                         maxLines: 2,
@@ -204,9 +203,8 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
-                            fontSize: 12,
+                            fontSize: 14,
                             letterSpacing: -0.3,
-                            height: 1,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
@@ -219,7 +217,6 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                             FontVariation('wght', 700),
                           ],
                           fontSize: 16,
-                          height: 0.85,
                           letterSpacing: -0.3),
                     ),
                   ],

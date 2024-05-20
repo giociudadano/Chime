@@ -2,7 +2,7 @@ part of '../../main.dart';
 
 class StorePage extends StatefulWidget {
   StorePage(this.places, {super.key, this.updateNavigationBarCallback});
-
+  
   final Function(bool newState)? updateNavigationBarCallback;
   Map places = {};
 
@@ -92,6 +92,39 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
       widget.places[placeID]['categories'][category].remove(productID);
     }
   }
+  
+  void _showAdditionalDetails(Offset offset) async {
+    await showMenu(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      elevation: 0,
+      context: context,
+      position: RelativeRect.fromLTRB(offset.dx, offset.dy, 0, 0),
+      items: [
+        // TO REMOVE?
+        PopupMenuItem(
+          onTap: () {
+            // _showQRCode();
+          },
+          child: Row(children: [
+            Icon(Icons.qr_code_scanner,
+                color: Theme.of(context).colorScheme.onPrimaryContainer),
+            const SizedBox(width: 5),
+            Text(
+              "Share QR Code",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontFamily: 'Manrope',
+                  fontVariations: const [
+                    FontVariation('wght', 700),
+                  ],
+                  fontSize: 13,
+                  letterSpacing: -0.3),
+            )
+          ]),
+        ),
+      ],
+    );
+  }
 
   @override
   void initState() {
@@ -116,8 +149,6 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
-
     // If there is no existing store, display a prompt to add a new one.
     if (widget.places.isEmpty) {
       return Scaffold(
@@ -136,11 +167,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                 "Meow-hoo!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Manrope',
                     fontVariations: const [
                       FontVariation('wght', 700),
                     ],
-                    color: ChimeColors.getGreen800(),
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 20,
                     letterSpacing: -0.3),
               ),
@@ -152,9 +183,9 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     fontVariations: const [
                       FontVariation('wght', 400),
                     ],
-                    color: Theme.of(context).colorScheme.outline,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 14,
-                    letterSpacing: -0.3),
+                    letterSpacing: -0.1),
               ),
               const SizedBox(height: 30),
               Row(
@@ -172,7 +203,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                       style: ButtonStyle(
                         elevation: const MaterialStatePropertyAll(0),
                         backgroundColor:
-                            MaterialStatePropertyAll(ChimeColors.getGreen200()),
+                            MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         )),
@@ -182,8 +213,8 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                         child: Text(
                           "Create",
                           style: TextStyle(
-                            color: ChimeColors.getGreen800(),
-                            fontFamily: 'Plus Jakarta Sans',
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
@@ -203,11 +234,11 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
 
     String key = widget.places.keys.elementAt(0);
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
+            padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
             child: Column(
               children: [
                 Row(
@@ -250,7 +281,7 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                             maxLines: 2,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
@@ -269,12 +300,22 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                                 fontVariations: const [
                                   FontVariation('wght', 400),
                                 ],
-                                fontSize: 14,
-                                letterSpacing: -0.3, //-0.3
-                                height: 1.2, //0.75
+                                fontSize: 16,
+                                letterSpacing: -0.1,
+                                height: 1.1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ],
+                      ),
+                    ),
+                                        GestureDetector(
+                      onTapDown: (TapDownDetails details) {
+                        _showAdditionalDetails(details.globalPosition);
+                      },
+                      child: Icon(
+                        Icons.more_vert,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
                   ],

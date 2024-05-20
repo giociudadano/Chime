@@ -70,20 +70,18 @@ class _LoginPageState extends State<LoginPage> {
           errorMessage =
               AppLocalizations.of(context)!.loginSnackbarGenericError;
       }
-      bool darkMode = Theme.of(context).brightness == Brightness.dark;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Theme.of(context).colorScheme.onErrorContainer,
                 fontSize: 14,
-                fontFamily: 'Bahnschrift',
+                fontFamily: 'Source Sans 3',
                 fontVariations: const [
-                  FontVariation('wght', 350),
-                  FontVariation('wdth', 100),
+                  FontVariation('wght', 400),
                 ],
               )),
-          backgroundColor: MaterialColors.getSurfaceContainer(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer,
         ),
       );
       return;
@@ -92,9 +90,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurface(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -104,10 +101,9 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 AppLocalizations.of(context)!.loginTitle,
                 style: const TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
+                  fontFamily: 'Manrope',
                   fontVariations: [
                     FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
                   ],
                   fontSize: 50,
                   height: 0.8,
@@ -128,10 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14),
+                            fontSize: 16),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -145,17 +140,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         hintText: AppLocalizations.of(context)!.emailHint,
                         hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.outline),
+                            color:
+                                Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
                           fontFamily: 'Source Sans 3',
                           fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14),
                       validator: (String? value) {
@@ -171,10 +165,9 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.onSurface,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
-                              FontVariation('wdth', 100),
+                              FontVariation('wght', 400),
                             ],
-                            fontSize: 14),
+                            fontSize: 16),
                         textAlign: TextAlign.left,
                       ),
                     ),
@@ -188,17 +181,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         hintText: AppLocalizations.of(context)!.passwordHint,
                         hintStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.outline),
+                            color:
+                                Theme.of(context).colorScheme.outline),
                         filled: true,
-                        fillColor:
-                            MaterialColors.getSurfaceContainerLowest(darkMode),
+                        fillColor: Theme.of(context).colorScheme.surfaceVariant,
                         isDense: true,
                       ),
                       style: const TextStyle(
                           fontFamily: 'Source Sans 3',
                           fontVariations: [
-                            FontVariation('wght', 300),
-                            FontVariation('wdth', 100),
+                            FontVariation('wght', 400),
                           ],
                           fontSize: 14),
                       obscureText: true,
@@ -232,12 +224,12 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
-                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontFamily: 'Manrope',
                                   fontVariations: const [
-                                    FontVariation('wght', 500),
-                                    FontVariation('wdth', 100),
+                                    FontVariation('wght', 700),
                                   ],
                                   fontSize: 14,
+                                  letterSpacing: -0.3,
                                 ),
                               ),
                             ),
@@ -245,59 +237,63 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                              thickness: 0.5,
-                              color: Theme.of(context).colorScheme.outline),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            AppLocalizations.of(context)!.loginServices,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            thickness: 0.5,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          color: MaterialColors.getSurfaceContainerLowest(
-                              darkMode),
-                        ),
-                        height: 50,
-                        width: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: IconButton(
-                              icon: Image.asset(
-                                  'lib/assets/images/service_google.png'),
-                              onPressed: () async {
-                                await AuthService()
-                                    .signInWithGoogle()
-                                    .then((response) {
-                                  if (context.mounted && response == true) {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()),
-                                        (Route<dynamic> route) => false);
-                                  }
-                                });
-                              }),
-                        )),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 48),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Divider(
+                    //           thickness: 0.5,
+                    //           color:
+                    //               Theme.of(context).colorScheme.outlineVariant),
+                    //     ),
+                    //     Padding(
+                    //       padding: const EdgeInsets.symmetric(horizontal: 10),
+                    //       child: Text(
+                    //         AppLocalizations.of(context)!.loginServices,
+                    //         style: TextStyle(
+                    //             fontFamily: 'Source Sans 3',
+                    //             fontSize: 14,
+                    //             color: Theme.of(context)
+                    //                 .colorScheme
+                    //                 .outlineVariant),
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       child: Divider(
+                    //         thickness: 0.5,
+                    //         color: Theme.of(context).colorScheme.outlineVariant,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // const SizedBox(height: 20),
+                    // Container(
+                    //     decoration: BoxDecoration(
+                    //       borderRadius:
+                    //           const BorderRadius.all(Radius.circular(10)),
+                    //       color: Theme.of(context).colorScheme.surfaceVariant,
+                    //     ),
+                    //     height: 50,
+                    //     width: 50,
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(4),
+                    //       child: IconButton(
+                    //           icon: Image.asset(
+                    //               'lib/assets/images/service_google.png'),
+                    //           onPressed: () async {
+                    //             await AuthService()
+                    //                 .signInWithGoogle()
+                    //                 .then((response) {
+                    //               if (context.mounted && response == true) {
+                    //                 Navigator.of(context).pushAndRemoveUntil(
+                    //                     MaterialPageRoute(
+                    //                         builder: (context) => HomePage()),
+                    //                     (Route<dynamic> route) => false);
+                    //               }
+                    //             });
+                    //           }),
+                    //     )),
+                    // const SizedBox(height: 36),
                     TextButton(
                       onPressed: () {
                         if (context.mounted) {
@@ -315,7 +311,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                             fontFamily: 'Source Sans 3',
                             fontVariations: const [
-                              FontVariation('wght', 350),
+                              FontVariation('wght', 400),
                             ],
                             fontSize: 14),
                       ),

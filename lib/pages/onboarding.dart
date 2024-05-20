@@ -27,9 +27,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurface(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
@@ -83,7 +82,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                 .split(':')
                                 .length -
                             1) {
-                      saveIsOnboardingVisited(true);
+                      // saveIsOnboardingVisited(true);
+                      saveIsOnboardingVisited(false);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const LoginPage()),
@@ -110,9 +110,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         ? AppLocalizations.of(context)!.onBoardingContinue
                         : AppLocalizations.of(context)!.onBoardingNext,
                     style: const TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
+                      fontFamily: 'Manrope',
                       fontVariations: [
-                        FontVariation('wght', 400),
+                        FontVariation('wght', 700),
                       ],
                       fontSize: 14,
                     ),
@@ -133,7 +133,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -165,7 +165,7 @@ class OnBoardingPageContent extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              fontFamily: 'Plus Jakarta Sans',
+              fontFamily: 'Manrope',
               fontVariations: [
                 FontVariation('wght', 700),
               ],

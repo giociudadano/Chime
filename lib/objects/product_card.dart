@@ -67,7 +67,7 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surface,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
@@ -87,7 +87,7 @@ class _ProductCardState extends State<ProductCard> {
           }
         },
         child: SizedBox(
-          height: 195,
+          height: 196,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -108,7 +108,7 @@ class _ProductCardState extends State<ProductCard> {
                         padding: const EdgeInsets.all(40.0),
                         child: Icon(Icons.local_mall_outlined,
                             color:
-                                Theme.of(context).colorScheme.onSurfaceVariant),
+                                Theme.of(context).colorScheme.outline),
                       ),
                       fadeInCurve: Curves.easeIn,
                       fadeOutCurve: Curves.easeOut,
@@ -117,12 +117,35 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 if (widget.product['isFeatured'] ?? false)
                   Positioned(
-                    left: 8,
-                    top: 0,
-                    child: Icon(Icons.bookmark,
-                        size: 32,
-                        color: Theme.of(context).colorScheme.tertiary),
-                  ),
+                      left: 4,
+                      top: 4,
+                      child: Card(
+                            elevation: 0,
+                        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.85),
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide.none,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: 
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          child: 
+                            Center(
+                              child: Text(
+                                "Featured",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                      
+                        ),
+                      )
+                      ),
                 Positioned(
                   right: 8,
                   top: 8,
@@ -133,7 +156,7 @@ class _ProductCardState extends State<ProductCard> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant,
+                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(.85),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
@@ -159,13 +182,13 @@ class _ProductCardState extends State<ProductCard> {
                 ),
               ]),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 12, 10, 0),
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 15,
+                      height: 20,
                       child: Text(
                         widget.product['productName'] ?? "",
                         maxLines: 1,
@@ -178,7 +201,6 @@ class _ProductCardState extends State<ProductCard> {
                             ],
                             fontSize: 14,
                             letterSpacing: -0.3,
-                            height: 0.85,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
@@ -191,7 +213,6 @@ class _ProductCardState extends State<ProductCard> {
                             FontVariation('wght', 700),
                           ],
                           fontSize: 16,
-                          height: 0.85,
                           letterSpacing: -0.3),
                     ),
                   ],

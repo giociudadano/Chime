@@ -122,7 +122,6 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
   }
 
   Future showEditNoticeForm(BuildContext context) async {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     // Variables for controllers.
     final GlobalKey<FormState> formEditNoticeKey = GlobalKey<FormState>();
     final inputEditNoticeTitle =
@@ -139,7 +138,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
             ),
           ),
           elevation: 0,
-          backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+          backgroundColor: Theme.of(context).colorScheme.surface,
           content: Form(
             key: formEditNoticeKey,
             child: Column(
@@ -151,8 +150,8 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     Text(
                       "Edit Notice",
                       style: TextStyle(
-                          color: ChimeColors.getGreen800(),
-                          fontFamily: 'Plus Jakarta Sans',
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),
                           ],
@@ -163,7 +162,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         icon: Icon(
                           Icons.close,
                           size: 24,
-                          color: Theme.of(context).colorScheme.outline,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         onPressed: () {
                           Navigator.pop(context);
@@ -174,15 +173,15 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Notice Title",
+                    "Title",
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 400),
                         ],
-                        fontSize: 14,
-                        letterSpacing: -0.3),
+                        fontSize: 16,
+                        letterSpacing: -0.1),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -191,14 +190,14 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -207,8 +206,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     hintStyle:
                         TextStyle(color: Theme.of(context).colorScheme.outline),
                     filled: true,
-                    fillColor:
-                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                    fillColor: Theme.of(context).colorScheme.surface,
                     isDense: true,
                   ),
                   style: const TextStyle(
@@ -217,21 +215,21 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                         FontVariation('wght', 400),
                       ],
                       fontSize: 14,
-                      letterSpacing: -0.3),
+                      letterSpacing: -0.1),
                 ),
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Description",
+                    "Content",
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontFamily: 'Source Sans 3',
                         fontVariations: const [
                           FontVariation('wght', 400),
                         ],
-                        fontSize: 14,
-                        letterSpacing: -0.3),
+                        fontSize: 16,
+                        letterSpacing: -0.1),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -240,14 +238,14 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
+                        color: Theme.of(context).colorScheme.outlineVariant,
                         width: 0.5,
                       ),
                       borderRadius: BorderRadius.circular(8.0),
@@ -256,8 +254,7 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                     hintStyle:
                         TextStyle(color: Theme.of(context).colorScheme.outline),
                     filled: true,
-                    fillColor:
-                        MaterialColors.getSurfaceContainerLowest(darkMode),
+                    fillColor: Theme.of(context).colorScheme.surface,
                     isDense: true,
                   ),
                   style: const TextStyle(
@@ -281,16 +278,15 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           Navigator.pop(context);
                         },
                         style: ButtonStyle(
+                          shadowColor:
+                              const MaterialStatePropertyAll(Colors.transparent),
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
-                              MaterialColors.getSurfaceContainerLowest(
-                                  darkMode)),
+                              Theme.of(context).colorScheme.surface),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: BorderSide(
-                              color: ChimeColors.getGreen300(),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide.none,
                           )),
                         ),
                         child: Padding(
@@ -298,12 +294,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           child: Text(
                             "Cancel",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -323,11 +319,13 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           }
                         },
                         style: ButtonStyle(
+                            shadowColor:
+                                const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context).colorScheme.primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(12),
                               side: BorderSide.none,
                             ))),
                         child: Padding(
@@ -335,12 +333,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                           child: Text(
                             "Save",
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -451,7 +449,6 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     Map productsSorted = Map.fromEntries(products.entries.toList()
       ..sort((a, b) => (a.value['productName'].toLowerCase())
           .compareTo(b.value['productName'].toLowerCase())));
@@ -461,24 +458,24 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
               .compareTo(b.value['productName'].toLowerCase())));
 
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       floatingActionButton: FloatingActionButton(
-              heroTag: null,
-              backgroundColor: ChimeColors.getGreen800(),
-              child: Icon(
-                Icons.add,
-                color: MaterialColors.getSurfaceContainerLowest(darkMode),
-                size: 24,
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => StoreProductsAddPage(
-                          widget.placeID, widget.categories,
-                          addProductCallback: addProduct)),
-                );
-              },
-            ),
+        heroTag: null,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimary,
+          size: 24,
+        ),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => StoreProductsAddPage(
+                    widget.placeID, widget.categories,
+                    addProductCallback: addProduct)),
+          );
+        },
+      ),
       body: (products.isEmpty && productsFeatured.isEmpty)
           ? const SizedBox.shrink()
           : Padding(
@@ -488,12 +485,10 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                   const SizedBox(height: 10),
                   Card(
                     elevation: 0,
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
                     shape: RoundedRectangleBorder(
                         //<-- SEE HERE
-                        side: BorderSide(
-                          color: MaterialColors.getSurfaceContainerHighest(
-                              darkMode),
-                        ),
+                        side: BorderSide.none,
                         borderRadius: BorderRadius.circular(16.0)),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
@@ -506,8 +501,10 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                     ? 'Add a notice'
                                     : 'Notice'),
                             style: TextStyle(
-                              color: ChimeColors.getGreen800(),
-                              fontFamily: 'Plus Jakarta Sans',
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onTertiaryContainer,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -525,7 +522,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                               widget.noticeDesc ??
                                   'This box will appear at the top of your products list when users visit your page. Add information such as delivery details, closing times, and more.',
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.outline,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onTertiaryContainer,
                                 fontFamily: 'Source Sans 3',
                                 fontVariations: const [
                                   FontVariation('wght', 400),
@@ -547,7 +546,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                   },
                                   style: ButtonStyle(
                                       backgroundColor: MaterialStatePropertyAll(
-                                          ChimeColors.getGreen200()),
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .tertiary),
                                       shape: MaterialStatePropertyAll(
                                           RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
@@ -562,14 +563,18 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                         Icon(
                                           Icons.edit_outlined,
                                           size: 20,
-                                          color: ChimeColors.getGreen800(),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onTertiary,
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
                                           "Edit Notice",
                                           style: TextStyle(
-                                            color: ChimeColors.getGreen800(),
-                                            fontFamily: 'Plus Jakarta Sans',
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onTertiary,
+                                            fontFamily: 'Manrope',
                                             fontVariations: const [
                                               FontVariation('wght', 700),
                                             ],
@@ -603,12 +608,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
-                                      fontFamily: 'Source Sans 3',
+                                      fontFamily: 'Manrope',
                                       fontVariations: const [
-                                        FontVariation('wght', 400),
+                                        FontVariation('wght', 700),
                                       ],
                                       fontSize: 16,
-                                      letterSpacing: 0),
+                                      letterSpacing: -0.3),
                                 ),
                               ]),
                         ),
@@ -653,12 +658,12 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface,
-                                        fontFamily: 'Source Sans 3',
+                                        fontFamily: 'Manrope',
                                         fontVariations: const [
-                                          FontVariation('wght', 400),
+                                          FontVariation('wght', 700),
                                         ],
                                         fontSize: 16,
-                                        letterSpacing: 0),
+                                        letterSpacing: -0.3),
                                   ),
                                 ]),
                           ),
@@ -685,8 +690,9 @@ class _StoreProductsPageState extends State<StoreProductsPage> {
                             },
                           ),
                           const SizedBox(
-                            height: 64,
-                            child: Center(child: Text("This is the end of the list!"))),
+                              height: 64,
+                              child: Center(
+                                  child: Text("This is the end of the list!"))),
                         ])
                 ],
               ),

@@ -81,7 +81,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                     ? "${widget.product['productName']} updated in cart!"
                     : "${widget.product['productName']} added to cart!",
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontSize: 16,
                   fontFamily: 'Source Sans 3',
                   fontVariations: const [
@@ -89,8 +89,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                   ],
                 )),
           ),
-          backgroundColor: MaterialColors.getSurfaceContainerHighest(
-              Theme.of(context).brightness == Brightness.dark),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
       );
     } catch (e) {
@@ -181,7 +180,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
-                        height: 48,
+                        height: 52,
                         child: DropdownButtonFormField(
                           iconSize: 0,
                           isExpanded: true,
@@ -221,7 +220,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                   ],
                                   fontSize: 16,
                                   height: 1,
-                                  letterSpacing: -0.3,
+                                  letterSpacing: -0.1,
                                 ),
                               ),
                               onTap: () {
@@ -284,11 +283,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                             Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(0),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant)),
+                                  border: Border.symmetric(
+                                            horizontal: BorderSide(
+                                              width: 1,
+                                              color: Theme.of(context).colorScheme.outlineVariant
+                                            ),
+                                            vertical: BorderSide.none,
+                                          ),),
                               width: 40,
                               height: 28,
                               child: Center(
@@ -495,13 +496,13 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           leading: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
             child: Ink(
               decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
+                color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
@@ -517,7 +518,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Ink(
                 decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.35),
+                  color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
                   shape: const CircleBorder(),
                 ),
                 child: Stack(children: [
@@ -631,9 +632,8 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                   fontVariations: const [
                                     FontVariation('wght', 700),
                                   ],
-                                  fontSize: 20,
+                                  fontSize: 16,
                                   letterSpacing: -0.3,
-                                  height: 0.85,
                                   overflow: TextOverflow.ellipsis),
                             ),
                             const SizedBox(height: 5),
@@ -684,7 +684,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                               false);
                                     },
                                   ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(width: 8),
                                   Text(
                                     "${widget.product['usersFavorited'] != null ? widget.product['usersFavorited'].length : 0}",
                                     style: TextStyle(
@@ -912,7 +912,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                       side: BorderSide.none,
                       borderRadius: BorderRadius.circular(12.0)),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                    padding: const EdgeInsets.all(16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -957,7 +957,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                                     fontVariations: const [
                                       FontVariation('wght', 400),
                                     ],
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     letterSpacing: -0.1,
                                     height: 1,
                                     overflow: TextOverflow.ellipsis),

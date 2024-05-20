@@ -55,15 +55,13 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: MaterialColors.getSurfaceContainerLowest(darkMode),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.onSurface),
+              color: Theme.of(context).colorScheme.onBackground),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -74,11 +72,10 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
             child: Text(
               "Order Info",
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontFamily: 'Plus Jakarta Sans',
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontFamily: 'Manrope',
                   fontVariations: const [
                     FontVariation('wght', 700),
-                    FontVariation('wdth', 100),
                   ],
                   fontSize: 20,
                   letterSpacing: -0.3),
@@ -103,19 +100,18 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Card(
-                            color: MaterialColors.getSurfaceContainerLowest(
-                                darkMode),
+                            color: Theme.of(context).colorScheme.surface,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
-                                color:
-                                    MaterialColors.getSurfaceContainerHighest(
-                                        darkMode),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
                               ),
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                             elevation: 0,
                             child: Padding(
-                              padding: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -138,9 +134,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Container(
-                                            color: MaterialColors
-                                                .getSurfaceContainerLow(
-                                                    darkMode),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surfaceVariant,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(20.0),
@@ -148,7 +144,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                                   Icons.local_mall_outlined,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .outlineVariant),
+                                                      .onSurfaceVariant),
                                             ),
                                           ),
                                           fadeInCurve: Curves.easeIn,
@@ -157,7 +153,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: 8),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -169,7 +165,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .onSurfaceVariant,
-                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontFamily: 'Manrope',
                                           fontVariations: const [
                                             FontVariation('wght', 700),
                                           ],
@@ -183,7 +179,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary,
-                                          fontFamily: 'Plus Jakarta Sans',
+                                          fontFamily: 'Manrope',
                                           fontVariations: const [
                                             FontVariation('wght', 700),
                                           ],
@@ -207,37 +203,30 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                                                   FontVariation('wght', 400),
                                                 ],
                                                 fontSize: 14,
-                                                height: 0.85,
                                                 letterSpacing: -0.3,
                                               ),
                                             )),
-                                      const SizedBox(height: 10),
+                                      const SizedBox(height: 4),
                                       Container(
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .outline,
-                                            width: 0.5,
-                                          ),
+                                              style: BorderStyle.none),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 15, vertical: 8),
+                                              horizontal: 16, vertical: 8),
                                           child: Text(
                                             "x${widget.order['items'][key]['quantity']}",
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .outline,
-                                              fontFamily: 'Bahnschrift',
+                                              fontFamily: 'Source Sans 3',
                                               fontVariations: const [
-                                                FontVariation('wght', 450),
-                                                FontVariation('wdth', 100),
+                                                FontVariation('wght', 400),
                                               ],
                                               fontSize: 13,
-                                              letterSpacing: -0.3,
-                                              height: 0.85,
+                                              letterSpacing: -0.1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -254,11 +243,54 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 12),
+                      // If order contains additional notes, display subsection.
+                      if (widget.order['additionalNotes'] != null)
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 12),
+                              Text(
+                                "Additional Notes",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  height: 1.1,
+                                  letterSpacing: -0.1,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                widget.order['additionalNotes'] ?? "",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontFamily: 'Source Sans 3',
+                                  fontVariations: const [
+                                    FontVariation('wght', 400),
+                                  ],
+                                  fontSize: 14,
+                                  height: 1.15,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Divider(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
+                                height: 0.5,
+                              ),
+                            ]),
                       const SizedBox(height: 20),
                       Text(
                         "Details",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Source Sans 3',
                           fontVariations: const [
                             FontVariation('wght', 400),
@@ -488,7 +520,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                       Text(
                         "Order Status",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Source Sans 3',
                           fontVariations: const [
                             FontVariation('wght', 400),
@@ -599,7 +631,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                       Text(
                         "Customer Info",
                         style: TextStyle(
-                          color: ChimeColors.getGreen800(),
+                          color: Theme.of(context).colorScheme.primary,
                           fontFamily: 'Source Sans 3',
                           fontVariations: const [
                             FontVariation('wght', 400),
@@ -746,52 +778,8 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 40),
                         ]),
-
-                      // If order contains additional notes, display subsection.
-                      if (widget.order['additionalNotes'] != null)
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 15),
-                              Divider(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant,
-                                height: 0.5,
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                "Additional Notes",
-                                style: TextStyle(
-                                  color: ChimeColors.getGreen800(),
-                                  fontFamily: 'Source Sans 3',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                  ],
-                                  fontSize: 14,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                widget.order['additionalNotes'] ?? "",
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontFamily: 'Source Sans 3',
-                                  fontVariations: const [
-                                    FontVariation('wght', 400),
-                                  ],
-                                  fontSize: 14,
-                                  height: 1.15,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                            ]),
-                      const SizedBox(height: 40),
                     ],
                   ),
                 ],
@@ -808,42 +796,69 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                       absorbing: widget.order['status'] != "Unread",
                       child: ElevatedButton(
                         onPressed: () => showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Cancel this order'),
-                                  content: const Text('After cancelling, the order will no longer be processed. Please contact the seller to request applicable refunds.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Cancel');
-                                      },
-                  
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        setOrderStatus("Cancelled");
-                                        Navigator.pop(context, 'OK');
-                                        const  snackBar = SnackBar(
-                                          content: Text('Order has been cancelled.'),
-                                        );
-
-                                        // Find the ScaffoldMessenger in the widget tree
-                                        // and use it to show a SnackBar.
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      } ,
-                                      child: const Text('OK'),
-                                    ),
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Cancel this order',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: [
+                                    FontVariation('wght', 700),
                                   ],
-                                ),
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                            content: const Text(
+                                'After cancelling, the order will no longer be processed. Please contact the seller to request applicable refunds.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Cancel');
+                                },
+                                child: const Text('Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
                               ),
+                              TextButton(
+                                onPressed: () {
+                                  setOrderStatus("Cancelled");
+                                  Navigator.pop(context, 'OK');
+                                  const snackBar = SnackBar(
+                                    content:
+                                       Text('Order has been cancelled.'),
+                                  );
+
+                                  // Find the ScaffoldMessenger in the widget tree
+                                  // and use it to show a SnackBar.
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                child: const Text('OK',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
                         style: ButtonStyle(
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
                               widget.order['status'] == "Unread"
-                                  ? ChimeColors.getRed200()
-                                  : MaterialColors.getSurfaceContainerLow(
-                                      darkMode)),
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .surfaceVariant),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -855,11 +870,11 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             "Cancel Order",
                             style: TextStyle(
                               color: widget.order['status'] == "Unread"
-                                  ? ChimeColors.getRed800()
+                                  ? Theme.of(context).colorScheme.onError
                                   : Theme.of(context)
                                       .colorScheme
-                                      .outlineVariant,
-                              fontFamily: 'Plus Jakarta Sans',
+                                      .outline,
+                              fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
                               ],
@@ -884,7 +899,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -895,12 +912,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             child: Text(
                               "Prepare",
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -921,7 +940,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -930,15 +951,17 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Mark as To Receive",
+                              "To Receive",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -959,7 +982,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -968,15 +993,17 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Mark as Received",
+                              "Received",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -995,7 +1022,9 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           style: ButtonStyle(
                             elevation: const MaterialStatePropertyAll(0),
                             backgroundColor: MaterialStatePropertyAll(
-                                ChimeColors.getGreen200()),
+                                Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -1004,15 +1033,17 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "Mark as Complete",
+                              "Completed",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: ChimeColors.getGreen800(),
-                                fontFamily: 'Plus Jakarta Sans',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
                                 ],
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
                           ),

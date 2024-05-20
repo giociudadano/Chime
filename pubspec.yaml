@@ -37,7 +37,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   shared_preferences: ^2.2.1
   onboarding: ^4.0.2
-  material_color_utilities: 0.8.0
+  material_color_utilities: ^0.5.0
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
   flutter_localizations:
@@ -49,7 +49,7 @@ dependencies:
   cloud_firestore: ^4.9.2
   dart_geohash: ^2.0.2
   firebase_storage: ^11.2.7
-  cached_network_image: ^3.2.3
+  cached_network_image: 3.3.0
   google_maps_flutter: ^2.3.0
   choice: ^2.0.0
   image_picker: ^1.0.4

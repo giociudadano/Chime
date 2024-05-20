@@ -91,7 +91,7 @@ class _CartCardState extends State<CartCard> {
           elevation: 0,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-            color:  Theme.of(context).colorScheme.outline,
+            color:  Theme.of(context).colorScheme.outlineVariant,
           ),
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -108,18 +108,18 @@ class _CartCardState extends State<CartCard> {
                       placeName,
                       maxLines: 1,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Theme.of(context).colorScheme.primary,
                         fontFamily: 'Manrope',
                         fontVariations: const [
                           FontVariation('wght', 700),
                         ],
-                        fontSize: 20,
+                        fontSize: 16,
                         letterSpacing: -0.3,
                       ),
                     ),
                     Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            color: Theme.of(context).colorScheme.surface,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8))),
                         child: Padding(
@@ -127,14 +127,14 @@ class _CartCardState extends State<CartCard> {
                               vertical: 4, horizontal: 8),
                           child: Row(
                             children: [
-                              Icon(Icons.motorcycle,
+                              Icon(Icons.local_shipping_outlined,
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
-                              const SizedBox(height: 12),
+                              const SizedBox(width: 4),
                               Text(
                                 "₱${deliveryFee}",
                                 maxLines: 1,
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(context).colorScheme.outline,
                                   fontFamily: 'Manrope',
                                   fontVariations: const [
                                     FontVariation('wght', 700),
@@ -173,8 +173,9 @@ class _CartCardState extends State<CartCard> {
                           }
                         },
                         style: ButtonStyle(
+                          shadowColor: const MaterialStatePropertyAll(Colors.transparent),
                             backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary),
+                                Theme.of(context).colorScheme.primaryContainer),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -185,7 +186,7 @@ class _CartCardState extends State<CartCard> {
                           child: Text(
                             "Checkout (₱$total)",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
