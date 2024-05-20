@@ -242,10 +242,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
-        "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
-        "municipality": "${municipality}".title(),
+        "phoneNumber": phoneNumber == "" ? null : "+63${phoneNumber!}",
+        "municipality": "$municipality".title(),
         "barangay":
-            barangay == "" || barangay == null ? null : "${barangay}".title(),
+            barangay == "" || barangay == null ? null : barangay.title(),
         "landmark": landmark == "No Landmark" ? null : landmark,
         "addressLine": addressLine == "" ? null : addressLine,
       };
@@ -282,10 +282,10 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
       FirebaseFirestore db = FirebaseFirestore.instance;
       Map<String, dynamic> data = {
         "name": name,
-        "phoneNumber": phoneNumber == "" ? null : "+63" + phoneNumber!,
-        "municipality": "${municipality}".title(),
+        "phoneNumber": phoneNumber == "" ? null : "+63${phoneNumber!}",
+        "municipality": "$municipality".title(),
         "barangay":
-            barangay == "" || barangay == null ? null : "${barangay}".title(),
+            barangay == "" || barangay == null ? null : barangay.title(),
         "landmark": landmark == "No Landmark" ? null : landmark,
         "addressLine": addressLine == "" ? null : addressLine,
       };
@@ -479,8 +479,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -542,8 +541,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -594,8 +592,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -710,7 +707,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Landmark", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -902,7 +900,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
     );
     municipality = selectedMunicipality == null
         ? "MIAGAO"
-        : "${selectedMunicipality}".toUpperCase();
+        : selectedMunicipality.toUpperCase();
 
     List<DropdownMenuItem> dropdownBarangays = List.generate(
       barangays.length,
@@ -925,8 +923,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
         },
       ),
     );
-    barangay =
-        selectedBarangay == null ? "" : "${selectedBarangay}".toUpperCase();
+    barangay = selectedBarangay == null ? "" : selectedBarangay.toUpperCase();
 
     return showDialog(
         context: context,
@@ -975,7 +972,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Label", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -1007,8 +1005,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                       hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor:
-                          Theme.of(context).colorScheme.surface,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       isDense: true,
                     ),
                     style: const TextStyle(
@@ -1233,7 +1230,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                     TextSpan(text: "Landmark", children: [
                       TextSpan(
                           text: "*",
-                          style: TextStyle(color: Theme.of(context).colorScheme.primary))
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary))
                     ]),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -1490,7 +1488,8 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(5),
                                 child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         addresses[key]["name"],

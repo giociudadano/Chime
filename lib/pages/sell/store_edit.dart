@@ -278,8 +278,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                 context: context);
                           },
                           style: ButtonStyle(
-                              shadowColor:
-                                  const MaterialStatePropertyAll(Colors.transparent),
+                              shadowColor: const MaterialStatePropertyAll(
+                                  Colors.transparent),
                               backgroundColor: MaterialStatePropertyAll(
                                   Theme.of(context)
                                       .colorScheme
@@ -608,9 +608,10 @@ class _StoreEditPageState extends State<StoreEditPage> {
                                       .text.isNotEmpty
                                   ? int.parse(inputEditStoreDeliveryFee.text)
                                   : 0,
-                              "phoneNumber": inputEditStorePhoneNumber != ""
-                                  ? "+63${inputEditStorePhoneNumber.text}"
-                                  : null,
+                              "phoneNumber":
+                                  inputEditStorePhoneNumber.text != ""
+                                      ? "+63${inputEditStorePhoneNumber.text}"
+                                      : null,
                             };
                             editStore(widget.placeID, data);
                           }

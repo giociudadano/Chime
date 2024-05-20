@@ -226,7 +226,7 @@ class _OrderCardState extends State<OrderCard> {
                 child: Text(
                   widget.order['deliveryMethod'] == "Pickup"
                       ? "For Pickup"
-                      : "Deliver to " + widget.order['landmark'],
+                      : "Deliver to ${widget.order['landmark']}",
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -294,7 +294,8 @@ class _OrderCardState extends State<OrderCard> {
                 },
                 style: ButtonStyle(
                   elevation: const MaterialStatePropertyAll(0),
-                  shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+                  shadowColor:
+                      const MaterialStatePropertyAll(Colors.transparent),
                   backgroundColor: MaterialStatePropertyAll(widget.adminControls
                       ? (widget.order['status'] == 'Received' ||
                               widget.order['status'] == 'Completed')
@@ -414,7 +415,8 @@ class _OrderCardState extends State<OrderCard> {
                       setStatusState('To Receive');
                     },
                     style: ButtonStyle(
-                      shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+                      shadowColor:
+                          const MaterialStatePropertyAll(Colors.transparent),
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor: MaterialStatePropertyAll(
                           Theme.of(context).colorScheme.secondaryContainer),
@@ -487,8 +489,7 @@ class _OrderCardState extends State<OrderCard> {
                               setStatusState("Received");
                               Navigator.pop(context, 'OK');
                               const snackBar = SnackBar(
-                                content:
-                                   Text('Order is marked as delivered.'),
+                                content: Text('Order is marked as delivered.'),
                               );
 
                               // Find the ScaffoldMessenger in the widget tree
@@ -578,8 +579,7 @@ class _OrderCardState extends State<OrderCard> {
                               setStatusState("Completed");
                               Navigator.pop(context, 'OK');
                               const snackBar = SnackBar(
-                                content:
-                                   Text('Order is marked as completed.'),
+                                content: Text('Order is marked as completed.'),
                               );
 
                               // Find the ScaffoldMessenger in the widget tree

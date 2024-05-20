@@ -131,7 +131,7 @@ class _CartCardState extends State<CartCard> {
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
                               const SizedBox(width: 4),
                               Text(
-                                "₱${deliveryFee}",
+                                "₱$deliveryFee",
                                 maxLines: 1,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.outline,

@@ -162,7 +162,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
         "storeName": storeName ?? 'Unknown Store',
         "userID": uid,
       };
-      print(data);
       db.collection("orders").add(data).then((docRef) {
         // 5. Add order to list of orders of user
         db.collection("users").doc(uid).update({
