@@ -20,6 +20,7 @@ class _ProductsPageState extends State<ProductsPage> {
   int productsPerPage = 10;
   int productsDisplayed = 0;
   String? lastVisible;
+  Map places = {};
 
   // Variables for search function.
   FocusNode focus = FocusNode();
@@ -68,6 +69,7 @@ class _ProductsPageState extends State<ProductsPage> {
           setProductImageURL(product.id).then((res) {
             setFavoriteState(favoriteProducts, product.id);
           });
+          getPlace(products[product.id]['placeID']);
           productsDisplayed += productsPerPage;
           lastVisible = product.id;
         }
@@ -146,14 +148,13 @@ class _ProductsPageState extends State<ProductsPage> {
     });
   }
 
-  getPlace(String placeID) {
+  void getPlace(String placeID) {
     FirebaseFirestore db = FirebaseFirestore.instance;
     db.collection("places").doc(placeID).get().then((document) {
       if (document.exists) {
-        return document.data();
+        places[placeID] = document.data();
       }
     });
-    return {};
   }
 
   void setFavoriteProduct(String productID, bool state) {
@@ -279,7 +280,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                   key,
                                   productsFavorited[key],
                                   productsFavorited[key]['placeID'],
-                                  getPlace(productsFavorited[key]['placeID']),
+                                  places[productsFavorited[key]['placeID']],
                                   setFavoriteProductCallback:
                                       setFavoriteProduct);
                             },
@@ -385,9 +386,9 @@ class _ProductsPageState extends State<ProductsPage> {
                             _searchBox.text.isEmpty
                                 ? products[key]['placeID']
                                 : productsSearched[key]['placeID'],
-                            getPlace(_searchBox.text.isEmpty
+                            places[_searchBox.text.isEmpty
                                 ? products[key]['placeID']
-                                : productsSearched[key]['placeID']),
+                                : productsSearched[key]['placeID']],
                             setFavoriteProductCallback: setFavoriteProduct);
                       }),
                   const SizedBox(height: 40),
