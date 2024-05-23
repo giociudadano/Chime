@@ -432,12 +432,21 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                addToCart();
-                                Navigator.pop(context);
+                                if (!variants[selectedVariantIndex]['isLimited'] || variants[selectedVariantIndex]['ordersRemaining'] > 0){
+                                  addToCart();
+                                  Navigator.pop(context);
+                                }
+
+                                // addToCart();
+                                // Navigator.pop(context);
                               },
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Theme.of(context).colorScheme.primary),
+                                  shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+                                  backgroundColor: 
+                                      variants[selectedVariantIndex]['isLimited'] && variants[selectedVariantIndex]['ordersRemaining'] <= 0
+                                      ? MaterialStatePropertyAll(Theme.of(context).colorScheme.errorContainer)
+                                      : MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                                
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -446,9 +455,16 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
-                                  "Add to Cart",
+                                  variants[selectedVariantIndex]['isLimited'] && variants[selectedVariantIndex]['ordersRemaining'] <= 0
+                                    ? "Unavailable"
+                                    : "Add to Cart",
+                                  // "Add to Cart",
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    color: 
+                                    
+                                      variants[selectedVariantIndex]['isLimited'] && variants[selectedVariantIndex]['ordersRemaining'] <= 0
+                                      ? Theme.of(context).colorScheme.onErrorContainer
+                                      : Theme.of(context).colorScheme.onPrimary,
                                     fontFamily: 'Manrope',
                                     fontVariations: const [
                                       FontVariation('wght', 700),
@@ -502,11 +518,11 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
             padding: const EdgeInsets.fromLTRB(10, 10, 6, 6),
             child: Ink(
               decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
+                color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
                 shape: const CircleBorder(),
               ),
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.outline),
+                icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.onSurface),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -518,7 +534,7 @@ class _ProductsMorePageState extends State<ProductsMorePage> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Ink(
                 decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.outline.withOpacity(0.85),
+                  color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
                   shape: const CircleBorder(),
                 ),
                 child: Stack(children: [

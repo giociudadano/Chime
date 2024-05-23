@@ -225,7 +225,7 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Delivered",
+                            "Received",
                             style: TextStyle(
                                 color: tabController.index == 2
                                     ? Theme.of(context).colorScheme.onPrimary

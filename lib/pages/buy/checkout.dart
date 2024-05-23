@@ -343,7 +343,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Text(
                                   deliveryPrice == null
-                                      ? "FREE"
+                                      ? "FREE Delivery"
                                       : "₱$deliveryPrice",
                                   maxLines: 1,
                                   style: TextStyle(
@@ -619,7 +619,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     overflow: TextOverflow.ellipsis),
                               ),
                               Text(
-                                "FREE",
+                                "No delivery fees",
                                 maxLines: 1,
                                 style: TextStyle(
                                     color:
@@ -664,7 +664,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       padding: const EdgeInsets.all(10),
                       child: Row(children: [
                         Radio(
-                          value: 'Cash (COD)',
+                          value: 'Cash on Pickup/Delivery',
                           groupValue: paymentMethod,
                           onChanged: (String? value) {
                             setState(() {
@@ -674,7 +674,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Cash (COD)",
+                          "Cash on Pickup/Delivery",
                           maxLines: 1,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,

@@ -127,7 +127,7 @@ class _CartCardState extends State<CartCard> {
                               vertical: 4, horizontal: 8),
                           child: Row(
                             children: [
-                              Icon(Icons.local_shipping_outlined,
+                              Icon(Icons.two_wheeler,
                                   size: 24, color: Theme.of(context).colorScheme.onSurfaceVariant),
                               const SizedBox(width: 4),
                               Text(

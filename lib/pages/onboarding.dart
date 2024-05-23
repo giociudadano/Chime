@@ -181,7 +181,7 @@ class OnBoardingPageContent extends StatelessWidget {
               fontVariations: [
                 FontVariation('wght', 400),
               ],
-              fontSize: 14,
+              fontSize: 16,
               height: 1.2,
             ),
           ),

@@ -1,8 +1,8 @@
 {
   "appName": "Chime!",
   "onBoardingImages": "lib/assets/images/Buy.png:lib/assets/images/Sell.png:lib/assets/images/Chime.png",
-  "onBoardingTitles": "Order Food:or Sell Food:Switch Easily",
-  "onBoardingDescriptions": "Ordering food online is made simpler with Chime! Search for your cravings, add to cart, and checkout.:Did we mention you can also sell with Chime? Create a store and share your products to customers.:By default, Chime let's you order food online, but you can switch to Seller mode in your profile ",
+  "onBoardingTitles": "Order Food:Sell Food:All in one!",
+  "onBoardingDescriptions": "Search for your cravings, add to cart, and checkout!:Create a store, share your products, and receive and manage orders!:Toggle between Customer and Seller mode in your Profile!",
   "onBoardingContinue": "Continue",
   "onBoardingNext": "Next",
   "loginTitle": "Welcome \nback",

@@ -305,6 +305,66 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               ),
             ),
           ),
+          actions: <Widget>[IconButton(
+            icon: Icon(Icons.delete_outline,
+                color: Theme.of(context).colorScheme.error),
+                        onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Delete this Product',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontVariations: [
+                                    FontVariation('wght', 700),
+                                  ],
+                                  fontSize: 16,
+                                  letterSpacing: -0.3,
+                                )),
+                            content: const Text(
+                                'This cannot be undone. Although you can always create a new product.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context, 'Cancel');
+                                },
+                                child: const Text('Cancel',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  deleteProduct();
+                                  Navigator.pop(context, 'OK');
+                                  const snackBar = SnackBar(
+                                    content:
+                                        Text('Product has been deleted.'),
+                                  );
+
+                                  // Find the ScaffoldMessenger in the widget tree
+                                  // and use it to show a SnackBar.
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                child: const Text('OK',
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontVariations: [
+                                        FontVariation('wght', 700),
+                                      ],
+                                      fontSize: 16,
+                                      letterSpacing: -0.3,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+          ),]
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -857,91 +917,6 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                           padding: const EdgeInsets.symmetric(
                             horizontal: 0,
                             vertical: 0,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Delete this Product',
-                                style: TextStyle(
-                                  fontFamily: 'Manrope',
-                                  fontVariations: [
-                                    FontVariation('wght', 700),
-                                  ],
-                                  fontSize: 16,
-                                  letterSpacing: -0.3,
-                                )),
-                            content: const Text(
-                                'This cannot be undone. Although you can always create a new product.'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, 'Cancel');
-                                },
-                                child: const Text('Cancel',
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontVariations: [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.3,
-                                    )),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  deleteProduct();
-                                  Navigator.pop(context, 'OK');
-                                  const snackBar = SnackBar(
-                                    content:
-                                        Text('Product has been deleted.'),
-                                  );
-
-                                  // Find the ScaffoldMessenger in the widget tree
-                                  // and use it to show a SnackBar.
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                },
-                                child: const Text('OK',
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontVariations: [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.3,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                        style: ButtonStyle(
-                            shadowColor:
-                                const MaterialStatePropertyAll(Colors.transparent),
-                            backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.errorContainer),
-                            shape:
-                                MaterialStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              side: BorderSide.none,
-                            ))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            "Delete Product",
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onErrorContainer,
-                              fontFamily: 'Manrope',
-                              fontVariations: const [
-                                FontVariation('wght', 700),
-                              ],
-                              fontSize: 16,
-                            ),
                           ),
                         ),
                       ),

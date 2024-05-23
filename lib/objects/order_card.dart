@@ -334,7 +334,7 @@ class _OrderCardState extends State<OrderCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    "Review",
+                    "View",
                     style: TextStyle(
                       color: widget.adminControls
                           ? (widget.order['status'] == 'Received' ||
@@ -350,7 +350,7 @@ class _OrderCardState extends State<OrderCard> {
                                       .colorScheme
                                       .onSecondaryContainer
                           : widget.order['status'] == 'Received'
-                              ? Theme.of(context).colorScheme.outline
+                              ? Theme.of(context).colorScheme.onSecondaryContainer
                               : widget.order['status'] == 'Cancelled'
                                   ? Theme.of(context)
                                       .colorScheme
@@ -419,7 +419,7 @@ class _OrderCardState extends State<OrderCard> {
                           const MaterialStatePropertyAll(Colors.transparent),
                       elevation: const MaterialStatePropertyAll(0),
                       backgroundColor: MaterialStatePropertyAll(
-                          Theme.of(context).colorScheme.secondaryContainer),
+                          Theme.of(context).colorScheme.primary),
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide.none,
@@ -435,7 +435,7 @@ class _OrderCardState extends State<OrderCard> {
                         style: TextStyle(
                           color: Theme.of(context)
                               .colorScheme
-                              .onSecondaryContainer,
+                              .onPrimary,
                           fontFamily: 'Manrope',
                           fontVariations: const [
                             FontVariation('wght', 700),

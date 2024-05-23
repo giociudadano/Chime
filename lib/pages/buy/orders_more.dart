@@ -855,10 +855,10 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           elevation: const MaterialStatePropertyAll(0),
                           backgroundColor: MaterialStatePropertyAll(
                               widget.order['status'] == "Unread"
-                                  ? Theme.of(context).colorScheme.error
+                                  ? Theme.of(context).colorScheme.surface
                                   : Theme.of(context)
                                       .colorScheme
-                                      .surfaceVariant),
+                                      .surface),
                           shape:
                               MaterialStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -870,10 +870,10 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             "Cancel Order",
                             style: TextStyle(
                               color: widget.order['status'] == "Unread"
-                                  ? Theme.of(context).colorScheme.onError
+                                  ? Theme.of(context).colorScheme.onErrorContainer
                                   : Theme.of(context)
                                       .colorScheme
-                                      .outline,
+                                      .surface,
                               fontFamily: 'Manrope',
                               fontVariations: const [
                                 FontVariation('wght', 700),
@@ -942,7 +942,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer),
+                                    .primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -951,12 +951,14 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text(
-                              "To Receive",
+                              widget.order['deliveryMethod'] == "Pickup"
+                                  ? "For Pickup"
+                                  : "For Delivery",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .onSecondaryContainer,
+                                    .onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
