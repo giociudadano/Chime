@@ -31,7 +31,13 @@
       "name": "cmsc198 (release mode)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
+      "flutterMode": "release",
+      "args": [
+        "--web-port",
+        "8000",
+        "--web-browser-flag",
+        "--disable-web-security"
+      ]
     }
   ]
 }

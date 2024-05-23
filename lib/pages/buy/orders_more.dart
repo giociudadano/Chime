@@ -870,7 +870,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             "Cancel Order",
                             style: TextStyle(
                               color: widget.order['status'] == "Unread"
-                                  ? Theme.of(context).colorScheme.onErrorContainer
+                                  ? Theme.of(context).colorScheme.error
                                   : Theme.of(context)
                                       .colorScheme
                                       .surface,
@@ -901,7 +901,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer),
+                                    .primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -914,7 +914,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .onSecondaryContainer,
+                                    .onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -986,7 +986,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer),
+                                    .primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -1000,7 +1000,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .onSecondaryContainer,
+                                    .onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
@@ -1026,7 +1026,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                             backgroundColor: MaterialStatePropertyAll(
                                 Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer),
+                                    .primary),
                             shape:
                                 MaterialStatePropertyAll(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -1040,7 +1040,7 @@ class _OrdersMorePageState extends State<OrdersMorePage> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .onSecondaryContainer,
+                                    .onPrimary,
                                 fontFamily: 'Manrope',
                                 fontVariations: const [
                                   FontVariation('wght', 700),
