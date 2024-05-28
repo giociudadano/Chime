@@ -163,9 +163,9 @@ class _StoreOrdersPageState extends State<StoreOrdersPage>
                                 : Theme.of(context).colorScheme.surface),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            "Unread",
+                            "Unread (${getOrderCount('Unread')})",
                             style: TextStyle(
                                 color: tabController.index == 0
                                     ? Theme.of(context).colorScheme.onPrimary

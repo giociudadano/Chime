@@ -1288,8 +1288,7 @@ class _CheckoutAddressesPageState extends State<CheckoutAddressesPage> {
                               shape: MaterialStatePropertyAll(
                                   RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                    color: Theme.of(context).colorScheme.error),
+                                side: BorderSide.none,
                               ))),
                           child: Padding(
                             padding: const EdgeInsets.all(10),
