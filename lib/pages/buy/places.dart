@@ -274,7 +274,6 @@ class _PlacesPageState extends State<PlacesPage> {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            bool darkMode = Theme.of(context).brightness == Brightness.dark;
             return AlertDialog(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -283,7 +282,7 @@ class _PlacesPageState extends State<PlacesPage> {
               ),
               elevation: 0,
               backgroundColor:
-                  MaterialColors.getSurfaceContainerLowest(darkMode),
+                  Theme.of(context).colorScheme.surface,
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
