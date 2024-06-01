@@ -798,9 +798,7 @@ class _StoreProductsVariantsPageState extends State<StoreProductsVariantsPage> {
                                 shape: MaterialStatePropertyAll(
                                     RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(
-                                      color:
-                                          Theme.of(context).colorScheme.error),
+                                  side: BorderSide.none,
                                 ))),
                             child: Padding(
                               padding: const EdgeInsets.all(10),
