@@ -99,136 +99,142 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
   @override
   Widget build(BuildContext context) {
     isFeatured = widget.product['categories'].contains('Featured');
-    return Card(
-      color: Theme.of(context).colorScheme.surface,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: 0,
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          width: 0.5,
-          color: Theme.of(context).colorScheme.outlineVariant,
+    return Opacity(
+      opacity: widget.product['isVisible'] ?? true ? 1 : 0.5,
+      child: Card(
+        color: Theme.of(context).colorScheme.surface,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 0,
+        margin: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 0.5,
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+          borderRadius: BorderRadius.circular(12.0),
         ),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: InkWell(
-        onTap: () {
-          if (context.mounted) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => StoreProductsEditPage(
-                        widget.productID,
-                        widget.categories,
-                        widget.product,
-                        editProductCallback: editProduct,
-                        deleteProductCallback: deleteProduct,
-                        editDefaultProductVariantCallback:
-                            editDefaultProductVariant,
-                      )),
-            );
-          }
-        },
-        child: SizedBox(
-          height: 220,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(children: [
-                SizedBox(
-                  width: 200,
-                  height: 120,
-                  child: FittedBox(
-                    clipBehavior: Clip.hardEdge,
-                    fit: BoxFit.cover,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.product['productImageURL'] ?? '',
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: CircularProgressIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => Padding(
-                        padding: const EdgeInsets.all(40.0),
-                        child: Icon(Icons.local_mall_outlined,
-                            color: Theme.of(context).colorScheme.outline),
-                      ),
-                      fadeInCurve: Curves.easeIn,
-                      fadeOutCurve: Curves.easeOut,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    child: Container(
-                      height: 32,
-                      width: 32,
-                      color: (widget.product['productImageURL'] == null)
-                          ? Colors.transparent
-                          : Theme.of(context)
-                              .colorScheme
-                              .surfaceVariant
-                              .withOpacity(0.85),
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: Icon(
-                          isFeatured ? Icons.bookmark : Icons.bookmark_outline,
-                          size: 24,
-                          color: isFeatured
-                              ? Theme.of(context).colorScheme.primary
-                              : (widget.product['productImageURL'] == null)
-                                  ? Theme.of(context).colorScheme.outline
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
+        child: InkWell(
+          onTap: () {
+            if (context.mounted) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => StoreProductsEditPage(
+                          widget.productID,
+                          widget.categories,
+                          widget.product,
+                          editProductCallback: editProduct,
+                          deleteProductCallback: deleteProduct,
+                          editDefaultProductVariantCallback:
+                              editDefaultProductVariant,
+                        )),
+              );
+            }
+          },
+          child: SizedBox(
+            height: 220,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(children: [
+                  SizedBox(
+                    width: 200,
+                    height: 120,
+                    child: FittedBox(
+                      clipBehavior: Clip.hardEdge,
+                      fit: BoxFit.cover,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.product['productImageURL'] ?? '',
+                        placeholder: (context, url) => const Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: CircularProgressIndicator(),
                         ),
-                        onPressed: () {
-                          setFeaturedProduct(widget.productID);
-                        },
+                        errorWidget: (context, url, error) => Padding(
+                          padding: const EdgeInsets.all(40.0),
+                          child: Icon(Icons.local_mall_outlined,
+                              color: Theme.of(context).colorScheme.outline),
+                        ),
+                        fadeInCurve: Curves.easeIn,
+                        fadeOutCurve: Curves.easeOut,
                       ),
                     ),
                   ),
-                ),
-              ]),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      child: Text(
-                        widget.product['productName'],
-                        maxLines: 2,
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      child: Container(
+                        height: 32,
+                        width: 32,
+                        color: (widget.product['productImageURL'] == null)
+                            ? Colors.transparent
+                            : Theme.of(context)
+                                .colorScheme
+                                .surfaceVariant
+                                .withOpacity(0.85),
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            isFeatured
+                                ? Icons.bookmark
+                                : Icons.bookmark_outline,
+                            size: 24,
+                            color: isFeatured
+                                ? Theme.of(context).colorScheme.primary
+                                : (widget.product['productImageURL'] == null)
+                                    ? Theme.of(context).colorScheme.outline
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                          ),
+                          onPressed: () {
+                            setFeaturedProduct(widget.productID);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        child: Text(
+                          widget.product['productName'],
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontFamily: 'Manrope',
+                              fontVariations: const [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 14,
+                              letterSpacing: -0.3,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      Text(
+                        '₱${widget.product['productPrice']}',
                         style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(context).colorScheme.primary,
                             fontFamily: 'Manrope',
                             fontVariations: const [
                               FontVariation('wght', 700),
                             ],
-                            fontSize: 14,
-                            letterSpacing: -0.3,
-                            overflow: TextOverflow.ellipsis),
+                            fontSize: 16,
+                            letterSpacing: -0.3),
                       ),
-                    ),
-                    Text(
-                      '₱${widget.product['productPrice']}',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontFamily: 'Manrope',
-                          fontVariations: const [
-                            FontVariation('wght', 700),
-                          ],
-                          fontSize: 16,
-                          letterSpacing: -0.3),
-                    ),
-                  ],
-                ),
-              )
-            ],
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

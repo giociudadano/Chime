@@ -77,9 +77,11 @@ class _PlacesMorePageState extends State<PlacesMorePage>
     FirebaseFirestore db = FirebaseFirestore.instance;
     for (String productID in widget.place['products']) {
       db.collection("products").doc(productID).get().then((document) async {
-        products[productID] = document.data()!;
-        initProductState(productID);
-        setProductImageURL(productID);
+        if (document.data()!["isVisible"] ?? true) {
+          products[productID] = document.data()!;
+          initProductState(productID);
+          setProductImageURL(productID);
+        }
       });
     }
     if (mounted) {
@@ -205,7 +207,6 @@ class _PlacesMorePageState extends State<PlacesMorePage>
                   version: QrVersions.auto,
                   size: 200.0,
                   padding: const EdgeInsets.all(24),
-      
                 ),
               ),
               const SizedBox(height: 12),
