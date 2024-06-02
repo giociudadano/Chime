@@ -20,6 +20,7 @@ class StoreProductsEditPage extends StatefulWidget {
     List addedCategories,
     List removedCategories,
     bool isLimited,
+    bool isVisible,
     String ordersRemaining,
   )? editProductCallback;
 
@@ -55,6 +56,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
 
   late bool isAcceptPreorders = widget.product['isAcceptPreorders'] ?? false;
   late bool isLimited = widget.product['isLimited'] ?? false;
+  late bool isVisible = widget.product['isVisible'] ?? true;
   late final inputEditProductOrdersRemaining =
       TextEditingController(text: widget.product['ordersRemaining'].toString());
 
@@ -125,6 +127,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
         "ordersRemaining":
             ordersRemaining == '' ? 0 : int.parse(ordersRemaining),
         "isLimited": isLimited,
+        "isVisible": isVisible,
         "isAcceptPreorders": isAcceptPreorders,
       });
 
@@ -171,6 +174,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
               addedCategories.toList(),
               removedCategories.toList(),
               isLimited,
+              isVisible,
               ordersRemaining);
         } catch (e) {
           // ...
@@ -184,6 +188,7 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
           addedCategories.toList(),
           removedCategories.toList(),
           isLimited,
+          isVisible,
           ordersRemaining,
         );
       }
@@ -281,91 +286,90 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.onSurface),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          title: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 50),
-              child: Text(
-                "Edit Product",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontFamily: 'Manrope',
-                    fontVariations: const [
-                      FontVariation('wght', 700),
-                    ],
-                    fontSize: 20,
-                    letterSpacing: -0.3),
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onSurface),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 50),
+                child: Text(
+                  "Edit Product",
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontFamily: 'Manrope',
+                      fontVariations: const [
+                        FontVariation('wght', 700),
+                      ],
+                      fontSize: 20,
+                      letterSpacing: -0.3),
+                ),
               ),
             ),
-          ),
-          actions: <Widget>[IconButton(
-            icon: Icon(Icons.delete_outline,
-                color: Theme.of(context).colorScheme.error),
-                        onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Delete this Product',
-                                style: TextStyle(
-                                  fontFamily: 'Manrope',
-                                  fontVariations: [
-                                    FontVariation('wght', 700),
-                                  ],
-                                  fontSize: 16,
-                                  letterSpacing: -0.3,
-                                )),
-                            content: const Text(
-                                'This cannot be undone. Although you can always create a new product.'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, 'Cancel');
-                                },
-                                child: const Text('Cancel',
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontVariations: [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.3,
-                                    )),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  deleteProduct();
-                                  Navigator.pop(context, 'OK');
-                                  const snackBar = SnackBar(
-                                    content:
-                                        Text('Product has been deleted.'),
-                                  );
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete_outline,
+                    color: Theme.of(context).colorScheme.error),
+                onPressed: () => showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete this Product',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontVariations: [
+                            FontVariation('wght', 700),
+                          ],
+                          fontSize: 16,
+                          letterSpacing: -0.3,
+                        )),
+                    content: const Text(
+                        'This cannot be undone. Although you can always create a new product.'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'Cancel');
+                        },
+                        child: const Text('Cancel',
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontVariations: [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.3,
+                            )),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          deleteProduct();
+                          Navigator.pop(context, 'OK');
+                          const snackBar = SnackBar(
+                            content: Text('Product has been deleted.'),
+                          );
 
-                                  // Find the ScaffoldMessenger in the widget tree
-                                  // and use it to show a SnackBar.
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                },
-                                child: const Text('OK',
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontVariations: [
-                                        FontVariation('wght', 700),
-                                      ],
-                                      fontSize: 16,
-                                      letterSpacing: -0.3,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-          ),]
-        ),
+                          // Find the ScaffoldMessenger in the widget tree
+                          // and use it to show a SnackBar.
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
+                        child: const Text('OK',
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontVariations: [
+                                FontVariation('wght', 700),
+                              ],
+                              fontSize: 16,
+                              letterSpacing: -0.3,
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Form(
@@ -375,11 +379,55 @@ class _StoreProductsEditPageState extends State<StoreProductsEditPage> {
                 Expanded(
                   child: ListView(
                     children: [
+                      const SizedBox(height: 30),
+                      Card(
+                        elevation: 0,
+                        color: Theme.of(context).colorScheme.surface,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color:
+                                  Theme.of(context).colorScheme.outlineVariant,
+                            ),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Show in Store',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontFamily: 'Source Sans 3',
+                                      fontVariations: const [
+                                        FontVariation('wght', 400),
+                                      ],
+                                      fontSize: 16,
+                                      height: 1,
+                                      letterSpacing: -0.1),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Transform.scale(
+                                  scale: 0.75,
+                                  child: Switch(
+                                    value: isVisible,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        isVisible = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       Center(
                         child: Card(
-                          color:
-                              Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(context).colorScheme.surfaceVariant,
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           elevation: 0,
                           child: SizedBox(

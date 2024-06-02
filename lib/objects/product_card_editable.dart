@@ -49,6 +49,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
       List addedCategories,
       List removedCategories,
       bool isLimited,
+      bool isVisible,
       String ordersRemaining) async {
     widget.product['productName'] = name;
     widget.product['productPrice'] = int.parse(price);
@@ -62,6 +63,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
     }
     widget.product['categories'] = categories;
     widget.product['isLimited'] = isLimited;
+    widget.product['isVisible'] = isVisible;
     widget.product['ordersRemaining'] = int.parse(ordersRemaining);
     if (widget.editProductCallback != null) {
       widget.editProductCallback!(
@@ -147,8 +149,7 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       errorWidget: (context, url, error) => Padding(
                         padding: const EdgeInsets.all(40.0),
                         child: Icon(Icons.local_mall_outlined,
-                            color:
-                                Theme.of(context).colorScheme.outline),
+                            color: Theme.of(context).colorScheme.outline),
                       ),
                       fadeInCurve: Curves.easeIn,
                       fadeOutCurve: Curves.easeOut,
@@ -165,7 +166,10 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                       width: 32,
                       color: (widget.product['productImageURL'] == null)
                           ? Colors.transparent
-                          : Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.85),
+                          : Theme.of(context)
+                              .colorScheme
+                              .surfaceVariant
+                              .withOpacity(0.85),
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         icon: Icon(
@@ -175,7 +179,9 @@ class _ProductCardEditableState extends State<ProductCardEditable> {
                               ? Theme.of(context).colorScheme.primary
                               : (widget.product['productImageURL'] == null)
                                   ? Theme.of(context).colorScheme.outline
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                         ),
                         onPressed: () {
                           setFeaturedProduct(widget.productID);
